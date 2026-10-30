@@ -97,7 +97,38 @@ const STEP_FILL_PERCENTAGES = [0, 33.333, 66.666, 100];
 export function ProcessConduit() {
   const trackRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const railContainerRef = useRef<HTMLDivElement>(null);
+  const node1Ref = useRef<HTMLButtonElement>(null);
+  const node4Ref = useRef<HTMLButtonElement>(null);
+  const [lineGeometry, setLineGeometry] = useState<{ left: number; width: number } | null>(null);
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    const updateGeometry = () => {
+      if (!railContainerRef.current || !node1Ref.current || !node4Ref.current) return;
+      const containerRect = railContainerRef.current.getBoundingClientRect();
+      const n1Rect = node1Ref.current.getBoundingClientRect();
+      const n4Rect = node4Ref.current.getBoundingClientRect();
+
+      const n1Center = n1Rect.left + n1Rect.width / 2;
+      const n4Center = n4Rect.left + n4Rect.width / 2;
+
+      const left = n1Center - containerRect.left;
+      const width = n4Center - n1Center;
+
+      if (width > 0) {
+        setLineGeometry({ left, width });
+      }
+    };
+
+    updateGeometry();
+    window.addEventListener("resize", updateGeometry);
+    const raf = requestAnimationFrame(updateGeometry);
+    return () => {
+      window.removeEventListener("resize", updateGeometry);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -156,9 +187,16 @@ export function ProcessConduit() {
         </div>
 
         {/* Desktop Waypoint Rail & Interactive Nodes */}
-        <div className="hidden lg:block relative mx-auto max-w-7xl px-4 h-12 flex items-center mb-6">
-          {/* Laser Track spanning between Column 1 Center (12.5%) and Column 4 Center (87.5%) */}
-          <div className="absolute inset-x-[12.5%] top-1/2 -translate-y-1/2 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+        <div ref={railContainerRef} className="hidden lg:block relative mx-auto max-w-7xl px-4 h-10 mb-8">
+          {/* Laser Track spanning strictly from Node 1 Center to Node 4 Center */}
+          <div
+            className="absolute top-1/2 -translate-y-1/2 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner"
+            style={
+              lineGeometry
+                ? { left: `${lineGeometry.left}px`, width: `${lineGeometry.width}px` }
+                : { left: "12.5%", right: "12.5%" }
+            }
+          >
             {/* Luminous Fill - Glides smoothly between round nodes with zero in-between stopping */}
             <div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -167,14 +205,15 @@ export function ProcessConduit() {
           </div>
 
           {/* 4 Node Waypoint Anchors placed directly in 4 grid columns to align with cards */}
-          <div className="relative z-10 grid grid-cols-4 gap-4 px-4 w-full pointer-events-auto">
+          <div className="absolute inset-0 z-10 grid grid-cols-4 gap-5 pointer-events-auto">
             {STATIONS.map((station, i) => {
               const isCurrent = activeStep === i;
               const isPassed = activeStep > i;
 
               return (
-                <div key={station.id} className="flex justify-center items-center">
+                <div key={station.id} className="flex justify-center items-center h-full">
                   <button
+                    ref={i === 0 ? node1Ref : i === 3 ? node4Ref : undefined}
                     type="button"
                     onClick={() => setActiveStep(i)}
                     aria-label={`Jump to ${station.station}`}
