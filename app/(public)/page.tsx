@@ -15,7 +15,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { CareerTransitSystem } from "@/components/landing/career-transit-system";
+import { GravitationalCampusOrbit } from "@/components/landing/gravitational-campus-orbit";
 
 export default function WelcomePage() {
   return (
@@ -89,10 +89,10 @@ export default function WelcomePage() {
           </div>
 
           {/* ========================================================= */}
-          {/* THE CAREER TRANSIT SYSTEM (Interactive Metro Schematic)   */}
+          {/* THE GRAVITATIONAL CAMPUS ORBIT (Interactive 3D Physics)   */}
           {/* ========================================================= */}
           <div className="w-full">
-            <CareerTransitSystem />
+            <GravitationalCampusOrbit />
           </div>
         </div>
       </section>
@@ -223,43 +223,6 @@ export default function WelcomePage() {
                 Spanning multinational software houses, commercial banks, government institutions, and global research fellowships.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* SECTION 4: Gated Institutional Access Callout              */}
-      {/* ========================================================= */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto max-w-4xl px-4 text-center space-y-6">
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto border border-primary/20 shadow-xs">
-            <Lock className="size-8 text-primary" />
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-              Protected Institutional Access
-            </h2>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              To safeguard applicant resumes, CGPA records, and internal referral communications, all opportunities and community feeds require verified login credentials.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link
-              href="/register"
-              className={buttonVariants({ variant: "default", size: "lg" })}
-            >
-              <span>Create Verified Account</span>
-              <ArrowRight className="size-4 ml-1.5" />
-            </Link>
-
-            <Link
-              href="/login"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              Member Sign In
-            </Link>
           </div>
         </div>
       </section>
