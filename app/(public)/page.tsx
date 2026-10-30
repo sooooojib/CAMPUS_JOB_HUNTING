@@ -1,35 +1,51 @@
 import Link from "next/link";
 import {
   ShieldCheck,
-  Briefcase,
-  Users,
-  Award,
-  Sparkles,
   ArrowRight,
-  CheckCircle2,
   Lock,
-  GraduationCap,
-  Building2,
-  FileText,
-  MapPin,
-  ChevronRight,
 } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { HeritageCampusPanorama } from "@/components/landing/heritage-campus-panorama";
 import { ProcessConduit } from "@/components/landing/process-conduit";
 
+export function ContinuousSpine() {
+  return (
+    <div className="flex flex-col items-center justify-center py-6 sm:py-8 pointer-events-none select-none">
+      <div className="w-px h-14 sm:h-20 bg-gradient-to-b from-primary/80 via-blue-500/70 to-purple-500/70" />
+      <div className="relative flex items-center justify-center size-5 rounded-full border border-primary/40 bg-card shadow-[0_0_16px_rgba(59,130,246,0.55)]">
+        <span className="size-2 rounded-full bg-primary animate-ping" />
+        <span className="size-2 rounded-full bg-primary" />
+      </div>
+      <div className="w-px h-14 sm:h-20 bg-gradient-to-b from-purple-500/70 via-primary/80 to-transparent" />
+    </div>
+  );
+}
+
+export function OutcomeSpine() {
+  return (
+    <div className="flex flex-col items-center justify-center py-6 sm:py-8 pointer-events-none select-none">
+      <div className="w-px h-12 sm:h-16 bg-gradient-to-b from-emerald-500/80 via-blue-500/70 to-primary/80" />
+      <div className="relative flex items-center justify-center size-5 rounded-full border border-emerald-500/40 bg-card shadow-[0_0_16px_rgba(16,185,129,0.55)]">
+        <span className="size-2 rounded-full bg-emerald-500 animate-ping" />
+        <span className="size-2 rounded-full bg-emerald-500" />
+      </div>
+      <div className="w-px h-12 sm:h-16 bg-gradient-to-b from-primary/80 via-emerald-500/70 to-transparent" />
+    </div>
+  );
+}
+
 export default function WelcomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* ========================================================= */}
-      {/* HERO SECTION: The Direct Line from Campus to Career       */}
-      {/* ========================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background py-16 sm:py-24">
-        {/* Soft Ambient Mesh Texture (Non-Sharp, Seamless) */}
-        <div className="absolute inset-0 bg-[radial-gradient(#3b82f608_1px,transparent_1px)] [background-size:28px_28px] pointer-events-none opacity-80" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/10 blur-[140px] pointer-events-none rounded-full" />
+    <div className="flex flex-col min-h-screen relative overflow-hidden bg-background">
+      {/* Continuous Ambient Background Glows - Zero Segmented Bands */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-primary/8 blur-[160px] pointer-events-none rounded-full" />
+      <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-blue-500/5 blur-[180px] pointer-events-none rounded-full" />
+      <div className="absolute inset-0 bg-[radial-gradient(#3b82f608_1px,transparent_1px)] [background-size:28px_28px] pointer-events-none opacity-80" />
 
-        <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 z-10 space-y-12 sm:space-y-16">
+      {/* ========================================================= */}
+      {/* SECTION 1: The Direct Line from Campus to Career          */}
+      {/* ========================================================= */}
+      <section className="relative z-10 pt-16 sm:pt-24 pb-4">
+        <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 space-y-12 sm:space-y-16">
           {/* Header Typography & Narrative Block */}
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
             {/* University Identity Pill */}
@@ -72,20 +88,19 @@ export default function WelcomePage() {
               </Link>
             </div>
 
-            {/* Core Integrity Pillars */}
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-muted-foreground">
-              <span className="flex items-center gap-2 font-medium bg-card/60 backdrop-blur-md border border-border/50 px-3.5 py-1.5 rounded-full shadow-xs">
-                <CheckCircle2 className="size-4 text-emerald-500" />
+            {/* Authentic Institutional Registry Strip (Non-Generic AI Checklist) */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground font-mono">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/15 text-foreground font-semibold">
+                <ShieldCheck className="size-3.5 text-primary" />
                 <span>Registrar ID Validated</span>
               </span>
-              <span className="flex items-center gap-2 font-medium bg-card/60 backdrop-blur-md border border-border/50 px-3.5 py-1.5 rounded-full shadow-xs">
-                <CheckCircle2 className="size-4 text-emerald-500" />
+              <span className="hidden sm:inline text-border/70">•</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-card/60 border border-border/40 text-muted-foreground">
+                <Lock className="size-3 text-emerald-500" />
                 <span>Private 15-Minute Resume Vault</span>
               </span>
-              <span className="flex items-center gap-2 font-medium bg-card/60 backdrop-blur-md border border-border/50 px-3.5 py-1.5 rounded-full shadow-xs">
-                <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>100% Gated Institutional Network</span>
-              </span>
+              <span className="hidden sm:inline text-border/70">•</span>
+              <span className="text-foreground/80 font-medium">100% Gated Institutional Network</span>
             </div>
           </div>
 
@@ -98,24 +113,39 @@ export default function WelcomePage() {
         </div>
       </section>
 
+      {/* Luminous Connective Spine (Tethering Campus Gateway to Verified Pipeline) */}
+      <ContinuousSpine />
+
       {/* ========================================================= */}
       {/* SECTION 2: The 4 Stations of the University Pipeline      */}
-      {/* Smoothly Flowing Section with Synchronized Scroll Conduit */}
+      {/* Flowing Smoothly on the Continuous Canvas (No Border Cut) */}
       {/* ========================================================= */}
-      <section className="py-20 sm:py-24 border-t border-border/40 bg-card/35 dark:bg-card/45 backdrop-blur-xl">
+      <section id="pipeline" className="relative z-10 pt-4 pb-8">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <ProcessConduit />
         </div>
       </section>
 
+      {/* Connective Spine (Tethering Pipeline Output to Verified Yield Audit) */}
+      <OutcomeSpine />
+
       {/* ========================================================= */}
-      {/* SECTION 3: Real Institutional Numbers                      */}
-      {/* Blended 3-Column Stats Grid (Seamless Page Integration)    */}
+      {/* SECTION 3: Verified Pipeline Yield Audit                  */}
+      {/* Direct Outcome of Station 04 - Seamless Flow              */}
       {/* ========================================================= */}
-      <section className="py-16 sm:py-20 border-t border-border/40 bg-card/20 dark:bg-card/25 backdrop-blur-xl">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative z-10 pt-2 pb-20 sm:pb-24">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 space-y-6">
+          {/* Continuity Label */}
+          <div className="text-center space-y-2">
+            <span className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
+              <span>Verified Pipeline Yield</span>
+              <span className="size-1.5 rounded-full bg-emerald-500" />
+              <span className="text-muted-foreground font-semibold">Institutional Audit</span>
+            </span>
+          </div>
+
           {/* Seamless Blended Container - Clean 3-Metric Presentation */}
-          <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/40 bg-card/50 dark:bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
+          <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/50 bg-card/60 dark:bg-card/50 backdrop-blur-2xl shadow-sm overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/40 text-center">
               {/* Column 1 */}
               <div className="p-8 sm:p-10 space-y-3">
