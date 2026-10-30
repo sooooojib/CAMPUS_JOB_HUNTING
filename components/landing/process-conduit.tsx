@@ -19,11 +19,14 @@ const STATIONS = [
     icon: GraduationCap,
     color: "blue",
     borderActive:
-      "border-blue-500/80 ring-2 ring-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.22)] bg-card",
+      "border-blue-500/80 ring-2 ring-blue-500/20 shadow-[0_12px_40px_rgba(59,130,246,0.22)] bg-card",
     iconBg: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
     badgeBg:
       "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30",
-    dotColor: "bg-blue-500",
+    nodeBg: "bg-blue-600 text-white",
+    nodeBorder: "border-blue-400",
+    nodeGlow: "shadow-[0_0_24px_rgba(59,130,246,0.7)] ring-4 ring-blue-500/25",
+    dotColor: "bg-blue-600",
   },
   {
     id: 1,
@@ -35,11 +38,14 @@ const STATIONS = [
     icon: ShieldCheck,
     color: "purple",
     borderActive:
-      "border-purple-500/80 ring-2 ring-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.22)] bg-card",
+      "border-purple-500/80 ring-2 ring-purple-500/20 shadow-[0_12px_40px_rgba(168,85,247,0.22)] bg-card",
     iconBg: "bg-purple-500/15 text-purple-600 dark:text-purple-400",
     badgeBg:
       "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/30",
-    dotColor: "bg-purple-500",
+    nodeBg: "bg-purple-600 text-white",
+    nodeBorder: "border-purple-400",
+    nodeGlow: "shadow-[0_0_24px_rgba(168,85,247,0.7)] ring-4 ring-purple-500/25",
+    dotColor: "bg-purple-600",
   },
   {
     id: 2,
@@ -51,11 +57,14 @@ const STATIONS = [
     icon: Award,
     color: "amber",
     borderActive:
-      "border-amber-500/80 ring-2 ring-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.22)] bg-card",
+      "border-amber-500/80 ring-2 ring-amber-500/20 shadow-[0_12px_40px_rgba(245,158,11,0.22)] bg-card",
     iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
     badgeBg:
       "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30",
-    dotColor: "bg-amber-500",
+    nodeBg: "bg-amber-600 text-white",
+    nodeBorder: "border-amber-400",
+    nodeGlow: "shadow-[0_0_24px_rgba(245,158,11,0.7)] ring-4 ring-amber-500/25",
+    dotColor: "bg-amber-600",
   },
   {
     id: 3,
@@ -67,11 +76,14 @@ const STATIONS = [
     icon: Building2,
     color: "emerald",
     borderActive:
-      "border-emerald-500/80 ring-2 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.22)] bg-card",
+      "border-emerald-500/80 ring-2 ring-emerald-500/20 shadow-[0_12px_40px_rgba(16,185,129,0.22)] bg-card",
     iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
     badgeBg:
       "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
-    dotColor: "bg-emerald-500",
+    nodeBg: "bg-emerald-600 text-white",
+    nodeBorder: "border-emerald-400",
+    nodeGlow: "shadow-[0_0_24px_rgba(16,185,129,0.7)] ring-4 ring-emerald-500/25",
+    dotColor: "bg-emerald-600",
   },
 ];
 
@@ -151,36 +163,45 @@ export function ProcessConduit() {
           </p>
         </div>
 
-        {/* Desktop Horizontal Conduit Line - Anchored Between 1st and 4th Card Centers */}
-        <div className="hidden lg:block relative mx-auto max-w-7xl px-4 my-2">
-          {/* Laser Track spanning between Node 1 (12.5%) and Node 4 (87.5%) */}
-          <div className="relative mx-[12.5%] h-2.5 bg-border/60 rounded-full overflow-hidden shadow-inner">
+        {/* Desktop Waypoint Rail & Interactive Nodes */}
+        <div className="hidden lg:block relative mx-auto max-w-7xl px-4 mt-2 mb-8">
+          {/* Laser Track spanning between Column 1 Center (12.5%) and Column 4 Center (87.5%) */}
+          <div className="relative mx-[12.5%] h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
             {/* Luminous Fill - Glides smoothly between round nodes with zero in-between stopping */}
             <div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-              style={{ width: `${targetFill}%` }}
+              style={{ width: `${Math.max(targetFill, 4)}%` }}
             />
           </div>
 
-          {/* 4 Node Waypoint Anchors Exactly Above Card Centers */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-around pointer-events-none px-4">
+          {/* 4 Node Waypoint Anchors placed directly in 4 grid columns to align with cards */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 grid grid-cols-4 gap-4 px-4 pointer-events-auto">
             {STATIONS.map((station, i) => {
-              const isCompletedOrActive = activeStep >= i;
               const isCurrent = activeStep === i;
+              const isPassed = activeStep > i;
+
               return (
-                <div
-                  key={station.id}
-                  className={`relative flex items-center justify-center size-7 rounded-full border-2 bg-card transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                    isCurrent
-                      ? `${station.dotColor} border-background scale-135 shadow-[0_0_20px_rgba(59,130,246,0.6)] ring-4 ring-primary/25 z-10`
-                      : isCompletedOrActive
-                      ? `${station.dotColor} border-background scale-110 shadow-sm`
-                      : "border-border/80 bg-muted scale-95"
-                  }`}
-                >
-                  {isCurrent && (
-                    <span className="size-2 rounded-full bg-white animate-ping" />
-                  )}
+                <div key={station.id} className="flex justify-center items-center">
+                  <button
+                    type="button"
+                    onClick={() => setActiveStep(i)}
+                    aria-label={`Jump to ${station.station}`}
+                    className={`relative flex items-center justify-center size-8 rounded-full border-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer ${
+                      isCurrent
+                        ? `${station.nodeBg} ${station.nodeBorder} ${station.nodeGlow} scale-125 z-20`
+                        : isPassed
+                        ? "bg-primary border-primary text-white scale-105 shadow-sm z-10"
+                        : "bg-card border-border/80 text-muted-foreground scale-95"
+                    }`}
+                  >
+                    {isCurrent ? (
+                      <span className="size-2.5 rounded-full bg-white shadow-sm" />
+                    ) : isPassed ? (
+                      <span className="size-2 rounded-full bg-white/90" />
+                    ) : (
+                      <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                    )}
+                  </button>
                 </div>
               );
             })}
@@ -197,28 +218,28 @@ export function ProcessConduit() {
               <div
                 key={station.id}
                 onClick={() => setActiveStep(idx)}
-                className={`cursor-pointer rounded-[2rem] border p-5 sm:p-6 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between ${
+                className={`cursor-pointer rounded-[2rem] border p-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between min-h-[300px] sm:min-h-[320px] ${
                   isActive
-                    ? `${station.borderActive} scale-102 opacity-100`
+                    ? `${station.borderActive} -translate-y-2 opacity-100`
                     : isPassed
-                    ? "border-border/70 bg-card/60 opacity-75 scale-100"
-                    : "border-border/40 bg-card/30 opacity-40 scale-98"
+                    ? "border-border/70 bg-card/60 opacity-75 translate-y-0"
+                    : "border-border/40 bg-card/30 opacity-40 translate-y-0"
                 }`}
               >
-                <div>
+                <div className="space-y-4">
                   {/* Station Icon & Number */}
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between">
                     <div
-                      className={`flex size-10 items-center justify-center rounded-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      className={`flex size-11 items-center justify-center rounded-2xl transition-all duration-500 ${
                         isActive
                           ? station.iconBg
                           : "bg-muted text-muted-foreground"
                       }`}
                     >
-                      <station.icon className="size-5" />
+                      <station.icon className="size-5.5" />
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/40 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/50 px-2.5 py-1 rounded-full border border-border/40">
                       {station.station}
                     </span>
                   </div>
@@ -233,23 +254,23 @@ export function ProcessConduit() {
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 sm:line-clamp-none">
                     {station.description}
                   </p>
                 </div>
 
                 {/* Station Badge (Active Indicator) */}
-                <div className="pt-4 mt-4 border-t border-border/40">
+                <div className="pt-4 mt-auto border-t border-border/40">
                   <div
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-semibold border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-500 ${
                       isActive
                         ? `${station.badgeBg} shadow-xs`
-                        : "bg-muted/50 text-muted-foreground/70 border-border/40"
+                        : "bg-muted/40 text-muted-foreground/70 border-border/40"
                     }`}
                   >
                     <span
-                      className={`size-1.5 rounded-full ${
-                        isActive ? station.dotColor : "bg-muted-foreground/50"
+                      className={`size-2 rounded-full ${
+                        isActive ? station.dotColor : "bg-muted-foreground/40"
                       } ${isActive ? "animate-pulse" : ""}`}
                     />
                     <span className="truncate">{station.badge}</span>

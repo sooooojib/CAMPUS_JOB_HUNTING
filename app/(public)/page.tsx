@@ -5,42 +5,53 @@ import { ProcessConduit } from "@/components/landing/process-conduit";
 
 export function ContinuousSpine() {
   return (
-    <div className="relative flex flex-col items-center justify-center py-6 sm:py-8 pointer-events-none select-none">
-      {/* Subtle descent beam */}
-      <div className="w-px h-6 sm:h-8 bg-gradient-to-b from-primary/60 via-blue-500/40 to-primary/80" />
+    <div className="relative flex flex-col items-center justify-center py-10 sm:py-16 select-none">
+      {/* Ambient Radial Luminous Glow */}
+      <div className="absolute w-[450px] h-[220px] bg-primary/10 dark:bg-primary/15 blur-[100px] rounded-full pointer-events-none -translate-y-4" />
 
-      {/* High-Trust Transition Pill */}
-      <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-card/90 dark:bg-slate-900/90 border border-primary/20 shadow-xs backdrop-blur-md">
-        <span className="relative flex size-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-          <span className="relative inline-flex rounded-full size-2 bg-primary" />
-        </span>
-        <span className="text-[11px] font-mono font-semibold tracking-wider uppercase text-foreground/90">
-          Career Conduit Protocol
-        </span>
-        <span className="text-muted-foreground/40">•</span>
-        <span className="text-[10px] font-mono text-primary font-bold">
-          4 Verification Stages
-        </span>
+      {/* Narrative Architectural Transition Bridge */}
+      <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto px-4 space-y-3">
+        {/* Luminous Waypoint Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-1 text-xs font-mono font-semibold text-blue-700 dark:text-blue-300 shadow-xs backdrop-blur-md">
+          <span className="relative flex size-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" />
+            <span className="relative inline-flex rounded-full size-2 bg-blue-600 dark:bg-blue-400" />
+          </span>
+          <span className="uppercase tracking-wider">Institutional Progression Pathway</span>
+        </div>
+
+        {/* Narrative Headline with Editorial Authority */}
+        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+          From Campus Matriculation to Enterprise Placement.
+        </h3>
+
+        {/* Supporting Narrative Copy */}
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg">
+          Connecting 168 years of Jagannath University academic heritage to private, verified career channels. Follow the 4-stage progression pipeline below.
+        </p>
+
+        {/* Soft Downward Flow Indicator (No Harsh 1px Skewer Line) */}
+        <div className="pt-3 flex flex-col items-center gap-1 text-muted-foreground/50">
+          <div className="w-px h-8 bg-gradient-to-b from-primary/50 to-transparent" />
+        </div>
       </div>
-
-      {/* Subtle entry beam */}
-      <div className="w-px h-6 sm:h-8 bg-gradient-to-b from-primary/80 via-blue-500/40 to-transparent" />
     </div>
   );
 }
 
 export function OutcomeSpine() {
   return (
-    <div className="relative flex flex-col items-center justify-center py-6 sm:py-8 pointer-events-none select-none">
-      <div className="w-px h-6 bg-gradient-to-b from-emerald-500/60 to-emerald-500" />
-      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-card/90 dark:bg-slate-900/90 border border-emerald-500/20 shadow-xs backdrop-blur-md">
-        <span className="size-1.5 rounded-full bg-emerald-500" />
-        <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-          Verified Progression Output
-        </span>
+    <div className="relative flex flex-col items-center justify-center py-8 sm:py-12 select-none">
+      <div className="flex flex-col items-center text-center space-y-2">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-50/70 dark:bg-emerald-950/40 px-4 py-1 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 shadow-xs backdrop-blur-md">
+          <span className="size-2 rounded-full bg-emerald-500" />
+          <span className="uppercase tracking-wider">Stage 04 Placement Output</span>
+        </div>
+        <p className="text-xs font-mono text-muted-foreground">
+          Verified Pipeline Yield • 100% Registrar Synchronized
+        </p>
       </div>
-      <div className="w-px h-6 bg-gradient-to-b from-emerald-500 to-transparent" />
+      <div className="w-px h-8 bg-gradient-to-b from-emerald-500/50 to-transparent mt-3" />
     </div>
   );
 }
