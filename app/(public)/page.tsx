@@ -5,53 +5,9 @@ import { ProcessConduit } from "@/components/landing/process-conduit";
 
 export function ContinuousSpine() {
   return (
-    <div className="relative flex flex-col items-center justify-center py-10 sm:py-16 select-none">
-      {/* Ambient Radial Luminous Glow */}
-      <div className="absolute w-[450px] h-[220px] bg-primary/10 dark:bg-primary/15 blur-[100px] rounded-full pointer-events-none -translate-y-4" />
-
-      {/* Narrative Architectural Transition Bridge */}
-      <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto px-4 space-y-3">
-        {/* Luminous Waypoint Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-1 text-xs font-mono font-semibold text-blue-700 dark:text-blue-300 shadow-xs backdrop-blur-md">
-          <span className="relative flex size-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" />
-            <span className="relative inline-flex rounded-full size-2 bg-blue-600 dark:bg-blue-400" />
-          </span>
-          <span className="uppercase tracking-wider">Institutional Progression Pathway</span>
-        </div>
-
-        {/* Narrative Headline with Editorial Authority */}
-        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-          From Campus Matriculation to Enterprise Placement.
-        </h3>
-
-        {/* Supporting Narrative Copy */}
-        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg">
-          Connecting 168 years of Jagannath University academic heritage to private, verified career channels. Follow the 4-stage progression pipeline below.
-        </p>
-
-        {/* Soft Downward Flow Indicator (No Harsh 1px Skewer Line) */}
-        <div className="pt-3 flex flex-col items-center gap-1 text-muted-foreground/50">
-          <div className="w-px h-8 bg-gradient-to-b from-primary/50 to-transparent" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function OutcomeSpine() {
-  return (
-    <div className="relative flex flex-col items-center justify-center py-8 sm:py-12 select-none">
-      <div className="flex flex-col items-center text-center space-y-2">
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-50/70 dark:bg-emerald-950/40 px-4 py-1 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 shadow-xs backdrop-blur-md">
-          <span className="size-2 rounded-full bg-emerald-500" />
-          <span className="uppercase tracking-wider">Stage 04 Placement Output</span>
-        </div>
-        <p className="text-xs font-mono text-muted-foreground">
-          Verified Pipeline Yield • 100% Registrar Synchronized
-        </p>
-      </div>
-      <div className="w-px h-8 bg-gradient-to-b from-emerald-500/50 to-transparent mt-3" />
+    <div className="flex flex-col items-center justify-center py-8 sm:py-12 pointer-events-none select-none">
+      <div className="w-px h-10 sm:h-14 bg-gradient-to-b from-primary/60 via-blue-500/40 to-transparent" />
+      <div className="size-2 rounded-full bg-primary/40 ring-4 ring-primary/10 shadow-[0_0_12px_rgba(59,130,246,0.4)] -mt-1" />
     </div>
   );
 }
@@ -136,24 +92,12 @@ export default function WelcomePage() {
         </div>
       </section>
 
-      {/* Connective Spine (Tethering Pipeline Output to Verified Yield Audit) */}
-      <OutcomeSpine />
-
       {/* ========================================================= */}
       {/* SECTION 3: Verified Pipeline Yield Audit                  */}
       {/* Direct Outcome of Station 04 - Seamless Flow              */}
       {/* ========================================================= */}
-      <section className="relative z-10 pt-2 pb-20 sm:pb-24">
+      <section className="relative z-10 pt-6 pb-20 sm:pb-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 space-y-6">
-          {/* Continuity Label */}
-          <div className="text-center space-y-2">
-            <span className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
-              <span>Verified Pipeline Yield</span>
-              <span className="size-1.5 rounded-full bg-emerald-500" />
-              <span className="text-muted-foreground font-semibold">Institutional Audit</span>
-            </span>
-          </div>
-
           {/* Seamless Blended Container - Clean 3-Metric Presentation */}
           <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/50 bg-card/60 dark:bg-card/50 backdrop-blur-2xl shadow-sm overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/40 text-center">

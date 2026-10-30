@@ -15,7 +15,7 @@ const STATIONS = [
     title: "Registrar Credential Validation",
     description:
       "Academic standing, CGPA records, and enrollment status are validated against official university registrar records. Zero unverified claims.",
-    badge: "Registrar Validated • Official Records",
+    shortBadge: "Registrar Validated",
     icon: GraduationCap,
     color: "blue",
     borderActive:
@@ -34,7 +34,7 @@ const STATIONS = [
     title: "Faculty Academic Endorsement",
     description:
       "Department chairs and faculty advisors endorse high-performing students, thesis researchers, and fellowship candidates with institutional seals.",
-    badge: "Faculty Endorsed • Academic Seal",
+    shortBadge: "Faculty Endorsed",
     icon: ShieldCheck,
     color: "purple",
     borderActive:
@@ -53,7 +53,7 @@ const STATIONS = [
     title: "Alumni Referral Exchange",
     description:
       "Students connect directly with Jagannath University alumni across technology, commercial banking, and multinational firms for internal recommendations.",
-    badge: "Alumni Endorsed • Internal Referral",
+    shortBadge: "Alumni Referral",
     icon: Award,
     color: "amber",
     borderActive:
@@ -72,7 +72,7 @@ const STATIONS = [
     title: "Vetted Employer Placement",
     description:
       "Partner corporations receive verified candidate dossiers through secure, consent-gated links, shortlisting candidates for direct interviews.",
-    badge: "Corporate Placement • Priority Round",
+    shortBadge: "Corporate Placement",
     icon: Building2,
     color: "emerald",
     borderActive:
@@ -145,28 +145,20 @@ export function ProcessConduit() {
       {/* Locked Sticky Showcase Window */}
       <div ref={stickyRef} className="sticky top-20 sm:top-24 z-10 space-y-6 sm:space-y-8 py-3 sm:py-5">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2.5">
-          <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1 rounded-full border border-primary/20">
-            <span>Verified Pipeline</span>
-            <span className="size-1.5 rounded-full bg-primary" />
-            <span className="text-muted-foreground font-semibold">
-              Stage 0{activeStep + 1} of 04 Active
-            </span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <div className="text-center max-w-3xl mx-auto space-y-3 pb-1">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
             How the Campus Network Accelerates Careers
           </h2>
 
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Every stage of your career transition is backed by official university verification and genuine alumni advocacy.
           </p>
         </div>
 
         {/* Desktop Waypoint Rail & Interactive Nodes */}
-        <div className="hidden lg:block relative mx-auto max-w-7xl px-4 mt-2 mb-8">
+        <div className="hidden lg:block relative mx-auto max-w-7xl px-4 h-12 flex items-center mb-6">
           {/* Laser Track spanning between Column 1 Center (12.5%) and Column 4 Center (87.5%) */}
-          <div className="relative mx-[12.5%] h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+          <div className="absolute inset-x-[12.5%] top-1/2 -translate-y-1/2 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
             {/* Luminous Fill - Glides smoothly between round nodes with zero in-between stopping */}
             <div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -175,7 +167,7 @@ export function ProcessConduit() {
           </div>
 
           {/* 4 Node Waypoint Anchors placed directly in 4 grid columns to align with cards */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 grid grid-cols-4 gap-4 px-4 pointer-events-auto">
+          <div className="relative z-10 grid grid-cols-4 gap-4 px-4 w-full pointer-events-auto">
             {STATIONS.map((station, i) => {
               const isCurrent = activeStep === i;
               const isPassed = activeStep > i;
@@ -208,8 +200,8 @@ export function ProcessConduit() {
           </div>
         </div>
 
-        {/* The 4 Station Cards - With Organic Roundness & Smooth Transition Focus */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* The 4 Station Cards - With Organic Roundness & 100% Contained Content */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {STATIONS.map((station, idx) => {
             const isActive = activeStep === idx;
             const isPassed = activeStep > idx;
@@ -218,15 +210,15 @@ export function ProcessConduit() {
               <div
                 key={station.id}
                 onClick={() => setActiveStep(idx)}
-                className={`cursor-pointer rounded-[2rem] border p-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between min-h-[300px] sm:min-h-[320px] ${
+                className={`cursor-pointer rounded-[2rem] border p-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between overflow-hidden relative ${
                   isActive
-                    ? `${station.borderActive} -translate-y-2 opacity-100`
+                    ? `${station.borderActive} opacity-100 ring-2 ring-primary/30 shadow-xl`
                     : isPassed
-                    ? "border-border/70 bg-card/60 opacity-75 translate-y-0"
-                    : "border-border/40 bg-card/30 opacity-40 translate-y-0"
+                    ? "border-border/70 bg-card/60 opacity-75"
+                    : "border-border/40 bg-card/30 opacity-45"
                 }`}
               >
-                <div className="space-y-4">
+                <div className="space-y-3.5">
                   {/* Station Icon & Number */}
                   <div className="flex items-center justify-between">
                     <div
@@ -239,14 +231,14 @@ export function ProcessConduit() {
                       <station.icon className="size-5.5" />
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/50 px-2.5 py-1 rounded-full border border-border/40">
+                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/60 px-2.5 py-1 rounded-full border border-border/40">
                       {station.station}
                     </span>
                   </div>
 
                   {/* Station Title */}
                   <h3
-                    className={`text-sm sm:text-base font-bold transition-colors duration-500 ${
+                    className={`text-base font-bold transition-colors duration-500 leading-snug ${
                       isActive ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >
@@ -254,27 +246,26 @@ export function ProcessConduit() {
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {station.description}
                   </p>
                 </div>
 
-                {/* Station Badge (Active Indicator) */}
-                <div className="pt-4 mt-auto border-t border-border/40">
-                  <div
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-500 ${
-                      isActive
-                        ? `${station.badgeBg} shadow-xs`
-                        : "bg-muted/40 text-muted-foreground/70 border-border/40"
-                    }`}
-                  >
+                {/* Station Verification Footer — 100% Contained, Never Overflows */}
+                <div className="pt-4 mt-6 border-t border-border/40 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 min-w-0">
                     <span
-                      className={`size-2 rounded-full ${
-                        isActive ? station.dotColor : "bg-muted-foreground/40"
+                      className={`size-2 rounded-full shrink-0 ${
+                        isActive ? station.dotColor : "bg-muted-foreground/30"
                       } ${isActive ? "animate-pulse" : ""}`}
                     />
-                    <span className="truncate">{station.badge}</span>
+                    <span className="font-mono text-[11px] font-semibold text-foreground/85 truncate">
+                      {station.shortBadge}
+                    </span>
                   </div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground/50 shrink-0">
+                    Verified
+                  </span>
                 </div>
               </div>
             );
