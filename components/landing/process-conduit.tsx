@@ -76,39 +76,42 @@ const STATIONS = [
 ];
 
 export function ProcessConduit() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      if (!trackRef.current) return;
+      const rect = trackRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
+      const stickyTop = 80; // top-20 (80px from viewport top)
 
-      // Exact user activation threshold:
-      // When the section header arrives in the upper third of the viewport (Image 2 view)
-      // Before reaching this point: NO animation, progress is 0, station 1 is resting
-      const activationPoint = windowHeight * 0.35;
+      // Dynamic calculation of total locked distance:
+      // The child is sticky until its bottom reaches the bottom of trackRef
+      const stickyHeight = stickyRef.current?.offsetHeight ?? (windowHeight * 0.65);
+      const totalPinnedDistance = rect.height - stickyHeight;
+      if (totalPinnedDistance <= 0) return;
 
-      if (rect.top > activationPoint) {
+      const scrolledDistance = stickyTop - rect.top;
+
+      // Before lock position is reached: progress is 0, station 1 is at rest
+      if (scrolledDistance <= 0) {
         setProgress(0);
         setActiveStep(0);
         return;
       }
 
-      // Smooth progression as user scrolls through the section
-      const scrollRange = rect.height * 0.8;
-      const scrolled = activationPoint - rect.top;
-      const p = Math.min(Math.max(scrolled / scrollRange, 0), 1);
-
+      const p = Math.min(Math.max(scrolledDistance / totalPinnedDistance, 0), 1);
       setProgress(p);
 
-      if (p < 0.28) {
+      // Station cadences evenly divided across the locked scroll:
+      if (p < 0.25) {
         setActiveStep(0);
-      } else if (p < 0.58) {
+      } else if (p < 0.50) {
         setActiveStep(1);
-      } else if (p < 0.85) {
+      } else if (p < 0.75) {
         setActiveStep(2);
       } else {
         setActiveStep(3);
@@ -121,132 +124,135 @@ export function ProcessConduit() {
   }, []);
 
   return (
-    <div ref={containerRef} className="space-y-12">
-      {/* Section Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
-          <span>Verified Pipeline</span>
-          <span className="size-1.5 rounded-full bg-primary" />
-          <span className="text-muted-foreground font-semibold">
-            Stage 0{activeStep + 1} of 04 Active
-          </span>
+    <div ref={trackRef} className="relative h-[220vh] sm:h-[260vh]">
+      {/* Locked Sticky Showcase Window */}
+      <div ref={stickyRef} className="sticky top-20 sm:top-24 z-10 space-y-10 py-6">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
+            <span>Verified Pipeline</span>
+            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="text-muted-foreground font-semibold">
+              Stage 0{activeStep + 1} of 04 Active
+            </span>
+          </div>
+
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+            How the Campus Network Accelerates Careers
+          </h2>
+
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            Every stage of your career transition is backed by official university verification and genuine alumni advocacy.
+          </p>
         </div>
 
-        <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-          How the Campus Network Accelerates Careers
-        </h2>
+        {/* Desktop Horizontal Conduit Line - Mathematically Anchored to Card Centers */}
+        <div className="hidden lg:block relative mx-auto max-w-7xl px-4">
+          {/* Track spanning exactly between the 1st card center (12.5%) and 4th card center (87.5%) */}
+          <div className="relative mx-[12.5%] h-2 bg-border/60 rounded-full overflow-hidden">
+            {/* Luminous Fill - Strictly Scroll-Driven */}
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-300 ease-out"
+              style={{ width: `${Math.max(progress * 100, 2)}%` }}
+            />
+          </div>
 
-        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-          Every stage of your career transition is backed by official university verification and genuine alumni advocacy.
-        </p>
-      </div>
-
-      {/* Desktop Horizontal Conduit Line - Mathematically Anchored to Card Centers */}
-      <div className="hidden lg:block relative mx-auto max-w-7xl px-4">
-        {/* Track spanning exactly between the 1st card center (12.5%) and 4th card center (87.5%) */}
-        <div className="relative mx-[12.5%] h-2 bg-border/60 rounded-full overflow-hidden">
-          {/* Luminous Fill - Strictly Scroll-Driven */}
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-300 ease-out"
-            style={{ width: `${Math.max(progress * 100, 2)}%` }}
-          />
+          {/* 4 Node Waypoint Anchors Exactly Above Card Centers */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-around pointer-events-none px-4">
+            {STATIONS.map((station, i) => {
+              const isCompletedOrActive = activeStep >= i;
+              const isCurrent = activeStep === i;
+              return (
+                <div
+                  key={station.id}
+                  className={`relative flex items-center justify-center size-6 rounded-full border-2 bg-card transition-all duration-300 ${
+                    isCurrent
+                      ? `${station.dotColor} border-background scale-130 shadow-lg ring-4 ring-primary/25`
+                      : isCompletedOrActive
+                      ? `${station.dotColor} border-background scale-110`
+                      : "border-border bg-muted scale-95"
+                  }`}
+                >
+                  {isCurrent && (
+                    <span className="size-2 rounded-full bg-white animate-ping" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* 4 Node Waypoint Anchors Exactly Above Card Centers */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-around pointer-events-none px-4">
-          {STATIONS.map((station, i) => {
-            const isCompletedOrActive = activeStep >= i;
-            const isCurrent = activeStep === i;
+        {/* The 4 Station Cards - With Organic Roundness & Clear Hierarchy */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {STATIONS.map((station, idx) => {
+            const isActive = activeStep === idx;
+            const isPassed = activeStep > idx;
+
             return (
               <div
                 key={station.id}
-                className={`relative flex items-center justify-center size-6 rounded-full border-2 bg-card transition-all duration-300 ${
-                  isCurrent
-                    ? `${station.dotColor} border-background scale-130 shadow-lg ring-4 ring-primary/25`
-                    : isCompletedOrActive
-                    ? `${station.dotColor} border-background scale-110`
-                    : "border-border bg-muted scale-95"
+                className={`rounded-[2rem] sm:rounded-[2.5rem] border p-7 transition-all duration-500 flex flex-col justify-between ${
+                  isActive
+                    ? `${station.borderActive} scale-102 opacity-100`
+                    : isPassed
+                    ? "border-border/70 bg-card/60 opacity-75"
+                    : "border-border/50 bg-card/40 opacity-45"
                 }`}
               >
-                {isCurrent && (
-                  <span className="size-2 rounded-full bg-white animate-ping" />
-                )}
+                <div>
+                  {/* Station Icon & Number */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div
+                      className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-300 ${
+                        isActive
+                          ? station.iconBg
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <station.icon className="size-6" />
+                    </div>
+
+                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/40 px-2.5 py-1 rounded-full">
+                      {station.station}
+                    </span>
+                  </div>
+
+                  {/* Station Title */}
+                  <h3
+                    className={`text-base font-bold transition-colors ${
+                      isActive ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {station.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="mt-2.5 text-xs text-muted-foreground leading-relaxed">
+                    {station.description}
+                  </p>
+                </div>
+
+                {/* Station Badge (Active Indicator) */}
+                <div className="pt-5 mt-5 border-t border-border/40">
+                  <div
+                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-300 ${
+                      isActive
+                        ? `${station.badgeBg} shadow-xs`
+                        : "bg-muted/50 text-muted-foreground/70 border-border/40"
+                    }`}
+                  >
+                    <span
+                      className={`size-2 rounded-full ${
+                        isActive ? station.dotColor : "bg-muted-foreground/50"
+                      } ${isActive ? "animate-pulse" : ""}`}
+                    />
+                    <span>{station.badge}</span>
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
-      </div>
-
-      {/* The 4 Station Cards - With Organic Roundness & Clear Hierarchy */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {STATIONS.map((station, idx) => {
-          const isActive = activeStep === idx;
-          const isPassed = activeStep > idx;
-
-          return (
-            <div
-              key={station.id}
-              className={`rounded-[2rem] sm:rounded-[2.5rem] border p-7 transition-all duration-500 flex flex-col justify-between ${
-                isActive
-                  ? `${station.borderActive} scale-102 opacity-100`
-                  : isPassed
-                  ? "border-border/70 bg-card/60 opacity-75"
-                  : "border-border/50 bg-card/40 opacity-45"
-              }`}
-            >
-              <div>
-                {/* Station Icon & Number */}
-                <div className="flex items-center justify-between mb-5">
-                  <div
-                    className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-300 ${
-                      isActive
-                        ? station.iconBg
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    <station.icon className="size-6" />
-                  </div>
-
-                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/40 px-2.5 py-1 rounded-full">
-                    {station.station}
-                  </span>
-                </div>
-
-                {/* Station Title */}
-                <h3
-                  className={`text-base font-bold transition-colors ${
-                    isActive ? "text-foreground" : "text-muted-foreground"
-                  }`}
-                >
-                  {station.title}
-                </h3>
-
-                {/* Description */}
-                <p className="mt-2.5 text-xs text-muted-foreground leading-relaxed">
-                  {station.description}
-                </p>
-              </div>
-
-              {/* Station Badge (Active Indicator) */}
-              <div className="pt-5 mt-5 border-t border-border/40">
-                <div
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-300 ${
-                    isActive
-                      ? `${station.badgeBg} shadow-xs`
-                      : "bg-muted/50 text-muted-foreground/70 border-border/40"
-                  }`}
-                >
-                  <span
-                    className={`size-2 rounded-full ${
-                      isActive ? station.dotColor : "bg-muted-foreground/50"
-                    } ${isActive ? "animate-pulse" : ""}`}
-                  />
-                  <span>{station.badge}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );
