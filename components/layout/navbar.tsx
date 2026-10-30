@@ -51,58 +51,61 @@ export function AppNavbar() {
           : "translate-y-0 opacity-100 scale-100"
       }`}
     >
-      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 h-13 sm:h-14 px-4 sm:px-6 rounded-full bg-slate-950/75 dark:bg-slate-950/85 backdrop-blur-2xl border border-white/12 shadow-[0_8px_32px_rgba(0,0,0,0.37),inset_0_1px_1px_rgba(255,255,255,0.15)] text-white w-full max-w-4xl transition-all">
+      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 h-13 sm:h-14 px-4 sm:px-6 rounded-full bg-white/45 dark:bg-slate-950/40 backdrop-blur-2xl saturate-150 border border-black/[0.08] dark:border-white/[0.12] shadow-[0_8px_30px_rgb(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_1px_rgba(255,255,255,0.18)] text-slate-900 dark:text-white w-full max-w-4xl transition-colors duration-300">
         {/* Left: Brand Icon + Title */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-semibold text-sm tracking-tight text-white hover:text-white/90 transition-opacity shrink-0"
+          className="flex items-center gap-2.5 font-semibold text-sm tracking-tight text-slate-900 dark:text-white hover:opacity-90 transition-opacity shrink-0"
         >
-          <div className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white border border-white/15">
+          <div className="flex size-7 items-center justify-center rounded-full bg-slate-900/5 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-900/10 dark:border-white/15 transition-colors">
             <GraduationCap className="size-4" />
           </div>
-          <span className="font-bold tracking-tight text-white">UniCareer</span>
+          <span className="font-bold tracking-tight text-slate-900 dark:text-white">UniCareer</span>
         </Link>
 
-        {/* Center: Clean Nav Links (Image 2 style) */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-xs font-medium text-slate-300">
+        {/* Center: Dynamic Nav Links */}
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-xs font-medium text-slate-600 dark:text-slate-300">
           <Link
             href="/#pipeline"
-            className="flex items-center gap-1 hover:text-white transition-colors"
+            className="flex items-center gap-1 hover:text-slate-950 dark:hover:text-white transition-colors"
           >
             <span>Explore</span>
             <ChevronDown className="size-3 opacity-60" />
           </Link>
           <Link
             href="/opportunities"
-            className="hover:text-white transition-colors"
+            className="hover:text-slate-950 dark:hover:text-white transition-colors"
           >
             Opportunities
           </Link>
-          <Link href="/about" className="hover:text-white transition-colors">
+          <Link
+            href="/about"
+            className="hover:text-slate-950 dark:hover:text-white transition-colors"
+          >
             About
           </Link>
           <Link
             href="/design-system"
-            className="hover:text-white transition-colors"
+            className="hover:text-slate-950 dark:hover:text-white transition-colors"
           >
             Design
           </Link>
         </nav>
 
-        {/* Right: Theme Toggle + Log In + Start Free (Pill Button) */}
+        {/* Right: Theme Toggle + Log In + Start Free (Adaptive Light/Dark Pill Button) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <ThemeToggle className="size-8 border-white/15 bg-white/5 text-white hover:bg-white/15 hover:text-white" />
+          <ThemeToggle className="size-8 border-slate-200/80 dark:border-white/15 bg-black/5 dark:bg-white/5 text-slate-700 dark:text-white hover:bg-black/10 dark:hover:bg-white/15 hover:text-slate-900 dark:hover:text-white transition-colors" />
 
           <Link
             href="/login"
-            className="text-xs font-medium text-slate-300 hover:text-white transition-colors px-2 py-1"
+            className="text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white transition-colors px-2 py-1"
           >
             Log in
           </Link>
 
           <Link
             href="/register"
-            className="text-xs font-semibold px-4 py-2 rounded-full bg-white text-slate-950 hover:bg-slate-100 shadow-xs transition-all hover:scale-103 shrink-0"
+            className="text-xs font-semibold px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 shadow-sm transition-all hover:scale-103 shrink-0"
           >
             Start free
           </Link>
