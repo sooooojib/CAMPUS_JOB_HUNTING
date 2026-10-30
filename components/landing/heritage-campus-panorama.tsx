@@ -102,28 +102,6 @@ export function HeritageCampusPanorama() {
 
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-
-  // Lando Norris Spectral Cursor Lens Tracker
-  const handleStageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!stageRef.current) return;
-    const rect = stageRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    stageRef.current.style.setProperty("--cursor-x", `${x}px`);
-    stageRef.current.style.setProperty("--cursor-y", `${y}px`);
-    stageRef.current.style.setProperty("--lens-opacity", "1");
-  };
-
-  const handleStageMouseEnter = () => {
-    if (!stageRef.current) return;
-    stageRef.current.style.setProperty("--lens-opacity", "1");
-  };
-
-  const handleStageMouseLeave = () => {
-    if (!stageRef.current) return;
-    stageRef.current.style.setProperty("--lens-opacity", "0");
-  };
 
   // Auto-cycle the ticker every 3.8s
   useEffect(() => {
@@ -210,83 +188,18 @@ export function HeritageCampusPanorama() {
         </div>
       </div>
 
-      {/* Main Photographic Heritage Stage with Lando Norris Spectral Cursor Mask */}
-      <div
-        ref={stageRef}
-        onMouseMove={handleStageMouseMove}
-        onMouseEnter={handleStageMouseEnter}
-        onMouseLeave={handleStageMouseLeave}
-        style={{
-          "--cursor-x": "-1000px",
-          "--cursor-y": "-1000px",
-          "--lens-opacity": "0",
-        } as React.CSSProperties}
-        className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden cursor-crosshair group/stage"
-      >
-        {/* Base Layer: Atmospheric Architectural Photography */}
+      {/* Main Photographic Heritage Stage */}
+      <div className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden">
+        {/* Real High-Resolution Photo of Jagannath University Building */}
         <img
           src="/images/jnu-building.jpg"
           alt="Jagannath University Heritage Building"
-          className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-95 dark:brightness-85 saturate-[0.85] pointer-events-none"
+          className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-95 dark:brightness-85 pointer-events-none"
         />
 
-        {/* Lando Norris Style Cursor Spotlight: High-Energy Spectral Color Reveal */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out z-10"
-          style={{
-            opacity: "var(--lens-opacity, 0)",
-            WebkitMaskImage:
-              "radial-gradient(circle 100px at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 90%, transparent 100%)",
-            maskImage:
-              "radial-gradient(circle 100px at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 90%, transparent 100%)",
-          }}
-        >
-          {/* Hyper-Color Saturated Spectral Reveal Layer */}
-          <img
-            src="/images/jnu-building.jpg"
-            alt="Jagannath University Spectral Reveal"
-            className="w-full h-full object-cover object-center filter brightness-125 contrast-135 saturate-200 hue-rotate-[195deg] drop-shadow-2xl"
-          />
-          {/* Lando Norris Neon Ambient Lens Flare */}
-          <div
-            className="absolute size-44 rounded-full blur-2xl bg-cyan-400/35 dark:bg-amber-400/40 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              left: "var(--cursor-x, -1000px)",
-              top: "var(--cursor-y, -1000px)",
-            }}
-          />
-        </div>
-
-        {/* Lando Norris Reticle Lens Ring & Viewfinder HUD */}
-        <div
-          className="absolute pointer-events-none transition-opacity duration-200 -translate-x-1/2 -translate-y-1/2 z-15"
-          style={{
-            left: "var(--cursor-x, -1000px)",
-            top: "var(--cursor-y, -1000px)",
-            opacity: "var(--lens-opacity, 0)",
-          }}
-        >
-          {/* Circular Aperture Ring */}
-          <div className="relative size-[160px] sm:size-[200px] rounded-full border border-cyan-400/70 dark:border-amber-400/80 shadow-[0_0_24px_rgba(6,182,212,0.4)] flex items-center justify-center">
-            {/* Crosshair accents */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-[2px] bg-cyan-400 dark:bg-amber-400" />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-[2px] bg-cyan-400 dark:bg-amber-400" />
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 h-3 w-[2px] bg-cyan-400 dark:bg-amber-400" />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3 w-[2px] bg-cyan-400 dark:bg-amber-400" />
-
-            {/* Center target dot */}
-            <div className="size-1.5 rounded-full bg-cyan-300 dark:bg-amber-300 shadow-[0_0_8px_rgba(6,182,212,0.9)]" />
-
-            {/* Technical HUD Tag */}
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-cyan-400/50 text-[9px] font-mono tracking-widest text-cyan-300 dark:text-amber-300 uppercase whitespace-nowrap shadow-md">
-              SPECTRAL LENS
-            </div>
-          </div>
-        </div>
-
         {/* Ambient Gradient Overlays for Theme Harmonization */}
-        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-transparent pointer-events-none z-15" />
-        <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/40 pointer-events-none z-15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-card/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/45 pointer-events-none" />
 
         {/* ========================================================= */}
         {/* REFINED ARCHITECTURAL MILESTONE PINS                     */}
