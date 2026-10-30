@@ -100,9 +100,9 @@ export default function WelcomePage() {
 
       {/* ========================================================= */}
       {/* SECTION 2: The 4 Stations of the University Pipeline      */}
-      {/* Flowing Clean Section (Zero Stacking Bugs)               */}
+      {/* Smoothly Flowing Section with Synchronized Scroll Conduit */}
       {/* ========================================================= */}
-      <section className="relative z-20 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-card/60 dark:bg-card/70 backdrop-blur-xl shadow-lg py-20 sm:py-24">
+      <section className="py-20 sm:py-24 border-t border-border/40 bg-card/35 dark:bg-card/45 backdrop-blur-xl">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <ProcessConduit />
         </div>
@@ -110,48 +110,85 @@ export default function WelcomePage() {
 
       {/* ========================================================= */}
       {/* SECTION 3: Real Institutional Numbers & Privacy Standard */}
-      {/* Flowing Clean Section (Zero Negative Margins)             */}
+      {/* Unified Institutional Bento Canvas (Mashed Together)     */}
       {/* ========================================================= */}
-      <section className="relative z-30 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-background shadow-lg py-20 sm:py-24">
+      <section className="py-20 sm:py-24 border-t border-border/40 bg-background">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
-            {/* Card 1 */}
-            <div className="rounded-[2.2rem] bg-card/60 border border-border/50 p-8 sm:p-10 shadow-xs hover:border-primary/40 transition-all space-y-3">
-              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight">
-                100%
+          {/* Single Unified Architectural Container - No Disjointed Pieces */}
+          <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/70 bg-card/80 dark:bg-card/90 backdrop-blur-xl shadow-xl overflow-hidden">
+            {/* Unified Top Banner */}
+            <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-5 border-b border-border/50 bg-muted/30">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="size-5 text-primary" />
+                <span className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
+                  Institutional Integrity & Student Protection Guarantee
+                </span>
               </div>
-              <div className="text-sm font-bold text-foreground">
-                Registrar-Verified Members
-              </div>
-              <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                Every student, alumni, and faculty profile is validated against official university records. Zero spam accounts.
-              </p>
+              <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider font-semibold">
+                Official Jagannath University Verification Standard
+              </span>
             </div>
 
-            {/* Card 2 */}
-            <div className="rounded-[2.2rem] bg-card/60 border border-border/50 p-8 sm:p-10 shadow-xs hover:border-primary/40 transition-all space-y-3">
-              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-primary">
-                0%
+            {/* 3 Unified Metric Columns with Elegant Dividers */}
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/60 text-center">
+              {/* Column 1 */}
+              <div className="p-8 sm:p-12 space-y-3">
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-blue-600 dark:text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                  Registrar Authenticated
+                </span>
+                <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight pt-1">
+                  100%
+                </div>
+                <div className="text-sm font-bold text-foreground">
+                  Registrar-Verified Members
+                </div>
+                <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                  Every student, alumni, and faculty profile is validated against official university records. Zero fake profiles or unaccredited claims.
+                </p>
               </div>
-              <div className="text-sm font-bold text-foreground">
-                Public Web Scraping
+
+              {/* Column 2 */}
+              <div className="p-8 sm:p-12 space-y-3">
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                  100% Private Cloud Vault
+                </span>
+                <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-primary pt-1">
+                  0%
+                </div>
+                <div className="text-sm font-bold text-foreground">
+                  Public Web Scraping
+                </div>
+                <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                  Candidate resumes are stored in private cloud storage and only accessed via expiring, 15-minute signed links upon explicit student consent.
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                Candidate resumes are stored in private cloud storage and only accessed via expiring, 15-minute signed links upon consent.
-              </p>
+
+              {/* Column 3 */}
+              <div className="p-8 sm:p-12 space-y-3">
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                  Alumni Enterprise Network
+                </span>
+                <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-amber-600 dark:text-amber-400 pt-1">
+                  450+
+                </div>
+                <div className="text-sm font-bold text-foreground">
+                  Active Senior Mentors
+                </div>
+                <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                  Spanning multinational software houses, commercial banks, government institutions, and global academic research fellowships.
+                </p>
+              </div>
             </div>
 
-            {/* Card 3 */}
-            <div className="rounded-[2.2rem] bg-card/60 border border-border/50 p-8 sm:p-10 shadow-xs hover:border-primary/40 transition-all space-y-3">
-              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-emerald-600 dark:text-emerald-400">
-                450+
-              </div>
-              <div className="text-sm font-bold text-foreground">
-                Alumni Enterprise Connections
-              </div>
-              <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                Spanning multinational software houses, commercial banks, government institutions, and global research fellowships.
-              </p>
+            {/* Bottom Security Footer inside the Container */}
+            <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-4 border-t border-border/50 bg-muted/20 text-xs text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <Lock className="size-3.5 text-primary" />
+                <span>Gated Institutional Access • Controlled by University Authorization</span>
+              </span>
+              <span className="font-mono text-[11px] text-foreground font-semibold">
+                Registrar ID Sync: Active
+              </span>
             </div>
           </div>
         </div>

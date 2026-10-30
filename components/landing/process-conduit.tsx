@@ -6,7 +6,6 @@ import {
   ShieldCheck,
   Award,
   Building2,
-  CheckCircle2,
 } from "lucide-react";
 
 const STATIONS = [
@@ -87,14 +86,22 @@ export function ProcessConduit() {
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Natural, non-trapping scroll calculation:
-      // Starts as section enters bottom-half of viewport, completes as section nears center
-      const start = windowHeight * 0.85;
-      const end = windowHeight * 0.25;
-      const totalDistance = start - end;
-      const current = start - rect.top;
+      // Exact user activation threshold:
+      // When the section header arrives in the upper third of the viewport (Image 2 view)
+      // Before reaching this point: NO animation, progress is 0, station 1 is resting
+      const activationPoint = windowHeight * 0.35;
 
-      const p = Math.min(Math.max(current / totalDistance, 0), 1);
+      if (rect.top > activationPoint) {
+        setProgress(0);
+        setActiveStep(0);
+        return;
+      }
+
+      // Smooth progression as user scrolls through the section
+      const scrollRange = rect.height * 0.8;
+      const scrolled = activationPoint - rect.top;
+      const p = Math.min(Math.max(scrolled / scrollRange, 0), 1);
+
       setProgress(p);
 
       if (p < 0.28) {
@@ -114,14 +121,14 @@ export function ProcessConduit() {
   }, []);
 
   return (
-    <div ref={containerRef} className="space-y-10">
+    <div ref={containerRef} className="space-y-12">
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
           <span>Verified Pipeline</span>
           <span className="size-1.5 rounded-full bg-primary" />
           <span className="text-muted-foreground font-semibold">
-            Stage 0{activeStep + 1} Active
+            Stage 0{activeStep + 1} of 04 Active
           </span>
         </div>
 
@@ -136,12 +143,12 @@ export function ProcessConduit() {
 
       {/* Desktop Horizontal Conduit Line - Mathematically Anchored to Card Centers */}
       <div className="hidden lg:block relative mx-auto max-w-7xl px-4">
-        {/* Track spanning from 1st card center (12.5%) to 4th card center (87.5%) */}
+        {/* Track spanning exactly between the 1st card center (12.5%) and 4th card center (87.5%) */}
         <div className="relative mx-[12.5%] h-2 bg-border/60 rounded-full overflow-hidden">
           {/* Luminous Fill - Strictly Scroll-Driven */}
           <div
             className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-300 ease-out"
-            style={{ width: `${Math.max(progress * 100, 3)}%` }}
+            style={{ width: `${Math.max(progress * 100, 2)}%` }}
           />
         </div>
 
