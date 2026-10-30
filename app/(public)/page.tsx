@@ -10,64 +10,73 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { CampusNetworkGraph } from "@/components/landing/campus-network-graph";
+import { IsometricCampusHero } from "@/components/landing/isometric-campus-hero";
 
 export default function WelcomePage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-border/80 bg-gradient-to-b from-primary/5 via-background to-background py-16 sm:py-24">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold text-blue-900 dark:border-blue-900/60 dark:bg-blue-950/60 dark:text-blue-300">
-              <Lock className="size-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Private & Gated Institutional Network</span>
+      {/* Hero Section — Clean, Uncluttered Split Layout (Accrely-Inspired) */}
+      <section className="relative overflow-hidden border-b border-border/80 bg-gradient-to-b from-blue-950/15 via-background to-background py-16 sm:py-24">
+        {/* Modern Engineering Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f610_1px,transparent_1px),linear-gradient(to_bottom,#3b82f610_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 size-96 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-1/4 size-96 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+
+        <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Column (6 cols): Authoritative, Spacious Typography & Actions */}
+            <div className="lg:col-span-6 flex flex-col items-start text-left space-y-6 max-w-2xl">
+              {/* Accrely-Style Feature Pill Badge */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold text-blue-900 dark:border-blue-800/60 dark:bg-blue-950/60 dark:text-blue-300 shadow-xs">
+                <span className="px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
+                  NEW
+                </span>
+                <span>Jagannath University Career Network</span>
+              </div>
+
+              {/* Bold, Elegant Headline */}
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-[1.12]">
+                Careers that elevate talent, for Jagannath University.
+              </h1>
+
+              {/* High-Readability Description */}
+              <p className="text-base text-muted-foreground sm:text-lg leading-relaxed max-w-xl">
+                UniCareer Community connects verified students, distinguished alumni, faculty mentors, and vetted employers into a private, high-trust ecosystem for internal referrals and direct campus placement.
+              </p>
+
+              {/* Pill Action Buttons (Accrely Style) */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm px-6 py-3 shadow-md hover:bg-primary/90 transition-all hover:scale-102"
+                >
+                  <span>Create Verified Account</span>
+                  <ArrowRight className="size-4 ml-1.5" />
+                </Link>
+
+                <Link
+                  href="/login"
+                  className="inline-flex items-center justify-center rounded-full border border-border bg-card/80 text-foreground font-medium text-sm px-6 py-3 backdrop-blur-md hover:bg-muted transition-all hover:scale-102"
+                >
+                  Member Sign In
+                </Link>
+              </div>
+
+              {/* Trust Announcement Pill Banner */}
+              <div className="pt-2">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/80 bg-muted/40 text-xs text-muted-foreground font-medium">
+                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">
+                    VERIFIED
+                  </span>
+                  <span>Registrar-validated records · 0% public scraping · Private vault</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl leading-[1.1]">
-              Connecting University Talent with High-Trust Careers
-            </h1>
-
-            <p className="text-base text-muted-foreground sm:text-lg leading-relaxed max-w-2xl">
-              UniCareer Community connects verified students, distinguished alumni, faculty mentors, and vetted employers. An exclusive ecosystem designed for trusted referrals and career acceleration.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Link
-                href="/register"
-                className={buttonVariants({ variant: "default", size: "lg" })}
-              >
-                <span>Create Verified Account</span>
-                <ArrowRight className="size-4 ml-1.5" />
-              </Link>
-
-              <Link
-                href="/login"
-                className={buttonVariants({ variant: "outline", size: "lg" })}
-              >
-                Member Sign In
-              </Link>
+            {/* Right Column (6 cols): 3D Layered Isometric Campus Visual */}
+            <div className="lg:col-span-6 flex items-center justify-center w-full">
+              <IsometricCampusHero />
             </div>
-
-            <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>Zero Public Scraping</span>
-              </span>
-              <span className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>Registrar Record Validation</span>
-              </span>
-              <span className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>Private Resume Vault</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Interactive Animated Jagannath University Campus Graph */}
-          <div className="w-full max-w-5xl mx-auto pt-10 sm:pt-14">
-            <CampusNetworkGraph />
           </div>
         </div>
       </section>
