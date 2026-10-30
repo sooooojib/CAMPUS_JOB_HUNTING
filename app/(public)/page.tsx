@@ -109,30 +109,16 @@ export default function WelcomePage() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 3: Real Institutional Numbers & Privacy Standard */}
-      {/* Unified Institutional Bento Canvas (Mashed Together)     */}
+      {/* SECTION 3: Real Institutional Numbers                      */}
+      {/* Blended 3-Column Stats Grid (Seamless Page Integration)    */}
       {/* ========================================================= */}
-      <section className="py-20 sm:py-24 border-t border-border/40 bg-background">
+      <section className="py-16 sm:py-20 border-t border-border/40 bg-card/20 dark:bg-card/25 backdrop-blur-xl">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
-          {/* Single Unified Architectural Container - No Disjointed Pieces */}
-          <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/70 bg-card/80 dark:bg-card/90 backdrop-blur-xl shadow-xl overflow-hidden">
-            {/* Unified Top Banner */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-5 border-b border-border/50 bg-muted/30">
-              <div className="flex items-center gap-2.5">
-                <ShieldCheck className="size-5 text-primary" />
-                <span className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
-                  Institutional Integrity & Student Protection Guarantee
-                </span>
-              </div>
-              <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider font-semibold">
-                Official Jagannath University Verification Standard
-              </span>
-            </div>
-
-            {/* 3 Unified Metric Columns with Elegant Dividers */}
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/60 text-center">
+          {/* Seamless Blended Container - Clean 3-Metric Presentation */}
+          <div className="rounded-[2.5rem] sm:rounded-[3rem] border border-border/40 bg-card/50 dark:bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/40 text-center">
               {/* Column 1 */}
-              <div className="p-8 sm:p-12 space-y-3">
+              <div className="p-8 sm:p-10 space-y-3">
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-blue-600 dark:text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
                   Registrar Authenticated
                 </span>
@@ -148,7 +134,7 @@ export default function WelcomePage() {
               </div>
 
               {/* Column 2 */}
-              <div className="p-8 sm:p-12 space-y-3">
+              <div className="p-8 sm:p-10 space-y-3">
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                   100% Private Cloud Vault
                 </span>
@@ -164,7 +150,7 @@ export default function WelcomePage() {
               </div>
 
               {/* Column 3 */}
-              <div className="p-8 sm:p-12 space-y-3">
+              <div className="p-8 sm:p-10 space-y-3">
                 <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
                   Alumni Enterprise Network
                 </span>
@@ -178,17 +164,6 @@ export default function WelcomePage() {
                   Spanning multinational software houses, commercial banks, government institutions, and global academic research fellowships.
                 </p>
               </div>
-            </div>
-
-            {/* Bottom Security Footer inside the Container */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-4 border-t border-border/50 bg-muted/20 text-xs text-muted-foreground">
-              <span className="flex items-center gap-2">
-                <Lock className="size-3.5 text-primary" />
-                <span>Gated Institutional Access • Controlled by University Authorization</span>
-              </span>
-              <span className="font-mono text-[11px] text-foreground font-semibold">
-                Registrar ID Sync: Active
-              </span>
             </div>
           </div>
         </div>

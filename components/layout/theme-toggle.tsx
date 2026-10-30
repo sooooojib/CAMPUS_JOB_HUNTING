@@ -4,6 +4,7 @@ import * as React from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const emptySubscribe = () => () => {};
 
@@ -15,7 +16,7 @@ function useMounted() {
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
 
@@ -26,6 +27,7 @@ export function ThemeToggle() {
         size="icon-sm"
         aria-label="Toggle theme"
         disabled
+        className={cn("rounded-full", className)}
       >
         <span className="size-4 animate-pulse rounded-full bg-muted" />
       </Button>
@@ -47,6 +49,7 @@ export function ThemeToggle() {
       variant="outline"
       size="icon-sm"
       onClick={cycleTheme}
+      className={cn("rounded-full", className)}
       aria-label={`Current theme: ${theme}. Click to switch theme.`}
       title={`Theme: ${theme}`}
     >

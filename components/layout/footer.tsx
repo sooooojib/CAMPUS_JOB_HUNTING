@@ -17,7 +17,7 @@ export function AppFooter() {
   };
 
   return (
-    <footer className="border-t border-border/40 bg-card/90 dark:bg-[#060A14] text-card-foreground rounded-t-[2.5rem] sm:rounded-t-[3.5rem] overflow-hidden mt-12">
+    <footer id="site-footer" className="border-t border-border/40 bg-card/90 dark:bg-[#060A14] text-card-foreground rounded-t-[2.5rem] sm:rounded-t-[3.5rem] overflow-hidden mt-12">
       <div className="container mx-auto max-w-7xl px-6 sm:px-10 pt-16 sm:pt-20 pb-8 space-y-16">
         {/* Top Grid: Newsletter on Left, 3 Navigation Columns on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 sm:gap-16">
