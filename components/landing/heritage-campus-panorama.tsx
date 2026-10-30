@@ -102,6 +102,28 @@ export function HeritageCampusPanorama() {
 
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  // Lando Norris Spectral Cursor Lens Tracker
+  const handleStageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!stageRef.current) return;
+    const rect = stageRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    stageRef.current.style.setProperty("--cursor-x", `${x}px`);
+    stageRef.current.style.setProperty("--cursor-y", `${y}px`);
+    stageRef.current.style.setProperty("--lens-opacity", "1");
+  };
+
+  const handleStageMouseEnter = () => {
+    if (!stageRef.current) return;
+    stageRef.current.style.setProperty("--lens-opacity", "1");
+  };
+
+  const handleStageMouseLeave = () => {
+    if (!stageRef.current) return;
+    stageRef.current.style.setProperty("--lens-opacity", "0");
+  };
 
   // Auto-cycle the ticker every 3.8s
   useEffect(() => {
@@ -167,13 +189,13 @@ export function HeritageCampusPanorama() {
           <img
             src="/images/jnu-crest.png"
             alt="Jagannath University"
-            className="size-7 object-contain"
+            className="size-7 object-contain hover:scale-110 hover:rotate-6 transition-transform duration-300 cursor-pointer"
           />
           <div>
             <h3 className="text-sm font-bold text-foreground tracking-tight flex items-center gap-2">
               <span>Jagannath University Administrative Core</span>
-              <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                Est. 1858
+              <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 hover:scale-105 hover:bg-primary/20 transition-all cursor-default">
+                Est. 2005
               </span>
             </h3>
             <p className="text-xs text-muted-foreground">
@@ -182,24 +204,89 @@ export function HeritageCampusPanorama() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground bg-muted/40 px-3 py-1.5 rounded-full border border-border/50">
+        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground bg-muted/40 hover:bg-muted/70 hover:border-emerald-500/50 hover:shadow-sm px-3 py-1.5 rounded-full border border-border/50 transition-all duration-300 cursor-default">
           <ShieldCheck className="size-4 text-emerald-500" />
           <span className="font-semibold text-foreground">Registrar Validated Community</span>
         </div>
       </div>
 
-      {/* Main Photographic Heritage Stage */}
-      <div className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden">
-        {/* Real High-Resolution Photo of Jagannath University Building */}
+      {/* Main Photographic Heritage Stage with Lando Norris Spectral Cursor Mask */}
+      <div
+        ref={stageRef}
+        onMouseMove={handleStageMouseMove}
+        onMouseEnter={handleStageMouseEnter}
+        onMouseLeave={handleStageMouseLeave}
+        style={{
+          "--cursor-x": "-1000px",
+          "--cursor-y": "-1000px",
+          "--lens-opacity": "0",
+        } as React.CSSProperties}
+        className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden cursor-crosshair group/stage"
+      >
+        {/* Base Layer: Atmospheric Architectural Photography */}
         <img
           src="/images/jnu-building.jpg"
           alt="Jagannath University Heritage Building"
-          className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-95 dark:brightness-85 pointer-events-none"
+          className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-95 dark:brightness-85 saturate-[0.85] pointer-events-none"
         />
 
+        {/* Lando Norris Style Cursor Spotlight: High-Energy Spectral Color Reveal */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out z-10"
+          style={{
+            opacity: "var(--lens-opacity, 0)",
+            WebkitMaskImage:
+              "radial-gradient(circle 100px at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 90%, transparent 100%)",
+            maskImage:
+              "radial-gradient(circle 100px at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 90%, transparent 100%)",
+          }}
+        >
+          {/* Hyper-Color Saturated Spectral Reveal Layer */}
+          <img
+            src="/images/jnu-building.jpg"
+            alt="Jagannath University Spectral Reveal"
+            className="w-full h-full object-cover object-center filter brightness-125 contrast-135 saturate-200 hue-rotate-[195deg] drop-shadow-2xl"
+          />
+          {/* Lando Norris Neon Ambient Lens Flare */}
+          <div
+            className="absolute size-44 rounded-full blur-2xl bg-cyan-400/35 dark:bg-amber-400/40 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              left: "var(--cursor-x, -1000px)",
+              top: "var(--cursor-y, -1000px)",
+            }}
+          />
+        </div>
+
+        {/* Lando Norris Reticle Lens Ring & Viewfinder HUD */}
+        <div
+          className="absolute pointer-events-none transition-opacity duration-200 -translate-x-1/2 -translate-y-1/2 z-15"
+          style={{
+            left: "var(--cursor-x, -1000px)",
+            top: "var(--cursor-y, -1000px)",
+            opacity: "var(--lens-opacity, 0)",
+          }}
+        >
+          {/* Circular Aperture Ring */}
+          <div className="relative size-[160px] sm:size-[200px] rounded-full border border-cyan-400/70 dark:border-amber-400/80 shadow-[0_0_24px_rgba(6,182,212,0.4)] flex items-center justify-center">
+            {/* Crosshair accents */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-[2px] bg-cyan-400 dark:bg-amber-400" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-[2px] bg-cyan-400 dark:bg-amber-400" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 h-3 w-[2px] bg-cyan-400 dark:bg-amber-400" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3 w-[2px] bg-cyan-400 dark:bg-amber-400" />
+
+            {/* Center target dot */}
+            <div className="size-1.5 rounded-full bg-cyan-300 dark:bg-amber-300 shadow-[0_0_8px_rgba(6,182,212,0.9)]" />
+
+            {/* Technical HUD Tag */}
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-cyan-400/50 text-[9px] font-mono tracking-widest text-cyan-300 dark:text-amber-300 uppercase whitespace-nowrap shadow-md">
+              SPECTRAL LENS
+            </div>
+          </div>
+        </div>
+
         {/* Ambient Gradient Overlays for Theme Harmonization */}
-        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-card/30 pointer-events-none" />
-        <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/45 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-transparent pointer-events-none z-15" />
+        <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/40 pointer-events-none z-15" />
 
         {/* ========================================================= */}
         {/* REFINED ARCHITECTURAL MILESTONE PINS                     */}
@@ -321,43 +408,51 @@ export function HeritageCampusPanorama() {
         {/* ========================================================= */}
         {!activeDetail && (
           <>
-            <div className="absolute bottom-5 left-5 sm:bottom-6 sm:left-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 rounded-full px-5 py-2.5 shadow-lg transition-opacity duration-300">
-              <div className="flex size-8 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
-                <Zap className="size-4" />
+            {/* Widget 1: Referral Velocity (Tactile Interactive Micro-UI) */}
+            <div className="group/velocity cursor-pointer absolute bottom-5 left-5 sm:bottom-6 sm:left-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 hover:border-amber-500/70 rounded-full px-5 py-2.5 shadow-lg hover:shadow-[0_12px_32px_rgba(245,158,11,0.25)] hover:scale-105 active:scale-95 transition-all duration-300">
+              <div className="flex size-8 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0 group-hover/velocity:bg-amber-500/25 group-hover/velocity:scale-115 group-hover/velocity:rotate-12 group-hover/velocity:shadow-[0_0_16px_rgba(245,158,11,0.5)] transition-all duration-300">
+                <Zap className="size-4 group-hover/velocity:fill-amber-500 transition-colors" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground group-hover/velocity:text-amber-500 transition-colors">
                     Referral Velocity
                   </span>
-                  <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 group-hover/velocity:scale-110 group-hover/velocity:font-bold transition-transform">
                     94% Shortlist
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-xs font-bold text-foreground">38 Placements Active</span>
                   <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 w-[94%] rounded-full" />
+                    <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 w-[94%] group-hover/velocity:w-full group-hover/velocity:shadow-[0_0_10px_rgba(16,185,129,0.8)] rounded-full transition-all duration-700 ease-out" />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="absolute bottom-5 right-5 sm:bottom-6 sm:right-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 rounded-full px-5 py-2.5 shadow-lg transition-opacity duration-300">
-              <div className="flex size-8 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-                <Briefcase className="size-4" />
+            {/* Widget 2: Campus Hiring Drives (Tactile Interactive Micro-UI) */}
+            <div className="group/drives cursor-pointer absolute bottom-5 right-5 sm:bottom-6 sm:right-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 hover:border-emerald-500/70 rounded-full px-5 py-2.5 shadow-lg hover:shadow-[0_12px_32px_rgba(16,185,129,0.25)] hover:scale-105 active:scale-95 transition-all duration-300">
+              <div className="flex size-8 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0 group-hover/drives:bg-emerald-500/25 group-hover/drives:scale-115 group-hover/drives:-rotate-12 group-hover/drives:shadow-[0_0_16px_rgba(16,185,129,0.5)] transition-all duration-300">
+                <Briefcase className="size-4 group-hover/drives:fill-emerald-500/30 transition-colors" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
+                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground group-hover/drives:text-emerald-500 transition-colors">
                     Campus Hiring Drives
                   </span>
-                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse group-hover/drives:scale-150 transition-transform" />
                 </div>
                 <div className="flex items-center gap-1.5 mt-0.5 text-xs font-bold text-foreground">
-                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">Optimizely</span>
-                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">bKash</span>
-                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">Brain Station</span>
+                  <span className="bg-muted hover:bg-emerald-500 hover:text-white px-2 py-0.5 rounded-full text-[11px] transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer">
+                    Optimizely
+                  </span>
+                  <span className="bg-muted hover:bg-emerald-500 hover:text-white px-2 py-0.5 rounded-full text-[11px] transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer">
+                    bKash
+                  </span>
+                  <span className="bg-muted hover:bg-emerald-500 hover:text-white px-2 py-0.5 rounded-full text-[11px] transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer">
+                    Brain Station
+                  </span>
                 </div>
               </div>
             </div>
