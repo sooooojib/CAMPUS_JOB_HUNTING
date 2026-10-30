@@ -19,7 +19,7 @@ const STATIONS = [
     icon: GraduationCap,
     color: "blue",
     borderActive:
-      "border-blue-500/80 ring-2 ring-blue-500/20 shadow-[0_0_25px_rgba(59,130,246,0.18)] bg-card",
+      "border-blue-500/80 ring-2 ring-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.22)] bg-card",
     iconBg: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
     badgeBg:
       "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30",
@@ -35,7 +35,7 @@ const STATIONS = [
     icon: ShieldCheck,
     color: "purple",
     borderActive:
-      "border-purple-500/80 ring-2 ring-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.18)] bg-card",
+      "border-purple-500/80 ring-2 ring-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.22)] bg-card",
     iconBg: "bg-purple-500/15 text-purple-600 dark:text-purple-400",
     badgeBg:
       "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/30",
@@ -51,7 +51,7 @@ const STATIONS = [
     icon: Award,
     color: "amber",
     borderActive:
-      "border-amber-500/80 ring-2 ring-amber-500/20 shadow-[0_0_25px_rgba(245,158,11,0.18)] bg-card",
+      "border-amber-500/80 ring-2 ring-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.22)] bg-card",
     iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
     badgeBg:
       "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30",
@@ -67,7 +67,7 @@ const STATIONS = [
     icon: Building2,
     color: "emerald",
     borderActive:
-      "border-emerald-500/80 ring-2 ring-emerald-500/20 shadow-[0_0_25px_rgba(16,185,129,0.18)] bg-card",
+      "border-emerald-500/80 ring-2 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.22)] bg-card",
     iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
     badgeBg:
       "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
@@ -75,10 +75,16 @@ const STATIONS = [
   },
 ];
 
+// Discrete fill percentages anchored strictly to the 4 round points:
+// Station 1 = 0% (anchored at Node 1)
+// Station 2 = 33.333% (anchored at Node 2)
+// Station 3 = 66.666% (anchored at Node 3)
+// Station 4 = 100% (anchored at Node 4)
+const STEP_FILL_PERCENTAGES = [0, 33.333, 66.666, 100];
+
 export function ProcessConduit() {
   const trackRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -88,25 +94,23 @@ export function ProcessConduit() {
       const windowHeight = window.innerHeight;
       const stickyTop = 80; // top-20 (80px from viewport top)
 
-      // Dynamic calculation of total locked distance:
-      // The child is sticky until its bottom reaches the bottom of trackRef
+      // Total distance the section remains pinned in view:
       const stickyHeight = stickyRef.current?.offsetHeight ?? (windowHeight * 0.65);
       const totalPinnedDistance = rect.height - stickyHeight;
       if (totalPinnedDistance <= 0) return;
 
       const scrolledDistance = stickyTop - rect.top;
 
-      // Before lock position is reached: progress is 0, station 1 is at rest
+      // Before lock position is reached: Station 1 is resting
       if (scrolledDistance <= 0) {
-        setProgress(0);
         setActiveStep(0);
         return;
       }
 
+      // Discrete step calculation across 4 equal zones
+      // Only stopping points are the round nodes (0, 1, 2, 3) — zero in-between stops!
       const p = Math.min(Math.max(scrolledDistance / totalPinnedDistance, 0), 1);
-      setProgress(p);
 
-      // Station cadences evenly divided across the locked scroll:
       if (p < 0.25) {
         setActiveStep(0);
       } else if (p < 0.50) {
@@ -122,6 +126,8 @@ export function ProcessConduit() {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const targetFill = STEP_FILL_PERCENTAGES[activeStep];
 
   return (
     <div ref={trackRef} className="relative h-[220vh] sm:h-[260vh]">
@@ -146,14 +152,14 @@ export function ProcessConduit() {
           </p>
         </div>
 
-        {/* Desktop Horizontal Conduit Line - Mathematically Anchored to Card Centers */}
+        {/* Desktop Horizontal Conduit Line - Anchored Between 1st and 4th Card Centers */}
         <div className="hidden lg:block relative mx-auto max-w-7xl px-4">
-          {/* Track spanning exactly between the 1st card center (12.5%) and 4th card center (87.5%) */}
-          <div className="relative mx-[12.5%] h-2 bg-border/60 rounded-full overflow-hidden">
-            {/* Luminous Fill - Strictly Scroll-Driven */}
+          {/* Laser Track spanning between Node 1 (12.5%) and Node 4 (87.5%) */}
+          <div className="relative mx-[12.5%] h-2.5 bg-border/60 rounded-full overflow-hidden shadow-inner">
+            {/* Luminous Fill - Glides smoothly between round nodes with zero in-between stopping */}
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-300 ease-out"
-              style={{ width: `${Math.max(progress * 100, 2)}%` }}
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{ width: `${targetFill}%` }}
             />
           </div>
 
@@ -165,12 +171,12 @@ export function ProcessConduit() {
               return (
                 <div
                   key={station.id}
-                  className={`relative flex items-center justify-center size-6 rounded-full border-2 bg-card transition-all duration-300 ${
+                  className={`relative flex items-center justify-center size-7 rounded-full border-2 bg-card transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isCurrent
-                      ? `${station.dotColor} border-background scale-130 shadow-lg ring-4 ring-primary/25`
+                      ? `${station.dotColor} border-background scale-135 shadow-[0_0_20px_rgba(59,130,246,0.6)] ring-4 ring-primary/25 z-10`
                       : isCompletedOrActive
-                      ? `${station.dotColor} border-background scale-110`
-                      : "border-border bg-muted scale-95"
+                      ? `${station.dotColor} border-background scale-110 shadow-sm`
+                      : "border-border/80 bg-muted scale-95"
                   }`}
                 >
                   {isCurrent && (
@@ -182,7 +188,7 @@ export function ProcessConduit() {
           </div>
         </div>
 
-        {/* The 4 Station Cards - With Organic Roundness & Clear Hierarchy */}
+        {/* The 4 Station Cards - With Organic Roundness & Smooth Transition Focus */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STATIONS.map((station, idx) => {
             const isActive = activeStep === idx;
@@ -191,19 +197,20 @@ export function ProcessConduit() {
             return (
               <div
                 key={station.id}
-                className={`rounded-[2rem] sm:rounded-[2.5rem] border p-7 transition-all duration-500 flex flex-col justify-between ${
+                onClick={() => setActiveStep(idx)}
+                className={`cursor-pointer rounded-[2rem] sm:rounded-[2.5rem] border p-7 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between ${
                   isActive
                     ? `${station.borderActive} scale-102 opacity-100`
                     : isPassed
-                    ? "border-border/70 bg-card/60 opacity-75"
-                    : "border-border/50 bg-card/40 opacity-45"
+                    ? "border-border/70 bg-card/60 opacity-75 scale-100"
+                    : "border-border/40 bg-card/30 opacity-40 scale-98"
                 }`}
               >
                 <div>
                   {/* Station Icon & Number */}
                   <div className="flex items-center justify-between mb-5">
                     <div
-                      className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-300 ${
+                      className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isActive
                           ? station.iconBg
                           : "bg-muted text-muted-foreground"
@@ -219,7 +226,7 @@ export function ProcessConduit() {
 
                   {/* Station Title */}
                   <h3
-                    className={`text-base font-bold transition-colors ${
+                    className={`text-base font-bold transition-colors duration-500 ${
                       isActive ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >
@@ -235,7 +242,7 @@ export function ProcessConduit() {
                 {/* Station Badge (Active Indicator) */}
                 <div className="pt-5 mt-5 border-t border-border/40">
                   <div
-                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-300 ${
+                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isActive
                         ? `${station.badgeBg} shadow-xs`
                         : "bg-muted/50 text-muted-foreground/70 border-border/40"
