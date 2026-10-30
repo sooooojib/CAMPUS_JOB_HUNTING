@@ -214,19 +214,7 @@ export function HeritageCampusPanorama() {
           </div>
         </div>
 
-        {/* Bottom Banner Inside Panorama */}
-        <div className="absolute bottom-4 left-4 right-4 z-20 hidden sm:flex items-center justify-between text-xs font-mono text-muted-foreground bg-card/85 dark:bg-card/90 backdrop-blur-md px-4 py-2.5 rounded-xl border border-border/80 shadow-sm">
-          <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold text-foreground">Authentic Campus Network</span>
-            <span>•</span>
-            <span>Tied to Official Student & Alumni Records</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span>Zero Public Web Scraping</span>
-            <span className="text-primary font-bold">100% PRIVATE VAULT</span>
-          </div>
-        </div>
+
       </div>
 
       {/* Auto-Updating Live Monospace Campus Ticker */}
@@ -259,3 +247,4 @@ export function HeritageCampusPanorama() {
     </div>
   );
 }
+
