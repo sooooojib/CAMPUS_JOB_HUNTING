@@ -277,151 +277,27 @@ export function CampusNetworkGraph() {
         </svg>
 
         {/* ========================================================= */}
-        {/* THE CENTERPIECE: Jagannath University Administrative Core  */}
+        {/* THE CENTERPIECE: Jagannath University Official Crest Core */}
         {/* ========================================================= */}
-        <div className="relative z-10 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-card/90 border border-primary/30 shadow-xl backdrop-blur-md max-w-[210px] sm:max-w-[250px] text-center select-none">
-          {/* Subtle Outer Glow */}
-          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-500/20 via-primary/20 to-amber-500/20 blur-md pointer-events-none" />
+        <div className="relative z-10 flex flex-col items-center justify-center p-3 sm:p-5 rounded-3xl bg-card/95 border border-primary/30 shadow-2xl backdrop-blur-xl max-w-[200px] sm:max-w-[240px] text-center select-none group transition-all duration-300 hover:border-primary/50 hover:shadow-primary/20">
+          {/* Ambient Outer Aura */}
+          <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-blue-500/25 via-primary/30 to-amber-500/25 blur-lg opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-          {/* Architectural Heritage Vector SVG of Jagannath University Building */}
-          <div className="relative w-full aspect-[16/10] flex items-center justify-center mb-2">
-            <svg
-              viewBox="0 0 240 150"
-              className="w-full h-full drop-shadow-sm"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Sky / Ambient Backing */}
-              <rect x="10" y="20" width="220" height="120" rx="4" fill="currentColor" className="text-muted/10" />
-
-              {/* Pediment / Triangular Neoclassical Roof */}
-              <polygon
-                points="120,8 60,42 180,42"
-                fill="currentColor"
-                className="text-primary/20"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <polygon
-                points="120,13 68,40 172,40"
-                fill="none"
-                stroke="currentColor"
-                className="text-primary/40"
-                strokeWidth="1"
-              />
-
-              {/* JNU Crest Medallion in Pediment */}
-              <circle
-                cx="120"
-                cy="27"
-                r="7"
-                fill="#ffffff"
-                stroke="#d97706"
-                strokeWidth="1.5"
-                className="university-crest-pulse"
-              />
-              <circle cx="120" cy="27" r="4" fill="#0284c7" />
-
-              {/* Roof Balustrade / Cornice */}
-              <rect x="25" y="42" width="190" height="6" fill="currentColor" className="text-primary/30" stroke="currentColor" strokeWidth="1" />
-              {/* Balusters */}
-              {[35, 45, 55, 65, 175, 185, 195, 205].map((bx) => (
-                <rect key={`bal-${bx}`} x={bx} y="38" width="2" height="4" fill="currentColor" className="text-muted-foreground/40" />
-              ))}
-
-              {/* The Iconic Orange Jagannath University Banner */}
-              <rect
-                x="64"
-                y="52"
-                width="112"
-                height="15"
-                rx="2"
-                fill="#ea580c"
-                stroke="#c2410c"
-                strokeWidth="1"
-              />
-              <text
-                x="120"
-                y="63"
-                textAnchor="middle"
-                fontSize="8.5"
-                fontWeight="bold"
-                fill="#ffffff"
-                fontFamily="sans-serif"
-                letterSpacing="0.2"
-              >
-                জগন্নাথ বিশ্ববিদ্যালয়
-              </text>
-
-              {/* Main Building Body / Facade */}
-              <rect
-                x="25"
-                y="48"
-                width="190"
-                height="82"
-                fill="currentColor"
-                className="text-card"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-
-              {/* 4 Grand Classical Columns (Neoclassical Portico) */}
-              {/* Column 1 */}
-              <rect x="70" y="68" width="8" height="58" fill="currentColor" className="text-primary/15" stroke="currentColor" strokeWidth="1" />
-              <rect x="68" y="68" width="12" height="4" rx="1" fill="#d97706" />
-              <rect x="68" y="123" width="12" height="4" rx="1" fill="currentColor" className="text-primary/30" />
-
-              {/* Column 2 */}
-              <rect x="96" y="68" width="8" height="58" fill="currentColor" className="text-primary/15" stroke="currentColor" strokeWidth="1" />
-              <rect x="94" y="68" width="12" height="4" rx="1" fill="#d97706" />
-              <rect x="94" y="123" width="12" height="4" rx="1" fill="currentColor" className="text-primary/30" />
-
-              {/* Column 3 */}
-              <rect x="136" y="68" width="8" height="58" fill="currentColor" className="text-primary/15" stroke="currentColor" strokeWidth="1" />
-              <rect x="134" y="68" width="12" height="4" rx="1" fill="#d97706" />
-              <rect x="134" y="123" width="12" height="4" rx="1" fill="currentColor" className="text-primary/30" />
-
-              {/* Column 4 */}
-              <rect x="162" y="68" width="8" height="58" fill="currentColor" className="text-primary/15" stroke="currentColor" strokeWidth="1" />
-              <rect x="160" y="68" width="12" height="4" rx="1" fill="#d97706" />
-              <rect x="160" y="123" width="12" height="4" rx="1" fill="currentColor" className="text-primary/30" />
-
-              {/* Central Grand Archway (Warm Interior Glow) */}
-              <path
-                d="M 110 126 L 110 96 Q 120 86 130 96 L 130 126 Z"
-                fill="#fbbf24"
-                fillOpacity="0.25"
-                stroke="#d97706"
-                strokeWidth="1.2"
-              />
-              <circle cx="120" cy="98" r="2" fill="#f59e0b" />
-
-              {/* Left Wing Arches */}
-              <path d="M 33 126 L 33 100 Q 40 92 47 100 L 47 126 Z" fill="currentColor" className="text-muted/30" stroke="currentColor" strokeWidth="1" />
-              <path d="M 51 126 L 51 100 Q 58 92 65 100 L 65 126 Z" fill="currentColor" className="text-muted/30" stroke="currentColor" strokeWidth="1" />
-
-              {/* Right Wing Arches */}
-              <path d="M 175 126 L 175 100 Q 182 92 189 100 L 189 126 Z" fill="currentColor" className="text-muted/30" stroke="currentColor" strokeWidth="1" />
-              <path d="M 193 126 L 193 100 Q 200 92 207 100 L 207 126 Z" fill="currentColor" className="text-muted/30" stroke="currentColor" strokeWidth="1" />
-
-              {/* Second Story Arched Windows */}
-              <path d="M 36 78 Q 40 72 44 78 L 44 86 L 36 86 Z" fill="currentColor" className="text-primary/20" stroke="currentColor" strokeWidth="0.8" />
-              <path d="M 54 78 Q 58 72 62 78 L 62 86 L 54 86 Z" fill="currentColor" className="text-primary/20" stroke="currentColor" strokeWidth="0.8" />
-              <path d="M 178 78 Q 182 72 186 78 L 186 86 L 178 86 Z" fill="currentColor" className="text-primary/20" stroke="currentColor" strokeWidth="0.8" />
-              <path d="M 196 78 Q 200 72 204 78 L 204 86 L 196 86 Z" fill="currentColor" className="text-primary/20" stroke="currentColor" strokeWidth="0.8" />
-
-              {/* Base Plinth & Steps */}
-              <rect x="20" y="130" width="200" height="5" fill="currentColor" className="text-muted" stroke="currentColor" strokeWidth="1" />
-              <rect x="15" y="135" width="210" height="5" fill="currentColor" className="text-muted/80" stroke="currentColor" strokeWidth="1" />
-            </svg>
+          {/* Official JNU Crest Image with Gentle Pulse */}
+          <div className="relative size-24 sm:size-32 flex items-center justify-center mb-2 university-crest-pulse">
+            <img
+              src="/images/jnu-crest.png"
+              alt="Jagannath University Crest"
+              className="w-full h-full object-contain drop-shadow-md filter brightness-105"
+            />
           </div>
 
-          <div className="space-y-0.5">
-            <h4 className="text-xs font-bold text-foreground tracking-tight">
-              Central Institutional Nexus
+          <div className="space-y-0.5 z-10">
+            <h4 className="text-xs sm:text-sm font-bold text-foreground tracking-tight">
+              জগন্নাথ বিশ্ববিদ্যালয়
             </h4>
             <p className="text-[10px] text-muted-foreground font-mono">
-              Registrar Verified Core
+              Central Institutional Nexus
             </p>
           </div>
         </div>
@@ -574,3 +450,4 @@ export function CampusNetworkGraph() {
     </div>
   );
 }
+
