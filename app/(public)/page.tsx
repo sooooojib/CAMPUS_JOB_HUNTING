@@ -10,7 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { IsometricCampusHero } from "@/components/landing/isometric-campus-hero";
+import { BentoCommandCenter } from "@/components/landing/bento-command-center";
 
 export default function WelcomePage() {
   return (
@@ -73,9 +73,9 @@ export default function WelcomePage() {
               </div>
             </div>
 
-            {/* Right Column (6 cols): 3D Layered Isometric Campus Visual */}
+            {/* Right Column (6 cols): Bento Command Center Visual */}
             <div className="lg:col-span-6 flex items-center justify-center w-full">
-              <IsometricCampusHero />
+              <BentoCommandCenter />
             </div>
           </div>
         </div>
