@@ -45,7 +45,6 @@ interface PinDetail {
   id: "gateway" | "alumni" | "corporate";
   title: string;
   tagline: string;
-  color: string;
   badge: string;
   highlights: string[];
   ctaText: string;
@@ -57,7 +56,6 @@ const PIN_DETAILS: Record<string, PinDetail> = {
     id: "gateway",
     title: "Central Registrar Verification Engine",
     tagline: "Synchronized directly with official Jagannath University academic registries.",
-    color: "blue",
     badge: "12,540 Student Roll Numbers Synced",
     highlights: [
       "Department and session records validated against registrar database",
@@ -71,7 +69,6 @@ const PIN_DETAILS: Record<string, PinDetail> = {
     id: "alumni",
     title: "Alumni Mentorship & Referral Network",
     tagline: "Direct 1-on-1 recommendations from JNU alumni working in leading enterprises.",
-    color: "amber",
     badge: "450+ Active Mentors Across 42 Multinationals",
     highlights: [
       "Direct referral pitches submitted into internal company applicant queues",
@@ -85,7 +82,6 @@ const PIN_DETAILS: Record<string, PinDetail> = {
     id: "corporate",
     title: "Direct Corporate Placement Gateway",
     tagline: "Gated campus interview channels without public recruiter noise.",
-    color: "emerald",
     badge: "120+ Vetted Corporate Partners",
     highlights: [
       "Exclusive recruitment rounds designated specifically for JNU cohorts",
@@ -100,12 +96,10 @@ const PIN_DETAILS: Record<string, PinDetail> = {
 export function HeritageCampusPanorama() {
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [tickerIndex, setTickerIndex] = useState(0);
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // 3D Parallax & Cursor Physics state
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Auto-cycle the ticker every 3.8s
@@ -116,38 +110,31 @@ export function HeritageCampusPanorama() {
     return () => clearInterval(timer);
   }, []);
 
-  // Clear timeout on unmount
+  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     };
   }, []);
 
+  // Apple-style smooth light glare tracker without shifting coordinates
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // Subtle 3D tilt (max 3.2 deg)
-    const rotX = ((y - centerY) / centerY) * -3.2;
-    const rotY = ((x - centerX) / centerX) * 3.2;
-
-    setTilt({ x: rotX, y: rotY });
-    setMousePos({ x, y });
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
     setIsHovered(true);
   };
 
   const handleCardMouseLeave = () => {
     setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setHoveredPin(null);
   };
 
-  // Pure hover interaction handlers
+  // Stable hover handlers with grace timeout to prevent flicker
   const handlePinMouseEnter = (pinId: string) => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -160,7 +147,7 @@ export function HeritageCampusPanorama() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setHoveredPin(null);
-    }, 180);
+    }, 240);
   };
 
   const handleDrawerMouseEnter = () => {
@@ -174,7 +161,7 @@ export function HeritageCampusPanorama() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setHoveredPin(null);
-    }, 180);
+    }, 240);
   };
 
   const currentTicker = LIVE_TICKER_ITEMS[tickerIndex];
@@ -185,28 +172,20 @@ export function HeritageCampusPanorama() {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleCardMouseLeave}
-      className="relative w-full max-w-5xl mx-auto rounded-3xl border border-border/90 bg-card shadow-2xl overflow-hidden select-none transition-all duration-300"
-      style={{
-        transform: isHovered
-          ? `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
-          : "perspective(1200px) rotateX(0deg) rotateY(0deg)",
-        transition: isHovered
-          ? "transform 0.1s ease-out"
-          : "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
+      className="relative w-full max-w-5xl mx-auto rounded-[2.5rem] sm:rounded-[3rem] border border-border/70 bg-card shadow-xl hover:shadow-2xl overflow-hidden select-none transition-all duration-500 ease-out hover:-translate-y-1"
     >
-      {/* Specular Radial Light Glare following Cursor */}
+      {/* Soft Specular Light Glare that follows cursor without shifting coordinates */}
       {isHovered && (
         <div
-          className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-300"
+          className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-500"
           style={{
-            background: `radial-gradient(circle 380px at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.08), transparent 75%)`,
+            background: `radial-gradient(circle 420px at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.07), transparent 75%)`,
           }}
         />
       )}
 
       {/* Top Heritage Header Bar */}
-      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-border/80 bg-background/85 backdrop-blur-md">
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-6 py-4.5 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <img
             src="/images/jnu-crest.png"
@@ -214,9 +193,9 @@ export function HeritageCampusPanorama() {
             className="size-7 object-contain"
           />
           <div>
-            <h3 className="text-sm font-bold text-foreground tracking-tight flex items-center gap-1.5">
+            <h3 className="text-sm font-bold text-foreground tracking-tight flex items-center gap-2">
               <span>Jagannath University Administrative Core</span>
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                 Est. 1858
               </span>
             </h3>
@@ -226,23 +205,23 @@ export function HeritageCampusPanorama() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground bg-muted/40 px-3 py-1.5 rounded-full border border-border/50">
           <ShieldCheck className="size-4 text-emerald-500" />
           <span className="font-semibold text-foreground">Registrar Validated Community</span>
         </div>
       </div>
 
       {/* Main Photographic Heritage Stage */}
-      <div className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden group">
-        {/* Real High-Resolution Photo of Jagannath University Building */}
+      <div className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden">
+        {/* Real High-Resolution Photo of Jagannath University Building (Solid, Non-Jittery) */}
         <img
           src="/images/jnu-building.jpg"
           alt="Jagannath University Heritage Building"
-          className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-95 dark:brightness-85 transition-transform duration-700 group-hover:scale-102"
+          className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-95 dark:brightness-85 pointer-events-none"
         />
 
         {/* Ambient Gradient Overlays for Theme Harmonization */}
-        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/25 to-card/35 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-card/30 pointer-events-none" />
         <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/45 pointer-events-none" />
 
         {/* ========================================================= */}
@@ -313,26 +292,26 @@ export function HeritageCampusPanorama() {
         </svg>
 
         {/* ========================================================= */}
-        {/* INTERACTIVE MILESTONE PINS (Hover-Only Interaction)       */}
+        {/* INTERACTIVE MILESTONE PINS (Generous Hit Target & Smooth) */}
         {/* ========================================================= */}
 
         {/* PIN 1: Over Grand Archway / Center Gateway */}
         <div
           onMouseEnter={() => handlePinMouseEnter("gateway")}
           onMouseLeave={handlePinMouseLeave}
-          className="absolute left-1/2 -translate-x-1/2 top-[30%] sm:top-[26%] z-20 cursor-pointer group/pin"
+          className="absolute left-1/2 -translate-x-1/2 top-[30%] sm:top-[26%] z-20 cursor-pointer p-2"
         >
           <div className="relative flex flex-col items-center">
             {/* The Glassmorphic Milestone Pill */}
             <div
-              className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
+              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-full border bg-card/95 backdrop-blur-xl shadow-xl transition-all duration-300 ${
                 hoveredPin === "gateway"
-                  ? "scale-108 border-primary ring-4 ring-primary/20 shadow-primary/30"
-                  : "border-border/80 hover:border-primary/60 hover:scale-103"
+                  ? "scale-105 border-primary ring-4 ring-primary/20 shadow-primary/30"
+                  : "border-border/70 hover:border-primary/60 hover:scale-102"
               }`}
             >
-              <div className="flex size-7 sm:size-8 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shrink-0">
-                <Building2 className="size-4 sm:size-4.5" />
+              <div className="flex size-7.5 items-center justify-center rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 shrink-0">
+                <Building2 className="size-4" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
@@ -363,19 +342,19 @@ export function HeritageCampusPanorama() {
         <div
           onMouseEnter={() => handlePinMouseEnter("alumni")}
           onMouseLeave={handlePinMouseLeave}
-          className="absolute left-[6%] sm:left-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer group/pin"
+          className="absolute left-[6%] sm:left-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer p-2"
         >
           <div className="relative flex flex-col items-center">
             {/* Glassmorphic Pill */}
             <div
-              className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
+              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-full border bg-card/95 backdrop-blur-xl shadow-xl transition-all duration-300 ${
                 hoveredPin === "alumni"
-                  ? "scale-108 border-amber-500 ring-4 ring-amber-500/20 shadow-amber-500/30"
-                  : "border-border/80 hover:border-amber-500/60 hover:scale-103"
+                  ? "scale-105 border-amber-500 ring-4 ring-amber-500/20 shadow-amber-500/30"
+                  : "border-border/70 hover:border-amber-500/60 hover:scale-102"
               }`}
             >
-              <div className="flex size-7 sm:size-8 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
-                <GraduationCap className="size-4 sm:size-4.5" />
+              <div className="flex size-7.5 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
+                <GraduationCap className="size-4" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
@@ -406,19 +385,19 @@ export function HeritageCampusPanorama() {
         <div
           onMouseEnter={() => handlePinMouseEnter("corporate")}
           onMouseLeave={handlePinMouseLeave}
-          className="absolute right-[6%] sm:right-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer group/pin"
+          className="absolute right-[6%] sm:right-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer p-2"
         >
           <div className="relative flex flex-col items-center">
             {/* Glassmorphic Pill */}
             <div
-              className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
+              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-full border bg-card/95 backdrop-blur-xl shadow-xl transition-all duration-300 ${
                 hoveredPin === "corporate"
-                  ? "scale-108 border-emerald-500 ring-4 ring-emerald-500/20 shadow-emerald-500/30"
-                  : "border-border/80 hover:border-emerald-500/60 hover:scale-103"
+                  ? "scale-105 border-emerald-500 ring-4 ring-emerald-500/20 shadow-emerald-500/30"
+                  : "border-border/70 hover:border-emerald-500/60 hover:scale-102"
               }`}
             >
-              <div className="flex size-7 sm:size-8 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-                <Briefcase className="size-4 sm:size-4.5" />
+              <div className="flex size-7.5 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
+                <Briefcase className="size-4" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
@@ -450,8 +429,8 @@ export function HeritageCampusPanorama() {
         {/* ========================================================= */}
         {!activeDetail && (
           <>
-            <div className="absolute bottom-4 left-4 sm:bottom-5 sm:left-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg transition-opacity duration-300">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
+            <div className="absolute bottom-5 left-5 sm:bottom-6 sm:left-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 rounded-full px-5 py-2.5 shadow-lg transition-opacity duration-300">
+              <div className="flex size-8 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
                 <Zap className="size-4" />
               </div>
               <div>
@@ -472,8 +451,8 @@ export function HeritageCampusPanorama() {
               </div>
             </div>
 
-            <div className="absolute bottom-4 right-4 sm:bottom-5 sm:right-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg transition-opacity duration-300">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
+            <div className="absolute bottom-5 right-5 sm:bottom-6 sm:right-7 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/70 rounded-full px-5 py-2.5 shadow-lg transition-opacity duration-300">
+              <div className="flex size-8 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
                 <Briefcase className="size-4" />
               </div>
               <div>
@@ -484,9 +463,9 @@ export function HeritageCampusPanorama() {
                   <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
                 <div className="flex items-center gap-1.5 mt-0.5 text-xs font-bold text-foreground">
-                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Optimizely</span>
-                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">bKash</span>
-                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Brain Station</span>
+                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">Optimizely</span>
+                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">bKash</span>
+                  <span className="bg-muted px-2 py-0.5 rounded-full text-[11px]">Brain Station</span>
                 </div>
               </div>
             </div>
@@ -502,15 +481,15 @@ export function HeritageCampusPanorama() {
             onMouseLeave={handleDrawerMouseLeave}
             className="absolute inset-x-4 sm:inset-x-8 bottom-4 sm:bottom-6 z-30 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-auto"
           >
-            <div className="rounded-2xl border border-primary/40 bg-card/95 dark:bg-card/98 backdrop-blur-xl p-4 sm:p-5 shadow-2xl">
+            <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-primary/30 bg-card/95 dark:bg-card/98 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                    <span className="text-[10px] font-mono uppercase font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
                       {activeDetail.badge}
                     </span>
                     <span className="text-xs text-muted-foreground font-mono">
-                      Hover to Inspect
+                      Institutional Layer
                     </span>
                   </div>
                   <h4 className="text-sm sm:text-base font-extrabold text-foreground">
@@ -526,7 +505,7 @@ export function HeritageCampusPanorama() {
                 {activeDetail.highlights.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-2 text-xs text-foreground bg-muted/40 p-2.5 rounded-xl border border-border/60"
+                    className="flex items-start gap-2 text-xs text-foreground bg-muted/40 p-3 rounded-2xl border border-border/60"
                   >
                     <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0 mt-0.5" />
                     <span className="leading-tight text-[11px] sm:text-xs">{item}</span>
@@ -542,7 +521,7 @@ export function HeritageCampusPanorama() {
 
                 <Link
                   href={activeDetail.ctaHref}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors bg-primary/10 hover:bg-primary/15 px-3 py-1.5 rounded-full"
                 >
                   <span>{activeDetail.ctaText}</span>
                   <ArrowRight className="size-3.5" />
@@ -554,7 +533,7 @@ export function HeritageCampusPanorama() {
       </div>
 
       {/* Auto-Updating Live Monospace Campus Ticker */}
-      <div className="relative z-20 px-4 py-3 sm:px-6 sm:py-3.5 border-t border-border/80 bg-muted/40 backdrop-blur-md">
+      <div className="relative z-20 px-5 py-3.5 sm:px-7 sm:py-4 border-t border-border/60 bg-muted/40 backdrop-blur-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex items-center gap-2 shrink-0">
@@ -562,7 +541,7 @@ export function HeritageCampusPanorama() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full size-2.5 bg-emerald-500" />
               </span>
-              <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                 LIVE DISPATCH
               </span>
             </div>

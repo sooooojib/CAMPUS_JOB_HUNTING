@@ -6,9 +6,6 @@ import {
   ShieldCheck,
   Award,
   Building2,
-  CheckCircle2,
-  Sparkles,
-  ArrowRight,
 } from "lucide-react";
 
 const STATIONS = [
@@ -114,15 +111,15 @@ export function ProcessConduit() {
   const currentActive = hoveredStep !== null ? hoveredStep : activeStep;
 
   return (
-    <div ref={sectionRef} className="space-y-8">
+    <div ref={sectionRef} className="space-y-10">
       {/* Desktop Horizontal Glowing Laser Conduit */}
       <div className="hidden lg:block relative mx-auto max-w-5xl px-8">
         {/* Background Track */}
-        <div className="h-1.5 w-full bg-border/80 rounded-full overflow-hidden" />
+        <div className="h-2 w-full bg-border/60 rounded-full overflow-hidden" />
 
         {/* Luminous Progress Laser Line */}
         <div
-          className="absolute top-0 left-8 h-1.5 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-200 ease-out"
+          className="absolute top-0 left-8 h-2 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 via-amber-500 to-emerald-500 shadow-[0_0_16px_rgba(59,130,246,0.7)] transition-all duration-300 ease-out"
           style={{ width: `calc(${progress * 100}% - 4rem)` }}
         />
 
@@ -134,16 +131,16 @@ export function ProcessConduit() {
             return (
               <div
                 key={station.id}
-                className={`relative flex items-center justify-center size-5 rounded-full border-2 bg-card transition-all duration-300 ${
+                className={`relative flex items-center justify-center size-6 rounded-full border-2 bg-card transition-all duration-300 ${
                   isCurrent
-                    ? `${station.dotColor} border-background scale-135 shadow-lg ring-4 ring-primary/20`
+                    ? `${station.dotColor} border-background scale-130 shadow-lg ring-4 ring-primary/20`
                     : isCompletedOrActive
                     ? `${station.dotColor} border-background scale-110`
                     : "border-border bg-muted scale-95"
                 }`}
               >
                 {isCurrent && (
-                  <span className="size-1.5 rounded-full bg-white animate-ping" />
+                  <span className="size-2 rounded-full bg-white animate-ping" />
                 )}
               </div>
             );
@@ -151,7 +148,7 @@ export function ProcessConduit() {
         </div>
       </div>
 
-      {/* The 4 Station Cards */}
+      {/* The 4 Station Cards - With Organic Human Roundness */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {STATIONS.map((station, idx) => {
           const isActive = currentActive === idx;
@@ -162,19 +159,19 @@ export function ProcessConduit() {
               key={station.id}
               onMouseEnter={() => setHoveredStep(idx)}
               onMouseLeave={() => setHoveredStep(null)}
-              className={`rounded-2xl border p-6 transition-all duration-300 flex flex-col justify-between ${
+              className={`rounded-[2rem] sm:rounded-[2.5rem] border p-7 transition-all duration-300 flex flex-col justify-between ${
                 isActive
                   ? `${station.borderActive} scale-102 opacity-100`
                   : isPassed
-                  ? "border-border/80 bg-background/80 opacity-80"
-                  : "border-border/60 bg-background/50 opacity-45 hover:opacity-85 hover:scale-100"
+                  ? "border-border/70 bg-background/80 opacity-80"
+                  : "border-border/50 bg-background/50 opacity-45 hover:opacity-85 hover:scale-100"
               }`}
             >
               <div>
                 {/* Station Icon & Number */}
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-5">
                   <div
-                    className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                    className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-300 ${
                       isActive
                         ? station.iconBg
                         : "bg-muted text-muted-foreground"
@@ -183,7 +180,7 @@ export function ProcessConduit() {
                     <station.icon className="size-6" />
                   </div>
 
-                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground">
+                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-muted-foreground bg-muted/40 px-2.5 py-1 rounded-full">
                     {station.station}
                   </span>
                 </div>
@@ -198,22 +195,22 @@ export function ProcessConduit() {
                 </h3>
 
                 {/* Description */}
-                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                <p className="mt-2.5 text-xs text-muted-foreground leading-relaxed">
                   {station.description}
                 </p>
               </div>
 
               {/* Station Badge (Active Indicator) */}
-              <div className="pt-5 mt-4 border-t border-border/50">
+              <div className="pt-5 mt-5 border-t border-border/40">
                 <div
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border transition-all duration-300 ${
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold border transition-all duration-300 ${
                     isActive
                       ? `${station.badgeBg} shadow-xs`
                       : "bg-muted/50 text-muted-foreground/70 border-border/40"
                   }`}
                 >
                   <span
-                    className={`size-1.5 rounded-full ${
+                    className={`size-2 rounded-full ${
                       isActive ? station.dotColor : "bg-muted-foreground/50"
                     } ${isActive ? "animate-pulse" : ""}`}
                   />
