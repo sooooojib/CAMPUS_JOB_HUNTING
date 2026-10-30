@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { HeritageCampusPanorama } from "@/components/landing/heritage-campus-panorama";
+import { ProcessConduit } from "@/components/landing/process-conduit";
 
 export default function WelcomePage() {
   return (
@@ -114,71 +115,7 @@ export default function WelcomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Station 1 */}
-            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
-              <div className="flex size-11 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-4">
-                <GraduationCap className="size-6" />
-              </div>
-              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
-                Station 01
-              </span>
-              <h3 className="text-base font-bold text-foreground mt-0.5">
-                Registrar Credential Validation
-              </h3>
-              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Academic standing, CGPA records, and enrollment status are verified against official registrar databases. No fake profiles or unaccredited claims.
-              </p>
-            </div>
-
-            {/* Station 2 */}
-            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
-              <div className="flex size-11 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 mb-4">
-                <ShieldCheck className="size-6" />
-              </div>
-              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
-                Station 02
-              </span>
-              <h3 className="text-base font-bold text-foreground mt-0.5">
-                Faculty Academic Endorsement
-              </h3>
-              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Department chairs and professors endorse top student talents, research assistants, and fellowship candidates with verifiable letters of recommendation.
-              </p>
-            </div>
-
-            {/* Station 3 */}
-            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
-              <div className="flex size-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4">
-                <Award className="size-6" />
-              </div>
-              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
-                Station 03
-              </span>
-              <h3 className="text-base font-bold text-foreground mt-0.5">
-                Alumni Referral Exchange
-              </h3>
-              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Students connect directly with Jagannath University alumni working in tech, banking, and government to request internal candidate referrals.
-              </p>
-            </div>
-
-            {/* Station 4 */}
-            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
-              <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-4">
-                <Building2 className="size-6" />
-              </div>
-              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
-                Station 04
-              </span>
-              <h3 className="text-base font-bold text-foreground mt-0.5">
-                Vetted Employer Placement
-              </h3>
-              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Partner corporations receive candidate portfolios through private, consent-gated links, shortlisting candidates for priority interview rounds.
-              </p>
-            </div>
-          </div>
+          <ProcessConduit />
         </div>
       </section>
 
