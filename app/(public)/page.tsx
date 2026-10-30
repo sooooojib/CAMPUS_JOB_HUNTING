@@ -15,7 +15,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { GravitationalCampusOrbit } from "@/components/landing/gravitational-campus-orbit";
+import { HeritageCampusPanorama } from "@/components/landing/heritage-campus-panorama";
 
 export default function WelcomePage() {
   return (
@@ -89,10 +89,10 @@ export default function WelcomePage() {
           </div>
 
           {/* ========================================================= */}
-          {/* THE GRAVITATIONAL CAMPUS ORBIT (Interactive 3D Physics)   */}
+          {/* THE HERITAGE CAMPUS PANORAMA & COMMUNITY PINS             */}
           {/* ========================================================= */}
           <div className="w-full">
-            <GravitationalCampusOrbit />
+            <HeritageCampusPanorama />
           </div>
         </div>
       </section>
