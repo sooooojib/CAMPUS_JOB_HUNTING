@@ -6,167 +6,259 @@ import {
   Award,
   Sparkles,
   ArrowRight,
-  Lock,
   CheckCircle2,
+  Lock,
+  GraduationCap,
+  Building2,
+  FileText,
+  MapPin,
+  ChevronRight,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { BentoCommandCenter } from "@/components/landing/bento-command-center";
+import { CareerTransitSystem } from "@/components/landing/career-transit-system";
 
 export default function WelcomePage() {
   return (
-    <div className="flex flex-col">
-      {/* Hero Section — Clean, Uncluttered Split Layout (Accrely-Inspired) */}
-      <section className="relative overflow-hidden border-b border-border/80 bg-gradient-to-b from-blue-950/15 via-background to-background py-16 sm:py-24">
-        {/* Modern Engineering Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f610_1px,transparent_1px),linear-gradient(to_bottom,#3b82f610_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/4 size-96 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-1/4 size-96 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+    <div className="flex flex-col min-h-screen">
+      {/* ========================================================= */}
+      {/* HERO SECTION: The Direct Line from Campus to Career       */}
+      {/* ========================================================= */}
+      <section className="relative overflow-hidden border-b border-border/80 bg-gradient-to-b from-primary/5 via-background to-background py-16 sm:py-24">
+        {/* Harmonized Institutional Grid Texture */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f608_1px,transparent_1px),linear-gradient(to_bottom,#3b82f608_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-primary/10 blur-[120px] pointer-events-none rounded-full" />
 
-        <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Column (6 cols): Authoritative, Spacious Typography & Actions */}
-            <div className="lg:col-span-6 flex flex-col items-start text-left space-y-6 max-w-2xl">
-              {/* Accrely-Style Feature Pill Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold text-blue-900 dark:border-blue-800/60 dark:bg-blue-950/60 dark:text-blue-300 shadow-xs">
-                <span className="px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
-                  NEW
-                </span>
-                <span>Jagannath University Career Network</span>
-              </div>
-
-              {/* Bold, Elegant Headline */}
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-[1.12]">
-                Careers that elevate talent, for Jagannath University.
-              </h1>
-
-              {/* High-Readability Description */}
-              <p className="text-base text-muted-foreground sm:text-lg leading-relaxed max-w-xl">
-                UniCareer Community connects verified students, distinguished alumni, faculty mentors, and vetted employers into a private, high-trust ecosystem for internal referrals and direct campus placement.
-              </p>
-
-              {/* Pill Action Buttons (Accrely Style) */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/register"
-                  className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm px-6 py-3 shadow-md hover:bg-primary/90 transition-all hover:scale-102"
-                >
-                  <span>Create Verified Account</span>
-                  <ArrowRight className="size-4 ml-1.5" />
-                </Link>
-
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center rounded-full border border-border bg-card/80 text-foreground font-medium text-sm px-6 py-3 backdrop-blur-md hover:bg-muted transition-all hover:scale-102"
-                >
-                  Member Sign In
-                </Link>
-              </div>
-
-              {/* Trust Announcement Pill Banner */}
-              <div className="pt-2">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/80 bg-muted/40 text-xs text-muted-foreground font-medium">
-                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">
-                    VERIFIED
-                  </span>
-                  <span>Registrar-validated records · 0% public scraping · Private vault</span>
-                </div>
-              </div>
+        <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 z-10 space-y-12 sm:space-y-16">
+          {/* Header Typography & Narrative Block */}
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-5">
+            {/* University Identity Pill */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/90 bg-blue-50/90 px-3.5 py-1 text-xs font-semibold text-blue-900 dark:border-blue-900/60 dark:bg-blue-950/60 dark:text-blue-300 shadow-xs">
+              <img
+                src="/images/jnu-crest.png"
+                alt="Jagannath University"
+                className="size-4 object-contain"
+              />
+              <span className="font-bold">Jagannath University</span>
+              <span className="text-muted-foreground/60">•</span>
+              <span>Official Career Community</span>
             </div>
 
-            {/* Right Column (6 cols): Bento Command Center Visual */}
-            <div className="lg:col-span-6 flex items-center justify-center w-full">
-              <BentoCommandCenter />
+            {/* Authoritative Human Headline */}
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl leading-[1.1]">
+              The direct line from campus to career.
+            </h1>
+
+            {/* Refined Description */}
+            <p className="text-base text-muted-foreground sm:text-lg leading-relaxed max-w-2xl">
+              UniCareer Community connects verified Jagannath University students, distinguished alumni mentors, and vetted employers into a private referral ecosystem. Zero public scraping. Zero recruiter spam. Just verified internal recommendations.
+            </p>
+
+            {/* Tactile Magnetic Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm px-7 py-3.5 shadow-md hover:bg-primary/90 transition-all hover:scale-102"
+              >
+                <span>Join the Verified Network</span>
+                <ArrowRight className="size-4 ml-2" />
+              </Link>
+
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center rounded-full border border-border bg-card/80 text-foreground font-semibold text-sm px-7 py-3.5 shadow-xs backdrop-blur-md hover:bg-muted transition-all hover:scale-102"
+              >
+                Member Sign In
+              </Link>
             </div>
+
+            {/* Core Integrity Pillars */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="size-4 text-emerald-500" />
+                <span>Registrar ID Validated</span>
+              </span>
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="size-4 text-emerald-500" />
+                <span>Private 15-Minute Resume Vault</span>
+              </span>
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="size-4 text-emerald-500" />
+                <span>100% Gated Institutional Network</span>
+              </span>
+            </div>
+          </div>
+
+          {/* ========================================================= */}
+          {/* THE CAREER TRANSIT SYSTEM (Interactive Metro Schematic)   */}
+          {/* ========================================================= */}
+          <div className="w-full">
+            <CareerTransitSystem />
           </div>
         </div>
       </section>
 
-      {/* 4 Core Platform Pillars */}
-      <section className="py-16 sm:py-20 border-b border-border/80 bg-card">
+      {/* ========================================================= */}
+      {/* SECTION 2: The 4 Stations of the University Pipeline      */}
+      {/* ========================================================= */}
+      <section className="py-20 border-b border-border/80 bg-card/60">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-              Built Specifically for the Campus Community
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+              Verified Pipeline
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              How the Campus Network Accelerates Careers
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Unlike generic public job boards, every opportunity and interaction is backed by verified institutional identity.
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Every stage of your career transition is backed by official university verification and genuine alumni advocacy.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Pillar 1 */}
-            <div className="rounded-xl border border-border/80 bg-background p-6 shadow-xs">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300 mb-4">
-                <Briefcase className="size-5" />
+            {/* Station 1 */}
+            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-4">
+                <GraduationCap className="size-6" />
               </div>
-              <h3 className="text-base font-bold text-foreground">
-                Curated Opportunities
+              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
+                Station 01
+              </span>
+              <h3 className="text-base font-bold text-foreground mt-0.5">
+                Registrar Credential Validation
               </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Internships and full-time roles strictly differentiated between official employer postings and verified community referrals.
+                Academic standing, CGPA records, and enrollment status are verified against official registrar databases. No fake profiles or unaccredited claims.
               </p>
             </div>
 
-            {/* Pillar 2 */}
-            <div className="rounded-xl border border-border/80 bg-background p-6 shadow-xs">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 mb-4">
-                <Award className="size-5" />
+            {/* Station 2 */}
+            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 mb-4">
+                <ShieldCheck className="size-6" />
               </div>
-              <h3 className="text-base font-bold text-foreground">
-                Alumni Referral Network
+              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
+                Station 02
+              </span>
+              <h3 className="text-base font-bold text-foreground mt-0.5">
+                Faculty Academic Endorsement
               </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Connect directly with alumni working at top companies. Submit structured elevator pitches for internal recommendations.
+                Department chairs and professors endorse top student talents, research assistants, and fellowship candidates with verifiable letters of recommendation.
               </p>
             </div>
 
-            {/* Pillar 3 */}
-            <div className="rounded-xl border border-border/80 bg-background p-6 shadow-xs">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 mb-4">
-                <Users className="size-5" />
+            {/* Station 3 */}
+            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-4">
+                <Award className="size-6" />
               </div>
-              <h3 className="text-base font-bold text-foreground">
-                Verified Directory
+              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
+                Station 03
+              </span>
+              <h3 className="text-base font-bold text-foreground mt-0.5">
+                Alumni Referral Exchange
               </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Discover mentors by graduation year, field of study, current employer, and industry. No spam or unverified recruiters.
+                Students connect directly with Jagannath University alumni working in tech, banking, and government to request internal candidate referrals.
               </p>
             </div>
 
-            {/* Pillar 4 */}
-            <div className="rounded-xl border border-border/80 bg-background p-6 shadow-xs">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 mb-4">
-                <Sparkles className="size-5" />
+            {/* Station 4 */}
+            <div className="rounded-2xl border border-border/80 bg-background p-6 shadow-sm hover:border-primary/50 transition-all">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-4">
+                <Building2 className="size-6" />
               </div>
-              <h3 className="text-base font-bold text-foreground">
-                Student Career Tools
+              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">
+                Station 04
+              </span>
+              <h3 className="text-base font-bold text-foreground mt-0.5">
+                Vetted Employer Placement
               </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                CGPA eligibility verification, automated skill matching, and tailored gap analysis to guide student career development.
+                Partner corporations receive candidate portfolios through private, consent-gated links, shortlisting candidates for priority interview rounds.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust & Access Gate Callout */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto max-w-4xl px-4 text-center space-y-6">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto">
-            <ShieldCheck className="size-8" />
+      {/* ========================================================= */}
+      {/* SECTION 3: Real Institutional Numbers & Privacy Standard */}
+      {/* ========================================================= */}
+      <section className="py-20 border-b border-border/80 bg-background">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-border/60">
+            <div className="px-6 py-4 space-y-2">
+              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight">
+                100%
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                Registrar-Verified Members
+              </div>
+              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                Every student, alumni, and faculty profile is validated against official university records. Zero spam accounts.
+              </p>
+            </div>
+
+            <div className="px-6 py-4 space-y-2">
+              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-primary">
+                0%
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                Public Web Scraping
+              </div>
+              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                Candidate resumes are stored in private cloud storage and only accessed via expiring, 15-minute signed links upon consent.
+              </p>
+            </div>
+
+            <div className="px-6 py-4 space-y-2">
+              <div className="text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight text-emerald-600 dark:text-emerald-400">
+                450+
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                Alumni Enterprise Connections
+              </div>
+              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                Spanning multinational software houses, commercial banks, government institutions, and global research fellowships.
+              </p>
+            </div>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Members-Only Authenticated Access
-          </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            To safeguard applicant resumes, CGPA records, and internal referral communications, all opportunities and community feeds require verified login credentials.
-          </p>
-          <div className="pt-2">
+        </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* SECTION 4: Gated Institutional Access Callout              */}
+      {/* ========================================================= */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto max-w-4xl px-4 text-center space-y-6">
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto border border-primary/20 shadow-xs">
+            <Lock className="size-8 text-primary" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              Protected Institutional Access
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
+              To safeguard applicant resumes, CGPA records, and internal referral communications, all opportunities and community feeds require verified login credentials.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
-              href="/login"
+              href="/register"
               className={buttonVariants({ variant: "default", size: "lg" })}
             >
-              Sign In to Your Account
+              <span>Create Verified Account</span>
+              <ArrowRight className="size-4 ml-1.5" />
+            </Link>
+
+            <Link
+              href="/login"
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              Member Sign In
             </Link>
           </div>
         </div>
@@ -174,4 +266,3 @@ export default function WelcomePage() {
     </div>
   );
 }
-
