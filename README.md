@@ -50,3 +50,4 @@ Access the diagnostic route at `/api/health` to verify runtime health, memory, a
 ```bash
 curl http://localhost:3000/api/health
 ```
+

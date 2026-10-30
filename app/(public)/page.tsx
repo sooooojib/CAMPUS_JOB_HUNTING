@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { CampusNetworkGraph } from "@/components/landing/campus-network-graph";
 
 export default function WelcomePage() {
   return (
@@ -62,6 +63,11 @@ export default function WelcomePage() {
                 <span>Private Resume Vault</span>
               </span>
             </div>
+          </div>
+
+          {/* Interactive Animated Jagannath University Campus Graph */}
+          <div className="w-full max-w-5xl mx-auto pt-10 sm:pt-14">
+            <CampusNetworkGraph />
           </div>
         </div>
       </section>
