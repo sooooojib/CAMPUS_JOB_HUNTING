@@ -9,8 +9,6 @@ import {
   Briefcase,
   Zap,
   CheckCircle2,
-  ChevronRight,
-  X,
   ArrowRight,
   Lock,
 } from "lucide-react";
@@ -100,9 +98,9 @@ const PIN_DETAILS: Record<string, PinDetail> = {
 };
 
 export function HeritageCampusPanorama() {
-  const [activePin, setActivePin] = useState<string | null>(null);
-  const [selectedDrawer, setSelectedDrawer] = useState<string | null>(null);
+  const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [tickerIndex, setTickerIndex] = useState(0);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // 3D Parallax & Cursor Physics state
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -118,6 +116,13 @@ export function HeritageCampusPanorama() {
     return () => clearInterval(timer);
   }, []);
 
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -126,7 +131,7 @@ export function HeritageCampusPanorama() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Subtle 3D tilt (max 3.5 deg)
+    // Subtle 3D tilt (max 3.2 deg)
     const rotX = ((y - centerY) / centerY) * -3.2;
     const rotY = ((x - centerX) / centerX) * 3.2;
 
@@ -135,20 +140,51 @@ export function HeritageCampusPanorama() {
     setIsHovered(true);
   };
 
-  const handleMouseLeave = () => {
+  const handleCardMouseLeave = () => {
     setIsHovered(false);
     setTilt({ x: 0, y: 0 });
-    setActivePin(null);
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    setHoveredPin(null);
+  };
+
+  // Pure hover interaction handlers
+  const handlePinMouseEnter = (pinId: string) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setHoveredPin(pinId);
+  };
+
+  const handlePinMouseLeave = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setHoveredPin(null);
+    }, 180);
+  };
+
+  const handleDrawerMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const handleDrawerMouseLeave = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setHoveredPin(null);
+    }, 180);
   };
 
   const currentTicker = LIVE_TICKER_ITEMS[tickerIndex];
-  const activeDetail = selectedDrawer ? PIN_DETAILS[selectedDrawer] : null;
+  const activeDetail = hoveredPin ? PIN_DETAILS[hoveredPin] : null;
 
   return (
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseLeave={handleCardMouseLeave}
       className="relative w-full max-w-5xl mx-auto rounded-3xl border border-border/90 bg-card shadow-2xl overflow-hidden select-none transition-all duration-300"
       style={{
         transform: isHovered
@@ -277,22 +313,20 @@ export function HeritageCampusPanorama() {
         </svg>
 
         {/* ========================================================= */}
-        {/* INTERACTIVE MILESTONE PINS FLOATING OVER THE FACADE       */}
+        {/* INTERACTIVE MILESTONE PINS (Hover-Only Interaction)       */}
         {/* ========================================================= */}
 
         {/* PIN 1: Over Grand Archway / Center Gateway */}
         <div
-          onClick={() =>
-            setSelectedDrawer((prev) => (prev === "gateway" ? null : "gateway"))
-          }
-          onMouseEnter={() => setActivePin("gateway")}
+          onMouseEnter={() => handlePinMouseEnter("gateway")}
+          onMouseLeave={handlePinMouseLeave}
           className="absolute left-1/2 -translate-x-1/2 top-[30%] sm:top-[26%] z-20 cursor-pointer group/pin"
         >
           <div className="relative flex flex-col items-center">
             {/* The Glassmorphic Milestone Pill */}
             <div
               className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
-                activePin === "gateway" || selectedDrawer === "gateway"
+                hoveredPin === "gateway"
                   ? "scale-108 border-primary ring-4 ring-primary/20 shadow-primary/30"
                   : "border-border/80 hover:border-primary/60 hover:scale-103"
               }`}
@@ -327,17 +361,15 @@ export function HeritageCampusPanorama() {
 
         {/* PIN 2: Over Left Wing / Alumni Mentorship Network */}
         <div
-          onClick={() =>
-            setSelectedDrawer((prev) => (prev === "alumni" ? null : "alumni"))
-          }
-          onMouseEnter={() => setActivePin("alumni")}
+          onMouseEnter={() => handlePinMouseEnter("alumni")}
+          onMouseLeave={handlePinMouseLeave}
           className="absolute left-[6%] sm:left-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer group/pin"
         >
           <div className="relative flex flex-col items-center">
             {/* Glassmorphic Pill */}
             <div
               className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
-                activePin === "alumni" || selectedDrawer === "alumni"
+                hoveredPin === "alumni"
                   ? "scale-108 border-amber-500 ring-4 ring-amber-500/20 shadow-amber-500/30"
                   : "border-border/80 hover:border-amber-500/60 hover:scale-103"
               }`}
@@ -372,17 +404,15 @@ export function HeritageCampusPanorama() {
 
         {/* PIN 3: Over Right Wing / Corporate Placement Drives */}
         <div
-          onClick={() =>
-            setSelectedDrawer((prev) => (prev === "corporate" ? null : "corporate"))
-          }
-          onMouseEnter={() => setActivePin("corporate")}
+          onMouseEnter={() => handlePinMouseEnter("corporate")}
+          onMouseLeave={handlePinMouseLeave}
           className="absolute right-[6%] sm:right-[14%] top-[14%] sm:top-[16%] z-20 cursor-pointer group/pin"
         >
           <div className="relative flex flex-col items-center">
             {/* Glassmorphic Pill */}
             <div
               className={`flex items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl transition-all duration-300 ${
-                activePin === "corporate" || selectedDrawer === "corporate"
+                hoveredPin === "corporate"
                   ? "scale-108 border-emerald-500 ring-4 ring-emerald-500/20 shadow-emerald-500/30"
                   : "border-border/80 hover:border-emerald-500/60 hover:scale-103"
               }`}
@@ -416,54 +446,62 @@ export function HeritageCampusPanorama() {
         </div>
 
         {/* ========================================================= */}
-        {/* LOWER FOG FLANK WIDGETS (Balances frame & removes empty)  */}
+        {/* LOWER FOG FLANK WIDGETS (Shown when unhovered)            */}
         {/* ========================================================= */}
-        <div className="absolute bottom-4 left-4 sm:bottom-5 sm:left-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg">
-          <div className="flex size-8 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
-            <Zap className="size-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
-                Referral Velocity
-              </span>
-              <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                94% Shortlist
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-xs font-bold text-foreground">38 Placements Active</span>
-              <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 w-[94%] rounded-full" />
+        {!activeDetail && (
+          <>
+            <div className="absolute bottom-4 left-4 sm:bottom-5 sm:left-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg transition-opacity duration-300">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 shrink-0">
+                <Zap className="size-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
+                    Referral Velocity
+                  </span>
+                  <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                    94% Shortlist
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-xs font-bold text-foreground">38 Placements Active</span>
+                  <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 w-[94%] rounded-full" />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="absolute bottom-4 right-4 sm:bottom-5 sm:right-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg">
-          <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-            <Briefcase className="size-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
-                Campus Hiring Drives
-              </span>
-              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <div className="absolute bottom-4 right-4 sm:bottom-5 sm:right-6 z-20 hidden md:flex items-center gap-3 bg-card/90 dark:bg-card/95 backdrop-blur-md border border-border/80 rounded-2xl px-4 py-2.5 shadow-lg transition-opacity duration-300">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
+                <Briefcase className="size-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
+                    Campus Hiring Drives
+                  </span>
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5 text-xs font-bold text-foreground">
+                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Optimizely</span>
+                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">bKash</span>
+                  <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Brain Station</span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 mt-0.5 text-xs font-bold text-foreground">
-              <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Optimizely</span>
-              <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">bKash</span>
-              <span className="bg-muted px-1.5 py-0.5 rounded text-[11px]">Brain Station</span>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* ========================================================= */}
-        {/* INTERACTIVE PIN INSPECTOR DRAWER (Expands on pin click)   */}
+        {/* HOVER INSPECTOR TRAY (Smoothly reveals on pin hover)      */}
         {/* ========================================================= */}
         {activeDetail && (
-          <div className="absolute inset-x-4 sm:inset-x-8 bottom-4 sm:bottom-6 z-30 animate-in fade-in slide-in-from-bottom-3 duration-300">
+          <div
+            onMouseEnter={handleDrawerMouseEnter}
+            onMouseLeave={handleDrawerMouseLeave}
+            className="absolute inset-x-4 sm:inset-x-8 bottom-4 sm:bottom-6 z-30 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-auto"
+          >
             <div className="rounded-2xl border border-primary/40 bg-card/95 dark:bg-card/98 backdrop-blur-xl p-4 sm:p-5 shadow-2xl">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
@@ -472,7 +510,7 @@ export function HeritageCampusPanorama() {
                       {activeDetail.badge}
                     </span>
                     <span className="text-xs text-muted-foreground font-mono">
-                      Institutional Layer
+                      Hover to Inspect
                     </span>
                   </div>
                   <h4 className="text-sm sm:text-base font-extrabold text-foreground">
@@ -482,15 +520,6 @@ export function HeritageCampusPanorama() {
                     {activeDetail.tagline}
                   </p>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedDrawer(null)}
-                  className="rounded-lg p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  aria-label="Close inspector"
-                >
-                  <X className="size-4" />
-                </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3.5 pb-2">
