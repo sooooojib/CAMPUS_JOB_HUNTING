@@ -24,7 +24,7 @@ export default function WelcomePage() {
       {/* ========================================================= */}
       {/* HERO SECTION: The Direct Line from Campus to Career       */}
       {/* ========================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background pt-28 sm:pt-36 pb-24 sm:pb-32">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background py-16 sm:py-24">
         {/* Soft Ambient Mesh Texture (Non-Sharp, Seamless) */}
         <div className="absolute inset-0 bg-[radial-gradient(#3b82f608_1px,transparent_1px)] [background-size:28px_28px] pointer-events-none opacity-80" />
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/10 blur-[140px] pointer-events-none rounded-full" />
@@ -100,9 +100,9 @@ export default function WelcomePage() {
 
       {/* ========================================================= */}
       {/* SECTION 2: The 4 Stations of the University Pipeline      */}
-      {/* Deep Rounded Dome Transition (Image 3 Style)              */}
+      {/* Flowing Clean Section (Zero Stacking Bugs)               */}
       {/* ========================================================= */}
-      <section className="relative z-20 -mt-12 sm:-mt-16 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-card/90 dark:bg-card/95 backdrop-blur-xl shadow-2xl pt-20 pb-16">
+      <section className="relative z-20 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-card/60 dark:bg-card/70 backdrop-blur-xl shadow-lg py-20 sm:py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <ProcessConduit />
         </div>
@@ -110,9 +110,9 @@ export default function WelcomePage() {
 
       {/* ========================================================= */}
       {/* SECTION 3: Real Institutional Numbers & Privacy Standard */}
-      {/* Deep Rounded Dome Transition (Image 3 Style)              */}
+      {/* Flowing Clean Section (Zero Negative Margins)             */}
       {/* ========================================================= */}
-      <section className="relative z-30 -mt-12 sm:-mt-16 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-background shadow-2xl pt-20 pb-24">
+      <section className="relative z-30 rounded-t-[3.5rem] sm:rounded-t-[4.5rem] border-t border-border/50 bg-background shadow-lg py-20 sm:py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
             {/* Card 1 */}

@@ -8,9 +8,9 @@ import {
   GraduationCap,
   Briefcase,
   Zap,
-  CheckCircle2,
   ArrowRight,
   Lock,
+  CheckCircle2,
 } from "lucide-react";
 
 const LIVE_TICKER_ITEMS = [
@@ -43,10 +43,10 @@ const LIVE_TICKER_ITEMS = [
 
 interface PinDetail {
   id: "gateway" | "alumni" | "corporate";
+  badge: string;
   title: string;
   tagline: string;
-  badge: string;
-  highlights: string[];
+  stats: { label: string; value: string }[];
   ctaText: string;
   ctaHref: string;
 }
@@ -54,41 +54,44 @@ interface PinDetail {
 const PIN_DETAILS: Record<string, PinDetail> = {
   gateway: {
     id: "gateway",
-    title: "Central Registrar Verification Engine",
-    tagline: "Synchronized directly with official Jagannath University academic registries.",
-    badge: "12,540 Student Roll Numbers Synced",
-    highlights: [
-      "Department and session records validated against registrar database",
-      "Automated CGPA threshold filtering for selective internship drives",
-      "Encrypted credential vault • 0% public web scraping",
+    badge: "Office of the Registrar",
+    title: "Central Academic Registry",
+    tagline:
+      "Direct integration with Jagannath University official records. Academic credentials, CGPA records, and enrollment status are validated at the institutional source.",
+    stats: [
+      { label: "Active Student Records", value: "12,540 Verified" },
+      { label: "Verification Source", value: "Registrar Database" },
+      { label: "Data Protection", value: "Zero Public Scraping" },
     ],
-    ctaText: "Verify Your University Roll ID",
+    ctaText: "Verify Your University Profile",
     ctaHref: "/register",
   },
   alumni: {
     id: "alumni",
-    title: "Alumni Mentorship & Referral Network",
-    tagline: "Direct 1-on-1 recommendations from JNU alumni working in leading enterprises.",
-    badge: "450+ Active Mentors Across 42 Multinationals",
-    highlights: [
-      "Direct referral pitches submitted into internal company applicant queues",
-      "14 verified mentors offering office hours and CV reviews this week",
-      "Top placement destinations: Optimizely, bKash, Brain Station 23, Apex",
+    badge: "Alumni Association Network",
+    title: "Distinguished Alumni Mentorship",
+    tagline:
+      "A trusted bridge between graduates and current students. Connect with senior alumni working across multinational software firms, commercial banks, and research institutes.",
+    stats: [
+      { label: "Mentors in Leading Tech", value: "450+ Active" },
+      { label: "Open Referral Slots", value: "14 This Week" },
+      { label: "Primary Sectors", value: "Tech, Finance & MNCs" },
     ],
     ctaText: "Connect with Alumni Mentors",
     ctaHref: "/register",
   },
   corporate: {
     id: "corporate",
-    title: "Direct Corporate Placement Gateway",
-    tagline: "Gated campus interview channels without public recruiter noise.",
-    badge: "120+ Vetted Corporate Partners",
-    highlights: [
-      "Exclusive recruitment rounds designated specifically for JNU cohorts",
-      "Expedited fast-track technical and managerial interview slots",
-      "15-minute temporary signed URLs for resume reviews upon explicit consent",
+    badge: "Institutional Placement",
+    title: "Direct Corporate Placement Drives",
+    tagline:
+      "Official university career partnerships. Vetted partner employers receive curated, consent-gated candidate rosters for exclusive campus recruitment rounds.",
+    stats: [
+      { label: "Accredited Partners", value: "120+ Employers" },
+      { label: "Hiring Pipeline", value: "Fall '26 Cohort" },
+      { label: "Interview Format", value: "Direct Priority Slots" },
     ],
-    ctaText: "Explore Partner Placement Drives",
+    ctaText: "Explore Placement Drives",
     ctaHref: "/register",
   },
 };
@@ -96,8 +99,6 @@ const PIN_DETAILS: Record<string, PinDetail> = {
 export function HeritageCampusPanorama() {
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [tickerIndex, setTickerIndex] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
 
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -117,24 +118,11 @@ export function HeritageCampusPanorama() {
     };
   }, []);
 
-  // Apple-style smooth light glare tracker without shifting coordinates
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-    setIsHovered(true);
-  };
-
   const handleCardMouseLeave = () => {
-    setIsHovered(false);
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setHoveredPin(null);
   };
 
-  // Stable hover handlers with grace timeout to prevent flicker
   const handlePinMouseEnter = (pinId: string) => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -170,20 +158,9 @@ export function HeritageCampusPanorama() {
   return (
     <div
       ref={cardRef}
-      onMouseMove={handleMouseMove}
       onMouseLeave={handleCardMouseLeave}
-      className="relative w-full max-w-5xl mx-auto rounded-[2.5rem] sm:rounded-[3rem] border border-border/70 bg-card shadow-xl hover:shadow-2xl overflow-hidden select-none transition-all duration-500 ease-out hover:-translate-y-1"
+      className="relative w-full max-w-5xl mx-auto rounded-[2.5rem] sm:rounded-[3rem] border border-border/70 bg-card shadow-xl hover:shadow-2xl overflow-hidden select-none transition-all duration-500 ease-out"
     >
-      {/* Soft Specular Light Glare that follows cursor without shifting coordinates */}
-      {isHovered && (
-        <div
-          className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(circle 420px at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.07), transparent 75%)`,
-          }}
-        />
-      )}
-
       {/* Top Heritage Header Bar */}
       <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-6 py-4.5 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="flex items-center gap-3">
@@ -213,7 +190,7 @@ export function HeritageCampusPanorama() {
 
       {/* Main Photographic Heritage Stage */}
       <div className="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[460px] max-h-[580px] overflow-hidden">
-        {/* Real High-Resolution Photo of Jagannath University Building (Solid, Non-Jittery) */}
+        {/* Real High-Resolution Photo of Jagannath University Building */}
         <img
           src="/images/jnu-building.jpg"
           alt="Jagannath University Heritage Building"
@@ -225,74 +202,7 @@ export function HeritageCampusPanorama() {
         <div className="absolute inset-0 bg-radial from-transparent via-card/10 to-card/45 pointer-events-none" />
 
         {/* ========================================================= */}
-        {/* LUMINOUS REFERRAL PATHWAY (Animated SVG Laser Beams)       */}
-        {/* ========================================================= */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none z-10"
-          viewBox="0 0 1000 560"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient id="gradient-blue-amber" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
-            </linearGradient>
-            <linearGradient id="gradient-amber-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#10b981" stopOpacity="0.9" />
-            </linearGradient>
-
-            <filter id="glow-laser" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          {/* Pathway 1: Central Gateway -> Left Alumni Wing */}
-          <path
-            id="path-gateway-alumni"
-            d="M 500 270 Q 340 260 210 185"
-            fill="none"
-            stroke="url(#gradient-blue-amber)"
-            strokeWidth="2"
-            strokeDasharray="4 6"
-            className="opacity-60"
-          />
-
-          {/* Pathway 2: Left Alumni Wing -> Right Corporate Wing */}
-          <path
-            id="path-alumni-corporate"
-            d="M 210 185 Q 500 120 790 185"
-            fill="none"
-            stroke="url(#gradient-amber-emerald)"
-            strokeWidth="2"
-            strokeDasharray="4 6"
-            className="opacity-60"
-          />
-
-          {/* Animated Traveling Luminous Energy Pulses */}
-          <circle r="4" fill="#60a5fa" filter="url(#glow-laser)">
-            <animateMotion
-              dur="3.6s"
-              repeatCount="indefinite"
-              path="M 500 270 Q 340 260 210 185"
-            />
-          </circle>
-
-          <circle r="4.5" fill="#34d399" filter="url(#glow-laser)">
-            <animateMotion
-              dur="4.4s"
-              repeatCount="indefinite"
-              path="M 210 185 Q 500 120 790 185"
-            />
-          </circle>
-        </svg>
-
-        {/* ========================================================= */}
-        {/* INTERACTIVE MILESTONE PINS (Generous Hit Target & Smooth) */}
+        {/* REFINED ARCHITECTURAL MILESTONE PINS                     */}
         {/* ========================================================= */}
 
         {/* PIN 1: Over Grand Archway / Center Gateway */}
@@ -326,15 +236,9 @@ export function HeritageCampusPanorama() {
               </div>
             </div>
 
-            {/* Vertical Pointer Line with Architectural Sonar Rings */}
+            {/* Vertical Pointer Line with Soft Beacon */}
             <div className="h-6 sm:h-9 w-[2px] bg-gradient-to-b from-primary via-blue-500/60 to-transparent" />
-
-            {/* Sonar Beacon on Building Pillar */}
-            <div className="relative flex items-center justify-center">
-              <span className="absolute size-7 rounded-full border border-blue-500/50 animate-ping opacity-60" />
-              <span className="absolute size-4 rounded-full border border-blue-400/40 animate-pulse" />
-              <div className="size-2 rounded-full bg-blue-500 shadow-sm ring-2 ring-background" />
-            </div>
+            <div className="size-2 rounded-full bg-blue-500 shadow-sm ring-2 ring-background" />
           </div>
         </div>
 
@@ -369,15 +273,9 @@ export function HeritageCampusPanorama() {
               </div>
             </div>
 
-            {/* Vertical Pointer Line with Architectural Sonar Rings */}
+            {/* Vertical Pointer Line with Soft Beacon */}
             <div className="h-7 sm:h-12 w-[2px] bg-gradient-to-b from-amber-500 via-amber-500/60 to-transparent" />
-
-            {/* Sonar Beacon on Pillar */}
-            <div className="relative flex items-center justify-center">
-              <span className="absolute size-7 rounded-full border border-amber-500/50 animate-ping opacity-60" />
-              <span className="absolute size-4 rounded-full border border-amber-400/40 animate-pulse" />
-              <div className="size-2 rounded-full bg-amber-500 shadow-sm ring-2 ring-background" />
-            </div>
+            <div className="size-2 rounded-full bg-amber-500 shadow-sm ring-2 ring-background" />
           </div>
         </div>
 
@@ -412,15 +310,9 @@ export function HeritageCampusPanorama() {
               </div>
             </div>
 
-            {/* Vertical Pointer Line with Architectural Sonar Rings */}
+            {/* Vertical Pointer Line with Soft Beacon */}
             <div className="h-7 sm:h-12 w-[2px] bg-gradient-to-b from-emerald-500 via-emerald-500/60 to-transparent" />
-
-            {/* Sonar Beacon on Pillar */}
-            <div className="relative flex items-center justify-center">
-              <span className="absolute size-7 rounded-full border border-emerald-500/50 animate-ping opacity-60" />
-              <span className="absolute size-4 rounded-full border border-emerald-400/40 animate-pulse" />
-              <div className="size-2 rounded-full bg-emerald-500 shadow-sm ring-2 ring-background" />
-            </div>
+            <div className="size-2 rounded-full bg-emerald-500 shadow-sm ring-2 ring-background" />
           </div>
         </div>
 
@@ -473,7 +365,7 @@ export function HeritageCampusPanorama() {
         )}
 
         {/* ========================================================= */}
-        {/* HOVER INSPECTOR TRAY (Smoothly reveals on pin hover)      */}
+        {/* HUMAN EDITORIAL DOSSIER (Replaces AI Looking Template)    */}
         {/* ========================================================= */}
         {activeDetail && (
           <div
@@ -481,51 +373,47 @@ export function HeritageCampusPanorama() {
             onMouseLeave={handleDrawerMouseLeave}
             className="absolute inset-x-4 sm:inset-x-8 bottom-4 sm:bottom-6 z-30 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-auto"
           >
-            <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-primary/30 bg-card/95 dark:bg-card/98 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl">
-              <div className="flex items-start justify-between gap-3">
+            <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-border/80 bg-card/95 dark:bg-card/98 backdrop-blur-2xl p-6 sm:p-7 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/50 pb-4">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono uppercase font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                  <div className="inline-flex items-center gap-2">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                       {activeDetail.badge}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      Institutional Layer
-                    </span>
                   </div>
-                  <h4 className="text-sm sm:text-base font-extrabold text-foreground">
+                  <h4 className="text-base sm:text-lg font-bold text-foreground">
                     {activeDetail.title}
                   </h4>
-                  <p className="text-xs text-muted-foreground">
-                    {activeDetail.tagline}
-                  </p>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3.5 pb-2">
-                {activeDetail.highlights.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-start gap-2 text-xs text-foreground bg-muted/40 p-3 rounded-2xl border border-border/60"
-                  >
-                    <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="leading-tight text-[11px] sm:text-xs">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
-                  <Lock className="size-3" />
-                  <span>Members-Only Encrypted Access</span>
-                </span>
 
                 <Link
                   href={activeDetail.ctaHref}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors bg-primary/10 hover:bg-primary/15 px-3 py-1.5 rounded-full"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 px-4 py-2 rounded-full transition-all shadow-xs self-start sm:self-auto"
                 >
                   <span>{activeDetail.ctaText}</span>
                   <ArrowRight className="size-3.5" />
                 </Link>
+              </div>
+
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {activeDetail.tagline}
+              </p>
+
+              {/* Clean Academic Metric Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                {activeDetail.stats.map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-muted/40 p-3.5 rounded-2xl border border-border/60 space-y-1"
+                  >
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      {stat.label}
+                    </div>
+                    <div className="text-xs sm:text-sm font-bold text-foreground">
+                      {stat.value}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
