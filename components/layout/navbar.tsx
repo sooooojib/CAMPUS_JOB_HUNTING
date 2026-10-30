@@ -5,8 +5,8 @@ import { buttonVariants } from "@/components/ui/button";
 
 export function AppNavbar() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/25 bg-background/65 backdrop-blur-xl transition-all duration-300">
-      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <div className="pointer-events-auto flex w-full max-w-5xl items-center justify-between rounded-full border border-border/50 bg-background/80 dark:bg-card/85 px-4 sm:px-6 py-2.5 shadow-xl backdrop-blur-2xl transition-all duration-300">
         {/* Brand Identity */}
         <Link
           href="/"
@@ -29,7 +29,7 @@ export function AppNavbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <Link
             href="/design-system"
-            className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-full hover:bg-muted/60"
+            className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-full hover:bg-muted/60 hidden sm:inline-block"
           >
             Design System
           </Link>
