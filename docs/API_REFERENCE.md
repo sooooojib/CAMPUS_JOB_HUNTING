@@ -415,7 +415,70 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 5. Career Tools API (Student Only)
+## 6. Member Directory, Connections & Referrals API (Stage 10 Implemented)
+
+### Endpoint: `/api/members`
+
+- `GET /api/members`
+  - Searches and paginates the authenticated university member directory.
+  - **Access**: Authenticated member.
+  - **Query Params**: `q`, `department`, `membershipType`, `company`, `skill`, `interest`, `page`, `pageSize`.
+  - **Privacy Enforcement**: Excludes `studentId`, `phone`, and verification documents. Redacts `email` unless `showEmail: true` or viewer is platform ADMIN. Enriches with viewer's `connectionStatus` (`NONE`, `PENDING_SENT`, `PENDING_RECEIVED`, `CONNECTED`, `SELF`).
+  - **Output**: `{ success: true, items: MemberDirectoryItem[], pagination: Pagination }`
+
+### Endpoints: `/api/connections`
+
+- `GET /api/connections`
+  - Lists connections or pending requests.
+  - **Query Params**: `type` (`ACCEPTED`, `PENDING_INCOMING`, `PENDING_OUTGOING`), `page`, `pageSize`.
+  - **Access**: Authenticated member.
+
+- `POST /api/connections`
+  - Initiates a connection request to another member.
+  - **Access**: Authenticated member.
+  - **Body**: `{ receiverId: string }`
+  - **Validation**: Prohibits self-connection (`senderId !== receiverId`), prevents duplicate pending requests.
+
+- `PUT /api/connections/[id]`
+  - Responds to an incoming connection request (`ACCEPT` or `REJECT`).
+  - **Access**: Recipient of the connection request only.
+  - **Body**: `{ action: "ACCEPT" | "REJECT" }`
+
+- `DELETE /api/connections/[id]`
+  - Cancels an outgoing pending request (`?action=cancel`) or dissolves an accepted connection.
+  - **Access**: Sender (for cancel) or either connected member (for removal).
+
+- `GET /api/connections/status`
+  - Queries active connection state with another member.
+  - **Query Params**: `userId: string`
+  - **Output**: `{ success: true, state: ConnectionState, connectionId?: string }`
+
+### Endpoints: `/api/referrals`
+
+- `GET /api/referrals`
+  - Queries user's incoming and outgoing referral dossiers.
+  - **Access**: Authenticated member.
+  - **Query Params**: `role` (`SENT`, `RECEIVED`, `ALL`), `status`, `page`, `pageSize`.
+  - **Output**: `{ success: true, items: ReferralItem[], disclaimer: string, pagination: Pagination }`
+
+- `POST /api/referrals`
+  - Submits a formal referral request to an alumni or enterprise member.
+  - **Access**: Authenticated member.
+  - **Body**: `{ recipientId, companyName, companyId?, roleTitle, opportunityId?, message, resumeUrl? }`
+  - **Validation**: Minimum 20 characters for message, blocks self-referral, verifies active recipient.
+
+- `GET /api/referrals/[id]`
+  - Retrieves full private referral dossier.
+  - **Access**: Requester, recipient, or platform `ADMIN` only. Strictly throws 403 Forbidden for unauthorized parties.
+
+- `PUT /api/referrals/[id]`
+  - Recipient responds (`ACCEPTED`, `DECLINED`, `COMPLETED`) with feedback note, or requester cancels (`?action=cancel`).
+  - **Access**: Recipient (for response) or requester (for cancel).
+  - **Body**: `{ status: "ACCEPTED" | "DECLINED" | "COMPLETED", responseNote?: string }`
+
+---
+
+## 7. Career Tools API (Student Only)
 
 ### `checkCgpaEligibility(studentCgpa: number, opportunityId: string)`
 - **Access**: Verified `STUDENT`

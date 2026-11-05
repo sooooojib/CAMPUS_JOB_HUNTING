@@ -10,17 +10,21 @@ import {
   Globe,
   Code2,
   Share2,
-  Mail,
   ArrowLeft,
-  Sparkles,
+  MessageSquare,
+  Users,
+  ExternalLink,
+  Layers,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { getPublicProfile } from "@/lib/services/profile";
+import { getConnectionState } from "@/lib/services/connection";
 import { ProfileTemplate } from "@/components/templates/profile-template";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ProfileActions } from "@/components/profile/profile-actions";
 
 export const instant = false;
 
@@ -52,6 +56,59 @@ export default async function PublicProfilePage(
     throw error;
   }
 
+  // Query connection state, mutual connections, and recent posts in parallel
+  const [connectionStateResult, recentPosts, viewerConnections, targetConnections] =
+    await Promise.all([
+      getConnectionState(session.user.id, id),
+      prisma.post.findMany({
+        where: {
+          authorId: id,
+          status: "ACTIVE",
+        },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        include: {
+          attachedOpportunity: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
+        },
+      }),
+      prisma.connection.findMany({
+        where: {
+          status: "ACCEPTED",
+          OR: [{ senderId: session.user.id }, { receiverId: session.user.id }],
+        },
+        select: { senderId: true, receiverId: true },
+      }),
+      prisma.connection.findMany({
+        where: {
+          status: "ACCEPTED",
+          OR: [{ senderId: id }, { receiverId: id }],
+        },
+        select: { senderId: true, receiverId: true },
+      }),
+    ]);
+
+  // Calculate shared connections count
+  const viewerPeerIds = new Set(
+    viewerConnections.map((c) =>
+      c.senderId === session.user.id ? c.receiverId : c.senderId
+    )
+  );
+  const targetPeerIds = new Set(
+    targetConnections.map((c) => (c.senderId === id ? c.receiverId : c.senderId))
+  );
+
+  let sharedCount = 0;
+  for (const pId of viewerPeerIds) {
+    if (targetPeerIds.has(pId) && pId !== id && pId !== session.user.id) {
+      sharedCount++;
+    }
+  }
+
   const initials = profileData.name
     .split(" ")
     .map((n) => n[0])
@@ -60,6 +117,14 @@ export default async function PublicProfilePage(
     .toUpperCase();
 
   const isVerified = profileData.verificationStatus === "VERIFIED";
+  const isSelf = session.user.id === id;
+  const canRequestReferral =
+    !isSelf &&
+    Boolean(
+      profileData.company ||
+        profileData.membershipType === "ALUMNI" ||
+        profileData.membershipType === "EMPLOYER"
+    );
 
   return (
     <div className="space-y-6">
@@ -77,7 +142,7 @@ export default async function PublicProfilePage(
         header={
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-              <Avatar className="size-24 border-2 border-primary/20 shadow-sm">
+              <Avatar className="size-24 border-2 border-primary/20 shadow-sm shrink-0">
                 <AvatarImage src={profileData.image || undefined} alt={profileData.name} />
                 <AvatarFallback className="text-xl font-bold bg-primary/10 text-primary">
                   {initials}
@@ -135,17 +200,15 @@ export default async function PublicProfilePage(
               </div>
             </div>
 
-            <div className="flex items-center justify-center sm:justify-end gap-2 shrink-0">
-              {profileData.email && (
-                <a
-                  href={`mailto:${profileData.email}`}
-                  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-border text-xs font-semibold text-foreground hover:bg-muted transition-colors"
-                >
-                  <Mail className="size-3.5" />
-                  <span>Send Email</span>
-                </a>
-              )}
-            </div>
+            <ProfileActions
+              targetUserId={id}
+              targetName={profileData.name}
+              targetCompany={profileData.company}
+              initialConnectionState={connectionStateResult.state}
+              initialConnectionId={connectionStateResult.connectionId}
+              canRequestReferral={canRequestReferral}
+              email={profileData.email}
+            />
           </div>
         }
         sidebar={
@@ -176,6 +239,29 @@ export default async function PublicProfilePage(
                 )}
               </CardContent>
             </Card>
+
+            {/* Shared Connections */}
+            {!isSelf && (
+              <Card className="rounded-2xl border border-border bg-card shadow-xs">
+                <CardHeader className="pb-3 border-b border-border/60">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Users className="size-3.5 text-primary" />
+                    <span>Campus Network</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4 text-xs space-y-2">
+                  <p className="text-muted-foreground">
+                    {sharedCount > 0
+                      ? `You and ${profileData.name} have ${sharedCount} shared university connection${sharedCount > 1 ? "s" : ""}.`
+                      : `You and ${profileData.name} do not have mutual connections yet.`}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Total Network Connections:{" "}
+                    <span className="font-semibold text-foreground">{targetConnections.length}</span>
+                  </p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Skills */}
             <Card className="rounded-2xl border border-border bg-card shadow-xs">
@@ -309,6 +395,102 @@ export default async function PublicProfilePage(
               </CardContent>
             </Card>
           )}
+
+          {/* Projects if available */}
+          {profileData.projects && profileData.projects.length > 0 && (
+            <Card className="rounded-2xl border border-border bg-card shadow-xs">
+              <CardHeader className="pb-3 border-b border-border/60">
+                <CardTitle className="text-base font-bold flex items-center gap-2">
+                  <Layers className="size-4 text-primary" />
+                  <span>Key Projects</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4 space-y-4">
+                {profileData.projects.map((proj: any, idx: number) => (
+                  <div key={idx} className="space-y-1 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground text-sm">{proj.title}</span>
+                      {proj.link && (
+                        <a
+                          href={proj.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary hover:underline flex items-center gap-1"
+                        >
+                          <span>View Project</span>
+                          <ExternalLink className="size-3" />
+                        </a>
+                      )}
+                    </div>
+                    {proj.description && <p className="text-muted-foreground">{proj.description}</p>}
+                    {proj.techStack && proj.techStack.length > 0 && (
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {proj.techStack.map((tech: string, i: number) => (
+                          <span key={i} className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-foreground/80">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Community Activity */}
+          <Card className="rounded-2xl border border-border bg-card shadow-xs">
+            <CardHeader className="pb-3 border-b border-border/60">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base font-bold flex items-center gap-2">
+                  <MessageSquare className="size-4 text-primary" />
+                  <span>Recent Community Activity</span>
+                </CardTitle>
+                <Link
+                  href={`/feed?authorId=${id}`}
+                  className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+                >
+                  <span>View in Feed</span>
+                  <ExternalLink className="size-3" />
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-4 space-y-3">
+              {recentPosts.length === 0 ? (
+                <p className="text-xs text-muted-foreground italic">
+                  This member hasn't published any community posts yet.
+                </p>
+              ) : (
+                recentPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="p-3 rounded-xl border border-border/60 bg-muted/20 space-y-1.5 text-xs hover:border-primary/40 transition-colors"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <Badge variant="outline" className="text-[10px] font-mono uppercase">
+                        {post.postType.replace("_", " ")}
+                      </Badge>
+                      <span className="text-[11px] text-muted-foreground">
+                        {new Date(post.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    {post.title && <h5 className="font-semibold text-foreground text-xs">{post.title}</h5>}
+                    <p className="text-muted-foreground line-clamp-2">{post.content}</p>
+                    {post.attachedOpportunity && (
+                      <div className="pt-1">
+                        <span className="text-[11px] text-emerald-600 font-medium">
+                          Linked to: {post.attachedOpportunity.title}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
         </div>
       </ProfileTemplate>
     </div>

@@ -4,6 +4,32 @@
 
 ---
 
+## Stage 10 Verification: Member Directory, Connections & Referrals (2026-11-05)
+
+- **Date**: 2026-11-05
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (125/125 Passing across 12 Test Files)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/connections-and-referrals.test.ts` | Member Directory Search, Privacy Filters, Connections Engine & Referrals Dossier | **PASSED** (12/12) | 1. Searches member directory and filters by department, membership type, and skill.<br>2. Enforces strict privacy restrictions in directory output (no studentId or phone).<br>3. Reveals email only if showEmail: true or viewer is platform ADMIN.<br>4. Prevents a member from connecting with themselves.<br>5. Sends a connection request and transitions state to PENDING.<br>6. Prevents duplicate pending connection requests.<br>7. Allows recipient to accept connection and blocks unauthorized responders.<br>8. Allows cancelling outgoing requests and removing existing connections.<br>9. Prevents requesting a referral from oneself.<br>10. Creates referral request and verifies non-guarantee disclaimer.<br>11. Allows recipient to respond (ACCEPTED, COMPLETED, DECLINED) and prevents unauthorized responses.<br>12. Enforces strict server-side access control for referral dossier (assertCanAccessReferral). |
+| `tests/unit/community.test.ts` | Community Posts, Threaded Comments, Reactions, Bookmarks & Moderation | **PASSED** (22/22) | Full community suite passing. |
+| `tests/unit/applications.test.ts` | Applications, Resume Vault & Recruiter Management | **PASSED** (17/17) | Magic bytes inspection, size limits, duplicate prevention, external tracking, withdrawal, recruiter review. |
+| `tests/unit/job-browsing-and-posting.test.ts` | Opportunity Discovery, Multi-Filter Search, Submission & Bookmarks | **PASSED** (14/14) | Browsing, multi-filters, pagination, draft/submit lifecycle, atomic bookmarks, author console. |
+| `tests/unit/companies-and-opportunities.test.ts` | Company Management, Opportunity Lifecycle, Moderation & Permissions | **PASSED** (18/18) | Company CRUD, ownership governance, admin approval, deadline expiration, rejection reasons. |
+| `tests/unit/membership-and-profiles.test.ts` | Membership Verification & Profile Privacy | **PASSED** (15/15) | Validates onboarding submission for all 6 membership types, admin approval/rejection with mandatory reason, profile updates, private student ID & phone redaction. |
+| `tests/unit/auth.test.ts` | Registration, Password Hashing, Role Separation | **PASSED** (8/8) | Validates scrypt hashing (>60 chars, non-plaintext), `membershipType` vs `systemRole` separation, duplicate email rejection, session persistence, email verification, password reset. |
+| `tests/unit/middleware.test.ts` | Server Route Protection & Proxy Gate | **PASSED** (7/7) | Verifies 307 redirects for unauthenticated requests on protected routes and public route access. |
+| `tests/unit/database.test.ts` | Neon PostgreSQL Driver Adapter Connection | **PASSED** (1/1) | Real database connection check via `SELECT 1` on pooled connection. |
+| `tests/unit/foundation.test.ts` | Base Architecture & Config | **PASSED** (5/5) | Environmental parameters, Next.js configuration, system integrity. |
+| `tests/unit/design-system.test.ts` | Design Token System & WCAG Contrast | **PASSED** (2/2) | Token definitions and theme contrast constraints. |
+| `tests/unit/navigation-layout.test.ts` | Template Components & Nav Items | **PASSED** (4/4) | Template structures and sidebar items. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Production Build** (`npm run build`) | Turbopack Production Build | **PASSED** | All 50 App Router routes compiled cleanly with active `ƒ Proxy (Middleware)`. |
+
+---
+
 ## Stage 9 Verification: Community Feed, Discussions & Moderation (2026-11-05)
 
 - **Date**: 2026-11-05

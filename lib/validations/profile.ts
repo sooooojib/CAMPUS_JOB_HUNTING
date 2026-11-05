@@ -101,3 +101,26 @@ export const onboardingPayloadSchema = z.object({
 });
 
 export type OnboardingPayload = z.infer<typeof onboardingPayloadSchema>;
+
+export const memberDirectoryQuerySchema = z.object({
+  q: z.string().trim().optional(),
+  department: z.string().trim().optional(),
+  membershipType: z
+    .enum([
+      "STUDENT",
+      "ALUMNI",
+      "FACULTY",
+      "STAFF",
+      "EMPLOYER",
+      "EXTERNAL_CONNECTION",
+    ])
+    .optional(),
+  company: z.string().trim().optional(),
+  skill: z.string().trim().optional(),
+  interest: z.string().trim().optional(),
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().max(50).default(12),
+});
+
+export type MemberDirectoryQueryInput = z.infer<typeof memberDirectoryQuerySchema>;
+

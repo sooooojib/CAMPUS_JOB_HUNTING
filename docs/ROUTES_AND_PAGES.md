@@ -1,6 +1,6 @@
 # UniCareer Community — Routes & Pages Inventory
 
-> **Stage 9 Status**: Complete Community Feed & Discussions implemented with channel filters, topic tags, threaded discussions, atomic reactions, bookmarks, reporting, and full database integration.
+> **Stage 10 Status**: Searchable Member Directory (`/community`), Member Profiles (`/profile/[id]`), Direct Connection Engine, and Dedicated Referrals Hub (`/referrals`) fully implemented and verified against PostgreSQL.
 
 ## 1. Route Map & Implementation Status
 
@@ -28,8 +28,9 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | `/opportunities/post` | Submit Opportunity (Managed Company or Community Lead, Preview Mode) | `OpportunityForm` | **Implemented (Stage 7)** |
 | `/opportunities/my` | Author Console (Status Tabs, Edit, Close, Resubmit Rejected) | `MyOpportunitiesView` | **Implemented (Stage 7)** |
 | `/opportunities/saved` | Member Bookmarked Opportunities Collection | `OpportunitiesBrowser` (Bookmarked Mode) | **Implemented (Stage 7)** |
-| `/community` | Member Directory & Campus Network | `ListingTemplate` | **Implemented** |
-| `/referrals` | Alumni Referral Hub & Sponsorships | `ListingTemplate` | **Implemented** |
+| `/community` | Member Directory & Campus Network Search | `ListingTemplate` + `MemberDirectoryView` | **Implemented (Stage 10)** |
+| `/referrals` | Dedicated Referral Hub, Inbound & Outbound Requests Tracker | `ListingTemplate` + `ReferralsHubView` | **Implemented (Stage 10)** |
+| `/profile/[id]` | Member Profile, Connection State, Shared Network, Recent Activity | `ProfileTemplate` + `ProfileActions` | **Implemented (Stage 10)** |
 | `/applications` | Candidate's Submitted Applications Tracker & Withdrawal | `MyApplicationsView` | **Implemented (Stage 8)** |
 | `/contributions` | Shared Leads, Referrals Offered, Community Posts | `DashboardTemplate` | **Implemented** |
 | `/notifications` | Activity alerts, status updates & announcements | `ListingTemplate` | **Implemented** |

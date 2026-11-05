@@ -127,3 +127,24 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
    - The user is a platform `ADMIN`.
    - The user is an authorized employer reviewing an active or historic application referencing the resume for their company.
 3. **Database-Level Duplicate Prevention**: Composite unique index `@@unique([opportunityId, applicantId])` guarantees at the database engine level that no member can submit duplicate applications to the same opportunity.
+
+---
+
+## 6. Member Directory, Connections & Referrals Governance (Stage 10)
+
+| Capability / Action | Active Student / Alumnus | Target Recipient (Alumni/Employer) | Third-Party Member | Platform Admin |
+| :--- | :---: | :---: | :---: | :---: |
+| **Search Member Directory** | ✅ | ✅ | ✅ | ✅ |
+| **View Redacted Student ID / Phone** | ❌ (Own only) | ❌ | ❌ **Strictly Hidden** | ✅ |
+| **View Member Email** | If `showEmail=true` | If `showEmail=true` | If `showEmail=true` | ✅ (Always) |
+| **Send Connection Request** | ✅ | ✅ | ✅ | ✅ |
+| **Connect to Oneself** | ❌ **PROHIBITED** | ❌ **PROHIBITED** | ❌ **PROHIBITED** | ❌ **PROHIBITED** |
+| **Accept / Decline Connection Request** | ❌ (If not recipient) | ✅ (Designated recipient) | ❌ **FORBIDDEN (403)** | ✅ |
+| **Cancel Outgoing Connection** | ✅ (Sender only) | ❌ | ❌ | ✅ |
+| **Remove Established Connection** | ✅ (If party) | ✅ (If party) | ❌ | ✅ |
+| **Send Referral Request** | ✅ | ✅ | ✅ | ✅ |
+| **Request Referral from Oneself** | ❌ **PROHIBITED** | ❌ **PROHIBITED** | ❌ **PROHIBITED** | ❌ **PROHIBITED** |
+| **View Referral Request Dossier** | ✅ (Requester) | ✅ (Recipient) | ❌ **FORBIDDEN (403)** | ✅ |
+| **Respond to Referral Request** | ❌ | ✅ (`ACCEPTED`/`DECLINED`/`COMPLETED`) | ❌ **FORBIDDEN (403)** | ✅ |
+| **Cancel Outgoing Referral Request** | ✅ (Requester only) | ❌ | ❌ | ✅ |
+

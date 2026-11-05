@@ -653,7 +653,7 @@ export default function DesignSystemPage() {
                 graduationYear={2022}
                 skills={["Distributed Systems", "Kubernetes", "Go", "PostgreSQL"]}
                 isAvailableForMentorship={true}
-                connectionState="NOT_CONNECTED"
+                connectionState="NONE"
               />
             </div>
 

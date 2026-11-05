@@ -164,11 +164,27 @@ flowchart TD
 
 ---
 
+### Stage 10: Member Directory, Connections & Referrals
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 9.
+- **Core Deliverables Delivered**:
+  - **Connections & Referrals Database Models (`prisma/schema.prisma`)**: Integrated `Connection` and `ReferralRequest` models into PostgreSQL with enums `ConnectionStatus` (`PENDING`, `ACCEPTED`, `REJECTED`) and `ReferralStatus` (`PENDING`, `ACCEPTED`, `DECLINED`, `COMPLETED`, `CANCELLED`).
+  - **Composite Unique Constraints**: Database-level unique constraint `@@unique([senderId, receiverId])` preventing duplicate connection requests.
+  - **Searchable Member Directory (`/community`)**: Real database-driven directory (`MemberDirectoryView`) with live debounced search, filtering by department, membership type, company, and skill, with strict redaction of private fields (`studentId`, `phone`, private email).
+  - **Direct Connection Engine**: Robust connection request lifecycle (`sendConnectionRequest`, `respondToConnectionRequest`, `cancelConnectionRequest`, `removeConnection`) with self-connect prevention and bidirectional state tracking (`ConnectionButton`).
+  - **Dedicated Referral Request System (`/referrals`)**: Full-featured referrals hub (`ReferralsHubView`) with incoming/outgoing tabs, request referral modal (`RequestReferralModal`), role & company selection, response workflow (`ACCEPTED`, `DECLINED`, `COMPLETED`), and non-guarantee disclaimers.
+  - **Strict Server-Side Referral Privacy**: `assertCanAccessReferral` ensuring only requester, recipient, or platform admin can inspect private request dossiers (403 Forbidden for unauthorized members).
+  - **Enriched Member Profile Detail (`/profile/[id]`)**: Full public dossier with connection status actions, "Request Referral" trigger, shared university connection counts, and recent community activity posts.
+  - **Automated Testing**: 12 new unit and integration tests in `tests/unit/connections-and-referrals.test.ts` (125/125 passing across all 12 test files).
+  - **Production Build**: 50 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
 ## 3. Next Stage Preview
 
-### Stage 10: University Career Tools (Verified Student Profiles)
+### Stage 11: University Career Tools (Verified Student Profiles)
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 9.
+- **Prerequisites**: Stage 10.
 - **Core Deliverables**:
   - CGPA eligibility checker against active campus opportunities.
   - Course skill matching algorithm and gap analysis.

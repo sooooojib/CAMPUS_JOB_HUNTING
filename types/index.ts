@@ -106,6 +106,83 @@ export type ReactionType =
   | "SUPPORT"
   | "CELEBRATE";
 
+export type ConnectionStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "REJECTED";
+
+export type ReferralStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "DECLINED"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export interface MemberDirectoryItem {
+  id: string;
+  name: string;
+  image: string | null;
+  membershipType: MembershipType;
+  verificationStatus: VerificationStatus;
+  department: string | null;
+  graduationYear: number | null;
+  company: string | null;
+  designation: string | null;
+  headline: string | null;
+  bio: string | null;
+  skills: string[];
+  interests: string[];
+  connectionStatus?: "NONE" | "PENDING_SENT" | "PENDING_RECEIVED" | "CONNECTED" | "SELF";
+  connectionId?: string;
+}
+
+export interface ReferralRequestDetails {
+  id: string;
+  requesterId: string;
+  requester: {
+    id: string;
+    name: string;
+    image: string | null;
+    membershipType: MembershipType;
+    verificationStatus: VerificationStatus;
+    profile?: {
+      department: string | null;
+      graduationYear: number | null;
+      headline: string | null;
+    } | null;
+  };
+  recipientId: string;
+  recipient: {
+    id: string;
+    name: string;
+    image: string | null;
+    membershipType: MembershipType;
+    verificationStatus: VerificationStatus;
+    profile?: {
+      company: string | null;
+      designation: string | null;
+      headline: string | null;
+    } | null;
+  };
+  companyId?: string | null;
+  companyName: string;
+  roleTitle: string;
+  opportunityId?: string | null;
+  opportunity?: {
+    id: string;
+    title: string;
+    opportunityType: OpportunityType;
+    companyName?: string;
+  } | null;
+  message: string;
+  resumeUrl?: string | null;
+  status: ReferralStatus;
+  responseNote?: string | null;
+  respondedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * Standard API Response Structure
  */

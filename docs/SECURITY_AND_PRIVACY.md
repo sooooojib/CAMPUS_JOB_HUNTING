@@ -146,4 +146,28 @@
    - Duplicate pending reports from the same user for the same content target are blocked (`409 DUPLICATE_REPORT`).
    - Auto-flagging threshold: When >= 3 pending reports are lodged against a post or comment, status is automatically updated to `FLAGGED` for administrative intervention.
 
+---
+
+## 10. Member Discovery, Network Connections & Referral Privacy (Stage 10 Implemented)
+
+1. **Member Directory Privacy Guarantees (`searchMemberDirectory`)**:
+   - Student IDs (`studentId`), personal phone numbers (`phone`), and verification evidence notes are **strictly withheld** from the directory output.
+   - Member emails are masked (`undefined`) unless the member has explicitly set `showEmail: true` on their profile, or the viewer is a platform `ADMIN`.
+   - Inactive, suspended, or deactivated accounts (`accountStatus !== "ACTIVE"`) are excluded from search results.
+2. **Self-Connection & Self-Referral Prevention**:
+   - Members are programmatically and logically prevented from sending connection requests or referral requests to themselves (`senderId !== receiverId`, `requesterId !== recipientId`).
+3. **Connection Integrity & Duplicate Prevention**:
+   - Database composite unique constraint `@@unique([senderId, receiverId])` prevents duplicate requests in the same direction.
+   - Bidirectional validation prevents sending a request if an inverted pending request is already waiting for the member's acceptance.
+4. **Referral Request Access Control (`assertCanAccessReferral`)**:
+   - Referral requests contain personal contact details, resumes, and career intentions.
+   - Access is restricted exclusively to:
+     - The member who submitted the referral request (`requesterId === viewerUserId`).
+     - The member to whom the request was directed (`recipientId === viewerUserId`).
+     - Platform administrators (`systemRole === "ADMIN"`).
+   - Any third-party access attempt is rejected with HTTP `403 Forbidden` (`Access denied. You do not have permission to view this referral request.`).
+5. **Regulatory & Non-Guarantee Disclaimers**:
+   - All referral creation flows and dashboards display prominent disclaimers clarifying that referrals facilitate trusted professional introductions within the university ecosystem and do NOT guarantee an interview, employment offer, or institutional endorsement.
+
+
 

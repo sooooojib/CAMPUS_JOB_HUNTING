@@ -6,6 +6,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 10: Member Directory, Connections & Referrals] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Connection`: Mutual professional network model with composite unique constraint `@@unique([senderId, receiverId])`, tracking `status` (`PENDING`, `ACCEPTED`, `REJECTED`), and relations to `User` (`sender` and `receiver`).
+  - `ReferralRequest`: Formal referral requisition model linking `requester`, `recipient`, optional `company`, target `roleTitle`, optional `opportunity`, message pitch, optional resume link, `status` (`PENDING`, `ACCEPTED`, `DECLINED`, `COMPLETED`, `CANCELLED`), response note, and response timestamp.
+  - New Enums: `ConnectionStatus` (`PENDING`, `ACCEPTED`, `REJECTED`) and `ReferralStatus` (`PENDING`, `ACCEPTED`, `DECLINED`, `COMPLETED`, `CANCELLED`).
+- **Validation Schemas (`lib/validations/connection.ts` & `lib/validations/referral.ts`)**:
+  - Zod schemas: `sendConnectionSchema`, `respondConnectionSchema`, `connectionQuerySchema`, `createReferralSchema` (min 20, max 2,000 chars), `respondReferralSchema`, `referralQuerySchema`, and `memberDirectoryQuerySchema` in `lib/validations/profile.ts`.
+- **Backend Services & Security Enforcements (`lib/services/connection.ts` & `lib/services/referral.ts`)**:
+  - `sendConnectionRequest`: Prohibits self-connection (`senderId !== receiverId`), prevents duplicate pending requests, rejects inactive recipients.
+  - `respondToConnectionRequest`: Enforces that only the designated recipient can `ACCEPT` or `REJECT` a pending request.
+  - `cancelConnectionRequest`: Enforces that only the sender can cancel a pending request.
+  - `removeConnection`: Allows either connected member to dissolve an accepted connection.
+  - `getConnectionState`: Computes real-time connection state (`SELF`, `NONE`, `PENDING_SENT`, `PENDING_RECEIVED`, `CONNECTED`).
+  - `createReferralRequest`: Prohibits self-referral, attaches optional company and opportunity references, initializes `PENDING` request.
+  - `assertCanAccessReferral`: Strictly enforces server-side access control. Only the requester, recipient, or platform administrator can view referral request dossiers (HTTP 403 Forbidden for unauthorized members).
+  - `respondToReferralRequest`: Recipient-only response lifecycle (`ACCEPTED`, `DECLINED`, `COMPLETED`) with feedback notes.
+  - `cancelReferralRequest`: Requester-only cancellation for pending referral requests.
+  - `searchMemberDirectory` in `lib/services/profile.ts`: Paginated member directory search with multi-filters (department, membershipType, company, skill, keyword) and strict redaction of private fields (`studentId`, `phone`, private email).
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/members`: Paginated member directory search endpoint.
+  - `GET /api/connections`, `POST /api/connections`: Connection list and request submission.
+  - `PUT /api/connections/[id]`, `DELETE /api/connections/[id]`: Connection response and cancellation/removal.
+  - `GET /api/connections/status`: Active connection status query between viewer and target member.
+  - `GET /api/referrals`, `POST /api/referrals`: User referral requests dashboard and submission.
+  - `GET /api/referrals/[id]`, `PUT /api/referrals/[id]`: Referral detail dossier and status update.
+- **Frontend Views & Components**:
+  - `components/community/member-directory-view.tsx`: Real database-backed member directory with live debounced search, role filter, department/company/skill inputs, pagination, and direct action triggers.
+  - `components/community/connection-button.tsx`: Stateful connection action button supporting connect, pending, accept/decline, connected, and remove actions with real-time feedback.
+  - `components/referrals/request-referral-modal.tsx`: Interactive modal for submitting tailored referral requests with institutional networking disclaimer.
+  - `components/referrals/referrals-hub-view.tsx`: Dedicated dashboard with Incoming Requests inbox, Sent Requests tracker, status badges, response notes, and response action dialogs.
+  - `components/profile/profile-actions.tsx`: Client action toolbar for member profile pages.
+  - Enhanced `app/(dashboard)/profile/[id]/page.tsx`: Profile detail page enriched with connection button, referral request trigger, mutual university connection count, and recent community activity feed.
+  - Connected `app/(dashboard)/community/page.tsx` and `app/(dashboard)/referrals/page.tsx` to real database services, eradicating all mock data.
+- **Automated Unit Testing (`tests/unit/connections-and-referrals.test.ts`)**:
+  - 12 comprehensive unit and integration tests covering directory search, privacy filters, connection lifecycle, duplicate prevention, self-connection blocking, referral request lifecycle, response workflows, and unauthorized access rejections.
+
+---
+
 ## [Stage 9: Community Feed, Discussions & Moderation] - 2026-11-05
 
 ### Added

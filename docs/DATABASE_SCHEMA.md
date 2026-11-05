@@ -1,8 +1,8 @@
 # UniCareer Community — Database Schema Specification
 
-> **Architectural Status**: Stage 9 (Community Feed, Discussions & Moderation) Complete  
+> **Architectural Status**: Stage 10 (Member Directory, Connections, and Referrals) Complete  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Session`, `Account`, `Verification`
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Session`, `Account`, `Verification`
 
 ---
 
@@ -394,3 +394,60 @@ erDiagram
 | `post_bookmarks` | `post_bookmarks_postId_userId_key` | `postId, userId` (UNIQUE) | Prevents duplicate post bookmarks |
 | `content_reports` | `content_reports_target_type_postId_idx` | `targetType, postId` | Post moderation queries |
 | `content_reports` | `content_reports_status_idx` | `status` | Admin review queue |
+
+---
+
+## 10. Stage 10 Models: Connections & Referrals Engine
+
+### `ConnectionStatus` (Enum)
+- `PENDING`: Initial request submitted and awaiting confirmation.
+- `ACCEPTED`: Active mutual network connection established.
+- `REJECTED`: Declined invitation.
+
+### `ReferralStatus` (Enum)
+- `PENDING`: Candidate submitted referral pitch; awaiting review.
+- `ACCEPTED`: Sponsor agreed to refer candidate; process in progress.
+- `DECLINED`: Sponsor unable to sponsor candidate with optional reason note.
+- `COMPLETED`: Internal corporate application formally submitted with reference note.
+- `CANCELLED`: Candidate cancelled the outgoing referral request.
+
+### `connections`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique connection identifier |
+| `senderId` | `VARCHAR(30)` | `NOT NULL`, `FK` | User referencing `users(id)` ON DELETE CASCADE |
+| `receiverId` | `VARCHAR(30)` | `NOT NULL`, `FK` | User referencing `users(id)` ON DELETE CASCADE |
+| `status` | `ConnectionStatus` | `DEFAULT PENDING` | `PENDING`, `ACCEPTED`, `REJECTED` |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Request initiation timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Status update timestamp |
+| *Constraints* | `UNIQUE(senderId, receiverId)` | Database-level unique | **Prevents duplicate requests in same direction** |
+
+### `referral_requests`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique referral identifier |
+| `requesterId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Student/alumnus requesting recommendation |
+| `recipientId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Member receiving request (sponsor/employee) |
+| `companyId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Optional linked `Company` |
+| `companyName` | `VARCHAR(100)` | `NOT NULL` | Organization name |
+| `roleTitle` | `VARCHAR(100)` | `NOT NULL` | Target role/position |
+| `opportunityId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Optional linked `Opportunity` |
+| `message` | `TEXT` | `NOT NULL` | Pitch, qualifications, and context |
+| `resumeUrl` | `VARCHAR(255)` | `NULLABLE` | Optional resume or portfolio URL |
+| `status` | `ReferralStatus` | `DEFAULT PENDING` | Request lifecycle state |
+| `responseNote` | `TEXT` | `NULLABLE` | Feedback or tracking note from recipient |
+| `respondedAt` | `TIMESTAMPTZ` | `NULLABLE` | Response timestamp |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Creation timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
+
+### Additional Stage 10 Indexes
+| Table | Index Name | Columns | Purpose |
+| :--- | :--- | :--- | :--- |
+| `connections` | `connections_sender_id_idx` | `senderId` | Fast sent connection queries |
+| `connections` | `connections_receiver_id_idx` | `receiverId` | Fast received connection queries |
+| `connections` | `connections_status_idx` | `status` | Accepted vs pending filtering |
+| `connections` | `connections_sender_id_receiver_id_key` | `senderId, receiverId` (UNIQUE) | Prevents duplicate requests |
+| `referral_requests` | `referral_requests_requester_id_idx` | `requesterId` | User outgoing referrals dashboard |
+| `referral_requests` | `referral_requests_recipient_id_idx` | `recipientId` | User incoming referrals inbox |
+| `referral_requests` | `referral_requests_status_idx` | `status` | Status filtering |
+

@@ -32,7 +32,7 @@ export function MemberProfileCard({
   graduationYear,
   skills = [],
   isAvailableForMentorship = false,
-  connectionState = "NOT_CONNECTED",
+  connectionState = "NONE",
   className,
 }: MemberProfileCardProps) {
   const initials = name

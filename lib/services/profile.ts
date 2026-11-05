@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { isPlatformAdmin } from "@/lib/permissions";
-import { OnboardingPayload, UpdateProfileInput } from "@/lib/validations/profile";
+import {
+  MemberDirectoryQueryInput,
+  OnboardingPayload,
+  UpdateProfileInput,
+} from "@/lib/validations/profile";
 import { submitVerificationRequest } from "@/lib/services/verification";
 
 export interface PublicProfileResult {
@@ -339,3 +343,182 @@ export async function completeOnboarding(userId: string, payload: OnboardingPayl
     verificationRequest: request,
   };
 }
+
+/**
+ * Searches and paginates the authenticated member directory.
+ *
+ * STRICT PRIVACY & PERMISSION ENFORCEMENT:
+ * - Excludes suspended or deactivated accounts.
+ * - Never returns studentId, phone, or verification proof.
+ * - Only reveals email if the member explicitly allowed it (showEmail: true)
+ *   or if the viewer is a platform administrator.
+ * - Enriches each profile with the active user's connection status.
+ */
+export async function searchMemberDirectory(
+  viewerUserId: string,
+  options: Partial<MemberDirectoryQueryInput> = {}
+) {
+  const {
+    q,
+    department,
+    membershipType,
+    company,
+    skill,
+    interest,
+    page = 1,
+    pageSize = 12,
+  } = options;
+
+  const skip = (page - 1) * pageSize;
+
+  // Determine if viewer is admin
+  const viewer = await prisma.user.findUnique({
+    where: { id: viewerUserId },
+    select: { systemRole: true },
+  });
+  const isViewerAdmin = isPlatformAdmin(viewer);
+
+  const andFilters: any[] = [{ accountStatus: "ACTIVE" }];
+
+  if (membershipType) {
+    andFilters.push({ membershipType });
+  }
+
+  if (department) {
+    andFilters.push({
+      profile: {
+        department: { contains: department, mode: "insensitive" },
+      },
+    });
+  }
+
+  if (company) {
+    andFilters.push({
+      profile: {
+        company: { contains: company, mode: "insensitive" },
+      },
+    });
+  }
+
+  if (skill) {
+    andFilters.push({
+      profile: {
+        skills: { has: skill },
+      },
+    });
+  }
+
+  if (interest) {
+    andFilters.push({
+      profile: {
+        interests: { has: interest },
+      },
+    });
+  }
+
+  if (q) {
+    andFilters.push({
+      OR: [
+        { name: { contains: q, mode: "insensitive" } },
+        { profile: { headline: { contains: q, mode: "insensitive" } } },
+        { profile: { bio: { contains: q, mode: "insensitive" } } },
+        { profile: { company: { contains: q, mode: "insensitive" } } },
+        { profile: { designation: { contains: q, mode: "insensitive" } } },
+        { profile: { department: { contains: q, mode: "insensitive" } } },
+      ],
+    });
+  }
+
+  const where = { AND: andFilters };
+
+  const [totalCount, users] = await Promise.all([
+    prisma.user.count({ where }),
+    prisma.user.findMany({
+      where,
+      include: {
+        profile: true,
+      },
+      orderBy: [
+        { verificationStatus: "asc" }, // VERIFIED / PENDING prioritization
+        { name: "asc" },
+      ],
+      skip,
+      take: pageSize,
+    }),
+  ]);
+
+  // Batch query connection status for these users relative to the viewer
+  const targetUserIds = users.map((u) => u.id);
+  const connections = await prisma.connection.findMany({
+    where: {
+      OR: [
+        { senderId: viewerUserId, receiverId: { in: targetUserIds } },
+        { senderId: { in: targetUserIds }, receiverId: viewerUserId },
+      ],
+    },
+  });
+
+  const connectionMap = new Map<string, { status: string; connectionId: string; isSender: boolean }>();
+  connections.forEach((c) => {
+    const otherId = c.senderId === viewerUserId ? c.receiverId : c.senderId;
+    connectionMap.set(otherId, {
+      status: c.status,
+      connectionId: c.id,
+      isSender: c.senderId === viewerUserId,
+    });
+  });
+
+  const items = users.map((u) => {
+    let connectionStatus: "SELF" | "NONE" | "PENDING_SENT" | "PENDING_RECEIVED" | "CONNECTED" = "NONE";
+    let connectionId: string | undefined = undefined;
+
+    if (u.id === viewerUserId) {
+      connectionStatus = "SELF";
+    } else {
+      const conn = connectionMap.get(u.id);
+      if (conn) {
+        connectionId = conn.connectionId;
+        if (conn.status === "ACCEPTED") {
+          connectionStatus = "CONNECTED";
+        } else if (conn.status === "PENDING") {
+          connectionStatus = conn.isSender ? "PENDING_SENT" : "PENDING_RECEIVED";
+        }
+      }
+    }
+
+    const p = u.profile;
+    const canSeeEmail = isViewerAdmin || u.id === viewerUserId || Boolean(p?.showEmail);
+
+    return {
+      id: u.id,
+      name: u.name,
+      email: canSeeEmail ? u.email : undefined,
+      image: u.image,
+      membershipType: u.membershipType,
+      verificationStatus: u.verificationStatus,
+      headline: p?.headline || null,
+      bio: p?.bio || null,
+      department: p?.department || null,
+      graduationYear: p?.graduationYear || null,
+      company: p?.company || null,
+      designation: p?.designation || null,
+      skills: p?.skills || [],
+      interests: p?.interests || [],
+      connectionStatus,
+      connectionId,
+    };
+  });
+
+  return {
+    items,
+    pagination: {
+      page,
+      pageSize,
+      totalCount,
+      totalPages: Math.ceil(totalCount / pageSize),
+      hasNextPage: skip + pageSize < totalCount,
+      hasPreviousPage: page > 1,
+    },
+  };
+}
+

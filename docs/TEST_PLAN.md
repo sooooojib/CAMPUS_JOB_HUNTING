@@ -126,3 +126,26 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - Theme switching light/dark preserves WCAG AA contrast.
 - Layout verification on iPhone 14 (390px), iPad (768px), and Desktop (1440px).
 
+### 2.8 Member Directory, Connections & Referrals (Stage 10: Vitest)
+- **Member Directory Search & Filtering**:
+  - Filter by department, membershipType, company, skill, interest, and keyword `q`.
+  - Pagination boundary tests (`page`, `pageSize`, `totalPages`, `hasNextPage`, `hasPreviousPage`).
+- **Strict Privacy Redaction**:
+  - Student IDs (`studentId`) and personal phone numbers (`phone`) are never returned in directory searches.
+  - Emails are redacted unless `showEmail: true` or viewer is platform `ADMIN`.
+- **Connection Request Lifecycle**:
+  - Sending connection request transitions state to `PENDING`.
+  - Self-connection prohibition (`senderId === receiverId` throws).
+  - Duplicate connection prevention.
+  - Responding to connection request (`ACCEPT` / `REJECT`).
+  - Unauthorized responder blocking (only recipient can accept/reject).
+  - Outgoing request cancellation (only sender can cancel).
+  - Connection dissolution (either party can remove).
+- **Referral Request Lifecycle & Privacy**:
+  - Creating referral request with recipient, company, role, message, and optional resume.
+  - Self-referral prohibition (`requesterId === recipientId` throws).
+  - Non-guarantee disclaimer presence assertion in responses and dashboards.
+  - Recipient responses (`ACCEPTED`, `COMPLETED`, `DECLINED`) with notes.
+  - Server-side access authorization (`assertCanAccessReferral`): requester allowed, recipient allowed, admin allowed, unauthorized third-party rejected with 403 Forbidden.
+
+

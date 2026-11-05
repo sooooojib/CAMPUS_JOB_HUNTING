@@ -94,6 +94,20 @@ enum ApplicationStatus {
   WITHDRAWN
 }
 
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ReferralStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id                   String             @id @default(cuid())
   name                 String
@@ -138,6 +152,12 @@ model User {
   submittedReports        ContentReport[]       @relation("UserSubmittedReports")
   reviewedReports         ContentReport[]       @relation("ReviewedReports")
 
+  // Stage 10: Connections & Referrals Relations
+  sentConnections         Connection[]          @relation("SentConnections")
+  receivedConnections     Connection[]          @relation("ReceivedConnections")
+  sentReferrals           ReferralRequest[]     @relation("SentReferrals")
+  receivedReferrals       ReferralRequest[]     @relation("ReceivedReferrals")
+
   @@map("users")
 }
 
@@ -155,8 +175,9 @@ model Company {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  members       CompanyMember[]
-  opportunities Opportunity[]
+  members          CompanyMember[]
+  opportunities    Opportunity[]
+  referralRequests ReferralRequest[]
 
   @@index([name])
   @@map("companies")
@@ -236,6 +257,7 @@ model Opportunity {
   bookmarks             OpportunityBookmark[]
   applications          Application[]
   referencingPosts      Post[]                @relation("OpportunityPosts")
+  referralRequests      ReferralRequest[]     @relation("ReferralOpportunities")
 
   @@index([status, deadline])
   @@index([companyId])
@@ -604,3 +626,49 @@ model ContentReport {
   @@index([reporterId])
   @@map("content_reports")
 }
+
+// Stage 10: Connections & Referrals Models
+
+model Connection {
+  id         String           @id @default(cuid())
+  senderId   String           @map("sender_id")
+  sender     User             @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String           @map("receiver_id")
+  receiver   User             @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     ConnectionStatus @default(PENDING)
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([status])
+  @@map("connections")
+}
+
+model ReferralRequest {
+  id            String         @id @default(cuid())
+  requesterId   String         @map("requester_id")
+  requester     User           @relation("SentReferrals", fields: [requesterId], references: [id], onDelete: Cascade)
+  recipientId   String         @map("recipient_id")
+  recipient     User           @relation("ReceivedReferrals", fields: [recipientId], references: [id], onDelete: Cascade)
+  companyId     String?        @map("company_id")
+  company       Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  companyName   String         @map("company_name")
+  roleTitle     String         @map("role_title")
+  opportunityId String?        @map("opportunity_id")
+  opportunity   Opportunity?   @relation("ReferralOpportunities", fields: [opportunityId], references: [id], onDelete: SetNull)
+  message       String         @db.Text
+  resumeUrl     String?        @map("resume_url")
+  status        ReferralStatus @default(PENDING)
+  responseNote  String?        @map("response_note") @db.Text
+  respondedAt   DateTime?      @map("responded_at")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@index([requesterId])
+  @@index([recipientId])
+  @@index([status])
+  @@map("referral_requests")
+}
+
