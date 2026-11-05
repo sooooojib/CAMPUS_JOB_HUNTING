@@ -185,5 +185,33 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Sorting opportunities by match percentage descending, then eligibility status, then deadline.
   - Inclusion of transparent recommendation reasons and mandatory non-guarantee disclaimer.
 
+### 2.10 Notifications and Calendar System (Stage 12: Vitest)
+- **Notification Database & Core Operations**:
+  - Creating in-app notifications with type, title, message, related entity, and deep link.
+  - In-app notification deduplication: updating unread duplicate notification records rather than creating redundant cards.
+  - Paginated notification retrieval with total and unread counts.
+  - Marking single notifications as read and recording exact `readAt` timestamps.
+  - Marking all unread notifications as read via batch operation.
+  - Strict recipient access control: verifying that member A cannot read, mark, or delete member B's notifications.
+- **Notification Preferences & Granular Controls**:
+  - Initializing default institutional preferences.
+  - Updating preferences across the 5 functional categories (opportunities, applications, community, membership, reminders).
+  - In-app and email suppression: verifying that notifications are not dispatched when the respective preference is disabled.
+- **Career Calendar Management**:
+  - Creating, updating, and deleting custom career events and notes.
+  - User boundary protection: verifying that member A cannot edit or delete member B's calendar reminders.
+  - Aggregated career calendar view (`getUserCareerCalendar`): combining custom events, application deadlines for applied jobs, interview stages, and saved opportunity deadlines.
+  - Deduplication: ensuring that an opportunity that is both applied and saved is not displayed twice.
+  - Month filtering: ensuring only events falling within the month grid window are included.
+- **Deadline Reminders & Cron Scanning Idempotency**:
+  - Scanning opportunities closing in the next 72 hours.
+  - Dispatching reminder notifications to interested applicants and bookmarkers.
+  - Recording dispatches in `DeadlineReminderLog` with composite unique constraint.
+  - Idempotency verification: confirming that secondary cron runs skip previously dispatched reminders without producing duplicate alerts.
+- **Email Notification Templates & Provider Resilience**:
+  - Safe error handling without credential leakage when email provider is unreachable.
+  - Verification that dev environment captures outbound notification emails in `devEmailStore`.
+
+
 
 

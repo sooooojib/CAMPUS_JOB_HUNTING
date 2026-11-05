@@ -136,7 +136,7 @@ describe("Stage 4: Authentication Engine & Account Security Unit Tests", () => {
 
     const verifyResult: any = await auth.api.verifyEmail({
       query: {
-        token: record!.token,
+        token: record!.token!,
       },
     });
 

@@ -8,6 +8,7 @@ import {
   CreateReportInput,
 } from "@/lib/validations/community";
 import { PostType, ReactionType } from "@/types";
+import { createNotification } from "./notification";
 
 export interface FeedPostResult {
   id: string;
@@ -554,7 +555,7 @@ export async function addPostComment(
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { id: true, status: true },
+    select: { id: true, status: true, authorId: true },
   });
 
   if (!post || post.status === "REMOVED") {
@@ -563,16 +564,18 @@ export async function addPostComment(
     throw error;
   }
 
+  let parentAuthorId: string | null = null;
   if (input.parentId) {
     const parentComment = await prisma.comment.findUnique({
       where: { id: input.parentId },
-      select: { id: true, postId: true, status: true },
+      select: { id: true, postId: true, status: true, authorId: true },
     });
     if (!parentComment || parentComment.postId !== postId || parentComment.status === "REMOVED") {
       const error = new Error("Parent comment not found on this post");
       (error as unknown as { code: string }).code = "PARENT_COMMENT_NOT_FOUND";
       throw error;
     }
+    parentAuthorId = parentComment.authorId;
   }
 
   const [comment] = await prisma.$transaction([
@@ -607,6 +610,29 @@ export async function addPostComment(
       data: { commentsCount: { increment: 1 } },
     }),
   ]);
+
+  // Dispatch comment / reply notification
+  if (parentAuthorId && parentAuthorId !== authorId) {
+    createNotification({
+      recipientId: parentAuthorId,
+      type: "COMMENT_REPLY",
+      title: "New Reply to Your Comment",
+      message: `${comment.author.name} replied to your comment on a community discussion.`,
+      relatedEntityType: "COMMENT",
+      relatedEntityId: comment.id,
+      actionUrl: `/feed?post=${postId}`,
+    }).catch(() => {});
+  } else if (post.authorId && post.authorId !== authorId) {
+    createNotification({
+      recipientId: post.authorId,
+      type: "POST_COMMENT",
+      title: "New Comment on Your Post",
+      message: `${comment.author.name} commented on your community post.`,
+      relatedEntityType: "POST",
+      relatedEntityId: post.id,
+      actionUrl: `/feed?post=${postId}`,
+    }).catch(() => {});
+  }
 
   return {
     id: comment.id,

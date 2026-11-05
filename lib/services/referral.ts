@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { CreateReferralInput, RespondReferralInput } from "@/lib/validations/referral";
 import { ReferralStatus } from "@/types";
 import { isPlatformAdmin } from "@/lib/permissions";
+import { createNotification } from "./notification";
 
 export const REFERRAL_DISCLAIMER =
   "UniCareer Community referral requests facilitate trusted professional recommendations between university-connected members. Submitting or receiving a referral does not guarantee an interview, employment offer, or institutional endorsement.";
@@ -95,6 +96,16 @@ export async function createReferralRequest(requesterId: string, input: CreateRe
       },
     },
   });
+
+  createNotification({
+    recipientId: input.recipientId,
+    type: "REFERRAL_REQUEST",
+    title: "New Referral Request",
+    message: `${referral.requester.name} requested an institutional referral for ${input.roleTitle} at ${companyName}.`,
+    relatedEntityType: "REFERRAL",
+    relatedEntityId: referral.id,
+    actionUrl: `/referrals`,
+  }).catch(() => {});
 
   return referral;
 }
@@ -231,6 +242,23 @@ export async function respondToReferralRequest(
       opportunity: true,
     },
   });
+
+  const statusLabel =
+    input.status === "ACCEPTED"
+      ? "Accepted"
+      : input.status === "COMPLETED"
+      ? "Completed"
+      : "Declined";
+
+  createNotification({
+    recipientId: referral.requesterId,
+    type: "REFERRAL_RESPONSE",
+    title: `Referral Request ${statusLabel}`,
+    message: `${updated.recipient.name} ${statusLabel.toLowerCase()} your referral request for ${referral.roleTitle} at ${referral.companyName}.`,
+    relatedEntityType: "REFERRAL",
+    relatedEntityId: referral.id,
+    actionUrl: `/referrals`,
+  }).catch(() => {});
 
   return updated;
 }

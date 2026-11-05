@@ -4,6 +4,34 @@
 
 ---
 
+## Stage 12 Verification: Notifications and Career Calendar System (2026-11-05)
+
+- **Date**: 2026-11-05
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (157/157 Passing across 14 Test Files, 0 Failures)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/notifications-and-calendar.test.ts` | Notifications Engine, Preferences Suppression, Event Deduplication, Career Calendar Aggregation, Deadline Reminders & Cron Scanning | **PASSED** (12/12) | 1. Creates a new notification when recipient has in-app notifications enabled.<br>2. Prevents duplicate unread notifications by updating existing unread record.<br>3. Retrieves paginated notifications and accurate unread count.<br>4. Marks an individual notification as read and records read timestamp.<br>5. Marks all unread notifications as read in a single batch operation.<br>6. Enforces recipient authorization boundaries (cannot mark or delete other member's notifications).<br>7. Returns default preferences if not yet configured.<br>8. Updates preferences and suppresses in-app notification when toggled off.<br>9. Creates, retrieves, updates, and deletes custom career reminders with user ownership checks.<br>10. Aggregates custom events, application deadlines, and saved opportunities into personal career calendar.<br>11. Dispatches deadline notifications and prevents duplicate dispatches via `DeadlineReminderLog`.<br>12. Safely handles email dispatches and records to dev store without leaking credentials. |
+| `tests/unit/smart-matching-and-career-tools.test.ts` | Controlled Skills Catalog, Explainable Match Scores, Eligibility Verification, Skill Gap Market Analytics & Confidential Academic Transcripts | **PASSED** (20/20) | All 20 tests passing. |
+| `tests/unit/connections-and-referrals.test.ts` | Member Directory Search, Privacy Filters, Connections Engine & Referrals Dossier | **PASSED** (12/12) | All 12 tests passing. |
+| `tests/unit/community.test.ts` | Community Posts, Threaded Comments, Reactions, Bookmarks & Moderation | **PASSED** (22/22) | All 22 tests passing. |
+| `tests/unit/applications.test.ts` | Applications, Resume Vault & Recruiter Management | **PASSED** (17/17) | All 17 tests passing. |
+| `tests/unit/job-browsing-and-posting.test.ts` | Opportunity Discovery, Multi-Filter Search, Submission & Bookmarks | **PASSED** (14/14) | All 14 tests passing. |
+| `tests/unit/companies-and-opportunities.test.ts` | Company Management, Opportunity Lifecycle, Moderation & Permissions | **PASSED** (18/18) | All 18 tests passing. |
+| `tests/unit/membership-and-profiles.test.ts` | Membership Verification & Profile Privacy | **PASSED** (15/15) | All 15 tests passing. |
+| `tests/unit/auth.test.ts` | Registration, Password Hashing, Role Separation | **PASSED** (8/8) | All 8 tests passing. |
+| `tests/unit/middleware.test.ts` | Server Route Protection & Proxy Gate | **PASSED** (7/7) | All 7 tests passing. |
+| `tests/unit/database.test.ts` | Neon PostgreSQL Driver Adapter Connection | **PASSED** (1/1) | Real database check passing. |
+| `tests/unit/foundation.test.ts` | Base Architecture & Config | **PASSED** (5/5) | Base parameters passing. |
+| `tests/unit/design-system.test.ts` | Design Token System & WCAG Contrast | **PASSED** (2/2) | Tokens & contrast passing. |
+| `tests/unit/navigation-layout.test.ts` | Template Components & Nav Items | **PASSED** (4/4) | Layout & navigation passing. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Production Build** (`npm run build`) | Turbopack Production Build | **PASSED** | All 62 App Router routes compiled cleanly with active `ƒ Proxy (Middleware)`. |
+
+---
+
 ## Stage 11 Verification: Smart Matching and Student Career Tools (2026-11-05)
 
 - **Date**: 2026-11-05

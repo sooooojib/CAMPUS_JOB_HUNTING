@@ -336,3 +336,102 @@ export interface PaginatedResponse<T> {
   };
 }
 
+// =========================================================================
+// STAGE 12: Notifications, Preferences & Career Calendar Types
+// =========================================================================
+
+export type NotificationType =
+  // Opportunities
+  | "OPPORTUNITY_MATCH"
+  | "OPPORTUNITY_DEADLINE_APPROACHING"
+  | "OPPORTUNITY_APPROVED"
+  | "OPPORTUNITY_REJECTED"
+  | "OPPORTUNITY_CLOSED"
+  | "OPPORTUNITY_EXPIRED"
+  // Applications
+  | "APPLICATION_SUBMITTED"
+  | "APPLICATION_STATUS_CHANGED"
+  | "APPLICATION_SHORTLISTED"
+  | "APPLICATION_INTERVIEW_SCHEDULED"
+  | "APPLICATION_WITHDRAWN"
+  // Community
+  | "POST_COMMENT"
+  | "COMMENT_REPLY"
+  | "POST_REACTION"
+  | "CONNECTION_REQUEST"
+  | "CONNECTION_ACCEPTED"
+  | "REFERRAL_REQUEST"
+  | "REFERRAL_RESPONSE"
+  // Membership
+  | "MEMBERSHIP_APPROVED"
+  | "MEMBERSHIP_REJECTED"
+  | "MEMBERSHIP_INFO_REQUIRED"
+  // Reminders & System
+  | "CAREER_REMINDER"
+  | "SYSTEM_ANNOUNCEMENT";
+
+export type RelatedEntityType =
+  | "OPPORTUNITY"
+  | "APPLICATION"
+  | "POST"
+  | "COMMENT"
+  | "CONNECTION"
+  | "REFERRAL"
+  | "MEMBERSHIP"
+  | "CALENDAR_EVENT"
+  | "SYSTEM";
+
+export type CalendarEventType =
+  | "APPLICATION_DEADLINE"
+  | "SAVED_OPPORTUNITY_DEADLINE"
+  | "INTERVIEW"
+  | "CAREER_FAIR"
+  | "REMINDER"
+  | "OTHER";
+
+export interface NotificationItem {
+  id: string;
+  recipientId: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  relatedEntityType?: RelatedEntityType | null;
+  relatedEntityId?: string | null;
+  actionUrl?: string | null;
+  isRead: boolean;
+  readAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationPreferencesItem {
+  opportunitiesInApp: boolean;
+  opportunitiesEmail: boolean;
+  applicationsInApp: boolean;
+  applicationsEmail: boolean;
+  communityInApp: boolean;
+  communityEmail: boolean;
+  membershipInApp: boolean;
+  membershipEmail: boolean;
+  remindersInApp: boolean;
+  remindersEmail: boolean;
+}
+
+export interface CalendarEventItem {
+  id: string;
+  title: string;
+  description?: string | null;
+  eventType: CalendarEventType;
+  startDate: string;
+  endDate?: string | null;
+  location?: string | null;
+  isAllDay: boolean;
+  relatedOpportunityId?: string | null;
+  relatedApplicationId?: string | null;
+  isSystemGenerated?: boolean;
+  companyName?: string | null;
+  actionUrl?: string | null;
+  statusBadge?: string | null;
+}
+
+

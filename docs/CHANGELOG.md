@@ -6,6 +6,71 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 12: Notifications and Personal Career Calendar] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Notification`: High-performance notification record linking `recipientId`, `type` (`NotificationType`), `title`, `message`, `relatedEntityType` (`RelatedEntityType`), `relatedEntityId`, `actionUrl`, `isRead`, `readAt`, `createdAt`, `updatedAt`, with indexes on `[recipientId, isRead]` and `[recipientId, createdAt]`.
+  - `NotificationPreference`: Granular channel control matrix storing boolean flags for `opportunitiesInApp`/`Email`, `applicationsInApp`/`Email`, `communityInApp`/`Email`, `membershipInApp`/`Email`, and `remindersInApp`/`Email`.
+  - `CareerCalendarEvent`: Personal calendar scheduling model tracking `title`, `description`, `eventType` (`CalendarEventType`), `startDate`, `endDate`, `location`, `isAllDay`, optional `relatedOpportunityId`, and optional `relatedApplicationId` with index on `[userId, startDate]`.
+  - `DeadlineReminderLog`: Scheduled reminder tracking model with composite unique constraint `@@unique([userId, opportunityId, reminderType, channel])` guaranteeing idempotent reminder dispatches without duplicate alerts across repetitive cron triggers.
+  - New Enums:
+    - `NotificationType` (22 events covering Opportunities, Applications, Community, Membership, and Reminders).
+    - `RelatedEntityType` (`OPPORTUNITY`, `APPLICATION`, `POST`, `COMMENT`, `CONNECTION`, `REFERRAL`, `MEMBERSHIP`, `CALENDAR_EVENT`, `SYSTEM`).
+    - `CalendarEventType` (`APPLICATION_DEADLINE`, `SAVED_OPPORTUNITY_DEADLINE`, `INTERVIEW`, `CAREER_FAIR`, `REMINDER`, `OTHER`).
+- **Validation Schemas (`lib/validations/notification.ts` & `lib/validations/calendar.ts`)**:
+  - `notificationQuerySchema`: Query parameter validation for pagination, unread filters, and notification type.
+  - `updateNotificationPreferencesSchema`: Granular boolean toggles for in-app and email channels across all 5 functional categories.
+  - `createCalendarEventSchema`: Calendar reminder creation validation with ISO date/time, category, and notes.
+  - `updateCalendarEventSchema`: Calendar reminder update validation.
+  - `calendarQuerySchema`: Month and year query validation supporting both `?year=2026&month=11` and `?month=2026-11`.
+- **Backend Services (`lib/services/`)**:
+  - `lib/services/notification.ts`:
+    - `createNotification`: Generates in-app notifications and dispatches emails with user preference checks, account status verification, and duplicate unread prevention.
+    - `getUserNotifications`: Retrieves paginated notifications with unread counts and pagination metadata.
+    - `getUnreadNotificationCount`: Lightweight unread counter for header bell badge polling.
+    - `markNotificationAsRead`: Marks individual notifications as read with recipient authorization enforcement.
+    - `markAllNotificationsAsRead`: Batch marks all unread notifications as read.
+    - `deleteNotification`: Deletes notification with recipient authorization check (blocks cross-member deletion with HTTP 403 Forbidden).
+    - `getUserNotificationPreferences` & `updateUserNotificationPreferences`: Manages member notification settings.
+  - `lib/services/calendar.ts`:
+    - `getUserCareerCalendar`: Aggregates 4 distinct real data sources into a single chronological calendar feed: user custom reminders, application target deadlines for applied opportunities, interview stages, and saved opportunity deadlines. Avoids duplicates for opportunities both saved and applied.
+    - `createCalendarEvent`: Creates custom career reminders.
+    - `updateCalendarEvent`: Updates custom career reminders with ownership verification.
+    - `deleteCalendarEvent`: Deletes custom career reminders with ownership verification (blocks unauthorized deletion with HTTP 403 Forbidden).
+  - `lib/services/reminder.ts`:
+    - `processScheduledDeadlineReminders`: Scans approved opportunities closing in the next 72 hours, verifies `DeadlineReminderLog`, and dispatches non-duplicate alerts to applied and bookmarking members.
+- **Email Notification Templates (`lib/email.ts`)**:
+  - Formatted responsive HTML email templates for transactional alerts with development log store (`devEmailStore`) and credential-safe error isolation.
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/notifications`: Retrieves notifications with pagination and filters.
+  - `POST /api/notifications?action=markAllRead`: Batch marks all notifications as read.
+  - `PUT /api/notifications/[id]`, `DELETE /api/notifications/[id]`: Individual notification mark read & dismissal.
+  - `GET /api/notifications/count`: Lightweight unread counter endpoint.
+  - `GET /api/notifications/preferences`, `PUT /api/notifications/preferences`: Manages notification channel settings.
+  - `GET /api/calendar`: Returns aggregated month calendar events.
+  - `POST /api/calendar`: Schedules a custom career reminder.
+  - `PUT /api/calendar/[id]`, `DELETE /api/calendar/[id]`: Updates and deletes custom reminders.
+  - `GET /api/cron/reminders`, `POST /api/cron/reminders`: Scheduled reminder worker protected via `CRON_SECRET` or platform `ADMIN` session.
+- **Frontend Components & Views**:
+  - `NotificationsPopover` (`components/navigation/notifications-popover.tsx`): Header popover displaying live unread counts, recent notifications with relative timestamps and icons, click-to-mark-read navigation, and link to `/notifications`.
+  - `NotificationsCenterView` (`components/notifications/notifications-center-view.tsx`): Notification center with filter tabs (All, Unread, Applications, Opportunities, Community, Referrals), "Mark as Read", "Mark All as Read", "Dismiss", direct entity deep links, and empty states.
+  - `NotificationsPage` (`app/(dashboard)/notifications/page.tsx`): Integrated dashboard page rendering `NotificationsCenterView` inside `ListingTemplate`.
+  - `AddEventModal` (`components/calendar/add-event-modal.tsx`): Dialog to schedule custom career reminders and interview preps with date, time, category, and notes.
+  - `CareerCalendarView` (`components/calendar/career-calendar-view.tsx`): Month view grid (7 days x 5-6 weeks) with previous/next month and today navigation, color-coded badges, event details dialog, and custom reminder creation.
+  - `CalendarPage` (`app/(dashboard)/calendar/page.tsx`): Dedicated career calendar route.
+  - `NotificationPreferencesCard` (`components/settings/notification-preferences-card.tsx`): Settings section with granular In-App and Email toggles across all 5 functional categories.
+  - Added "Career Calendar" navigation item to `AppSidebar` (`components/navigation/sidebar.tsx`).
+- **Event Triggers Wired**:
+  - Applications: `APPLICATION_SUBMITTED`, `APPLICATION_STATUS_CHANGED`, `APPLICATION_SHORTLISTED`, `APPLICATION_INTERVIEW_SCHEDULED`, `APPLICATION_WITHDRAWN`.
+  - Community: `POST_COMMENT`, `COMMENT_REPLY`.
+  - Connections & Referrals: `CONNECTION_REQUEST`, `CONNECTION_ACCEPTED`, `REFERRAL_REQUEST`, `REFERRAL_RESPONSE`.
+  - Membership: `MEMBERSHIP_APPROVED`, `MEMBERSHIP_REJECTED`.
+- **Automated Testing**:
+  - `tests/unit/notifications-and-calendar.test.ts`: 12 comprehensive unit and integration tests covering notification lifecycle, preference suppression, recipient authorization boundaries, calendar event aggregation, custom event CRUD, deadline reminder scanning, and email template resiliency (157/157 passing across all 14 test files).
+
+---
+
 ## [Stage 11: Smart Matching and Student Career Tools] - 2026-11-05
 
 ### Added

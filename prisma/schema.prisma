@@ -183,6 +183,12 @@ model User {
   // Stage 11: Academic Records & Career Tools
   academicRecords         AcademicRecord[]      @relation("UserAcademicRecords")
 
+  // Stage 12: Notifications, Preferences & Career Calendar
+  notifications           Notification[]        @relation("UserNotifications")
+  notificationPreference  NotificationPreference?
+  calendarEvents          CareerCalendarEvent[] @relation("UserCalendarEvents")
+  reminderLogs            DeadlineReminderLog[] @relation("UserReminderLogs")
+
   @@map("users")
 }
 
@@ -765,5 +771,147 @@ model AcademicRecord {
   @@index([userId])
   @@map("academic_records")
 }
+
+// =========================================================================
+// STAGE 12: Notifications, Preferences & Career Calendar
+// =========================================================================
+
+enum NotificationType {
+  // Opportunities
+  OPPORTUNITY_MATCH
+  OPPORTUNITY_DEADLINE_APPROACHING
+  OPPORTUNITY_APPROVED
+  OPPORTUNITY_REJECTED
+  OPPORTUNITY_CLOSED
+  OPPORTUNITY_EXPIRED
+
+  // Applications
+  APPLICATION_SUBMITTED
+  APPLICATION_STATUS_CHANGED
+  APPLICATION_SHORTLISTED
+  APPLICATION_INTERVIEW_SCHEDULED
+  APPLICATION_WITHDRAWN
+
+  // Community
+  POST_COMMENT
+  COMMENT_REPLY
+  POST_REACTION
+  CONNECTION_REQUEST
+  CONNECTION_ACCEPTED
+  REFERRAL_REQUEST
+  REFERRAL_RESPONSE
+
+  // Membership
+  MEMBERSHIP_APPROVED
+  MEMBERSHIP_REJECTED
+  MEMBERSHIP_INFO_REQUIRED
+
+  // Reminders & System
+  CAREER_REMINDER
+  SYSTEM_ANNOUNCEMENT
+}
+
+enum RelatedEntityType {
+  OPPORTUNITY
+  APPLICATION
+  POST
+  COMMENT
+  CONNECTION
+  REFERRAL
+  MEMBERSHIP
+  CALENDAR_EVENT
+  SYSTEM
+}
+
+enum CalendarEventType {
+  APPLICATION_DEADLINE
+  SAVED_OPPORTUNITY_DEADLINE
+  INTERVIEW
+  CAREER_FAIR
+  REMINDER
+  OTHER
+}
+
+model Notification {
+  id                String            @id @default(cuid())
+  recipientId       String            @map("recipient_id")
+  recipient         User              @relation("UserNotifications", fields: [recipientId], references: [id], onDelete: Cascade)
+  type              NotificationType
+  title             String
+  message           String
+  relatedEntityType RelatedEntityType? @map("related_entity_type")
+  relatedEntityId   String?           @map("related_entity_id")
+  actionUrl         String?           @map("action_url")
+  isRead            Boolean           @default(false) @map("is_read")
+  readAt            DateTime?         @map("read_at")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  @@index([recipientId, isRead])
+  @@index([recipientId, createdAt])
+  @@index([relatedEntityType, relatedEntityId])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id                 String   @id @default(cuid())
+  userId             String   @unique @map("user_id")
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // In-App Notification toggles
+  opportunitiesInApp Boolean  @default(true) @map("opportunities_in_app")
+  applicationsInApp  Boolean  @default(true) @map("applications_in_app")
+  communityInApp     Boolean  @default(true) @map("community_in_app")
+  membershipInApp    Boolean  @default(true) @map("membership_in_app")
+  remindersInApp     Boolean  @default(true) @map("reminders_in_app")
+
+  // Email Notification toggles
+  opportunitiesEmail Boolean  @default(true) @map("opportunities_email")
+  applicationsEmail  Boolean  @default(true) @map("applications_email")
+  communityEmail     Boolean  @default(false) @map("community_email") // Low frequency default
+  membershipEmail    Boolean  @default(true) @map("membership_email")
+  remindersEmail     Boolean  @default(true) @map("reminders_email")
+
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_preferences")
+}
+
+model CareerCalendarEvent {
+  id                    String            @id @default(cuid())
+  userId                String            @map("user_id")
+  user                  User              @relation("UserCalendarEvents", fields: [userId], references: [id], onDelete: Cascade)
+  title                 String
+  description           String?
+  eventType             CalendarEventType @default(REMINDER) @map("event_type")
+  startDate             DateTime          @map("start_date")
+  endDate               DateTime?         @map("end_date")
+  location              String?
+  isAllDay              Boolean           @default(false) @map("is_all_day")
+  relatedOpportunityId  String?           @map("related_opportunity_id")
+  relatedApplicationId  String?           @map("related_application_id")
+  createdAt             DateTime          @default(now()) @map("created_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+
+  @@index([userId, startDate])
+  @@map("career_calendar_events")
+}
+
+model DeadlineReminderLog {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  user          User     @relation("UserReminderLogs", fields: [userId], references: [id], onDelete: Cascade)
+  opportunityId String?  @map("opportunity_id")
+  applicationId String?  @map("application_id")
+  reminderType  String   @map("reminder_type") // e.g. "DEADLINE_3_DAYS", "DEADLINE_24_HOURS", "INTERVIEW_24_HOURS"
+  channel       String   @default("IN_APP") // "IN_APP" | "EMAIL"
+  sentAt        DateTime @default(now()) @map("sent_at")
+
+  @@unique([userId, opportunityId, reminderType, channel])
+  @@index([userId])
+  @@map("deadline_reminder_logs")
+}
+
 
 

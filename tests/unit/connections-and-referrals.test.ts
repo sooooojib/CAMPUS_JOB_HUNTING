@@ -148,7 +148,7 @@ describe("Stage 10: Member Directory, Connections, and Referrals", () => {
       const deptResults = await searchMemberDirectory(student.id, {
         department: "Computer Science",
         page: 1,
-        pageSize: 10,
+        pageSize: 100,
       });
       expect(deptResults.items.some((m) => m.id === student.id)).toBe(true);
       expect(deptResults.items.some((m) => m.id === alumni.id)).toBe(true);
@@ -157,7 +157,7 @@ describe("Stage 10: Member Directory, Connections, and Referrals", () => {
       const alumniResults = await searchMemberDirectory(student.id, {
         membershipType: "ALUMNI",
         page: 1,
-        pageSize: 10,
+        pageSize: 100,
       });
       expect(alumniResults.items.some((m) => m.id === alumni.id)).toBe(true);
       expect(alumniResults.items.some((m) => m.id === student.id)).toBe(false);

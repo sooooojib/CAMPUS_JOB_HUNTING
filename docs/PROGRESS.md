@@ -197,12 +197,28 @@ flowchart TD
 
 ---
 
+### Stage 12: Notifications and Personal Career Calendar
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 11.
+- **Core Deliverables Delivered**:
+  - **Notification & Calendar Models (`prisma/schema.prisma`)**: Integrated `Notification`, `NotificationPreference`, `CareerCalendarEvent`, and `DeadlineReminderLog` tables into PostgreSQL. Enums `NotificationType` (22 events), `RelatedEntityType` (9 entities), and `CalendarEventType` (6 event types).
+  - **Notification Center (`/notifications`)**: Full-featured interactive activity center (`NotificationsCenterView`) with category filter tabs (All, Unread, Applications, Opportunities, Community, Referrals), "Mark as Read", "Mark All as Read", "Dismiss / Delete", and direct entity deep links.
+  - **Dynamic Header Popover (`components/navigation/notifications-popover.tsx`)**: Real unread counter badge, live recent notifications drop-down, unread status indicators, and one-click navigation to `/notifications`.
+  - **Granular Notification Preferences (`/settings` & `/api/notifications/preferences`)**: Dual-channel control matrix (In-App and Email) across Opportunities, Applications, Community, Membership, and Reminders. Automatic server-side notification suppression when preferences are toggled off.
+  - **Personal Career Calendar (`/calendar`)**: Month view grid (`CareerCalendarView`) aggregating 4 real data sources: custom reminders, application target deadlines, scheduled interview milestones, and saved opportunity deadlines. Includes event detail dialog and "Add Career Reminder" modal (`AddEventModal`).
+  - **Scheduled Deadline Reminders & Cron Worker (`/api/cron/reminders`)**: Automated worker scanning closing opportunities in the next 72 hours, protected by `CRON_SECRET` / Admin session, with idempotency guaranteed by composite unique constraint in `DeadlineReminderLog` to prevent duplicate alerts.
+  - **Email Notification Templates & Resiliency**: Formatted transactional email templates in `lib/email.ts` with development logger store (`devEmailStore`) and credential-safe error isolation.
+  - **Automated Testing**: 12 new unit and integration tests in `tests/unit/notifications-and-calendar.test.ts` (157/157 passing across all 14 test files).
+  - **Production Build**: 62 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
 ## 3. Next Stage Preview
 
-### Stage 12: Notification Pipeline & System Observability
+### Stage 13: Administrative Governance & Audit Reporting
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 11.
+- **Prerequisites**: Stage 12.
 - **Core Deliverables**:
-  - In-app notification center for application updates, opportunity approvals, connection requests, and referrals.
-  - Notification preferences and email dispatch triggers.
-  - Audit logging and administrative system metrics.
+  - Centralized admin audit trail and platform oversight.
+  - Advanced institutional reports and analytics exports.
+  - Account suspension and role administration workflows.

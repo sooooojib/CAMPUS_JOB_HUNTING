@@ -4,6 +4,7 @@ import {
   AdminReviewVerificationInput,
   SubmitVerificationRequestInput,
 } from "@/lib/validations/verification";
+import { createNotification } from "./notification";
 
 /**
  * Submits an institutional verification request for an authenticated member.
@@ -156,6 +157,16 @@ export async function reviewVerificationRequest(
       },
     });
 
+    createNotification({
+      recipientId: request.userId,
+      type: "MEMBERSHIP_APPROVED",
+      title: "University Membership Verified",
+      message: `Your ${request.membershipType} membership verification has been approved. You now have full access to university platform tools.`,
+      relatedEntityType: "MEMBERSHIP",
+      relatedEntityId: request.id,
+      actionUrl: "/profile/me",
+    }).catch(() => {});
+
     return {
       request: updatedRequest,
       user: updatedUser,
@@ -185,6 +196,16 @@ export async function reviewVerificationRequest(
         canReviewApplicants: false,
       },
     });
+
+    createNotification({
+      recipientId: request.userId,
+      type: "MEMBERSHIP_REJECTED",
+      title: "Verification Update Required",
+      message: `Your membership verification request was rejected: ${input.rejectionReason.trim()}. Please review and submit updated details.`,
+      relatedEntityType: "MEMBERSHIP",
+      relatedEntityId: request.id,
+      actionUrl: "/onboarding",
+    }).catch(() => {});
 
     return {
       request: updatedRequest,

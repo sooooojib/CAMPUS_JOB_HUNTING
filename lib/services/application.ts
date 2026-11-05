@@ -5,6 +5,7 @@ import {
   RecordExternalApplicationInput,
 } from "@/lib/validations/application";
 import { isPlatformAdmin } from "@/lib/permissions";
+import { createNotification } from "./notification";
 
 /**
  * Checks applicant eligibility before submitting an application.
@@ -217,6 +218,16 @@ export async function submitInternalApplication(
     return createdApp;
   });
 
+  createNotification({
+    recipientId: userId,
+    type: "APPLICATION_SUBMITTED",
+    title: "Application Submitted Successfully",
+    message: `Your application for ${opportunity.title} at ${opportunity.companyName} has been recorded.`,
+    relatedEntityType: "APPLICATION",
+    relatedEntityId: application.id,
+    actionUrl: `/applications`,
+  }).catch(() => {});
+
   return application;
 }
 
@@ -283,6 +294,16 @@ export async function recordExternalApplication(
     return createdApp;
   });
 
+  createNotification({
+    recipientId: userId,
+    type: "APPLICATION_SUBMITTED",
+    title: "Application Submitted Successfully",
+    message: `Your application for ${opportunity.title} at ${opportunity.companyName} has been recorded.`,
+    relatedEntityType: "APPLICATION",
+    relatedEntityId: application.id,
+    actionUrl: `/applications`,
+  }).catch(() => {});
+
   return application;
 }
 
@@ -330,6 +351,16 @@ export async function withdrawApplication(
 
     return app;
   });
+
+  createNotification({
+    recipientId: application.applicantId,
+    type: "APPLICATION_WITHDRAWN",
+    title: `Application Withdrawn: ${application.opportunity.title}`,
+    message: `You have successfully withdrawn your application for ${application.opportunity.title} at ${application.opportunity.companyName}.`,
+    relatedEntityType: "APPLICATION",
+    relatedEntityId: application.id,
+    actionUrl: `/applications`,
+  }).catch(() => {});
 
   return updated;
 }
@@ -625,6 +656,16 @@ export async function updateApplicationStatus({
 
     return app;
   });
+
+  createNotification({
+    recipientId: application.applicantId,
+    type: "APPLICATION_WITHDRAWN",
+    title: `Application Withdrawn: ${application.opportunity.title}`,
+    message: `You have successfully withdrawn your application for ${application.opportunity.title} at ${application.opportunity.companyName}.`,
+    relatedEntityType: "APPLICATION",
+    relatedEntityId: application.id,
+    actionUrl: `/applications`,
+  }).catch(() => {});
 
   return updated;
 }

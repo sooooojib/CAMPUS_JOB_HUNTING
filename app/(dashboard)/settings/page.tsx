@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { NotificationPreferencesCard } from "@/components/settings/notification-preferences-card";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -134,7 +135,7 @@ export default function SettingsPage() {
         {/* Appearance & Preferences */}
         <section className="space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            3. Appearance &amp; Notifications
+            3. Appearance
           </h3>
 
           <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-background">
@@ -146,6 +147,17 @@ export default function SettingsPage() {
             </div>
             <ThemeToggle />
           </div>
+        </section>
+
+        {/* Notification Preferences */}
+        <section className="space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
+            4. Notification Channels &amp; Preferences
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Configure how and when you receive in-app alerts and email notifications across the platform.
+          </p>
+          <NotificationPreferencesCard />
         </section>
       </form>
     </FormTemplate>

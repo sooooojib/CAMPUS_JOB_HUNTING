@@ -540,4 +540,143 @@ enum SkillLevel {
 | `updatedAt` | DateTime | Updated at | Modification timestamp |
 | Unique | `@@unique([userId, semester])` | Prevents duplicate semester entries |
 
+---
+
+## 12. Stage 12 Models: Notifications, Notification Preferences & Career Calendar
+
+### 12.1 Enums
+
+#### `NotificationType`
+```prisma
+enum NotificationType {
+  // Opportunities
+  OPPORTUNITY_MATCH
+  OPPORTUNITY_DEADLINE_APPROACHING
+  OPPORTUNITY_APPROVED
+  OPPORTUNITY_REJECTED
+  OPPORTUNITY_CLOSED
+  OPPORTUNITY_EXPIRED
+
+  // Applications
+  APPLICATION_SUBMITTED
+  APPLICATION_STATUS_CHANGED
+  APPLICATION_SHORTLISTED
+  APPLICATION_INTERVIEW_SCHEDULED
+  APPLICATION_WITHDRAWN
+
+  // Community
+  POST_COMMENT
+  COMMENT_REPLY
+  POST_REACTION
+  CONNECTION_REQUEST
+  CONNECTION_ACCEPTED
+  REFERRAL_REQUEST
+  REFERRAL_RESPONSE
+
+  // Membership
+  MEMBERSHIP_APPROVED
+  MEMBERSHIP_REJECTED
+  MEMBERSHIP_INFO_REQUIRED
+
+  // Reminders & System
+  CAREER_REMINDER
+  SYSTEM_ANNOUNCEMENT
+}
+```
+
+#### `RelatedEntityType`
+```prisma
+enum RelatedEntityType {
+  OPPORTUNITY
+  APPLICATION
+  POST
+  COMMENT
+  CONNECTION
+  REFERRAL
+  MEMBERSHIP
+  CALENDAR_EVENT
+  SYSTEM
+}
+```
+
+#### `CalendarEventType`
+```prisma
+enum CalendarEventType {
+  APPLICATION_DEADLINE
+  SAVED_OPPORTUNITY_DEADLINE
+  INTERVIEW
+  CAREER_FAIR
+  REMINDER
+  OTHER
+}
+```
+
+### 12.2 Tables
+
+#### `notifications` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique notification record ID |
+| `recipientId` | String | FK -> `users(id)`, Cascade | Recipient member |
+| `type` | NotificationType | Required | High-level notification classification |
+| `title` | String | Required | Concise alert headline |
+| `message` | String | Required (Text) | Descriptive notification body |
+| `relatedEntityType` | RelatedEntityType? | Optional | Associated domain entity type |
+| `relatedEntityId` | String? | Optional | Associated domain entity ID |
+| `actionUrl` | String? | Optional | Direct in-app navigation deep link |
+| `isRead` | Boolean | Default: `false` | Unread / read status |
+| `readAt` | DateTime? | Optional | Exact timestamp when marked read |
+| `createdAt` | DateTime | Default: `now()` | Notification dispatch timestamp |
+| `updatedAt` | DateTime | Updated at | Modification timestamp |
+| Index | `@@index([recipientId, isRead])` | Rapid lookup of recipient unread items |
+| Index | `@@index([recipientId, createdAt])` | Paginated descending feed index |
+
+#### `notification_preferences` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique preference record ID |
+| `userId` | String | Unique, FK -> `users(id)`, Cascade | Account owner |
+| `opportunitiesInApp` | Boolean | Default: `true` | In-app alerts for opportunity matches and deadlines |
+| `opportunitiesEmail` | Boolean | Default: `true` | Email alerts for opportunity matches and deadlines |
+| `applicationsInApp` | Boolean | Default: `true` | In-app alerts for application status changes |
+| `applicationsEmail` | Boolean | Default: `true` | Email alerts for application milestones |
+| `communityInApp` | Boolean | Default: `true` | In-app alerts for comments and connections |
+| `communityEmail` | Boolean | Default: `false` | Email alerts for community social interactions |
+| `membershipInApp` | Boolean | Default: `true` | In-app alerts for verification updates |
+| `membershipEmail` | Boolean | Default: `true` | Email alerts for verification decisions |
+| `remindersInApp` | Boolean | Default: `true` | In-app alerts for deadlines and scheduled events |
+| `remindersEmail` | Boolean | Default: `true` | Email alerts for approaching deadlines |
+| `createdAt` | DateTime | Default: `now()` | Preference creation timestamp |
+| `updatedAt` | DateTime | Updated at | Preference update timestamp |
+
+#### `career_calendar_events` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique event record ID |
+| `userId` | String | FK -> `users(id)`, Cascade | Creator / event owner |
+| `title` | String | Required (max 120) | Event title |
+| `description` | String? | Optional (Text) | Event notes and preparation context |
+| `eventType` | CalendarEventType | Default: `REMINDER` | Event classification |
+| `startDate` | DateTime | Required | Scheduled starting date and time |
+| `endDate` | DateTime? | Optional | Scheduled ending date and time |
+| `location` | String? | Optional | Event location (e.g. room or link) |
+| `isAllDay` | Boolean | Default: `false` | Full-day indicator |
+| `relatedOpportunityId`| String? | Optional, FK -> `opportunities(id)`, SetNull | Linked opportunity |
+| `relatedApplicationId`| String? | Optional, FK -> `applications(id)`, SetNull | Linked application |
+| `createdAt` | DateTime | Default: `now()` | Record creation timestamp |
+| `updatedAt` | DateTime | Updated at | Modification timestamp |
+| Index | `@@index([userId, startDate])` | Fast month-view interval queries |
+
+#### `deadline_reminder_logs` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique log record ID |
+| `userId` | String | FK -> `users(id)`, Cascade | Target member recipient |
+| `opportunityId` | String | FK -> `opportunities(id)`, Cascade | Target expiring opportunity |
+| `reminderType` | String | Required (e.g. `DEADLINE_72_HOURS`) | Reminder threshold stage |
+| `channel` | String | Default: `IN_APP` | Notification dispatch medium |
+| `sentAt` | DateTime | Default: `now()` | Dispatch timestamp |
+| Unique | `@@unique([userId, opportunityId, reminderType, channel])` | Prevents duplicate deadline alerts across cron iterations |
+
+
 

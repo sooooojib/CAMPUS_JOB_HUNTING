@@ -614,4 +614,175 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - **Query Params**: `opportunityId: string`
 - **Output**: `{ success: true, eligibility: EligibilityCheckResult }`
 
+---
+
+## 8. Stage 12 API: Notifications, Calendar & Reminders
+
+### 8.1 Notifications Endpoints
+
+#### `GET /api/notifications`
+- **Description**: Returns paginated notifications for the authenticated user with unread counts and pagination metadata.
+- **Access**: Authenticated member (recipient-restricted).
+- **Query Params**:
+  - `unreadOnly?: boolean` (filter for unread items only)
+  - `page?: number` (default: 1)
+  - `pageSize?: number` (default: 20, max: 100)
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "notifications": [
+      {
+        "id": "notif_123",
+        "recipientId": "user_456",
+        "type": "APPLICATION_SHORTLISTED",
+        "title": "Application Shortlisted",
+        "message": "Your submission for Cloud Systems Intern has been shortlisted.",
+        "relatedEntityType": "APPLICATION",
+        "relatedEntityId": "app_789",
+        "actionUrl": "/applications",
+        "isRead": false,
+        "readAt": null,
+        "createdAt": "2026-11-05T07:30:00.000Z",
+        "updatedAt": "2026-11-05T07:30:00.000Z"
+      }
+    ],
+    "unreadCount": 1,
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalCount": 1,
+      "totalPages": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false
+    }
+  }
+  ```
+
+#### `POST /api/notifications?action=markAllRead`
+- **Description**: Marks all unread notifications for the authenticated user as read in a single batch.
+- **Access**: Authenticated member.
+- **Output**: `{ "success": true, "count": 4 }`
+
+#### `PUT /api/notifications/[id]`
+- **Description**: Marks a specific notification as read, recording the exact `readAt` timestamp.
+- **Access**: Recipient owner only. Strictly blocks unauthorized members with 403 Forbidden.
+- **Output**: `{ "success": true, "notification": NotificationItem }`
+
+#### `DELETE /api/notifications/[id]`
+- **Description**: Deletes / dismisses a notification from the recipient's feed.
+- **Access**: Recipient owner only.
+- **Output**: `{ "success": true, "id": "notif_123" }`
+
+#### `GET /api/notifications/count`
+- **Description**: Lightweight endpoint returning the unread notification count for header badge polling.
+- **Access**: Authenticated member.
+- **Output**: `{ "success": true, "unreadCount": 3 }`
+
+#### `GET /api/notifications/preferences`
+- **Description**: Retrieves granular in-app and email notification preferences for the authenticated member.
+- **Access**: Authenticated member.
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "preferences": {
+      "opportunitiesInApp": true,
+      "opportunitiesEmail": true,
+      "applicationsInApp": true,
+      "applicationsEmail": true,
+      "communityInApp": true,
+      "communityEmail": false,
+      "membershipInApp": true,
+      "membershipEmail": true,
+      "remindersInApp": true,
+      "remindersEmail": true
+    }
+  }
+  ```
+
+#### `PUT /api/notifications/preferences`
+- **Description**: Updates in-app and email preferences across the 5 platform categories.
+- **Access**: Authenticated member.
+- **Body**: Partial or complete preference flags.
+- **Output**: `{ "success": true, "preferences": NotificationPreferencesItem }`
+
+---
+
+### 8.2 Career Calendar Endpoints
+
+#### `GET /api/calendar`
+- **Description**: Returns all aggregated calendar events for a given month: custom reminders, application deadlines, interview milestones, and saved opportunity deadlines.
+- **Access**: Authenticated member.
+- **Query Params**: `year?: number`, `month?: number` (or `month=YYYY-MM`)
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "year": 2026,
+    "month": 11,
+    "data": [
+      {
+        "id": "app_deadline_123",
+        "title": "Deadline: Distributed Systems Intern",
+        "description": "Application deadline for your submitted application at Google.",
+        "eventType": "APPLICATION_DEADLINE",
+        "startDate": "2026-11-20T23:59:59.000Z",
+        "endDate": null,
+        "isAllDay": true,
+        "isSystemGenerated": true,
+        "companyName": "Google",
+        "actionUrl": "/applications",
+        "statusBadge": "Applied: UNDER REVIEW"
+      }
+    ]
+  }
+  ```
+
+#### `POST /api/calendar`
+- **Description**: Schedules a personal career calendar event or reminder.
+- **Access**: Authenticated member.
+- **Body**:
+  ```json
+  {
+    "title": "Mock Technical Interview with Alumni",
+    "description": "Review system design and data structures.",
+    "eventType": "INTERVIEW",
+    "startDate": "2026-11-15T14:00:00.000Z",
+    "isAllDay": false
+  }
+  ```
+- **Output**: `{ "success": true, "event": CalendarEventItem }`
+
+#### `PUT /api/calendar/[id]`
+- **Description**: Updates a custom career reminder (title, description, date, type).
+- **Access**: Event creator only.
+- **Output**: `{ "success": true, "event": CalendarEventItem }`
+
+#### `DELETE /api/calendar/[id]`
+- **Description**: Deletes a custom calendar reminder.
+- **Access**: Event creator only.
+- **Output**: `{ "success": true, "id": "event_123" }`
+
+---
+
+### 8.3 Cron Scheduled Worker
+
+#### `GET /api/cron/reminders` | `POST /api/cron/reminders`
+- **Description**: Scans closing opportunities in the next 72 hours and dispatches non-duplicate reminders to applied and bookmarked members.
+- **Access**: Authorized via `Authorization: Bearer <CRON_SECRET>` or platform `ADMIN` session.
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "summary": {
+      "opportunitiesScanned": 5,
+      "remindersTriggered": 3,
+      "skippedDuplicates": 8,
+      "errors": 0
+    }
+  }
+  ```
+
+
 

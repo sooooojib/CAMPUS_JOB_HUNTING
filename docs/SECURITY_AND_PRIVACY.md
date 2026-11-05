@@ -169,5 +169,34 @@
 5. **Regulatory & Non-Guarantee Disclaimers**:
    - All referral creation flows and dashboards display prominent disclaimers clarifying that referrals facilitate trusted professional introductions within the university ecosystem and do NOT guarantee an interview, employment offer, or institutional endorsement.
 
+---
+
+## 11. Student Academic Data Privacy & Matching Integrity (Stage 11 Implemented)
+
+1. **Student Tools Access Guard (`canAccessStudentTools`)**:
+   - Academic CGPA calculation, semester transcript logs, and skill gap telemetry are strictly guarded. Non-student profiles are blocked at server routes and client wrappers.
+2. **Academic Transcript Confidentiality**:
+   - Individual term grades, CGPAs, and coursework notes are visible strictly to the student owner and platform administrators. They are never exposed in community feeds, member directory cards, or company applicant overviews.
+3. **Transparent & Explainable Matching**:
+   - Match percentages are purely algorithmic and explainable. No blackbox fabricated scores. High match scores explicitly carry non-guarantee disclaimers.
+
+---
+
+## 12. Notifications, Career Calendar & Cron Security (Stage 12 Implemented)
+
+1. **Recipient Notification Isolation**:
+   - All notification retrieval and mutation endpoints (`/api/notifications`, `/api/notifications/[id]`) strictly query `recipientId = session.user.id`.
+   - Members cannot view, mark as read, or delete notifications belonging to another user. Unauthorized attempts are rejected with `403 FORBIDDEN`.
+2. **Calendar Event Ownership & Isolation**:
+   - Custom calendar reminders and notes are strictly isolated to the creating user (`userId = session.user.id`).
+   - Mutations (`updateCalendarEvent`, `deleteCalendarEvent`) verify that the requesting user matches the record owner before applying changes.
+3. **Scheduled Deadline Reminders & Cron Authorization**:
+   - The cron worker route (`/api/cron/reminders`) requires either an explicit `Authorization: Bearer <CRON_SECRET>` matching the server configuration or an active platform `ADMIN` session.
+   - Idempotency is enforced via the `DeadlineReminderLog` composite constraint `@@unique([userId, opportunityId, reminderType, channel])`, preventing duplicate alerts from being dispatched across repetitive cron invocations.
+4. **Email Dispatch Privacy & Credential Safety**:
+   - Outbound notification emails log structured events safely without leaking API keys, credentials, or session cookies.
+   - Fallback error handlers catch provider timeouts and delivery errors gracefully without crashing parent business transactions.
+
+
 
 

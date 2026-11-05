@@ -10,6 +10,7 @@ import {
   Users,
   Award,
   FileText,
+  Calendar,
   Sparkles,
   Share2,
   Settings,
@@ -57,6 +58,11 @@ const mainNavItems: NavItem[] = [
     title: "My Applications",
     href: "/applications",
     icon: FileText,
+  },
+  {
+    title: "Career Calendar",
+    href: "/calendar",
+    icon: Calendar,
   },
   {
     title: "My Career Tools",

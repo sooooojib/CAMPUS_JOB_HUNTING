@@ -32,8 +32,9 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | `/referrals` | Dedicated Referral Hub, Inbound & Outbound Requests Tracker | `ListingTemplate` + `ReferralsHubView` | **Implemented (Stage 10)** |
 | `/profile/[id]` | Member Profile, Connection State, Shared Network, Recent Activity | `ProfileTemplate` + `ProfileActions` | **Implemented (Stage 10)** |
 | `/applications` | Candidate's Submitted Applications Tracker & Withdrawal | `MyApplicationsView` | **Implemented (Stage 8)** |
+| `/calendar` | Personal Career Calendar (Deadlines, Interviews, Saved Targets, Custom Reminders) | `ListingTemplate` + `CareerCalendarView` | **Implemented (Stage 12)** |
 | `/contributions` | Shared Leads, Referrals Offered, Community Posts | `DashboardTemplate` | **Implemented** |
-| `/notifications` | Activity alerts, status updates & announcements | `ListingTemplate` | **Implemented** |
+| `/notifications` | Activity alerts, status updates & announcements | `ListingTemplate` + `NotificationsCenterView` | **Implemented (Stage 12)** |
 | `/profile/me` | Current Member Profile & Experience | `ProfileTemplate` | **Implemented** |
 | `/settings` | Edit Personal Profile, Privacy, Vault Security | `FormTemplate` | **Implemented** |
 
@@ -80,4 +81,45 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
    - Auto-synced `Profile.currentCgpa` cached field.
    - Semester history table with Term, GPA, Credits, Standing, Notes, and record removal.
    - Strict academic privacy: Academic records visible only to the student and platform administrators.
+
+---
+
+## 3. Stage 12: Notifications, Activity Alerts & Personal Career Calendar
+
+### 3.1 Notification Center (`/notifications`)
+- **Path**: `/notifications`
+- **Component**: `components/notifications/notifications-center-view.tsx`
+- **Features**:
+  - Filter tabs: All Alerts, Unread, Applications, Opportunities, Community, Referrals.
+  - Granular action controls: "Mark as Read", "Mark All as Read", "Dismiss / Delete".
+  - Deep-link action targets: Direct navigation to related applications, job descriptions, community posts, or referral requests.
+  - Real-time unread counter badge.
+  - Recipient-isolated data fetching: Members can only view and mutate their own notifications.
+  - Header Popover integration (`components/navigation/notifications-popover.tsx`): Displays recent unread notifications and links directly to the full notification center.
+
+### 3.2 Personal Career Calendar (`/calendar`)
+- **Path**: `/calendar`
+- **Component**: `components/calendar/career-calendar-view.tsx`
+- **Features**:
+  - Full-month calendar grid (7 days x 5-6 weeks) with previous/next month navigation and "Today" quick button.
+  - Automated event aggregation:
+    - Target Application Deadlines (Blue badge)
+    - Active Interview Rounds & Stages (Emerald badge)
+    - Saved / Bookmarked Opportunity Closures (Amber badge)
+    - Custom Career Notes & Reminders (Purple badge)
+  - Interactive Event Detail Dialog: Displays title, company name, date/time, action links to the opportunity/application, and reminder deletion.
+  - "Add Career Reminder" Modal (`components/calendar/add-event-modal.tsx`): Allows scheduling custom reminders, interview preps, and milestone notes.
+
+### 3.3 Notification Channels & Preferences (`/settings`)
+- **Path**: `/settings` (Section 4)
+- **Component**: `components/settings/notification-preferences-card.tsx`
+- **Features**:
+  - Independent In-App and Email toggles across 5 key functional categories:
+    - Opportunities & Matches
+    - Applications & Status
+    - Community & Networking
+    - Membership & Verification
+    - Reminders & Deadlines
+  - Instant preferences synchronization with `/api/notifications/preferences`.
+  - Notification suppression: When a channel is toggled off, automated notification services suppress dispatches accordingly.
 

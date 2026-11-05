@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ConnectionStatus } from "@/types";
+import { createNotification } from "./notification";
 
 export type ConnectionState = "SELF" | "NONE" | "PENDING_SENT" | "PENDING_RECEIVED" | "CONNECTED";
 
@@ -98,6 +99,18 @@ export async function sendConnectionRequest(senderId: string, receiverId: string
         updatedAt: new Date(),
       },
     });
+
+    const sender = await prisma.user.findUnique({ where: { id: senderId }, select: { name: true } });
+    createNotification({
+      recipientId: receiverId,
+      type: "CONNECTION_REQUEST",
+      title: "New Connection Request",
+      message: `${sender?.name || "A member"} sent you a university network connection request.`,
+      relatedEntityType: "CONNECTION",
+      relatedEntityId: updated.id,
+      actionUrl: `/profile/${senderId}`,
+    }).catch(() => {});
+
     return updated;
   }
 
@@ -108,6 +121,17 @@ export async function sendConnectionRequest(senderId: string, receiverId: string
       status: "PENDING",
     },
   });
+
+  const sender = await prisma.user.findUnique({ where: { id: senderId }, select: { name: true } });
+  createNotification({
+    recipientId: receiverId,
+    type: "CONNECTION_REQUEST",
+    title: "New Connection Request",
+    message: `${sender?.name || "A member"} sent you a university network connection request.`,
+    relatedEntityType: "CONNECTION",
+    relatedEntityId: connection.id,
+    actionUrl: `/profile/${senderId}`,
+  }).catch(() => {});
 
   return connection;
 }
@@ -154,8 +178,26 @@ export async function respondToConnectionRequest(
           verificationStatus: true,
         },
       },
+      receiver: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
+
+  if (action === "ACCEPT") {
+    createNotification({
+      recipientId: connection.senderId,
+      type: "CONNECTION_ACCEPTED",
+      title: "Connection Request Accepted",
+      message: `${updated.receiver?.name || "A member"} accepted your connection request. You are now connected!`,
+      relatedEntityType: "CONNECTION",
+      relatedEntityId: connection.id,
+      actionUrl: `/profile/${userId}`,
+    }).catch(() => {});
+  }
 
   return updated;
 }
