@@ -30,9 +30,16 @@ export async function GET(request: NextRequest) {
       sourceType: searchParams.get("sourceType") || undefined,
       department: searchParams.get("department") || undefined,
       workplaceType: searchParams.get("workplaceType") || undefined,
+      companyId: searchParams.get("companyId") || undefined,
+      companyName: searchParams.get("companyName") || undefined,
+      location: searchParams.get("location") || undefined,
+      skill: searchParams.get("skill") || undefined,
+      maxMinCgpa: searchParams.get("maxMinCgpa") || undefined,
+      openToAllDepartments: searchParams.get("openToAllDepartments") || undefined,
+      bookmarkedOnly: searchParams.get("bookmarkedOnly") || undefined,
       query: searchParams.get("query") || undefined,
       page: searchParams.get("page") || 1,
-      limit: searchParams.get("limit") || 20,
+      limit: searchParams.get("limit") || 12,
     };
 
     const parsed = opportunityFilterSchema.safeParse(filterInput);
@@ -46,8 +53,8 @@ export async function GET(request: NextRequest) {
     // Automatically transition overdue opportunities to EXPIRED
     await expireOverdueOpportunities();
 
-    const result = await getApprovedOpportunities(parsed.data);
-    return NextResponse.json({ success: true, data: result });
+    const result = await getApprovedOpportunities(parsed.data, session.user.id);
+    return NextResponse.json({ success: true, data: result.items, pagination: result.pagination });
   } catch (error: any) {
     return NextResponse.json(
       { error: "SERVER_ERROR", message: error.message || "Failed to retrieve opportunities." },

@@ -49,7 +49,15 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - **Opportunity Lifecycle & Expiration**:
   - `expireOverdueOpportunities()` transitions past-deadline opportunities to `EXPIRED` status.
 
-### 2.3 Applications & Resume Safeguard (Playwright)
+### 2.3 Opportunity Discovery, Multi-Filter Search & Posting (Stage 7 - Vitest & Integration)
+- Multi-filter query parsing: keywords, opportunity types, workplace modes, source types, department targeting, minimum CGPA cutoff, and bookmark filtering.
+- Public/unauthenticated restriction: verifies anonymous users cannot access `/opportunities`, `/opportunities/[id]`, or `/opportunities/post`.
+- Posting permission gate: blocks unauthorized or unverified users; requires managed company for `OFFICIAL_EMPLOYER` postings.
+- Draft creation, preview toggling, and review submission into `PENDING` queue.
+- Bookmark toggling: verifies atomic bookmark creation and removal; confirms duplicate prevention with composite unique index.
+- Author management console: verifies status filtering, closure, and rejected resubmission workflows.
+
+### 2.4 Applications & Resume Safeguard (Stage 8 - Playwright)
 - Applying internally with a resume upload.
 - Preventing duplicate submissions by the same user to the same opportunity.
 - Withdrawing an application and verifying status change.

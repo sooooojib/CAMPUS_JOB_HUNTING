@@ -113,16 +113,30 @@ flowchart TD
   - **Automated Testing**: 18 new unit and integration tests (60/60 passing across all 8 test files).
   - **Production Build**: 37 App Router routes compiled cleanly with Next.js Turbopack.
 
+### Stage 7: Job Browsing, Searching, and Posting Interfaces
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 6.
+- **Core Deliverables Delivered**:
+  - **Opportunity Browsing Page (`/opportunities`)**: Approved opportunity discovery grid displaying company logos, job title, type, location, workplace mode, compensation, urgency deadline indicator, required skills, department tags, and official vs community-shared provenance badges.
+  - **Multi-Filter & Real-Time Search**: Live keyword search with debouncing, opportunity type, workplace mode, source type, department targeting, and minimum CGPA filters working directly against backend database queries with pagination.
+  - **Opportunity Details View (`/opportunities/[id]`)**: Full job specifications, company identity, requirements, academic criteria, application routing (external redirect vs internal notice), deadline countdown, poster attribution, bookmark toggle, and related openings.
+  - **Opportunity Submission Interface (`/opportunities/post`)**: React Hook Form + Zod form supporting managed company selection or custom company names, skills tag input, target department multi-selection, and server-side posting clearance checks.
+  - **Posting Workflow with Live Preview**: Seamless toggle between form mode and live card preview mode. Support for saving as `DRAFT` or direct submission for institutional review (`PENDING`).
+  - **Author Console (`/opportunities/my`)**: Dedicated authoring console categorized by status (`ALL`, `APPROVED`, `PENDING`, `DRAFT`, `REJECTED`, `CLOSED`, `EXPIRED`) with status counts, draft submission, opportunity closure, deletion, and rejected resubmission workflows.
+  - **Opportunity Bookmarks Engine**: `OpportunityBookmark` database model with composite unique constraint, toggle API (`/api/opportunities/[id]/bookmark`), saved listings collection (`/opportunities/saved`), and real-time bookmark status decoration.
+  - **User Experience & State Completeness**: Loading skeletons, empty states, confirmation dialogs, toast notifications, responsive mobile layouts, and complete light/dark theme support.
+  - **Automated Testing**: 14 new unit and integration tests (74/74 passing across all 9 test files). Clean Next.js 16 production build (41 routes).
+
 ---
 
 ## 3. Next Stage Preview
 
-### Stage 7: Opportunity Portal & Candidate Applications
+### Stage 8: Applications & Private Resume Vault
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 6.
+- **Prerequisites**: Stage 7.
 - **Core Deliverables**:
-  - Member opportunity catalog browsing and filterable search interface (`/opportunities`).
-  - Detailed opportunity view with company badge and provenance banner (`/opportunities/[id]`).
-  - Opportunity creation wizard for verified members and company representatives (`/opportunities/post`).
-  - Internal application submission with private resume vault upload.
-  - Application lifecycle management (submission, withdrawal, employer candidate review).
+  - Internal application submission workflow (`/opportunities/[id]/apply`).
+  - Secure private resume storage with time-limited signed URL generation.
+  - Duplicate application prevention and application withdrawal capability.
+  - Employer applicant management dashboard with status transitions (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `REJECTED`, `ACCEPTED`).
+  - Applicant tracking table with resume access controls and candidate communication notes.

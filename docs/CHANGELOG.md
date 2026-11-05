@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 7: Job Browsing, Searching, and Posting Interfaces] - 2026-11-05
+
+### Added
+- **Database Schema Models & Relations (`prisma/schema.prisma`)**:
+  - `OpportunityBookmark`: Model establishing user bookmarks for opportunities with composite unique constraint `@@unique([userId, opportunityId])`, indexed on `userId` and `opportunityId`.
+  - Added relation fields to `User` (`opportunityBookmarks`) and `Opportunity` (`bookmarks`).
+- **Validation Schemas (`lib/validations/opportunity.ts`)**:
+  - Updated `opportunityFilterSchema` with `companyId`, `companyName`, `location`, `skill`, `maxMinCgpa`, `openToAllDepartments`, `bookmarkedOnly`, `page`, and `limit`.
+- **Backend Services (`lib/services/opportunity.ts`)**:
+  - `toggleOpportunityBookmark`: Atomic create/delete bookmark toggle returning active boolean status.
+  - `isOpportunityBookmarked`: Checks if a user has saved a listing.
+  - `getUserBookmarkedOpportunities`: Fetches user's bookmarked opportunities with pagination.
+  - `getUserAuthoredOpportunities`: Fetches user's authored opportunities with live status counts across all lifecycle states (`ALL`, `APPROVED`, `PENDING`, `DRAFT`, `REJECTED`, `CLOSED`, `EXPIRED`).
+  - `getRelatedOpportunities`: Retrieves up to 3 active opportunities from the same company or department.
+  - Enhanced `getApprovedOpportunities` with enriched multi-filter support and viewer bookmark status decoration.
+- **API Routes (`app/api/`)**:
+  - `POST /api/opportunities/[id]/bookmark`: Toggle bookmark endpoint.
+  - `GET /api/opportunities/bookmarks`: User saved listings endpoint.
+  - `GET /api/opportunities/my`: Author opportunities console endpoint.
+  - Updated `GET /api/opportunities` with multi-filter query params and bookmark decoration.
+- **Frontend Components & Pages**:
+  - `components/opportunities/opportunities-browser.tsx`: Complete client browser with search debounce, multi-select filters (type, workplace, source, department, max CGPA), active filters pill bar, all/bookmarked view tabs, loading skeletons, empty states, and pagination.
+  - `components/opportunities/job-card.tsx`: Enriched with company logo, department badges, min CGPA indicator, poster details, and interactive bookmark button.
+  - `components/opportunities/opportunity-detail-actions.tsx`: Interactive bookmark button with toast notifications, share link button, and `OpportunityApplyButton` supporting external redirect or internal application notice.
+  - `components/opportunities/opportunity-form.tsx`: Comprehensive form using React Hook Form + Zod, skills tag input, department multi-select checkboxes, live card preview toggle, draft saving (`DRAFT`), and review submission (`PENDING`).
+  - `components/opportunities/my-opportunities-view.tsx`: Author console with status tabs, count badges, draft submission, closure dialog, delete dialog, and rejection reason feedback.
+  - `app/(dashboard)/opportunities/page.tsx`: Real browser page connected to live API.
+  - `app/(dashboard)/opportunities/[id]/page.tsx`: Server component fetching detailed opportunity, company info, academic criteria, poster identity, and related openings.
+  - `app/(dashboard)/opportunities/post/page.tsx`: Server page validating user posting permission, loading managed companies, and rendering form.
+  - `app/(dashboard)/opportunities/my/page.tsx`: Author console page.
+  - `app/(dashboard)/opportunities/saved/page.tsx`: Dedicated saved opportunities view.
+  - `app/(dashboard)/contributions/page.tsx`: Linked opportunities section to `/opportunities/my`.
+- **Automated Testing (`tests/unit/job-browsing-and-posting.test.ts`)**:
+  - 14 new unit and integration tests covering approved listing queries, keyword search, opportunity type filtering, workplace mode filtering, source type filtering, department eligibility matching, minimum CGPA filtering, pagination, posting permission gates, managed company validation for official postings, draft saving and pending submission, atomic bookmark toggling, duplicate bookmark prevention, and author listing retrieval.
+  - Total test suite expanded to 74 passing tests across 9 test files.
+
+---
+
 ## [Stage 6: Companies, Opportunities, and Approval System] - 2026-11-05
 
 ### Added

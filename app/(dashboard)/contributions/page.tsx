@@ -78,36 +78,38 @@ export default function ContributionsPage() {
     >
       <div className="space-y-6">
         <Card className="rounded-2xl border border-border bg-card shadow-xs">
-          <CardHeader className="pb-3 border-b border-border/60">
+          <CardHeader className="pb-3 border-b border-border/60 flex flex-row items-center justify-between">
             <CardTitle className="text-base font-bold">Opportunities You Have Shared</CardTitle>
+            <Link
+              href="/opportunities/my"
+              className={buttonVariants({ variant: "outline", size: "xs" })}
+            >
+              Manage Postings
+            </Link>
           </CardHeader>
           <CardContent className="pt-4">
             <div className="space-y-3">
-              {SAMPLE_POSTED_OPPORTUNITIES.map((opp) => (
-                <div
-                  key={opp.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border border-border bg-background"
-                >
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-foreground">{opp.title}</h4>
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                      <span>Posted {opp.date}</span>
-                      <span>•</span>
-                      <span>{opp.views} views</span>
-                      <span>•</span>
-                      <span className="text-primary font-medium">{opp.applicants} applicants</span>
-                    </div>
-                  </div>
+              <div className="p-4 rounded-xl border border-border/70 bg-background/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <Badge variant="success" className="text-xs">
-                      {opp.status}
-                    </Badge>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Manage Applicants
-                    </Button>
+                    <span className="text-xs font-mono font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                      Live Dashboard
+                    </span>
+                    <h4 className="text-sm font-bold text-foreground">
+                      Author &amp; Opportunity Management Console
+                    </h4>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Track all your published openings, active drafts, revision requests from moderators, and closed opportunities in one unified workspace.
+                  </p>
                 </div>
-              ))}
+                <Link
+                  href="/opportunities/my"
+                  className={buttonVariants({ variant: "default", size: "sm" })}
+                >
+                  <span>Go to My Opportunities</span>
+                </Link>
+              </div>
             </div>
           </CardContent>
         </Card>

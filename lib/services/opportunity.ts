@@ -271,7 +271,10 @@ export async function getOpportunityById(opportunityId: string, viewerUserId?: s
 /**
  * Retrieves approved, active opportunities with filtering and department targeting.
  */
-export async function getApprovedOpportunities(filters: OpportunityFilterInput) {
+export async function getApprovedOpportunities(
+  filters: OpportunityFilterInput,
+  viewerUserId?: string
+) {
   const now = new Date();
   const where: any = {
     status: "APPROVED",
@@ -290,31 +293,68 @@ export async function getApprovedOpportunities(filters: OpportunityFilterInput) 
     where.workplaceType = filters.workplaceType;
   }
 
-  // Department Targeting Filter (TASK 5)
-  if (filters.department) {
+  if (filters.companyId) {
+    where.companyId = filters.companyId;
+  }
+
+  if (filters.companyName) {
+    where.companyName = { contains: filters.companyName.trim(), mode: "insensitive" };
+  }
+
+  if (filters.location) {
+    where.location = { contains: filters.location.trim(), mode: "insensitive" };
+  }
+
+  if (filters.skill) {
+    where.requiredSkills = { has: filters.skill.trim() };
+  }
+
+  if (filters.maxMinCgpa !== undefined && filters.maxMinCgpa !== null) {
+    where.OR = [
+      { minCgpa: null },
+      { minCgpa: { lte: filters.maxMinCgpa } },
+    ];
+  }
+
+  if (filters.openToAllDepartments === true) {
+    where.openToAllDepartments = true;
+  } else if (filters.department) {
+    // If a specific department is filtered
     where.OR = [
       { openToAllDepartments: true },
       { targetDepartments: { has: filters.department } },
     ];
   }
 
+  if (filters.bookmarkedOnly && viewerUserId) {
+    where.bookmarks = {
+      some: {
+        userId: viewerUserId,
+      },
+    };
+  }
+
   if (filters.query && filters.query.trim().length > 0) {
     const q = filters.query.trim();
-    where.AND = [
-      {
-        OR: [
-          { title: { contains: q, mode: "insensitive" } },
-          { description: { contains: q, mode: "insensitive" } },
-          { companyName: { contains: q, mode: "insensitive" } },
-          { location: { contains: q, mode: "insensitive" } },
-          { requiredSkills: { has: q } },
-        ],
-      },
-    ];
+    const queryFilter = {
+      OR: [
+        { title: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { companyName: { contains: q, mode: "insensitive" } },
+        { location: { contains: q, mode: "insensitive" } },
+        { requiredSkills: { has: q } },
+      ],
+    };
+
+    if (where.AND) {
+      where.AND.push(queryFilter);
+    } else {
+      where.AND = [queryFilter];
+    }
   }
 
   const page = filters.page || 1;
-  const limit = filters.limit || 20;
+  const limit = filters.limit || 12;
   const skip = (page - 1) * limit;
 
   const [items, total] = await Promise.all([
@@ -332,6 +372,7 @@ export async function getApprovedOpportunities(filters: OpportunityFilterInput) 
             logo: true,
             location: true,
             industry: true,
+            website: true,
           },
         },
         poster: {
@@ -340,6 +381,7 @@ export async function getApprovedOpportunities(filters: OpportunityFilterInput) 
             name: true,
             image: true,
             membershipType: true,
+            verificationStatus: true,
           },
         },
       },
@@ -347,13 +389,31 @@ export async function getApprovedOpportunities(filters: OpportunityFilterInput) 
     prisma.opportunity.count({ where }),
   ]);
 
+  // Check bookmarks if viewer is logged in
+  let bookmarkedSet = new Set<string>();
+  if (viewerUserId && items.length > 0) {
+    const bookmarks = await prisma.opportunityBookmark.findMany({
+      where: {
+        userId: viewerUserId,
+        opportunityId: { in: items.map((i) => i.id) },
+      },
+      select: { opportunityId: true },
+    });
+    bookmarkedSet = new Set(bookmarks.map((b) => b.opportunityId));
+  }
+
+  const decoratedItems = items.map((opp) => ({
+    ...opp,
+    isBookmarked: bookmarkedSet.has(opp.id),
+  }));
+
   return {
-    items,
+    items: decoratedItems,
     pagination: {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / limit) || 1,
     },
   };
 }
@@ -447,4 +507,228 @@ export async function reviewOpportunity(
       include: { company: true, poster: true },
     });
   }
+}
+
+/**
+ * Toggles an opportunity bookmark for an authenticated user.
+ * Returns { bookmarked: boolean }.
+ */
+export async function toggleOpportunityBookmark(userId: string, opportunityId: string) {
+  const opp = await prisma.opportunity.findUnique({
+    where: { id: opportunityId },
+    select: { id: true, status: true },
+  });
+  if (!opp) throw new Error("OPPORTUNITY_NOT_FOUND");
+
+  const existing = await prisma.opportunityBookmark.findUnique({
+    where: {
+      userId_opportunityId: {
+        userId,
+        opportunityId,
+      },
+    },
+  });
+
+  if (existing) {
+    await prisma.opportunityBookmark.delete({
+      where: { id: existing.id },
+    });
+    return { bookmarked: false };
+  } else {
+    await prisma.opportunityBookmark.create({
+      data: {
+        userId,
+        opportunityId,
+      },
+    });
+    return { bookmarked: true };
+  }
+}
+
+/**
+ * Checks whether an opportunity is bookmarked by a specific user.
+ */
+export async function isOpportunityBookmarked(userId: string, opportunityId: string) {
+  const bookmark = await prisma.opportunityBookmark.findUnique({
+    where: {
+      userId_opportunityId: {
+        userId,
+        opportunityId,
+      },
+    },
+  });
+  return !!bookmark;
+}
+
+/**
+ * Retrieves opportunities bookmarked by a user.
+ */
+export async function getUserBookmarkedOpportunities(
+  userId: string,
+  page = 1,
+  limit = 12
+) {
+  const skip = (page - 1) * limit;
+
+  const [bookmarks, total] = await Promise.all([
+    prisma.opportunityBookmark.findMany({
+      where: { userId },
+      skip,
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: {
+        opportunity: {
+          include: {
+            company: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+                logo: true,
+                location: true,
+                industry: true,
+              },
+            },
+            poster: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                membershipType: true,
+              },
+            },
+          },
+        },
+      },
+    }),
+    prisma.opportunityBookmark.count({ where: { userId } }),
+  ]);
+
+  const items = bookmarks.map((b) => ({
+    ...b.opportunity,
+    isBookmarked: true,
+    savedAt: b.createdAt,
+  }));
+
+  return {
+    items,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit) || 1,
+    },
+  };
+}
+
+/**
+ * Retrieves all opportunities authored by a member with status breakdown.
+ */
+export async function getUserAuthoredOpportunities(
+  userId: string,
+  statusFilter?: string
+) {
+  const where: any = { posterId: userId };
+  if (statusFilter && statusFilter !== "ALL") {
+    where.status = statusFilter;
+  }
+
+  const [items, counts] = await Promise.all([
+    prisma.opportunity.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      include: {
+        company: true,
+        _count: {
+          select: {
+            bookmarks: true,
+          },
+        },
+      },
+    }),
+    prisma.opportunity.groupBy({
+      by: ["status"],
+      where: { posterId: userId },
+      _count: {
+        id: true,
+      },
+    }),
+  ]);
+
+  const statusCounts: Record<string, number> = {
+    ALL: 0,
+    DRAFT: 0,
+    PENDING: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+    CLOSED: 0,
+    EXPIRED: 0,
+  };
+
+  let allTotal = 0;
+  for (const c of counts) {
+    statusCounts[c.status] = c._count.id;
+    allTotal += c._count.id;
+  }
+  statusCounts.ALL = allTotal;
+
+  return {
+    items,
+    statusCounts,
+  };
+}
+
+/**
+ * Retrieves related active opportunities (sharing similar department or opportunity type).
+ */
+export async function getRelatedOpportunities(opportunityId: string, limit = 3) {
+  const target = await prisma.opportunity.findUnique({
+    where: { id: opportunityId },
+    select: {
+      id: true,
+      type: true,
+      targetDepartments: true,
+      openToAllDepartments: true,
+    },
+  });
+
+  if (!target) return [];
+
+  const now = new Date();
+  const related = await prisma.opportunity.findMany({
+    where: {
+      id: { not: opportunityId },
+      status: "APPROVED",
+      deadline: { gt: now },
+      OR: [
+        { type: target.type },
+        { openToAllDepartments: true },
+        ...(target.targetDepartments.length > 0
+          ? [{ targetDepartments: { hasSome: target.targetDepartments } }]
+          : []),
+      ],
+    },
+    take: limit,
+    orderBy: { createdAt: "desc" },
+    include: {
+      company: {
+        select: {
+          id: true,
+          name: true,
+          logo: true,
+          location: true,
+        },
+      },
+      poster: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          membershipType: true,
+        },
+      },
+    },
+  });
+
+  return related;
 }

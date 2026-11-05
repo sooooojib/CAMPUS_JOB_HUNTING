@@ -211,6 +211,25 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - Manually closes an opportunity before deadline (`CLOSED`).
   - **Access**: Authorized poster or company manager.
 
+### Endpoints: `/api/opportunities/[id]/bookmark` & `/bookmarks` (Stage 7 Implemented)
+
+- `POST /api/opportunities/[id]/bookmark`
+  - Atomically toggles bookmark / saved state for an opportunity for the authenticated member.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, bookmarked: boolean }`
+
+- `GET /api/opportunities/bookmarks?page=1&limit=12`
+  - Retrieves all active opportunities saved by the authenticated member.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: Opportunity[], pagination: PaginationMeta }`
+
+### Endpoint: `/api/opportunities/my` (Stage 7 Implemented)
+
+- `GET /api/opportunities/my?status=ALL`
+  - Retrieves all opportunities authored by the authenticated member, categorized with status counts (`ALL`, `APPROVED`, `PENDING`, `DRAFT`, `REJECTED`, `CLOSED`, `EXPIRED`).
+  - **Access**: Authenticated member (owner).
+  - **Output**: `{ success: true, data: Opportunity[], counts: Record<string, number> }`
+
 ---
 
 ## 6. Admin Opportunity Moderation API (Stage 6 Implemented)
@@ -233,7 +252,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 7. Applications API & Actions (Upcoming Stage 7)
+## 7. Applications API & Actions (Upcoming Stage 8)
 
 ### `submitApplication(opportunityId: string, data: SubmitApplicationSchema)`
 - **Access**: Verified Members (Students/Alumni)

@@ -1,6 +1,6 @@
 # UniCareer Community — Routes & Pages Inventory
 
-> **Stage 3 Status**: Shell layouts, navigation system, and page templates fully implemented and statically/partially prerendered with Turbopack.
+> **Stage 7 Status**: Complete opportunity discovery, multi-filter search, detailed job view, submission workflow with live preview, author management console, and bookmarking system fully implemented and connected to database routes.
 
 ## 1. Route Map & Implementation Status
 
@@ -22,13 +22,15 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | :--- | :--- | :--- | :--- |
 | `/dashboard` | Member Overview, Recent Activity, Alerts | `DashboardTemplate` | **Implemented** |
 | `/feed` | Redirect alias to `/dashboard` | Server redirect | **Implemented** |
-| `/opportunities` | Job & Internship Portal, Filter, Search | `ListingTemplate` | **Implemented** |
-| `/opportunities/[id]` | Full Job Description, Requirements, Apply CTA | `DetailsTemplate` | **Implemented** |
-| `/opportunities/post` | Submit New Opportunity (Employer / Community) | `FormTemplate` | **Implemented** |
+| `/opportunities` | Job & Internship Portal, Live Filter, Keyword Search, Pagination | `OpportunitiesBrowser` | **Implemented (Stage 7)** |
+| `/opportunities/[id]` | Full Job Description, Requirements, Apply Routing, Related Openings | Server Page + `OpportunityDetailActions` | **Implemented (Stage 7)** |
+| `/opportunities/post` | Submit Opportunity (Managed Company or Community Lead, Preview Mode) | `OpportunityForm` | **Implemented (Stage 7)** |
+| `/opportunities/my` | Author Console (Status Tabs, Edit, Close, Resubmit Rejected) | `MyOpportunitiesView` | **Implemented (Stage 7)** |
+| `/opportunities/saved` | Member Bookmarked Opportunities Collection | `OpportunitiesBrowser` (Bookmarked Mode) | **Implemented (Stage 7)** |
 | `/community` | Member Directory, Networking & Discussions | `ListingTemplate` | **Implemented** |
 | `/referrals` | Alumni Referral Hub & Sponsorships | `ListingTemplate` | **Implemented** |
 | `/applications` | Candidate's Submitted Applications Tracker | `ListingTemplate` | **Implemented** |
-| `/contributions` | Shared Leads, Referrals Offered, Community Posts | `DashboardTemplate` | **Implemented** |
+| `/contributions` | Shared Leads, Referrals Offered, Community Posts | `DashboardTemplate` (Links to `/opportunities/my`) | **Implemented** |
 | `/notifications` | Activity alerts, status updates & announcements | `ListingTemplate` | **Implemented** |
 | `/profile/me` | Current Member Profile & Experience | `ProfileTemplate` | **Implemented** |
 | `/settings` | Edit Personal Profile, Privacy, Vault Security | `FormTemplate` | **Implemented** |

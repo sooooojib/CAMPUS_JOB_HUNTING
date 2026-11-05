@@ -143,13 +143,20 @@ export const adminReviewOpportunitySchema = z
 export type AdminReviewOpportunityInput = z.infer<typeof adminReviewOpportunitySchema>;
 
 export const opportunityFilterSchema = z.object({
+  query: z.string().optional(),
   type: opportunityTypeEnum.optional(),
   sourceType: opportunitySourceTypeEnum.optional(),
   department: z.string().optional(),
   workplaceType: workplaceTypeEnum.optional(),
-  query: z.string().optional(),
+  companyId: z.string().optional(),
+  companyName: z.string().optional(),
+  location: z.string().optional(),
+  skill: z.string().optional(),
+  maxMinCgpa: z.coerce.number().min(0).max(4.0).optional(),
+  openToAllDepartments: z.coerce.boolean().optional(),
+  bookmarkedOnly: z.coerce.boolean().optional(),
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(50).default(20),
+  limit: z.coerce.number().int().min(1).max(50).default(12),
 });
 
 export type OpportunityFilterInput = z.infer<typeof opportunityFilterSchema>;

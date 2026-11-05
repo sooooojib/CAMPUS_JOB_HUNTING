@@ -16,14 +16,24 @@ export interface JobCardProps {
   id: string;
   title: string;
   companyName: string;
+  companyLogo?: string | null;
   location: string;
   workplaceType: "REMOTE" | "HYBRID" | "ON_SITE";
   type: OpportunityType;
   classification: OpportunityClassification;
-  salaryRange?: string;
+  salaryRange?: string | null;
   deadline?: string | Date;
   matchScore?: number;
   skills?: string[];
+  targetDepartments?: string[];
+  openToAllDepartments?: boolean;
+  minCgpa?: number | null;
+  poster?: {
+    id: string;
+    name: string;
+    image?: string | null;
+    membershipType: string;
+  };
   isBookmarked?: boolean;
   onBookmarkToggle?: (id: string) => void;
   className?: string;
@@ -33,6 +43,7 @@ export function JobCard({
   id,
   title,
   companyName,
+  companyLogo,
   location,
   workplaceType,
   type,
@@ -41,6 +52,10 @@ export function JobCard({
   deadline,
   matchScore,
   skills = [],
+  targetDepartments = [],
+  openToAllDepartments = true,
+  minCgpa,
+  poster,
   isBookmarked = false,
   onBookmarkToggle,
   className,
@@ -55,37 +70,57 @@ export function JobCard({
   return (
     <Card
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-border/80 bg-card p-5 transition-all hover:border-primary/40 hover:shadow-md",
+        "group relative overflow-hidden rounded-2xl border border-border/80 bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md flex flex-col justify-between",
         className
       )}
     >
-      <CardContent className="p-0">
+      <CardContent className="p-0 space-y-4">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            {/* Company Avatar Badge */}
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted font-bold text-base text-foreground shadow-2xs">
-              {companyName.slice(0, 2).toUpperCase()}
-            </div>
+          <div className="flex items-start gap-3.5 min-w-0">
+            {/* Company Avatar / Logo */}
+            {companyLogo ? (
+              <img
+                src={companyLogo}
+                alt={companyName}
+                className="size-11 shrink-0 rounded-xl border border-border object-contain bg-background p-1 shadow-2xs"
+              />
+            ) : (
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-primary/10 text-primary font-bold text-base shadow-2xs">
+                {companyName.slice(0, 2).toUpperCase()}
+              </div>
+            )}
 
-            <div>
-              <div className="flex flex-wrap items-center gap-2 mb-1">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
                 <EmployerBadge classification={classification} />
-                <Badge variant="outline" className="text-[11px] font-normal">
+                <Badge variant="outline" className="text-[11px] font-normal uppercase">
                   {type.replace("_", " ")}
                 </Badge>
+                {openToAllDepartments ? (
+                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                    Open to All Majors
+                  </span>
+                ) : targetDepartments.length > 0 ? (
+                  <span
+                    className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 truncate max-w-[150px]"
+                    title={targetDepartments.join(", ")}
+                  >
+                    {targetDepartments.length === 1 ? targetDepartments[0] : `${targetDepartments[0]} +${targetDepartments.length - 1}`}
+                  </span>
+                ) : null}
                 {matchScore !== undefined && (
                   <MatchScoreIndicator score={matchScore} />
                 )}
               </div>
 
-              <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
+              <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
                 <Link href={`/opportunities/${id}`} className="focus:outline-none">
                   {title}
                 </Link>
               </h3>
 
-              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                <span className="font-medium text-foreground flex items-center gap-1">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                <span className="font-semibold text-foreground flex items-center gap-1">
                   <Building2 className="size-3 text-muted-foreground" />
                   {companyName}
                 </span>
@@ -97,9 +132,17 @@ export function JobCard({
                 {salaryRange && (
                   <>
                     <span className="text-border">•</span>
-                    <span className="flex items-center gap-1 font-medium text-foreground">
-                      <DollarSign className="size-3 text-muted-foreground" />
+                    <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+                      <DollarSign className="size-3 text-emerald-600 dark:text-emerald-400" />
                       {salaryRange}
+                    </span>
+                  </>
+                )}
+                {minCgpa && (
+                  <>
+                    <span className="text-border">•</span>
+                    <span className="font-mono text-[11px] font-medium text-amber-600 dark:text-amber-400">
+                      Min CGPA: {minCgpa.toFixed(2)}
                     </span>
                   </>
                 )}
@@ -112,15 +155,20 @@ export function JobCard({
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => onBookmarkToggle(id)}
+              onClick={(e) => {
+                e.preventDefault();
+                onBookmarkToggle(id);
+              }}
               aria-label={isBookmarked ? "Remove bookmark" : "Bookmark job"}
               className={cn(
-                "shrink-0",
-                isBookmarked ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                "shrink-0 transition-colors",
+                isBookmarked
+                  ? "text-primary hover:text-primary/80"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               <Bookmark
-                className={cn("size-4", isBookmarked && "fill-current")}
+                className={cn("size-4", isBookmarked && "fill-primary text-primary")}
               />
             </Button>
           )}
@@ -128,31 +176,38 @@ export function JobCard({
 
         {/* Skill tags */}
         {skills.length > 0 && (
-          <div className="mt-4 flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 pt-1">
             {skills.slice(0, 4).map((skill) => (
               <span
                 key={skill}
-                className="rounded-md bg-secondary/70 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
+                className="rounded-md bg-secondary/80 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
               >
                 {skill}
               </span>
             ))}
             {skills.length > 4 && (
-              <span className="text-[11px] text-muted-foreground pl-1">
+              <span className="text-[11px] text-muted-foreground pl-1 font-mono">
                 +{skills.length - 4} more
               </span>
             )}
           </div>
         )}
+      </CardContent>
 
-        {/* Footer meta & action */}
-        <div className="mt-4 pt-3.5 border-t border-border/60 flex items-center justify-between text-xs">
-          {deadline ? (
-            <DeadlineIndicator deadline={deadline} />
-          ) : (
-            <span className="text-muted-foreground">Open Application</span>
+      {/* Footer meta & action */}
+      <div className="mt-4 pt-3.5 border-t border-border/60 flex items-center justify-between text-xs">
+        {deadline ? (
+          <DeadlineIndicator deadline={deadline} />
+        ) : (
+          <span className="text-muted-foreground">Open Application</span>
+        )}
+
+        <div className="flex items-center gap-2">
+          {poster && (
+            <span className="hidden sm:inline text-[11px] text-muted-foreground truncate max-w-[120px]">
+              By {poster.name}
+            </span>
           )}
-
           <Link
             href={`/opportunities/${id}`}
             className={cn(
@@ -163,7 +218,7 @@ export function JobCard({
             View Details
           </Link>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }

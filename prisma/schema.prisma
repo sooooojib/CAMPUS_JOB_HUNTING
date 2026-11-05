@@ -112,6 +112,7 @@ model User {
   companyMemberships    CompanyMember[]
   postedOpportunities   Opportunity[]       @relation("PostedOpportunities")
   reviewedOpportunities Opportunity[]       @relation("ReviewedOpportunities")
+  bookmarkedOpportunities OpportunityBookmark[]
 
   @@map("users")
 }
@@ -208,11 +209,27 @@ model Opportunity {
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
 
+  bookmarks             OpportunityBookmark[]
+
   @@index([status, deadline])
   @@index([companyId])
   @@index([posterId])
   @@index([sourceType])
   @@map("opportunities")
+}
+
+model OpportunityBookmark {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([userId, opportunityId])
+  @@index([userId])
+  @@index([opportunityId])
+  @@map("opportunity_bookmarks")
 }
 
 model Profile {
