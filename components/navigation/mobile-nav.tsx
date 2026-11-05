@@ -28,7 +28,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   }, [isOpen]);
 
   const bottomItems = [
-    { title: "Feed", href: "/dashboard", icon: Home },
+    { title: "Feed", href: "/feed", icon: Home },
     { title: "Jobs", href: "/opportunities", icon: Briefcase },
     { title: "Referrals", href: "/referrals", icon: Award },
     { title: "Network", href: "/community", icon: Users },

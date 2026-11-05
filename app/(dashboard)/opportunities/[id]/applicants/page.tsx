@@ -45,3 +45,4 @@ export default async function OpportunityApplicantsPage({
     redirect(`/opportunities/${id}?error=unauthorized_applicant_management`);
   }
 }
+

@@ -53,11 +53,52 @@ export type ApplicationStatus =
 
 export type PostCategory =
   | "GENERAL"
+  | "GENERAL_DISCUSSION"
   | "CAREER_ADVICE"
   | "JOB_ANNOUNCEMENT"
+  | "INTERNSHIP_ANNOUNCEMENT"
   | "REFERRAL_REQUEST"
+  | "ACHIEVEMENT"
+  | "QUESTION"
   | "EVENT"
   | "ACADEMIC";
+
+export type PostType =
+  | "GENERAL_DISCUSSION"
+  | "CAREER_ADVICE"
+  | "JOB_ANNOUNCEMENT"
+  | "INTERNSHIP_ANNOUNCEMENT"
+  | "REFERRAL_REQUEST"
+  | "ACHIEVEMENT"
+  | "QUESTION";
+
+export type ModerationStatus =
+  | "ACTIVE"
+  | "PENDING_REVIEW"
+  | "FLAGGED"
+  | "REMOVED";
+
+export type PostVisibility =
+  | "PUBLIC"
+  | "STUDENTS_ONLY"
+  | "ALUMNI_ONLY";
+
+export type ReportTargetType =
+  | "POST"
+  | "COMMENT";
+
+export type ReportReason =
+  | "SPAM"
+  | "HARASSMENT"
+  | "INAPPROPRIATE"
+  | "MISINFORMATION"
+  | "OTHER";
+
+export type ReportStatus =
+  | "PENDING"
+  | "REVIEWED"
+  | "RESOLVED"
+  | "DISMISSED";
 
 export type ReactionType =
   | "LIKE"

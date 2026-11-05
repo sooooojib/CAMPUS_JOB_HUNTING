@@ -1,136 +1,341 @@
 "use client";
 
 import * as React from "react";
-import { Send, Tag } from "lucide-react";
+import {
+  Send,
+  Tag,
+  Briefcase,
+  HelpCircle,
+  Sparkles,
+  Award,
+  MessageSquare,
+  AlertCircle,
+  Loader2,
+  X,
+  Plus,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PostCategory } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { PostType } from "@/types";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface CreatePostBoxProps {
   currentUser?: {
     name: string;
-    avatarUrl?: string;
+    avatarUrl?: string | null;
+    membershipType?: string | null;
   };
-  onSubmitPost?: (content: string, category: PostCategory) => Promise<void> | void;
+  onPostCreated?: (newPost: any) => void;
   className?: string;
 }
 
+const POST_TYPE_OPTIONS: {
+  type: PostType;
+  label: string;
+  icon: React.ElementType;
+  badgeClass: string;
+}[] = [
+  {
+    type: "GENERAL_DISCUSSION",
+    label: "Discussion",
+    icon: MessageSquare,
+    badgeClass: "hover:bg-muted",
+  },
+  {
+    type: "CAREER_ADVICE",
+    label: "Career Advice",
+    icon: Sparkles,
+    badgeClass: "hover:bg-sky-500/10 hover:text-sky-600",
+  },
+  {
+    type: "QUESTION",
+    label: "Ask Question",
+    icon: HelpCircle,
+    badgeClass: "hover:bg-purple-500/10 hover:text-purple-600",
+  },
+  {
+    type: "REFERRAL_REQUEST",
+    label: "Referral Request",
+    icon: Award,
+    badgeClass: "hover:bg-amber-500/10 hover:text-amber-600",
+  },
+  {
+    type: "JOB_ANNOUNCEMENT",
+    label: "Job Lead",
+    icon: Briefcase,
+    badgeClass: "hover:bg-emerald-500/10 hover:text-emerald-600",
+  },
+  {
+    type: "INTERNSHIP_ANNOUNCEMENT",
+    label: "Internship Lead",
+    icon: Briefcase,
+    badgeClass: "hover:bg-indigo-500/10 hover:text-indigo-600",
+  },
+  {
+    type: "ACHIEVEMENT",
+    label: "Achievement",
+    icon: Sparkles,
+    badgeClass: "hover:bg-rose-500/10 hover:text-rose-600",
+  },
+];
+
 export function CreatePostBox({
-  currentUser = { name: "Current Member" },
-  onSubmitPost,
+  currentUser = { name: "Member" },
+  onPostCreated,
   className,
 }: CreatePostBoxProps) {
   const [content, setContent] = React.useState("");
-  const [category, setCategory] = React.useState<PostCategory>("GENERAL");
+  const [title, setTitle] = React.useState("");
+  const [postType, setPostType] = React.useState<PostType>("GENERAL_DISCUSSION");
+  const [tagInput, setTagInput] = React.useState("");
+  const [tags, setTags] = React.useState<string[]>([]);
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const categories: { key: PostCategory; label: string }[] = [
-    { key: "GENERAL", label: "General" },
-    { key: "CAREER_ADVICE", label: "Career Advice" },
-    { key: "JOB_ANNOUNCEMENT", label: "Opportunity Announcement" },
-    { key: "REFERRAL_REQUEST", label: "Referral Request" },
-  ];
+  function handleAddTag() {
+    const trimmed = tagInput.trim().replace(/^#/, "");
+    if (!trimmed) return;
+    if (tags.includes(trimmed)) {
+      setTagInput("");
+      return;
+    }
+    if (tags.length >= 5) {
+      toast.error("Maximum 5 tags allowed");
+      return;
+    }
+    setTags((prev) => [...prev, trimmed]);
+    setTagInput("");
+  }
 
-  async function handleSubmit() {
-    if (!content.trim() || isSubmitting) return;
+  function handleRemoveTag(tagToRemove: string) {
+    setTags((prev) => prev.filter((t) => t !== tagToRemove));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (content.trim().length < 10) {
+      toast.error("Post content must be at least 10 characters long.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      if (onSubmitPost) {
-        await onSubmitPost(content, category);
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.trim() || undefined,
+          content: content.trim(),
+          postType,
+          tags,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create post");
       }
+
+      toast.success("Post published to community feed!");
       setContent("");
+      setTitle("");
+      setTags([]);
+      setTagInput("");
       setIsExpanded(false);
+
+      if (onPostCreated) {
+        onPostCreated(data.data);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create post");
     } finally {
       setIsSubmitting(false);
     }
   }
 
   const initials = currentUser.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+    ? currentUser.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "U";
 
   return (
     <Card className={cn("rounded-xl border border-border/80 bg-card p-4 shadow-xs", className)}>
       <CardContent className="p-0">
-        <div className="flex items-start gap-3">
-          <Avatar className="size-10 border border-border shrink-0">
-            <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-            <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="flex items-start gap-3">
+            <Avatar className="size-10 border border-border shrink-0">
+              <AvatarImage src={currentUser.avatarUrl || undefined} alt={currentUser.name} />
+              <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
 
-          <div className="flex-1 space-y-3">
-            <Textarea
-              placeholder="Share career advice, announcements, or ask for peer referrals..."
-              value={content}
-              onFocus={() => setIsExpanded(true)}
-              onChange={(e) => setContent(e.target.value)}
-              className={cn(
-                "w-full resize-none transition-all text-sm leading-relaxed",
-                isExpanded ? "min-h-[100px]" : "min-h-[44px]"
+            <div className="flex-1 space-y-2.5">
+              {/* Optional Title when expanded */}
+              {isExpanded && (
+                <Input
+                  placeholder="Headline or Question (optional, e.g. 'Software Engineering Interview Prep Tips')"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={150}
+                  className="text-xs font-semibold bg-background"
+                />
               )}
-            />
 
-            {isExpanded && (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-border/60">
-                {/* Category selector */}
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1 mr-1">
-                    <Tag className="size-3" />
-                    <span>Topic:</span>
-                  </span>
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.key}
-                      type="button"
-                      onClick={() => setCategory(cat.key)}
-                      className={cn(
-                        "rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
-                        category === cat.key
-                          ? "bg-primary text-primary-foreground shadow-2xs"
-                          : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-                      )}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+              {/* Textarea */}
+              <Textarea
+                placeholder="Share a career question, interview advice, referral request, or campus achievement..."
+                value={content}
+                onFocus={() => setIsExpanded(true)}
+                onChange={(e) => setContent(e.target.value)}
+                maxLength={5000}
+                className={cn(
+                  "w-full resize-none transition-all text-xs leading-relaxed bg-background",
+                  isExpanded ? "min-h-[110px]" : "min-h-[44px]"
+                )}
+              />
+            </div>
+          </div>
+
+          {isExpanded && (
+            <div className="space-y-3 pt-2 border-t border-border/60">
+              {/* Topic Selector */}
+              <div>
+                <span className="text-[11px] font-semibold text-muted-foreground block mb-1.5">
+                  Select Post Type:
+                </span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {POST_TYPE_OPTIONS.map(({ type, label, icon: Icon }) => {
+                    const isSelected = postType === type;
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setPostType(type)}
+                        className={cn(
+                          "flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all",
+                          isSelected
+                            ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
+                            : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        )}
+                      >
+                        <Icon className="size-3" />
+                        <span>{label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Tags Input */}
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <Tag className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
+                    <Input
+                      placeholder="Add tag (e.g. 'Stripe', 'FullStack', 'Internship') and press Add..."
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddTag();
+                        }
+                      }}
+                      className="pl-7 h-7 text-xs bg-background"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="xs"
+                    onClick={handleAddTag}
+                    disabled={!tagInput.trim() || tags.length >= 5}
+                    className="h-7 px-2"
+                  >
+                    <Plus className="size-3 mr-1" />
+                    Add Tag
+                  </Button>
                 </div>
 
-                <div className="flex items-center justify-end gap-2">
+                {/* Tag Pills */}
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    {tags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant="secondary"
+                        className="text-[10px] pl-2 pr-1 py-0.5 gap-1 font-mono"
+                      >
+                        <span>#{tag}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTag(tag)}
+                          className="hover:text-destructive transition-colors"
+                        >
+                          <X className="size-2.5" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Controls */}
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-muted-foreground">
+                  {content.length}/5000 characters (min. 10)
+                </span>
+
+                <div className="flex items-center gap-2">
                   <Button
+                    type="button"
                     variant="ghost"
                     size="xs"
                     onClick={() => {
                       setIsExpanded(false);
                       setContent("");
+                      setTitle("");
+                      setTags([]);
                     }}
+                    disabled={isSubmitting}
                   >
                     Cancel
                   </Button>
+
                   <Button
+                    type="submit"
                     size="xs"
-                    onClick={handleSubmit}
-                    disabled={!content.trim() || isSubmitting}
-                    className="gap-1 font-semibold"
+                    disabled={content.trim().length < 10 || isSubmitting}
+                    className="gap-1.5"
                   >
-                    <Send className="size-3" />
-                    <span>{isSubmitting ? "Posting..." : "Publish Post"}</span>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="size-3 animate-spin" />
+                        <span>Publishing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="size-3" />
+                        <span>Post to Community</span>
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+        </form>
       </CardContent>
     </Card>
   );
 }
-

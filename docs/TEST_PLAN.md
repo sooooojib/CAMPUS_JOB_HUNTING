@@ -85,12 +85,44 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Recruiter notes and audit logging of state changes with reviewer ID and timestamp.
   - **Community Poster Strict Restriction**: Verified community member sharing `COMMUNITY_SHARED` opportunity is blocked with 403 Forbidden from viewing applicants or downloading candidate resumes.
 
-### 2.4 Career Tools & CGPA Checking (Vitest)
+### 2.5 Community Feed, Discussions & Moderation (Stage 9 - Vitest & Integration)
+- **Post Creation & Validation**:
+  - Validates post creation with required content (min 10, max 5,000 chars) and post types (`GENERAL_DISCUSSION`, `CAREER_ADVICE`, `QUESTION`, `REFERRAL_REQUEST`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `ACHIEVEMENT`).
+  - Rejects short content (< 10 chars).
+  - Blocks suspended and deactivated accounts from creating posts (`accountStatus: SUSPENDED`).
+- **Post Lifecycle & Access Control**:
+  - Author can update title, content, postType, and tags.
+  - Unauthorized members are blocked from editing or deleting other users' posts (403 Forbidden).
+  - Platform administrators can edit or delete any post for moderation.
+  - Cascading deletion of comments, reactions, bookmarks, and reports when post is deleted.
+- **Threaded Comments & Replies**:
+  - Adding top-level comments and incrementing `commentsCount`.
+  - Adding nested replies linked via `parentId`.
+  - Author editing of comments.
+  - Author deletion of comments and decrementing `commentsCount`.
+  - Unauthorized members blocked from editing other users' comments.
+- **Reactions Engine & Duplicate Prevention**:
+  - Adding reactions (`LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE`) and incrementing counters.
+  - Toggling off reaction when clicked again (duplicate reaction prevention).
+  - Switching reaction type atomically (e.g. `LIKE` to `INSIGHTFUL`).
+- **Post Bookmarks & Saved Feed**:
+  - Saving/bookmarking posts with composite unique constraint `@@unique([postId, userId])`.
+  - Un-bookmarking and querying saved posts feed.
+- **Content Reporting & Moderation**:
+  - Submitting report for posts and comments with reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`).
+  - Preventing duplicate pending reports from the same user for the same content target (409 Conflict).
+  - Automatic status escalation to `FLAGGED` when >= 3 reports are lodged.
+- **Feed Filtering & Pagination Performance**:
+  - Filtering by PostType channels.
+  - Real-time debounced keyword and hashtag search.
+  - Paginated loading with page, pageSize, totalPages, and boundary flags.
+
+### 2.6 Career Tools & CGPA Checking (Vitest)
 - Student with GPA 3.4 checks opportunity requiring GPA 3.5: reports `isEligible: false`.
 - Skill matching algorithm correctly computes overlap percentage and missing skill list.
 - Non-student user attempting to open `/career-tools` is blocked.
 
-### 2.5 Responsive & Theme Audits (Playwright + Axe-Core)
+### 2.7 Responsive & Theme Audits (Playwright + Axe-Core)
 - Theme switching light/dark preserves WCAG AA contrast.
 - Layout verification on iPhone 14 (390px), iPad (768px), and Desktop (1440px).
 

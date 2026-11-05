@@ -4,6 +4,31 @@
 
 ---
 
+## Stage 9 Verification: Community Feed, Discussions & Moderation (2026-11-05)
+
+- **Date**: 2026-11-05
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (113/113 Passing across 11 Test Files)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/community.test.ts` | Community Posts, Threaded Comments, Reactions, Bookmarks & Moderation | **PASSED** (22/22) | 1. Creates a community post with valid content and type.<br>2. Rejects post creation with content shorter than 10 characters.<br>3. Blocks suspended users from creating community posts.<br>4. Allows post author to edit their own post.<br>5. Prevents unauthorized member from editing another user's post.<br>6. Allows platform admin to edit any post for moderation.<br>7. Adds a top-level comment to a post and increments comments count.<br>8. Adds a nested reply to an existing comment using parentId.<br>9. Allows comment author to edit their own comment.<br>10. Prevents unauthorized users from editing other comments.<br>11. Allows comment deletion and decrements post comments count.<br>12. Adds a reaction (LIKE) to a post and increments count.<br>13. Removes reaction when the same reaction is clicked again.<br>14. Switches reaction type seamlessly (e.g., LIKE to INSIGHTFUL).<br>15. Toggles bookmark on a post and enforces unique constraint.<br>16. Submits a content report for an inappropriate post.<br>17. Prevents duplicate pending reports from the same user on the same post.<br>18. Submits a content report for an inappropriate comment.<br>19. Filters community feed by PostType (QUESTION).<br>20. Filters community feed by keyword search and pagination.<br>21. Retrieves single post by ID with reactions and bookmarks context.<br>22. Author successfully deletes their post and cascades. |
+| `tests/unit/applications.test.ts` | Applications, Resume Vault & Recruiter Management | **PASSED** (17/17) | Magic bytes inspection, size limits, duplicate prevention, external tracking, withdrawal, recruiter review. |
+| `tests/unit/job-browsing-and-posting.test.ts` | Opportunity Discovery, Multi-Filter Search, Submission & Bookmarks | **PASSED** (14/14) | Browsing, multi-filters, pagination, draft/submit lifecycle, atomic bookmarks, author console. |
+| `tests/unit/companies-and-opportunities.test.ts` | Company Management, Opportunity Lifecycle, Moderation & Permissions | **PASSED** (18/18) | Company CRUD, ownership governance, admin approval, deadline expiration, rejection reasons. |
+| `tests/unit/membership-and-profiles.test.ts` | Membership Verification & Profile Privacy | **PASSED** (15/15) | Validates onboarding submission for all 6 membership types, admin approval/rejection with mandatory reason, profile updates, private student ID & phone redaction. |
+| `tests/unit/auth.test.ts` | Registration, Password Hashing, Role Separation | **PASSED** (8/8) | Validates scrypt hashing (>60 chars, non-plaintext), `membershipType` vs `systemRole` separation, duplicate email rejection, session persistence, email verification, password reset. |
+| `tests/unit/middleware.test.ts` | Server Route Protection & Proxy Gate | **PASSED** (7/7) | Verifies 307 redirects for unauthenticated requests on protected routes and public route access. |
+| `tests/unit/database.test.ts` | Neon PostgreSQL Driver Adapter Connection | **PASSED** (1/1) | Real database connection check via `SELECT 1` on pooled connection. |
+| `tests/unit/foundation.test.ts` | Base Architecture & Config | **PASSED** (5/5) | Environmental parameters, Next.js configuration, system integrity. |
+| `tests/unit/design-system.test.ts` | Design Token System & WCAG Contrast | **PASSED** (2/2) | Token definitions and theme contrast constraints. |
+| `tests/unit/navigation-layout.test.ts` | Template Components & Nav Items | **PASSED** (4/4) | Template structures and sidebar items. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Production Build** (`npm run build`) | Turbopack Production Build | **PASSED** | All 46 static and dynamic App Router routes compiled cleanly with active `ƒ Proxy (Middleware)`. |
+
+---
+
 ## Stage 8 Verification: Applications and Applicant Management (2026-11-05)
 
 - **Date**: 2026-11-05

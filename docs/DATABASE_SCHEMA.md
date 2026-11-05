@@ -1,8 +1,8 @@
 # UniCareer Community — Database Schema Specification
 
-> **Architectural Status**: Stage 6 (Companies, Opportunities, and Approval System) Complete  
+> **Architectural Status**: Stage 9 (Community Feed, Discussions & Moderation) Complete  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `Session`, `Account`, `Verification`
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Session`, `Account`, `Verification`
 
 ---
 
@@ -308,3 +308,89 @@ erDiagram
 | `applications` | `applications_applicantId_idx` | `applicantId` | Fast candidate application dashboard queries |
 | `applications` | `applications_status_idx` | `status` | Stage filtering for recruiter workflows |
 | `application_status_history` | `application_status_history_applicationId_idx` | `applicationId` | Fast chronological audit trail queries |
+
+---
+
+## 4. Stage 9 Tables & Moderation Models
+
+### `posts`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique post identifier |
+| `authorId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Author referencing `users(id)` ON DELETE CASCADE |
+| `title` | `VARCHAR(150)` | `NULLABLE` | Optional headline for questions/announcements |
+| `content` | `TEXT` | `NOT NULL` | Post body (10 - 5,000 characters) |
+| `postType` | `PostType` | `DEFAULT GENERAL_DISCUSSION` | `GENERAL_DISCUSSION`, `CAREER_ADVICE`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `REFERRAL_REQUEST`, `ACHIEVEMENT`, `QUESTION` |
+| `visibility` | `PostVisibility` | `DEFAULT PUBLIC` | `PUBLIC`, `STUDENTS_ONLY`, `ALUMNI_ONLY` |
+| `status` | `ModerationStatus` | `DEFAULT ACTIVE` | `ACTIVE`, `PENDING_REVIEW`, `FLAGGED`, `REMOVED` |
+| `isPinned` | `BOOLEAN` | `DEFAULT false` | Pinned announcement flag |
+| `attachedOpportunityId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Opportunity reference referencing `opportunities(id)` ON DELETE SET NULL |
+| `tags` | `TEXT[]` | `DEFAULT []` | Topic hashtags (up to 5 tags) |
+| `viewsCount` | `INTEGER` | `DEFAULT 0` | View analytics |
+| `likesCount` | `INTEGER` | `DEFAULT 0` | Total reaction count |
+| `commentsCount` | `INTEGER` | `DEFAULT 0` | Total comment & reply count |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Creation timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
+
+### `comments`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique comment identifier |
+| `postId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Target post referencing `posts(id)` ON DELETE CASCADE |
+| `authorId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Comment author referencing `users(id)` ON DELETE CASCADE |
+| `parentId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Parent comment for single-level reply hierarchy |
+| `content` | `TEXT` | `NOT NULL` | Comment body (2 - 2,000 characters) |
+| `status` | `ModerationStatus` | `DEFAULT ACTIVE` | `ACTIVE`, `FLAGGED`, `REMOVED` |
+| `likesCount` | `INTEGER` | `DEFAULT 0` | Comment likes count |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Creation timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
+
+### `post_reactions`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique reaction identifier |
+| `postId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Post referencing `posts(id)` ON DELETE CASCADE |
+| `userId` | `VARCHAR(30)` | `NOT NULL`, `FK` | User referencing `users(id)` ON DELETE CASCADE |
+| `type` | `ReactionType` | `DEFAULT LIKE` | `LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE` |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Timestamp |
+| *Constraints* | `UNIQUE(postId, userId, type)` | Database-level unique | **Prevents duplicate reactions of same type** |
+
+### `post_bookmarks`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique bookmark identifier |
+| `postId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Post referencing `posts(id)` ON DELETE CASCADE |
+| `userId` | `VARCHAR(30)` | `NOT NULL`, `FK` | User referencing `users(id)` ON DELETE CASCADE |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Timestamp |
+| *Constraints* | `UNIQUE(postId, userId)` | Database-level unique | **Prevents duplicate bookmarks** |
+
+### `content_reports`
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique report identifier |
+| `reporterId` | `VARCHAR(30)` | `NOT NULL`, `FK` | User referencing `users(id)` ON DELETE CASCADE |
+| `targetType` | `ReportTargetType` | `NOT NULL` | `POST` vs `COMMENT` |
+| `postId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Target post |
+| `commentId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Target comment |
+| `reason` | `ReportReason` | `DEFAULT OTHER` | `SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER` |
+| `description` | `TEXT` | `NULLABLE` | Detailed explanation |
+| `status` | `ReportStatus` | `DEFAULT PENDING` | `PENDING`, `REVIEWED`, `RESOLVED`, `DISMISSED` |
+| `reviewedById` | `VARCHAR(30)` | `NULLABLE`, `FK` | Admin reviewer |
+| `reviewNotes` | `TEXT` | `NULLABLE` | Admin moderation notes |
+| `reviewedAt` | `TIMESTAMPTZ` | `NULLABLE` | Resolution timestamp |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last update |
+
+### Additional Stage 9 Indexes
+| Table | Index Name | Columns | Purpose |
+| :--- | :--- | :--- | :--- |
+| `posts` | `posts_author_id_idx` | `authorId` | User author profile feed lookups |
+| `posts` | `posts_post_type_idx` | `postType` | Channel/category filtering |
+| `posts` | `posts_status_idx` | `status` | Active feed querying |
+| `posts` | `posts_created_at_idx` | `createdAt` | Reverse chronological feed sorting |
+| `comments` | `comments_post_id_idx` | `postId` | Rapid retrieval of post discussions |
+| `comments` | `comments_parent_id_idx` | `parentId` | Threaded reply traversal |
+| `post_reactions` | `post_reactions_postId_userId_type_key` | `postId, userId, type` (UNIQUE) | Prevents duplicate reactions |
+| `post_bookmarks` | `post_bookmarks_postId_userId_key` | `postId, userId` (UNIQUE) | Prevents duplicate post bookmarks |
+| `content_reports` | `content_reports_target_type_postId_idx` | `targetType, postId` | Post moderation queries |
+| `content_reports` | `content_reports_status_idx` | `status` | Admin review queue |

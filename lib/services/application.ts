@@ -695,3 +695,4 @@ export async function getApplicationById(
     viewerRole: isApplicant ? "APPLICANT" : isEmployer ? "EMPLOYER" : "ADMIN",
   };
 }
+

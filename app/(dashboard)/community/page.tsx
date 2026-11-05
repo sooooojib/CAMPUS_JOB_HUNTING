@@ -1,4 +1,6 @@
-import { Search } from "lucide-react";
+import { Search, MessageSquare } from "lucide-react";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import { ListingTemplate } from "@/components/templates/listing-template";
 import { MemberProfileCard } from "@/components/community/member-profile-card";
 import { Input } from "@/components/ui/input";
@@ -74,6 +76,15 @@ export default function CommunityPage() {
     <ListingTemplate
       title="Member Directory &amp; Campus Network"
       subtitle="Discover and connect with verified members of the university ecosystem."
+      primaryAction={
+        <Link
+          href="/feed"
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+        >
+          <MessageSquare className="size-3.5 mr-1.5" />
+          <span>Community Discussions Feed →</span>
+        </Link>
+      }
       searchFilterBar={
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">

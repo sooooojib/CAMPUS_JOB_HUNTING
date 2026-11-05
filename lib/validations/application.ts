@@ -156,3 +156,4 @@ export function inspectFileMagicBytes(buffer: Buffer): {
     error: "Security validation failed: File signature does not match authorized PDF or Word document standards.",
   };
 }
+

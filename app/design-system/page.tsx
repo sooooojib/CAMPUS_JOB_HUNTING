@@ -81,17 +81,36 @@ const DEMO_DATES = {
 const INITIAL_COMMENTS: CommentItem[] = [
   {
     id: "c-1",
-    authorName: "Sarah Chen",
-    authorAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    postId: "demo-post",
     content: "Great initiative! As an alum at Stripe, I'm happy to review resumes for our summer backend intern roles.",
     createdAt: "2026-10-30T18:00:00.000Z",
+    updatedAt: "2026-10-30T18:00:00.000Z",
     likesCount: 5,
+    author: {
+      id: "usr-1",
+      name: "Sarah Chen",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      membershipType: "ALUMNI",
+      verificationStatus: "VERIFIED",
+    },
+    isAuthor: false,
     replies: [
       {
         id: "c-2",
-        authorName: "Tanvir Ahmed",
+        postId: "demo-post",
+        parentId: "c-1",
         content: "Thank you Sarah! I just submitted a referral request via the platform.",
         createdAt: "2026-10-30T19:30:00.000Z",
+        updatedAt: "2026-10-30T19:30:00.000Z",
+        likesCount: 2,
+        author: {
+          id: "usr-2",
+          name: "Tanvir Ahmed",
+          image: null,
+          membershipType: "STUDENT",
+          verificationStatus: "VERIFIED",
+        },
+        isAuthor: false,
       },
     ],
   },
@@ -594,8 +613,8 @@ export default function DesignSystemPage() {
             <h3 className="text-base font-bold text-foreground">Post Creation Interface</h3>
             <CreatePostBox
               currentUser={{ name: "Alex Mercer" }}
-              onSubmitPost={async (_content, category) => {
-                toast.success(`Published post in ${category}!`);
+              onPostCreated={() => {
+                toast.success("Published post!");
               }}
             />
           </div>
@@ -607,18 +626,18 @@ export default function DesignSystemPage() {
               authorId="usr-1"
               authorName="Dr. Nadia Rahman"
               authorMembership="FACULTY"
-              category="CAREER_ADVICE"
+              authorVerificationStatus="VERIFIED"
+              postType="CAREER_ADVICE"
               createdAt={DEMO_DATES.pastHours5}
               title="Preparing for Summer Tech Interviews: What recruiters look for"
               content="When applying for competitive software and data internships, prioritize demonstrating system fundamentals and clean architecture over simply listing libraries. Make sure your Git commits tell a clear narrative, and explain your technical tradeoffs clearly in your interviews!"
               attachedOpportunity={{
                 id: "job-1",
                 title: "Software Engineer Intern",
-                company: "Microsoft",
+                companyName: "Microsoft",
               }}
               commentsCount={14}
               initialReactions={{ LIKE: 24, INSIGHTFUL: 18, CELEBRATE: 7 }}
-              onCommentClick={() => toast.info("Opened comment drawer")}
             />
           </div>
 
@@ -664,19 +683,8 @@ export default function DesignSystemPage() {
             </CardHeader>
             <CardContent>
               <CommentThread
-                comments={demoComments}
-                onAddComment={(content) => {
-                  toast.success("Comment added to thread!");
-                  setDemoComments((prev) => [
-                    ...prev,
-                    {
-                      id: `c-${Date.now()}`,
-                      authorName: "You (Verified Member)",
-                      content,
-                      createdAt: new Date().toISOString(),
-                    },
-                  ]);
-                }}
+                postId="demo-post"
+                initialComments={demoComments}
               />
             </CardContent>
           </Card>

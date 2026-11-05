@@ -31,7 +31,7 @@ interface NavItem {
 const mainNavItems: NavItem[] = [
   {
     title: "Community Feed",
-    href: "/dashboard",
+    href: "/feed",
     icon: Home,
   },
   {

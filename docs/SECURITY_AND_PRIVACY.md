@@ -106,14 +106,44 @@
 
 ---
 
-## 7. Opportunity Moderation Isolation & Anti-Leak Controls (Stage 6 Implemented)
+## 8. Applications & Private Resume Vault Protections (Stage 8 Implemented)
 
-1. **Review Queue Isolation**:
-   - `DRAFT`, `PENDING`, and `REJECTED` opportunities are completely isolated from standard member discovery endpoints (`GET /api/opportunities`).
-   - Detail queries (`GET /api/opportunities/[id]`) for non-approved listings enforce strict authorization: only the original author, authorized company managers, or platform `ADMIN` can retrieve them.
-2. **Opportunity Modification Ownership (`assertCanModifyOpportunity`)**:
-   - Updates and deletions (`PUT /api/opportunities/[id]`, `DELETE /api/opportunities/[id]`) verify that the acting user is the original poster, an authorized company manager, or a platform administrator. Unauthorized users receive `403 FORBIDDEN`.
-3. **Temporal Application Cutoff**:
-   - Opportunity creation enforces a future deadline (`deadline > now()`).
-   - Expired postings are automatically filtered out from active feeds and marked `EXPIRED` via `expireOverdueOpportunities()`.
+1. **Private Storage Location**:
+   - Resume binaries are stored on disk under `storage/resumes/` completely outside of `public/` web assets.
+   - Public URLs to candidate resumes do NOT exist anywhere in the application.
+2. **Binary Magic-Bytes Verification**:
+   - `inspectFileMagicBytes` validates real binary file headers:
+     - PDF: `%PDF-` (`0x25 0x50 0x44 0x46`)
+     - DOCX: `PK\x03\x04` (`0x50 0x4B 0x03 0x04`)
+   - Rejects file extension spoofing, binary exploits, or disguised executables.
+   - Enforces 5MB file size limit.
+3. **Anti-IDOR Download Authorization**:
+   - Direct downloads via `GET /api/resumes/[id]/download` require `assertCanAccessResume`:
+     - Resume owner can access.
+     - Authorized employer whose company received an application with the resume can access.
+     - Platform admin can access for moderation.
+     - Unauthorized members are blocked with `403 Forbidden`.
+4. **Duplicate Application Prevention**:
+   - Database composite unique constraint `@@unique([opportunityId, applicantId])` blocks race conditions and duplicate applications at the database engine level.
+5. **Community Poster Strict Isolation**:
+   - Members who merely shared a listing (`COMMUNITY_SHARED`) are prevented from viewing candidate dossiers or downloading resumes via `assertCanManageApplicantsForOpportunity (403 Forbidden)`.
+
+---
+
+## 9. Community Feed, Discussions & Content Moderation (Stage 9 Implemented)
+
+1. **Community Participation Gate (`assertCanParticipateInCommunity`)**:
+   - Unauthenticated visitors cannot browse or post in the community feed.
+   - Users with `accountStatus: SUSPENDED` or `DEACTIVATED` are blocked from creating posts, writing comments, toggling reactions, or submitting bookmarks (`403 FORBIDDEN_ACCOUNT_SUSPENDED`).
+2. **Post & Comment Ownership Enforcement**:
+   - Editing or deleting posts (`updateCommunityPost`, `deleteCommunityPost`) is strictly limited to the post author or platform `ADMIN`.
+   - Editing or deleting comments (`updatePostComment`, `deletePostComment`) is strictly limited to the comment author or platform `ADMIN`.
+3. **Atomic Reactions & Duplicate Prevention**:
+   - Composite unique constraint `@@unique([postId, userId, type])` guarantees that duplicate reactions of the same type cannot be created.
+   - Toggling reactions operates atomically, ensuring like and reaction counts remain strictly synchronized.
+4. **Content Reporting & Moderation Queue**:
+   - Members can report inappropriate posts or comments with categorized reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`).
+   - Duplicate pending reports from the same user for the same content target are blocked (`409 DUPLICATE_REPORT`).
+   - Auto-flagging threshold: When >= 3 pending reports are lodged against a post or comment, status is automatically updated to `FLAGGED` for administrative intervention.
+
 

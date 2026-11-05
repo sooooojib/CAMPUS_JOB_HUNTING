@@ -6,6 +6,52 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 9: Community Feed, Discussions & Moderation] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Post`: Community discussion post model with fields for title, content, postType, visibility, moderation status, pinned flag, attached opportunity reference, topic tags, view counts, like counts, comment counts, and relations.
+  - `Comment`: Discussion comments and single-level reply hierarchy model (`parentId`), content, moderation status, and audit relations.
+  - `PostReaction`: Atomic post reaction model with composite unique constraint `@@unique([postId, userId, type])` preventing duplicate reactions of the same type.
+  - `PostBookmark`: Saved posts model with composite unique constraint `@@unique([postId, userId])` preventing duplicate bookmarks.
+  - `ContentReport`: Moderation report model tracking reporter, target type (`POST` vs `COMMENT`), target reference, categorized reason, description, and admin review audit fields.
+  - New Enums: `PostType` (`GENERAL_DISCUSSION`, `CAREER_ADVICE`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `REFERRAL_REQUEST`, `ACHIEVEMENT`, `QUESTION`), `ModerationStatus` (`ACTIVE`, `PENDING_REVIEW`, `FLAGGED`, `REMOVED`), `PostVisibility` (`PUBLIC`, `STUDENTS_ONLY`, `ALUMNI_ONLY`), `ReactionType` (`LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE`), `ReportTargetType` (`POST`, `COMMENT`), `ReportReason` (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`), `ReportStatus` (`PENDING`, `REVIEWED`, `RESOLVED`, `DISMISSED`).
+- **Validation Schemas (`lib/validations/community.ts`)**:
+  - Zod schemas: `createPostSchema` (min 10, max 5,000 chars), `updatePostSchema`, `createCommentSchema` (min 2, max 2,000 chars), `updateCommentSchema`, `toggleReactionSchema`, `createReportSchema`, and `communityFilterSchema`.
+- **Backend Services & Security Enforcements (`lib/services/community.ts`)**:
+  - `createCommunityPost`: Validates author status, verifies attached opportunity, and persists post.
+  - `getCommunityFeed`: Paginated feed retrieval with channel filtering, hashtag search, viewer reaction state, and saved status.
+  - `getCommunityPostById`: Single post dossier with reactions, comments, and viewer context.
+  - `updateCommunityPost` & `deleteCommunityPost`: Author or platform admin only; cascades relations on deletion.
+  - `addPostComment`: Adds top-level comment or reply (`parentId`) with automatic `commentsCount` synchronization.
+  - `getPostComments`: Hierarchical comment and reply thread retrieval.
+  - `updatePostComment` & `deletePostComment`: Author or platform admin only.
+  - `togglePostReaction`: Atomic toggle off and type switching with accurate aggregate recounts.
+  - `togglePostBookmark`: Atomic bookmark toggle.
+  - `createContentReport`: Moderation report submission with duplicate report prevention and automatic status escalation to `FLAGGED` upon >= 3 reports.
+  - `assertCanParticipateInCommunity`: Rejects unverified or suspended accounts (`FORBIDDEN_ACCOUNT_SUSPENDED`).
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/posts` & `POST /api/posts`: Feed query and post creation.
+  - `GET /api/posts/[id]`, `PUT /api/posts/[id]`, `DELETE /api/posts/[id]`: Post detail, updates, and deletion.
+  - `POST /api/posts/[id]/react`: Reaction toggle endpoint.
+  - `POST /api/posts/[id]/bookmark` & `GET /api/posts/bookmarks`: Bookmark toggle and saved feed endpoint.
+  - `GET /api/posts/[id]/comments` & `POST /api/posts/[id]/comments`: Comments and replies endpoints.
+  - `PUT /api/comments/[id]` & `DELETE /api/comments/[id]`: Comment update and deletion endpoints.
+  - `POST /api/posts/[id]/report` & `POST /api/comments/[id]/report`: Inappropriate content reporting endpoints.
+- **Frontend Components & Pages**:
+  - `components/community/community-feed-view.tsx`: Client community feed with channel tabs, real-time search, feed statistics, skeletons, and pagination.
+  - `components/community/create-post-box.tsx`: Rich post creation component with post type selector, headline, topic tags, and optimistic feed updates.
+  - `components/community/feed-post-card.tsx`: Enriched post card with badges, reactions, in-place edit, delete, bookmark, share, and inline comments toggle.
+  - `components/community/comment-thread.tsx`: Threaded discussion component supporting replies, comment editing, deletion, and reporting.
+  - `components/community/report-dialog.tsx`: Reusable modal for reporting posts or comments.
+  - `app/(dashboard)/feed/page.tsx`: Full-featured Community Feed page.
+  - `app/(dashboard)/dashboard/page.tsx`: Updated with real PostgreSQL metrics and live community feed stream.
+  - Updated `components/navigation/sidebar.tsx` and `components/navigation/mobile-nav.tsx` to link directly to `/feed`.
+- **Automated Testing (`tests/unit/community.test.ts`)**:
+  - 22 new unit and integration tests covering post creation, validation, suspended account gates, author edits, admin moderation, threaded replies, comment lifecycle, atomic reactions, duplicate reaction prevention, bookmark unique constraints, content reporting, channel filtering, and pagination. Total test suite expanded to 113 passing tests across 11 test files.
+
+---
+
 ## [Stage 8: Applications and Applicant Management] - 2026-11-05
 
 ### Added

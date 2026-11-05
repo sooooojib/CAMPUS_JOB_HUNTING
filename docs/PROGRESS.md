@@ -147,13 +147,30 @@ flowchart TD
 
 ---
 
+### Stage 9: Community Feed, Discussions & Moderation
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 8.
+- **Core Deliverables Delivered**:
+  - **Community Database Models (`prisma/schema.prisma`)**: Integrated `Post`, `Comment`, `PostReaction`, `PostBookmark`, and `ContentReport` models into PostgreSQL with granular enums (`PostType`, `ModerationStatus`, `PostVisibility`, `ReactionType`, `ReportTargetType`, `ReportReason`, `ReportStatus`).
+  - **Composite Unique Constraints**: Database-level unique constraint `@@unique([postId, userId, type])` preventing duplicate reactions of the same type, and `@@unique([postId, userId])` preventing duplicate post bookmarks.
+  - **Dedicated Community Feed (`/feed`) & Live Dashboard (`/dashboard`)**: Full-featured feeds built on `CommunityFeedView` supporting channel filtering (`GENERAL_DISCUSSION`, `CAREER_ADVICE`, `QUESTION`, `REFERRAL_REQUEST`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `ACHIEVEMENT`, `BOOKMARKED`), live debounced search, active university statistics, loading skeletons, and pagination.
+  - **Interactive Post Creation (`CreatePostBox`)**: Rich post publisher supporting post type selection, optional headline, topic tag chips, opportunity linkage, character counters (min 10, max 5,000 chars), and immediate optimistic feed updates.
+  - **Threaded Comments & Replies (`CommentThread`)**: Single-level hierarchical reply structure (`parentId`), in-place comment editing for authors, comment deletion with automatic post count synchronization, and comment reporting.
+  - **Atomic Reactions Engine**: Like, Insightful, Support, and Celebrate reaction buttons with real-time counters, toggle-off capability, and clean type switching.
+  - **Post Interactions & Bookmarks**: In-place post editing (author or admin), post deletion with cascade, saved posts collection (`/api/posts/bookmarks`), and internal shareable link generation.
+  - **Community Content Moderation Foundation**: Report dialog for posts and comments with categorized reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`), duplicate report protection, and auto-flagging threshold (flagged when >= 3 pending reports are lodged).
+  - **Automated Testing**: 22 new unit and integration tests in `tests/unit/community.test.ts` (113/113 passing across all 11 test files).
+  - **Production Build**: 46 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
 ## 3. Next Stage Preview
 
-### Stage 9: Community Feed & Discussions
+### Stage 10: University Career Tools (Verified Student Profiles)
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 8.
+- **Prerequisites**: Stage 9.
 - **Core Deliverables**:
-  - Community feed with threaded discussions, career questions, and referral requests.
-  - Post categorization (general, referral request, interview experience, job question).
-  - Reactions, comments, and replies with moderation controls.
-  - Member profile integration and connection requests.
+  - CGPA eligibility checker against active campus opportunities.
+  - Course skill matching algorithm and gap analysis.
+  - Personalized opportunity recommendations for verified students.
+  - Resume version selector and career readiness tracker.

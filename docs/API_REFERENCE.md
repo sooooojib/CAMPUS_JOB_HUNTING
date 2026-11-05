@@ -322,19 +322,96 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 8. Community API & Actions (Upcoming Stage 9)
+## 8. Community Feed, Discussions & Moderation APIs (Stage 9 Implemented)
 
-### `createPost(input: CreatePostSchema)`
-- **Access**: Verified Members
-- **Input**: `content`, `category`, optional `opportunityId`, `title`.
+### Endpoints: `/api/posts`
 
-### `createComment(postId: string, content: string, parentId?: string)`
-- **Access**: Verified Members
-- **Behavior**: Adds top-level comment or nested reply; notifies post author.
+- `GET /api/posts`
+  - Retrieves paginated community discussions with filters, reaction counts, user reaction state, and bookmark indicators.
+  - **Access**: Authenticated member.
+  - **Query Parameters**:
+    - `postType`: Filter by `GENERAL_DISCUSSION`, `CAREER_ADVICE`, `QUESTION`, `REFERRAL_REQUEST`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `ACHIEVEMENT`, or `ALL`.
+    - `search`: Case-insensitive text search matching title, content, or topic tags.
+    - `tag`: Filter by specific topic tag.
+    - `bookmarkedOnly`: If `true`, returns viewer's saved posts.
+    - `page`: Page number (default: 1).
+    - `limit`: Items per page (default: 10, max: 30).
+  - **Output**: `{ success: true, data: FeedPostResult[], pagination: Pagination }`
 
-### `toggleReaction(postId: string, type: ReactionType)`
-- **Access**: Verified Members
-- **Behavior**: Adds or removes user reaction atomically.
+- `POST /api/posts`
+  - Creates a new community post.
+  - **Access**: Authenticated active member.
+  - **Body**: `{ title?, content, postType, visibility?, attachedOpportunityId?, tags? }`
+  - **Rules**: Content min 10 chars, max 5,000 chars. Suspended accounts are blocked.
+  - **Output**: `{ success: true, data: FeedPostResult }` (Status 201)
+
+### Endpoints: `/api/posts/[id]`
+
+- `GET /api/posts/[id]`
+  - Retrieves a single community post by ID with comments, reactions, and bookmark context.
+  - **Access**: Authenticated member.
+
+- `PUT /api/posts/[id]`
+  - Updates post title, content, postType, or tags.
+  - **Access**: Post author or platform `ADMIN`.
+
+- `DELETE /api/posts/[id]`
+  - Permanently deletes post and cascading comments/reactions.
+  - **Access**: Post author or platform `ADMIN`.
+
+### Endpoints: `/api/posts/[id]/react`
+
+- `POST /api/posts/[id]/react`
+  - Atomically toggles a reaction (`LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE`).
+  - **Access**: Authenticated member.
+  - **Body**: `{ type: ReactionType }`
+  - **Behavior**: Toggles off if already active; switches cleanly between reaction types. Prevents duplicate reactions via database constraint.
+  - **Output**: `{ success: true, data: { reacted: boolean, currentReaction, reactions, totalLikes } }`
+
+### Endpoints: `/api/posts/[id]/bookmark` & `/bookmarks`
+
+- `POST /api/posts/[id]/bookmark`
+  - Toggles saving a post for the authenticated user.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: { bookmarked: boolean } }`
+
+- `GET /api/posts/bookmarks`
+  - Retrieves all saved/bookmarked posts for the viewer.
+  - **Access**: Authenticated member.
+
+### Endpoints: `/api/posts/[id]/comments` & `/api/comments/[id]`
+
+- `GET /api/posts/[id]/comments`
+  - Retrieves top-level comments and nested replies for a post.
+  - **Access**: Authenticated member.
+
+- `POST /api/posts/[id]/comments`
+  - Adds a top-level comment or reply (`parentId`). Increments `commentsCount`.
+  - **Access**: Authenticated member.
+  - **Body**: `{ content, parentId? }`
+  - **Output**: `{ success: true, data: CommentItem }` (Status 201)
+
+- `PUT /api/comments/[id]`
+  - Updates an existing comment.
+  - **Access**: Comment author only.
+
+- `DELETE /api/comments/[id]`
+  - Deletes a comment (and its nested replies). Decrements `commentsCount`.
+  - **Access**: Comment author or platform `ADMIN`.
+
+### Endpoints: Content Moderation & Reporting
+
+- `POST /api/posts/[id]/report`
+  - Submits a content report for an inappropriate post.
+  - **Access**: Authenticated member.
+  - **Body**: `{ reason: ReportReason, description? }`
+  - **Behavior**: Prevents duplicate pending reports from same user; flags post when >= 3 reports are lodged.
+
+- `POST /api/comments/[id]/report`
+  - Submits a content report for an inappropriate comment.
+  - **Access**: Authenticated member.
+  - **Body**: `{ reason: ReportReason, description? }`
+
 
 ---
 
