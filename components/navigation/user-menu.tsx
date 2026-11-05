@@ -118,6 +118,13 @@ export function UserMenu({
           </DropdownMenuItem>
 
           <DropdownMenuItem className="p-0">
+            <Link href="/onboarding" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-primary font-medium">
+              <ShieldAlert className="size-3.5 text-primary" />
+              <span>Institutional Onboarding</span>
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem className="p-0">
             <Link href="/applications" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
               <FileText className="size-3.5 text-muted-foreground" />
               <span>Applications</span>

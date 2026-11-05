@@ -49,7 +49,70 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 2. Opportunities API & Actions
+## 2. Membership Verification & Profile API (Stage 5 Implemented)
+
+### Profile Endpoints
+
+- `GET /api/profile`
+  - Retrieves current authenticated user's profile record, full account details, and recent verification requests.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: MemberDataWithProfile }`
+
+- `PUT /api/profile`
+  - Updates member profile information (bio, headline, department, company, designation, skills, links, showEmail).
+  - **Access**: Authenticated member.
+  - **Body**: `UpdateProfileInput`
+  - **Output**: `{ success: true, data: Profile }`
+
+- `GET /api/profile/[id]`
+  - Retrieves a member's public profile with strict server-side privacy filtering.
+  - **Access**: Authenticated members.
+  - **Privacy Enforcement**:
+    - `studentId` and `phone` are **strictly omitted** unless viewed by the profile owner or platform admin.
+    - `email` is masked unless the user enabled `showEmail: true`.
+    - Internal verification notes and proof documents are excluded.
+  - **Output**: `{ success: true, data: PublicProfileResult }`
+
+### Onboarding & Verification Endpoints
+
+- `POST /api/onboarding`
+  - Submits role-specific onboarding credentials, provisions the user profile, and triggers an initial institutional verification request.
+  - **Access**: Authenticated member.
+  - **Body**: `{ membershipType, studentData?, alumniData?, facultyData?, employerData? }`
+  - **Behavior**: Updates user's `membershipType`, creates `Profile`, creates `MembershipRequest` with status `PENDING`, sets `user.verificationStatus = PENDING`.
+  - **Output**: `{ success: true, data: { profile, verificationRequest } }`
+
+- `POST /api/verification/request`
+  - Submits an institutional verification request or resubmits updated credentials following a rejection.
+  - **Access**: Authenticated member.
+  - **Body**: `SubmitVerificationRequestInput`
+  - **Behavior**: Creates a new `MembershipRequest` record with status `PENDING`, updates `user.verificationStatus = PENDING`. Retains previous records in audit history.
+  - **Output**: `{ success: true, data: MembershipRequest }`
+
+- `GET /api/verification/request`
+  - Returns verification request history for the current authenticated user.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: MembershipRequest[] }`
+
+### Administration Governance Endpoints
+
+- `GET /api/admin/verifications`
+  - Fetches all pending membership verification requests awaiting administrative review.
+  - **Access**: Platform `ADMIN` only (`assertAdmin` enforced).
+  - **Output**: `{ success: true, data: PendingVerificationRequest[] }`
+
+- `POST /api/admin/verifications`
+  - Evaluates an applicant's verification request (APPROVE or REJECT).
+  - **Access**: Platform `ADMIN` only.
+  - **Body**: `{ requestId: string, decision: 'APPROVE' | 'REJECT', rejectionReason?: string }`
+  - **Behavior**:
+    - If `APPROVE`: Updates request to `APPROVED`, sets `user.verificationStatus = VERIFIED`, sets `verifiedAt` and `verifiedBy`. For employers, faculty, and staff, automatically activates opportunity posting clearance (`canPostOpportunities = true`).
+    - If `REJECT`: Requires a non-empty `rejectionReason`. Updates request to `REJECTED`, stores explanation, sets `user.verificationStatus = REJECTED`, revokes posting clearance.
+  - **Output**: `{ success: true, data: { request, user, decision } }`
+
+---
+
+## 3. Opportunities API & Actions
 
 ### `createOpportunity(input: CreateOpportunitySchema)`
 - **Access**: Verified Members

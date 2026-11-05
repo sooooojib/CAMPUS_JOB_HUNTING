@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 5: Membership Verification and User Profiles] - 2026-11-05
+
+### Added
+- **Database Schema Models & Extensions (`prisma/schema.prisma`)**:
+  - `Profile`: User profile model with headline, bio, department, studentId (private), academicYear, graduationYear, degree, company, designation, skills, interests, projects, experience, social URLs, phone (private), showEmail, and isOnboarded flag.
+  - `MembershipRequest`: Verification request model with audit trails (`status`, `institutionalId`, `department`, `organization`, `designation`, `workEmail`, `connectionNote`, `proofDetails`, `reviewerId`, `rejectionReason`, `reviewedAt`).
+  - `User`: Added `canPostOpportunities`, `canReviewApplicants`, `verifiedAt`, `verifiedBy`, and relational links to `Profile` and `MembershipRequest`.
+- **Permissions & Authorization Engine (`lib/permissions.ts`)**:
+  - `canPostOpportunity`: Server-enforced gate asserting that only platform administrators and verified institutional roles (`EMPLOYER`, `FACULTY`, `STAFF`) can post opportunities.
+  - `canReviewApplicants`: Restricts candidate dossier review to verified employers and administrators.
+  - `canAccessStudentTools`: Restricts academic CGPA and course gap tooling exclusively to verified students.
+  - `assertCanPostOpportunity`: Throws HTTP 403 Forbidden on unverified attempts to post opportunities.
+  - `assertAdmin`: Guards administrative queues and review capabilities.
+- **Profile & Verification Services (`lib/services/profile.ts`, `lib/services/verification.ts`)**:
+  - `getPublicProfile`: Strict privacy filter redacting student IDs, personal phone numbers, and private emails for non-owner, non-admin members.
+  - `getMemberProfile`: Loads complete member profile and recent verification requests.
+  - `upsertProfile`: Updates member profile fields and triggers onboarding completion.
+  - `completeOnboarding`: Role-tailored handler creating Profile and submitting a pending `MembershipRequest`.
+  - `submitVerificationRequest`: Submits new or resubmitted credentials, preserving request history.
+  - `getPendingVerificationRequests`: Queries pending review queue for platform administrators.
+  - `reviewVerificationRequest`: Evaluates request (APPROVE / REJECT with reason), grants/revokes posting permissions, and updates user verification status.
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/profile` & `PUT /api/profile`: Authenticated profile retrieval and editing.
+  - `GET /api/profile/[id]`: Privacy-sanitized public profile viewer.
+  - `POST /api/onboarding`: Role-specific onboarding processor.
+  - `POST /api/verification/request` & `GET /api/verification/request`: Verification dossier submission and history.
+  - `GET /api/admin/verifications` & `POST /api/admin/verifications`: Admin review queue and decision execution.
+- **Frontend Pages & Interactive UI**:
+  - `app/(dashboard)/onboarding/page.tsx`: Role-tailored onboarding flow for `STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, and `EXTERNAL_CONNECTION`.
+  - `app/(dashboard)/profile/me/page.tsx`: Live connected profile with status badges, institutional dossier, and in-place `EditProfileModal` and `ResubmitVerificationModal`.
+  - `app/(dashboard)/profile/[id]/page.tsx`: Privacy-enforcing public member viewer.
+  - `app/(dashboard)/admin/page.tsx`: Upgraded Admin Governance Center with real database counts, live status pills, and `VerificationTable`.
+  - `components/admin/verification-table.tsx`: Interactive verification table with instant Approve and Reject with mandatory reason workflows.
+- **Automated Testing (`tests/unit/membership-and-profiles.test.ts`)**:
+  - 15 unit and integration tests verifying all 6 membership types, 4 verification statuses, onboarding flow, admin approve/reject/resubmit lifecycle, privacy redactions, and server-side posting clearance. Total test suite expanded to 42 passing tests.
+
+---
+
 ## [Stage 4: Authentication Engine and Account Security] - 2026-11-05
 
 ### Added

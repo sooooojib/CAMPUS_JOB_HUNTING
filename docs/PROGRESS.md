@@ -86,13 +86,26 @@ flowchart TD
   - **Interactive User Menu**: Integrated live session display with working `signOut()` action.
   - **Automated Testing**: 27/27 Vitest unit and integration tests passing. Clean Next.js 16 production build.
 
+### Stage 5: Membership Verification & User Profiles Engine
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 4.
+- **Core Deliverables Delivered**:
+  - **Decoupled Identity Models (`prisma/schema.prisma`)**: Integrated `Profile` and `MembershipRequest` models into PostgreSQL. Retained strict separation between institutional `MembershipType` and platform `SystemRole`.
+  - **Role-Tailored Onboarding Flow (`/onboarding`)**: Dynamic multi-step onboarding tailored to `STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, and `EXTERNAL_CONNECTION` with instant validation and database submission.
+  - **Verification Review & Admin Center (`/admin`)**: Fully functional administrative verification management interface displaying applicant claims and evidence with live Approve and Reject with mandatory reason workflows.
+  - **Resubmission & Historical Audit**: Rejection reasons displayed clearly to members with one-click resubmission modal and multi-attempt historical tracking in `membership_requests`.
+  - **Profile System & In-Place Editing (`/profile/me`)**: Live database-connected member profile with status badges, institutional dossier, skills, experience, projects, links, and responsive `EditProfileModal`.
+  - **Strict Profile Privacy Redaction (`/profile/[id]`)**: `getPublicProfile` server service redacts sensitive Student IDs, personal phone numbers, and private emails for general community members.
+  - **Server-Enforced Opportunity Posting Clearance (`lib/permissions.ts`)**: `canPostOpportunity` and `assertCanPostOpportunity` guarantee that unverified members cannot publish opportunities by altering frontend state.
+  - **Automated Testing**: 42/42 Vitest unit and integration tests passing. Clean Next.js 16 production build.
+
 ---
 
 ## 3. Next Stage Preview
 
-### Stage 5: Opportunity Portal & Review Engine
+### Stage 6: Opportunity Portal & Review Engine
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 4.
+- **Prerequisites**: Stage 5.
 - **Core Deliverables**:
   - Opportunity lifecycle management (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`).
   - Opportunity provenance classification (`OFFICIAL_EMPLOYER` vs `COMMUNITY_SHARED`).

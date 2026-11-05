@@ -60,6 +60,28 @@ export const auth = betterAuth({
         defaultValue: "PENDING",
         input: false,
       },
+      canPostOpportunities: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
+      canReviewApplicants: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
+      verifiedAt: {
+        type: "date",
+        required: false,
+        input: false,
+      },
+      verifiedBy: {
+        type: "string",
+        required: false,
+        input: false,
+      },
     },
   },
   session: {

@@ -1,5 +1,5 @@
 // Prisma schema for UniCareer Community
-// Stage 4: Authentication Engine & Account Security
+// Stage 5: Membership Verification & User Profile Engine
 
 generator client {
   provider = "prisma-client"
@@ -39,23 +39,111 @@ enum VerificationStatus {
   SUSPENDED
 }
 
-model User {
-  id                 String             @id @default(cuid())
-  name               String
-  email              String             @unique
-  emailVerified      Boolean            @default(false)
-  image              String?
-  membershipType     MembershipType     @default(STUDENT)
-  systemRole         SystemRole         @default(MEMBER)
-  accountStatus      AccountStatus      @default(ACTIVE)
-  verificationStatus VerificationStatus @default(PENDING)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+enum VerificationRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
-  sessions Session[]
-  accounts Account[]
+model User {
+  id                   String             @id @default(cuid())
+  name                 String
+  email                String             @unique
+  emailVerified        Boolean            @default(false)
+  image                String?
+  membershipType       MembershipType     @default(STUDENT)
+  systemRole           SystemRole         @default(MEMBER)
+  accountStatus        AccountStatus      @default(ACTIVE)
+  verificationStatus   VerificationStatus @default(PENDING)
+  canPostOpportunities Boolean            @default(false)
+  canReviewApplicants  Boolean            @default(false)
+  verifiedAt           DateTime?
+  verifiedBy           String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  sessions           Session[]
+  accounts           Account[]
+  profile            Profile?
+  membershipRequests MembershipRequest[] @relation("UserMembershipRequests")
+  reviewedRequests   MembershipRequest[] @relation("ReviewedRequests")
 
   @@map("users")
+}
+
+model Profile {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  headline       String?
+  bio            String?
+  department     String?
+
+  // Academic Information (studentId is PRIVATE: visible only to self & Admin)
+  studentId      String?
+  academicYear   String?
+  graduationYear Int?
+  degree         String?
+
+  // Professional Information
+  company        String?
+  designation    String?
+
+  // Structured Information
+  skills         String[]  @default([])
+  interests      String[]  @default([])
+  projects       Json?     // Array of { id, title, description, link, techStack }
+  experience     Json?     // Array of { id, company, role, period, description }
+
+  // Social & Professional Profiles
+  linkedinUrl    String?
+  githubUrl      String?
+  websiteUrl     String?
+
+  // Privacy & Contact Preferences
+  phone          String?   // PRIVATE: visible only to self & Admin
+  showEmail      Boolean   @default(false)
+
+  // Onboarding lifecycle flag
+  isOnboarded    Boolean   @default(false)
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("profiles")
+}
+
+model MembershipRequest {
+  id               String                    @id @default(cuid())
+  userId           String
+  user             User                      @relation("UserMembershipRequests", fields: [userId], references: [id], onDelete: Cascade)
+
+  membershipType   MembershipType
+  status           VerificationRequestStatus @default(PENDING)
+
+  // Institutional Claims & Verification Dossier (PRIVATE)
+  institutionalId  String?
+  department       String?
+  academicYear     String?
+  graduationYear   Int?
+  organization     String?
+  designation      String?
+  workEmail        String?
+  connectionNote   String?
+  proofDetails     String?
+  proofDocumentUrl String?
+
+  // Governance Audit
+  reviewerId       String?
+  reviewer         User?                     @relation("ReviewedRequests", fields: [reviewerId], references: [id])
+  rejectionReason  String?
+  reviewedAt       DateTime?
+
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+
+  @@map("membership_requests")
 }
 
 model Session {

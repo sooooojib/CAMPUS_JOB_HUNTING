@@ -20,19 +20,38 @@
 
 ---
 
-## 2. Server-Side Authorization & Anti-IDOR
+## 2. Profile Privacy & Sensitive Data Redaction (Stage 5 Implemented)
 
-1. **No Trust in Frontend**: Frontend controls (such as disabled buttons or hidden menus) are visual aids only. All Server Actions and Route Handlers validate:
-   - Is user authenticated?
-   - Is user verified?
-   - Is user the owner of the resource or an authorized administrator?
-2. **Anti-IDOR (Insecure Direct Object Reference)**:
-   - For applicant records: Only the applicant and the verified employer associated with the opportunity can retrieve applicant resumes and details.
-   - For opportunity editing: Only the opportunity author or an admin can update or close an opportunity.
+1. **Private Identifier Redaction**:
+   - University Student IDs (`studentId`), personal phone numbers (`phone`), and verification evidence notes (`proofDetails`) are strictly classified as **Private Institutional Data**.
+   - The server service `getPublicProfile(targetUserId, viewerUserId)` (`lib/services/profile.ts`) intercepts all member profile lookups:
+     - If the viewer is NOT the profile owner and NOT a platform `ADMIN`, `studentId`, `phone`, and `proofDetails` are stripped completely (`undefined`).
+     - Regular members browsing `/profile/[id]` cannot inspect another member's student ID or personal phone number under any condition.
+2. **Contact Email Privacy Control**:
+   - By default, member emails are withheld from public directory profiles (`showEmail: false`).
+   - A member's email address is displayed to other authenticated community members only if the user explicitly enables `showEmail: true` in their profile settings.
+   - Profile owners and platform administrators retain full visibility for account administration and verification audits.
+3. **Verification Dossier Confidentiality**:
+   - Academic transcripts, proof documents, and employer partnership agreements submitted during onboarding or resubmission are visible exclusively to the applicant and platform administrators.
+   - Non-administrators attempting to query `/api/admin/verifications` receive an immediate `403 FORBIDDEN` response.
 
 ---
 
-## 3. Resume & File Storage Security
+## 3. Server-Side Posting Clearance & Anti-Privilege Escalation
+
+1. **Server-Enforced Opportunity Posting (`assertCanPostOpportunity`)**:
+   - Unverified members (`PENDING`, `REJECTED`, `SUSPENDED`) are strictly prohibited from publishing opportunities.
+   - The posting clearance check is executed on the server (`lib/permissions.ts`):
+     - Platform administrators (`systemRole === 'ADMIN'`) always hold posting clearance.
+     - Verified `EMPLOYER`, `FACULTY`, and `STAFF` hold posting clearance upon institutional approval.
+     - Unverified accounts cannot bypass posting restrictions by modifying client payloads or DOM state.
+2. **Separation of Platform Role vs. Membership Type**:
+   - Institutional membership types (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) are strictly separated from administrative roles (`systemRole: MEMBER | MODERATOR | ADMIN`).
+   - Better Auth user input configurations declare `systemRole`, `accountStatus`, and `canPostOpportunities` with `input: false`, preventing client-side registration payloads from self-elevating privileges.
+
+---
+
+## 4. Resume & File Storage Security
 
 1. **Private Object Storage**: Resumes and verification proof documents are stored in private, unguessable storage buckets (never in `/public/`).
 2. **Time-Limited Signed URLs**: Resumes are accessed exclusively via temporary pre-signed download URLs with an expiration lifetime of at most 15 minutes.
@@ -40,8 +59,7 @@
 
 ---
 
-## 4. Privacy & Data Protection
+## 5. Audit Trails & Governance History
 
-1. **Academic Confidentiality**: Student CGPAs and academic records are stored in the segregated `StudentAcademic` model and are never exposed in public profile views or community directories.
-2. **Audit Trails**: All elevated administrative actions (approving opportunities, changing member verification statuses, viewing sensitive applicant files) generate immutable entries in the `AuditLog` table.
-
+1. **Immutable Request History**: Rejections and resubmissions create distinct records in `membership_requests`, ensuring complete historical traceability of credential reviews and rejection justifications.
+2. **Reviewer Attribution**: Every approved or rejected verification logs the `reviewerId` and `reviewedAt` timestamp in PostgreSQL.
