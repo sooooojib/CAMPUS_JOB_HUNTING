@@ -15,6 +15,8 @@ interface AuthenticatedShellProps {
     systemRole?: string;
     isVerified?: boolean;
     emailVerified?: boolean;
+    canPostOpportunities?: boolean;
+    canReviewApplicants?: boolean;
   };
 }
 

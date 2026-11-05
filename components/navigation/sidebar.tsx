@@ -82,22 +82,6 @@ const mainNavItems: NavItem[] = [
   },
 ];
 
-const secondaryNavItems: NavItem[] = [
-  {
-    title: "Settings & Profile",
-    href: "/settings",
-    icon: Settings,
-  },
-  {
-    title: "Admin Command",
-    href: "/admin",
-    icon: ShieldAlert,
-    badge: "Staff",
-    badgeVariant: "destructive",
-    roleRequired: "ADMIN",
-  },
-];
-
 interface AppSidebarProps {
   className?: string;
   onNavigate?: () => void;
@@ -109,6 +93,7 @@ interface AppSidebarProps {
     systemRole?: string;
     isVerified?: boolean;
     emailVerified?: boolean;
+    canPostOpportunities?: boolean;
   };
 }
 
@@ -121,9 +106,16 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
     name: session?.user?.name || propUser?.name || "Verified Member",
     email: session?.user?.email || propUser?.email || "member@university.edu",
     avatarUrl: session?.user?.image || propUser?.avatarUrl,
-    role: (session?.user as any)?.membershipType || propUser?.membershipType || "MEMBER",
+    membershipType: (session?.user as any)?.membershipType || propUser?.membershipType || "STUDENT",
+    systemRole: (session?.user as any)?.systemRole || propUser?.systemRole || "MEMBER",
     isVerified: (session?.user as any)?.verificationStatus === "VERIFIED" || propUser?.isVerified || false,
+    canPostOpportunities: (session?.user as any)?.canPostOpportunities || propUser?.canPostOpportunities || false,
   };
+
+  const isAdmin = currentUser.systemRole === "ADMIN";
+  const isStudent = currentUser.membershipType === "STUDENT";
+  const isAlumni = currentUser.membershipType === "ALUMNI";
+  const isEmployer = currentUser.membershipType === "EMPLOYER" || currentUser.membershipType === "EXTERNAL_CONNECTION";
 
   const initials = currentUser.name
     .split(" ")
@@ -132,6 +124,88 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
     .join("")
     .slice(0, 2)
     .toUpperCase() || "UC";
+
+  const visibleNavItems: NavItem[] = React.useMemo(() => {
+    const items: NavItem[] = [
+      {
+        title: "Community Feed",
+        href: "/feed",
+        icon: Home,
+      },
+      {
+        title: "Opportunities",
+        href: "/opportunities",
+        icon: Briefcase,
+        badge: "New",
+        badgeVariant: "info",
+      },
+    ];
+
+    // For Employers, authorized posters, or Admin: show Manage Postings
+    if (isEmployer || currentUser.canPostOpportunities || isAdmin) {
+      items.push({
+        title: "Manage Postings",
+        href: "/opportunities/my",
+        icon: Briefcase,
+        badge: isEmployer ? "Hiring" : undefined,
+        badgeVariant: "warning",
+      });
+    }
+
+    // Member Network (for everyone)
+    items.push({
+      title: "Member Network",
+      href: "/community",
+      icon: Users,
+    });
+
+    // Referrals (Students, Alumni, Faculty, Admin)
+    if (!isEmployer) {
+      items.push({
+        title: "Alumni Referrals",
+        href: "/referrals",
+        icon: Award,
+        badge: isAlumni ? "Alumni" : "High Trust",
+        badgeVariant: "warning",
+      });
+    }
+
+    // Applications: Students and Alumni (employers don't submit student applications)
+    if (isStudent || isAlumni || isAdmin) {
+      items.push({
+        title: "My Applications",
+        href: "/applications",
+        icon: FileText,
+      });
+    }
+
+    // Career Calendar (for everyone)
+    items.push({
+      title: "Career Calendar",
+      href: "/calendar",
+      icon: Calendar,
+    });
+
+    // My Career Tools: STUDENTS ONLY (or Admin)
+    if (isStudent || isAdmin) {
+      items.push({
+        title: "My Career Tools",
+        href: "/career-tools",
+        icon: Sparkles,
+        badge: "Student",
+        badgeVariant: "secondary",
+      });
+    }
+
+    // My Contributions (Discussions, Posts)
+    items.push({
+      title: "My Contributions",
+      href: "/contributions",
+      icon: Share2,
+    });
+
+    return items;
+  }, [isAdmin, isStudent, isAlumni, isEmployer, currentUser.canPostOpportunities]);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -179,7 +253,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
             Main Platform
           </p>
           <nav className="space-y-1" aria-label="Main Navigation">
-            {mainNavItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive =
                 item.href === "/dashboard"
@@ -222,49 +296,61 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
           </nav>
         </div>
 
-        {/* Governance & Management Section */}
+        {/* System & Administration - STRICTLY VISIBLE ONLY TO PLATFORM ADMINS */}
+        {isAdmin && (
+          <div>
+            <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-destructive font-mono mb-2">
+              System & Administration
+            </p>
+            <nav className="space-y-1" aria-label="Administrative Navigation">
+              <Link
+                href="/admin"
+                onClick={onNavigate}
+                className={cn(
+                  "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                  pathname.startsWith("/admin")
+                    ? "bg-destructive/10 text-destructive shadow-2xs font-bold"
+                    : "text-sidebar-foreground/80 hover:bg-destructive/10 hover:text-destructive"
+                )}
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShieldAlert className="size-4 shrink-0 text-destructive" />
+                  <span>Admin Command</span>
+                </div>
+                <Badge variant="destructive" className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono">
+                  Staff
+                </Badge>
+              </Link>
+            </nav>
+          </div>
+        )}
+
+        {/* Account & Preferences - ALWAYS SHOWN FOR ALL USERS */}
         <div>
           <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
-            System & Administration
+            Account & Preferences
           </p>
-          <nav className="space-y-1" aria-label="System Navigation">
-            {secondaryNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname.startsWith(item.href);
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={onNavigate}
+          <nav className="space-y-1" aria-label="Account Navigation">
+            <Link
+              href="/settings"
+              onClick={onNavigate}
+              className={cn(
+                "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                pathname.startsWith("/settings")
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              )}
+            >
+              <div className="flex items-center gap-2.5">
+                <Settings
                   className={cn(
-                    "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
-                      : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                    "size-4 shrink-0",
+                    pathname.startsWith("/settings") ? "text-primary" : "text-muted-foreground"
                   )}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon
-                      className={cn(
-                        "size-4 shrink-0",
-                        isActive ? "text-primary" : "text-muted-foreground"
-                      )}
-                    />
-                    <span>{item.title}</span>
-                  </div>
-
-                  {item.badge && (
-                    <Badge
-                      variant={item.badgeVariant || "outline"}
-                      className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono"
-                    >
-                      {item.badge}
-                    </Badge>
-                  )}
-                </Link>
-              );
-            })}
+                />
+                <span>Settings & Profile</span>
+              </div>
+            </Link>
 
             <button
               type="button"
@@ -301,7 +387,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                 {currentUser.name}
               </p>
               <p className="text-[10px] text-muted-foreground truncate">
-                {currentUser.role.replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
+                {currentUser.membershipType.replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
               </p>
             </div>
           </div>

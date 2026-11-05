@@ -36,6 +36,8 @@ export default async function DashboardLayout({
         systemRole: user.systemRole || "MEMBER",
         isVerified: user.verificationStatus === "VERIFIED",
         emailVerified: session.user.emailVerified,
+        canPostOpportunities: user.canPostOpportunities || user.systemRole === "ADMIN",
+        canReviewApplicants: user.canReviewApplicants || user.systemRole === "ADMIN",
       }}
     >
       {children}

@@ -1,13 +1,12 @@
-import { Save } from "lucide-react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { FormTemplate } from "@/components/templates/form-template";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NotificationPreferencesCard } from "@/components/settings/notification-preferences-card";
 import { SessionSecurityCard } from "@/components/settings/session-security-card";
+import { SettingsProfileForm } from "@/components/settings/settings-profile-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,12 +21,30 @@ export const metadata = {
   description: "Manage your profile details, privacy preferences, and notification options.",
 };
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const reqHeaders = await headers();
+  const session = await auth.api.getSession({
+    headers: reqHeaders,
+  });
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: { profile: true },
+  });
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <FormTemplate
       maxWidth="xl"
-      title="Account &amp; Privacy Settings"
-      subtitle="Customize your platform profile, private vault security, and notification preferences."
+      title="Account & Privacy Settings"
+      subtitle={`Manage your personal identity (${user.membershipType.replace("_", " ")}), notification channels, and active security session.`}
       breadcrumbs={
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
@@ -41,102 +58,30 @@ export default function SettingsPage() {
           </BreadcrumbList>
         </Breadcrumb>
       }
-      footerActions={
-        <Button className="gap-2">
-          <Save className="size-4" />
-          <span>Save Changes</span>
-        </Button>
-      }
     >
-      <form className="space-y-8">
-        {/* Profile Information */}
+      <div className="space-y-8">
+        {/* Dynamic Profile & Role Settings Form */}
+        <SettingsProfileForm
+          user={{
+            name: user.name,
+            email: user.email,
+            membershipType: user.membershipType,
+            headline: user.profile?.headline,
+            bio: user.profile?.bio,
+            department: user.profile?.department,
+            company: user.profile?.company,
+            designation: user.profile?.designation,
+            graduationYear: user.profile?.graduationYear,
+            showEmail: user.profile?.showEmail,
+            linkedinUrl: user.profile?.linkedinUrl,
+            githubUrl: user.profile?.githubUrl,
+          }}
+        />
+
+        {/* Appearance Settings */}
         <section className="space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            1. Profile Information
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" defaultValue="Sarah Miller" />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="email">Verified Institutional Email</Label>
-              <Input id="email" defaultValue="sarah.miller@university.edu" disabled />
-              <p className="text-[11px] text-muted-foreground">
-                Managed via university registrar identity federation.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="headline">Professional Headline</Label>
-            <Input
-              id="headline"
-              defaultValue="Undergraduate in Computer Science & Engineering • Cloud Systems Focus"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="bio">About Me</Label>
-            <Textarea
-              id="bio"
-              rows={4}
-              defaultValue="Third-year Computer Science student passionate about distributed architectures and cloud systems."
-            />
-          </div>
-        </section>
-
-        {/* Privacy & Resume Vault Permissions */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            2. Privacy &amp; Vault Permissions
-          </h3>
-
-          <div className="space-y-3">
-            <div className="flex items-start space-x-2.5">
-              <Checkbox id="searchable" defaultChecked className="mt-0.5" />
-              <div>
-                <Label htmlFor="searchable" className="text-sm font-semibold cursor-pointer">
-                  Visible in Verified Member Directory
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Allows enrolled students, alumni, and verified faculty to find your profile in campus networking.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-2.5">
-              <Checkbox id="referralsOpen" defaultChecked className="mt-0.5" />
-              <div>
-                <Label htmlFor="referralsOpen" className="text-sm font-semibold cursor-pointer">
-                  Accept Direct Inquiries &amp; Referral Discussions
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Displays the &quot;Open to Discussion&quot; badge on your profile.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-2.5">
-              <Checkbox id="privateVault" defaultChecked disabled className="mt-0.5" />
-              <div>
-                <Label htmlFor="privateVault" className="text-sm font-semibold">
-                  Enforce Time-Limited Signed URLs for Resumes (Permanent Rule)
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Mandatory platform security standard. Resumes are never accessible via persistent public links.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Appearance & Preferences */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            3. Appearance
+            4. Appearance &amp; Interface
           </h3>
 
           <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-background">
@@ -153,7 +98,7 @@ export default function SettingsPage() {
         {/* Notification Preferences */}
         <section className="space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            4. Notification Channels &amp; Preferences
+            5. Notification Channels &amp; Preferences
           </h3>
           <p className="text-xs text-muted-foreground">
             Configure how and when you receive in-app alerts and email notifications across the platform.
@@ -161,17 +106,17 @@ export default function SettingsPage() {
           <NotificationPreferencesCard />
         </section>
 
-        {/* Session & Device Security */}
+        {/* Active Session & Security */}
         <section className="space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-            5. Session &amp; Device Security
+            6. Active Session &amp; Device Security
           </h3>
           <p className="text-xs text-muted-foreground">
             Terminate your active credentials across this browser and clear all session tokens.
           </p>
           <SessionSecurityCard />
         </section>
-      </form>
+      </div>
     </FormTemplate>
   );
 }

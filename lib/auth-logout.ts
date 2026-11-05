@@ -43,3 +43,4 @@ export async function performClientSignOut(): Promise<void> {
   // 4. Force a hard document navigation to /login?signout=true
   window.location.href = "/login?signout=true";
 }
+

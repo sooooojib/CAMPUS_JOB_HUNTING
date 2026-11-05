@@ -24,8 +24,11 @@ interface UserMenuProps {
     email: string;
     avatarUrl?: string;
     role?: string;
+    membershipType?: string;
+    systemRole?: string;
     isVerified?: boolean;
     emailVerified?: boolean;
+    canPostOpportunities?: boolean;
   };
 }
 
@@ -41,10 +44,14 @@ export function UserMenu({
     name: session?.user?.name || propUser?.name || "Verified Member",
     email: session?.user?.email || propUser?.email || "member@university.edu",
     avatarUrl: session?.user?.image || propUser?.avatarUrl,
-    role: (session?.user as any)?.membershipType || propUser?.role || "MEMBER",
+    membershipType: (session?.user as any)?.membershipType || propUser?.membershipType || propUser?.role || "STUDENT",
+    systemRole: (session?.user as any)?.systemRole || propUser?.systemRole || "MEMBER",
     isVerified: (session?.user as any)?.verificationStatus === "VERIFIED" || propUser?.isVerified || false,
     emailVerified: session?.user?.emailVerified ?? propUser?.emailVerified ?? false,
   };
+
+  const isAdmin = currentUser.systemRole === "ADMIN";
+  const isEmployer = currentUser.membershipType === "EMPLOYER" || currentUser.membershipType === "EXTERNAL_CONNECTION";
 
   const initials = currentUser.name
     .split(" ")
@@ -123,12 +130,21 @@ export function UserMenu({
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="p-0">
-            <Link href="/applications" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
-              <FileText className="size-3.5 text-muted-foreground" />
-              <span>Applications</span>
-            </Link>
-          </DropdownMenuItem>
+          {isEmployer ? (
+            <DropdownMenuItem className="p-0">
+              <Link href="/opportunities/my" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
+                <FileText className="size-3.5 text-muted-foreground" />
+                <span>Manage Postings</span>
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem className="p-0">
+              <Link href="/applications" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
+                <FileText className="size-3.5 text-muted-foreground" />
+                <span>Applications</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem className="p-0">
             <Link href="/settings" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
@@ -137,12 +153,14 @@ export function UserMenu({
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="p-0">
-            <Link href="/admin" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-primary font-semibold">
-              <ShieldAlert className="size-3.5" />
-              <span>Admin Center</span>
-            </Link>
-          </DropdownMenuItem>
+          {isAdmin && (
+            <DropdownMenuItem className="p-0">
+              <Link href="/admin" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-primary font-semibold">
+                <ShieldAlert className="size-3.5" />
+                <span>Admin Center</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
