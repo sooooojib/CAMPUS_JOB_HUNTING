@@ -2,13 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { GraduationCap } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 export function AppNavbar() {
   const [isFooterReached, setIsFooterReached] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     // 1. IntersectionObserver for detecting footer entry
@@ -64,30 +62,6 @@ export function AppNavbar() {
           </div>
           <span className="font-bold tracking-tight text-slate-900 dark:text-white">UniCareer</span>
         </Link>
-
-        {/* Center: Rearranged Clean Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-medium">
-          <Link
-            href="/"
-            className={`transition-colors ${
-              pathname === "/"
-                ? "text-slate-950 dark:text-white font-semibold"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
-            }`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/about"
-            className={`transition-colors ${
-              pathname === "/about"
-                ? "text-slate-950 dark:text-white font-semibold"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
-            }`}
-          >
-            About
-          </Link>
-        </nav>
 
         {/* Right: Theme Toggle + Log In + Start Free (Adaptive Light/Dark Pill Button) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">

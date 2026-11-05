@@ -52,7 +52,7 @@ describe("Stage 4: Server Route Protection & Proxy Tests", () => {
   });
 
   it("4. allows unauthenticated visitors to access public marketing & info routes", () => {
-    const publicPaths = ["/", "/about"];
+    const publicPaths = ["/"];
 
     for (const path of publicPaths) {
       const req = createMockRequest(path);

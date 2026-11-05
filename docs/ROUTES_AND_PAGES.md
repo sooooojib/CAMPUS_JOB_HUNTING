@@ -8,7 +8,6 @@
 | Route | Component / Purpose | Layout Group | Implementation Status |
 | :--- | :--- | :--- | :--- |
 | `/` | Landing / Marketing Homepage (No Private Data Leaks) | `app/(public)/layout.tsx` | **Implemented** |
-| `/about` | Institutional background & mission | `app/(public)/layout.tsx` | **Implemented** |
 | `/login` | Member Login with redirect support | `app/(auth)/layout.tsx` | **Implemented** |
 | `/register` | Member Registration & Role Selection | `app/(auth)/layout.tsx` | **Implemented** |
 | `/forgot-password` | Password Reset Request | `app/(auth)/layout.tsx` | **Implemented** |

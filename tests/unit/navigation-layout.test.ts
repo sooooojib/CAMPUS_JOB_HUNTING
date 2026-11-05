@@ -50,12 +50,12 @@ describe("Stage 3 Navigation & Layout Architecture", () => {
   });
 
   it("defines public entry routes without exposing unauthenticated private opportunity feeds", () => {
-    const publicRoutes = ["/", "/about", "/login", "/register", "/forgot-password"];
+    const publicRoutes = ["/", "/login", "/register", "/forgot-password"];
 
     expect(publicRoutes).toContain("/");
-    expect(publicRoutes).toContain("/about");
     expect(publicRoutes).toContain("/login");
     expect(publicRoutes).toContain("/register");
+    expect(publicRoutes).not.toContain("/about");
     expect(publicRoutes).not.toContain("/opportunities");
     expect(publicRoutes).not.toContain("/dashboard");
   });
