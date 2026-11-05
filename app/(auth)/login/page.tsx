@@ -57,6 +57,8 @@ function LoginForm() {
       if (error) {
         if (error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD") {
           setErrorMessage("Invalid university email or password. Please try again.");
+        } else if (error.status === 500) {
+          setErrorMessage("Database connection failed on server. Please verify the server DATABASE_URL configuration.");
         } else if (error.message) {
           setErrorMessage(error.message);
         } else {
