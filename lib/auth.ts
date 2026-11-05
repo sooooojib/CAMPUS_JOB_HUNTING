@@ -3,12 +3,69 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/email";
 
+function getBaseURL(): string {
+  if (process.env.BETTER_AUTH_URL) {
+    return process.env.BETTER_AUTH_URL;
+  }
+  if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes("localhost")) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  if (process.env.NODE_ENV === "production") {
+    return "https://jnujobhunting.vercel.app";
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+}
+
 export const auth = betterAuth({
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  baseURL: getBaseURL(),
   secret: process.env.AUTH_SECRET || "dev-insecure-secret-key-32-chars-minimum-needed",
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  trustedOrigins: async (request?: Request) => {
+    const origins = [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://127.0.0.1:3000",
+      "https://*.vercel.app",
+      "https://jnujobhunting.vercel.app",
+    ];
+
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      origins.push(process.env.NEXT_PUBLIC_APP_URL);
+    }
+    if (process.env.BETTER_AUTH_URL) {
+      origins.push(process.env.BETTER_AUTH_URL);
+    }
+    if (process.env.VERCEL_URL) {
+      origins.push(`https://${process.env.VERCEL_URL}`);
+    }
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+      origins.push(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+    }
+
+    if (request?.headers) {
+      const origin = request.headers.get("origin");
+      if (origin) {
+        origins.push(origin);
+      }
+      const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+      const proto = request.headers.get("x-forwarded-proto") || "https";
+      if (host) {
+        origins.push(`${proto}://${host}`);
+        origins.push(`https://${host}`);
+        origins.push(`http://${host}`);
+      }
+    }
+
+    return Array.from(new Set(origins.filter(Boolean) as string[]));
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false, // Allows account setup; verification required for member actions
@@ -95,6 +152,7 @@ export const auth = betterAuth({
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
     cookiePrefix: "better-auth",
+    trustedProxyHeaders: true,
   },
 });
 
