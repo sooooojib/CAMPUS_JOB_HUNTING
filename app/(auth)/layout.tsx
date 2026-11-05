@@ -60,12 +60,6 @@ export default function AuthLayout({
       <footer className="container mx-auto max-w-7xl px-4 py-6 text-center text-xs text-muted-foreground sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/40">
         <p>© 2026 UniCareer Community. All rights reserved.</p>
         <div className="flex items-center gap-4">
-          <Link href="/terms" className="hover:underline">
-            Terms of Service
-          </Link>
-          <Link href="/privacy" className="hover:underline">
-            Privacy Policy
-          </Link>
           <Link href="/about" className="hover:underline">
             About
           </Link>

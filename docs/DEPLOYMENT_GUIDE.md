@@ -163,3 +163,4 @@ npx prisma migrate dev --name revert_faulty_migration
 # 3. Deploy corrective migration
 npx prisma migrate deploy
 ```
+

@@ -244,15 +244,7 @@ function RegisterForm() {
               htmlFor="agreeTerms"
               className="text-xs font-normal text-muted-foreground leading-relaxed cursor-pointer select-none"
             >
-              I agree to the{" "}
-              <Link href="/terms" target="_blank" className="text-primary hover:underline font-medium">
-                Community Honor Code
-              </Link>{" "}
-              and acknowledge the{" "}
-              <Link href="/privacy" target="_blank" className="text-primary hover:underline font-medium">
-                Student Data Protection Policy
-              </Link>
-              .
+              I agree to the Community Honor Code and acknowledge the Student Data Protection Policy.
             </Label>
           </div>
 

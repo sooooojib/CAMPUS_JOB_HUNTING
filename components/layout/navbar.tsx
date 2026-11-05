@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { GraduationCap, ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { GraduationCap } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 export function AppNavbar() {
   const [isFooterReached, setIsFooterReached] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // 1. IntersectionObserver for detecting footer entry
@@ -63,32 +65,27 @@ export function AppNavbar() {
           <span className="font-bold tracking-tight text-slate-900 dark:text-white">UniCareer</span>
         </Link>
 
-        {/* Center: Dynamic Nav Links */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-xs font-medium text-slate-600 dark:text-slate-300">
+        {/* Center: Rearranged Clean Nav Links */}
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-medium">
           <Link
-            href="/#pipeline"
-            className="flex items-center gap-1 hover:text-slate-950 dark:hover:text-white transition-colors"
+            href="/"
+            className={`transition-colors ${
+              pathname === "/"
+                ? "text-slate-950 dark:text-white font-semibold"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
+            }`}
           >
-            <span>Explore</span>
-            <ChevronDown className="size-3 opacity-60" />
-          </Link>
-          <Link
-            href="/opportunities"
-            className="hover:text-slate-950 dark:hover:text-white transition-colors"
-          >
-            Opportunities
+            Home
           </Link>
           <Link
             href="/about"
-            className="hover:text-slate-950 dark:hover:text-white transition-colors"
+            className={`transition-colors ${
+              pathname === "/about"
+                ? "text-slate-950 dark:text-white font-semibold"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
+            }`}
           >
             About
-          </Link>
-          <Link
-            href="/design-system"
-            className="hover:text-slate-950 dark:hover:text-white transition-colors"
-          >
-            Design
           </Link>
         </nav>
 

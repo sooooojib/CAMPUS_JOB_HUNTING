@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Post-Stage 14: Layout Streamlining & Public Route Refinement] - 2026-11-05
+
+### Changed
+- **Public Navigation (`components/layout/navbar.tsx`)**:
+  - Removed `Opportunities` from public navbar (aligned with strict rule that opportunities browsing is reserved for authenticated members).
+  - Removed `Design` (`/design-system`) development showcase link and page.
+  - Removed `Explore ⌄` dropdown writing and chevron icon.
+  - Rearranged the navigation bar tabs cleanly to display `Home` and `About` with route-aware styling and smooth hover states.
+- **Footers (`components/layout/footer.tsx` & `app/(auth)/layout.tsx`)**:
+  - Removed `Terms of Service` and `Privacy Policy` links from all footers.
+  - Retained exclusively the `About` link alongside institutional copyright metadata.
+- **Authentication Forms (`app/(auth)/register/page.tsx`)**:
+  - Cleaned up terms and policy links from the registration agreement checkbox label to prevent dead links.
+
+### Removed
+- `app/design-system` (`page.tsx`, `layout.tsx`)
+- `app/(public)/terms` (`page.tsx`)
+- `app/(public)/privacy` (`page.tsx`)
+
+---
+
 ## [Stage 14: Final Testing, Security, Responsiveness, and Optimization] - 2026-11-05
 
 ### Added

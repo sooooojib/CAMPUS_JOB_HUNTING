@@ -9,8 +9,6 @@
 | :--- | :--- | :--- | :--- |
 | `/` | Landing / Marketing Homepage (No Private Data Leaks) | `app/(public)/layout.tsx` | **Implemented** |
 | `/about` | Institutional background & mission | `app/(public)/layout.tsx` | **Implemented** |
-| `/terms` | Community Terms of Service & Integrity Standards | `app/(public)/layout.tsx` | **Implemented** |
-| `/privacy` | Privacy Policy & Private Resume Vault Guarantees | `app/(public)/layout.tsx` | **Implemented** |
 | `/login` | Member Login with redirect support | `app/(auth)/layout.tsx` | **Implemented** |
 | `/register` | Member Registration & Role Selection | `app/(auth)/layout.tsx` | **Implemented** |
 | `/forgot-password` | Password Reset Request | `app/(auth)/layout.tsx` | **Implemented** |
@@ -47,11 +45,6 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | Route | Purpose | Template Used | Implementation Status |
 | :--- | :--- | :--- | :--- |
 | `/admin` | Administration Command Center, Review Queues, Audit Trail | `AdminTemplate` | **Implemented** |
-
-### 1.5 System & Design Showcase
-| Route | Purpose | Layout Group | Implementation Status |
-| :--- | :--- | :--- | :--- |
-| `/design-system` | Live Interactive Token & Component Showcase | `app/design-system/layout.tsx` | **Implemented** |
 
 ---
 
