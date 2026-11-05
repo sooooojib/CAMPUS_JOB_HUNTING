@@ -458,7 +458,7 @@ export default async function PublicProfilePage(
             <CardContent className="pt-4 space-y-3">
               {recentPosts.length === 0 ? (
                 <p className="text-xs text-muted-foreground italic">
-                  This member hasn't published any community posts yet.
+                  This member has not published any community posts yet.
                 </p>
               ) : (
                 recentPosts.map((post) => (

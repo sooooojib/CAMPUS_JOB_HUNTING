@@ -121,7 +121,7 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
             m.canPostOpportunities)
       ));
 
-  const isExpired = new Date(opportunity.deadline).getTime() < Date.now();
+  const isExpired = opportunity.status === "EXPIRED" || opportunity.status === "CLOSED";
 
   const workplaceLabel =
     opportunity.workplaceType === "REMOTE"

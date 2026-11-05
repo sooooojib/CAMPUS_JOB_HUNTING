@@ -216,6 +216,26 @@
    - Each audit record cryptographically attributes the performing administrator (`adminId`), action type (`AdminAuditAction`), affected entity (`targetType`, `targetId`, `targetLabel`), stated reason, client IP address, and structured pre/post state metadata.
    - Audit logs are permanently retained and cannot be edited or deleted by normal administrative accounts.
 
+---
+
+## 14. Rate Limiting, Anti-IDOR & Upload Hardening (Stage 14 Implemented)
+
+1. **Sliding-Window In-Memory Rate Limiting**:
+   - `lib/security/rate-limit.ts` enforces sliding-window rate limiting on critical mutation endpoints:
+     - Resume Uploads (`POST /api/resumes`): 10 uploads / 10 minutes.
+     - Verification Requests (`POST /api/verification/request`): 10 submissions / 10 minutes.
+     - Application Submissions (`POST /api/applications`): 30 applications / 1 hour.
+   - Client identifier is derived from `x-forwarded-for`, `x-real-ip`, or user session ID.
+   - Rejections return HTTP 429 Too Many Requests with standard RFC headers (`Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`).
+2. **Anti-IDOR (Insecure Direct Object Reference) Protection**:
+   - Applicant management endpoints (`/opportunities/[id]/applicants` and status mutations) assert employer affiliation with the opportunity's company via `assertCanManageApplicantsForOpportunity`. Third-party authenticated users cannot inspect or manage candidate pipelines.
+   - Candidate resumes are streamed through private endpoint `/api/resumes/[id]/download`, requiring either user ownership (`resume.userId === session.user.id`), an active employer role for an opportunity the candidate applied to, or platform administrator clearance.
+   - Referral requests enforce access exclusively to the requesting student, receiving alumni/member, or platform administrator (`assertCanAccessReferral`).
+3. **Magic-Bytes File Inspection & Upload Isolation**:
+   - File uploads are validated via binary magic bytes (`%PDF-` for PDF, `PK\x03\x04` for DOCX) rather than client-reported MIME types or file extensions.
+   - Uploads are capped at 5 MB; executable or macro-enabled documents are strictly rejected.
+   - Files are stored with randomized UUID identifiers in isolated storage containers.
+
 
 
 

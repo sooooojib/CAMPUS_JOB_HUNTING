@@ -5,6 +5,7 @@ import {
   submitVerificationRequest,
 } from "@/lib/services/verification";
 import { submitVerificationRequestSchema } from "@/lib/validations/verification";
+import { checkRateLimit, getClientIp, rateLimitExceededResponse } from "@/lib/security/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,6 +18,15 @@ export async function POST(request: NextRequest) {
         { error: "UNAUTHORIZED", message: "Sign in required." },
         { status: 401 }
       );
+    }
+
+    const ip = getClientIp(request);
+    const rateCheck = checkRateLimit(`verification_${session.user.id}_${ip}`, {
+      limit: 10,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rateCheck.success) {
+      return rateLimitExceededResponse(rateCheck.limit, rateCheck.reset);
     }
 
     const body = await request.json();

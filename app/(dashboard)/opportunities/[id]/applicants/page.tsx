@@ -24,25 +24,28 @@ export default async function OpportunityApplicantsPage({
     redirect(`/login?callbackUrl=/opportunities/${id}/applicants`);
   }
 
+  let opportunityData;
   try {
-    const { opportunity, company } = await assertCanManageApplicantsForOpportunity(
+    opportunityData = await assertCanManageApplicantsForOpportunity(
       id,
       session.user.id,
       (session.user as any).systemRole
     );
-
-    return (
-      <div className="space-y-6">
-        <EmployerApplicantManager
-          opportunityId={opportunity.id}
-          opportunityTitle={opportunity.title}
-          companyName={company?.name || opportunity.companyName}
-        />
-      </div>
-    );
-  } catch (error: any) {
+  } catch {
     // If user is not authorized to manage applicants for this opportunity
     redirect(`/opportunities/${id}?error=unauthorized_applicant_management`);
   }
+
+  const { opportunity, company } = opportunityData;
+
+  return (
+    <div className="space-y-6">
+      <EmployerApplicantManager
+        opportunityId={opportunity.id}
+        opportunityTitle={opportunity.title}
+        companyName={company?.name || opportunity.companyName}
+      />
+    </div>
+  );
 }
 

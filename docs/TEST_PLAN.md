@@ -245,6 +245,39 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - **Institutional Analytics Compilation**:
   - Verification of non-fabricated time-series aggregates (`memberGrowth`, `opportunityActivity`, `applicationActivity`, `departmentParticipation`, `opportunityTypes`, `verificationBreakdown`).
 
+### 2.12 End-to-End Multi-Persona Workflows & Security Hardening (Stage 14: Vitest)
+- **Workflow A: Student Complete Journey**:
+  - Registration and email verification link processing.
+  - Institutional membership claim submission and registrar approval.
+  - Complete profile creation with skills and current CGPA.
+  - Multi-faceted opportunity discovery with hybrid filtering.
+  - Explainable algorithmic match scoring (`calculateSkillMatch`) and eligibility verification (`evaluateEligibility`).
+  - Opportunity bookmarking with duplicate prevention.
+  - Magic-bytes validated PDF resume upload and internal application submission.
+  - Database-enforced duplicate application rejection.
+  - Real-time application status tracking and notification dispatch.
+  - Community feed engagement (posting, commenting, insightful reaction toggle).
+- **Workflow B: Alumni Complete Journey**:
+  - Alumni claim submission with graduation year and employer details.
+  - Community opportunity lead sharing with external ATS link.
+  - Student connection request reception and acceptance.
+  - Career referral request review and acceptance with personalized response note.
+- **Workflow C: Employer & Recruiter Complete Journey**:
+  - Recruiter registration and institutional verification granting posting clearance.
+  - Corporate company profile creation.
+  - Official employer opportunity publication with compensation and deadline.
+  - Admin approval, candidate application ingestion, Anti-IDOR security checks (unauthorized users strictly blocked from candidate records), and candidate pipeline status advancement to `SHORTLISTED`.
+- **Workflow D: Administrator Complete Command & Moderation**:
+  - Admin session clearance assertion.
+  - Pending verification review queue (approving and rejecting with feedback).
+  - Opportunity moderation (approving, closing, and deleting).
+  - Community content reports review & spam content removal.
+  - User account suspension & restoration with immutable audit logging.
+  - Live platform KPIs & analytics verification.
+- **Security & Rate Limiting Verification**:
+  - Verification of sliding-window rate limiter on sensitive mutation endpoints (`/api/resumes`, `/api/verification/request`, `/api/applications`).
+  - Validation of HTTP 429 response codes with rate limit headers (`Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`).
+
 
 
 

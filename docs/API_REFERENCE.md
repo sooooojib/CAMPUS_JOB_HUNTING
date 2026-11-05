@@ -1,5 +1,14 @@
 # UniCareer Community — API & Server Actions Reference
 
+> **Standard Security & Rate Limiting Policy**:  
+> Sensitive mutation routes (`POST /api/resumes`, `POST /api/verification/request`, `POST /api/applications`) enforce sliding-window rate limiting. When a limit is reached, endpoints return `429 Too Many Requests` with headers:  
+> - `X-RateLimit-Limit`: Maximum permitted operations in the sliding window.  
+> - `X-RateLimit-Remaining`: Remaining allowed attempts.  
+> - `X-RateLimit-Reset`: Epoch timestamp when quota refreshes.  
+> - `Retry-After`: Seconds to wait before retrying.  
+
+---
+
 ## 1. Authentication & Session (Stage 4 Implemented)
 
 ### Better Auth Handler: `/api/auth/[...all]`

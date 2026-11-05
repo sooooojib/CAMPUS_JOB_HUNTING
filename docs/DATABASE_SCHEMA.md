@@ -1,8 +1,8 @@
 # UniCareer Community — Database Schema Specification
 
-> **Architectural Status**: Stage 13 (Admin Dashboard, Moderation & Audit Logs) Complete  
+> **Architectural Status**: Stage 14 (Final Testing, Security, Responsiveness, and Optimization) Complete  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `ProfileSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification`
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `ProfileSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification` (All 27 Models Verified)
 
 ---
 

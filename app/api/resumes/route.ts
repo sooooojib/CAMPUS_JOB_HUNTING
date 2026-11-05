@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getUserResumes, saveUploadedResume } from "@/lib/services/resume";
+import { checkRateLimit, getClientIp, rateLimitExceededResponse } from "@/lib/security/rate-limit";
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,6 +39,15 @@ export async function POST(request: NextRequest) {
         { success: false, error: "UNAUTHORIZED" },
         { status: 401 }
       );
+    }
+
+    const ip = getClientIp(request);
+    const rateCheck = checkRateLimit(`resume_upload_${session.user.id}_${ip}`, {
+      limit: 10,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rateCheck.success) {
+      return rateLimitExceededResponse(rateCheck.limit, rateCheck.reset);
     }
 
     const formData = await request.formData();

@@ -111,4 +111,5 @@ se_project/
 4. **Domain Services**: Encapsulate transactions, audit logging, status transitions, and data integrity rules.
 5. **Database**: Prisma ORM executes typed SQL queries against PostgreSQL via `@prisma/adapter-pg`.
 6. **Storage**: Resumes and verification IDs are never saved in public paths; secure, short-lived signed URLs govern candidate document access.
-7. **Testing**: Vitest executes fast unit and schema tests; Playwright runs full browser workflows.
+7. **Rate Limiting**: Integrated sliding-window rate limiter in `lib/security/rate-limit.ts` protects mutation routes against spam, scraping, and brute force with HTTP 429 response headers.
+8. **Testing**: Vitest executes fast unit, schema, and end-to-end multi-persona workflow tests; Playwright runs browser workflows.
