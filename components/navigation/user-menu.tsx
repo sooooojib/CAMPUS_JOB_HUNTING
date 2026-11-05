@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { User, Settings, FileText, ShieldAlert, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { User, Settings, FileText, ShieldAlert, LogOut, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,31 +15,57 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { authClient } from "@/lib/auth-client";
 
 interface UserMenuProps {
   user?: {
     name: string;
     email: string;
     avatarUrl?: string;
-    role: string;
-    isVerified: boolean;
+    role?: string;
+    isVerified?: boolean;
+    emailVerified?: boolean;
   };
 }
 
 export function UserMenu({
-  user = {
-    name: "Sarah Miller",
-    email: "sarah.miller@university.edu",
-    role: "STUDENT",
-    isVerified: true,
-  },
+  user: propUser,
 }: UserMenuProps) {
-  const initials = user.name
+  const router = useRouter();
+  const [isSigningOut, setIsSigningOut] = React.useState(false);
+  const { data: session } = authClient.useSession();
+
+  // Prefer active live session, fallback to propUser or default
+  const currentUser = {
+    name: session?.user?.name || propUser?.name || "Verified Member",
+    email: session?.user?.email || propUser?.email || "member@university.edu",
+    avatarUrl: session?.user?.image || propUser?.avatarUrl,
+    role: (session?.user as any)?.membershipType || propUser?.role || "MEMBER",
+    isVerified: (session?.user as any)?.verificationStatus === "VERIFIED" || propUser?.isVerified || false,
+    emailVerified: session?.user?.emailVerified ?? propUser?.emailVerified ?? false,
+  };
+
+  const initials = currentUser.name
     .split(" ")
     .map((n) => n[0])
+    .filter(Boolean)
     .join("")
     .slice(0, 2)
-    .toUpperCase();
+    .toUpperCase() || "UC";
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    try {
+      await authClient.signOut();
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Sign out error:", error);
+      window.location.href = "/login";
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -47,7 +74,7 @@ export function UserMenu({
         aria-label="User navigation menu"
       >
         <Avatar className="size-8 border border-border">
-          <AvatarImage src={user.avatarUrl} alt={user.name} />
+          <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
           <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
             {initials}
           </AvatarFallback>
@@ -58,15 +85,25 @@ export function UserMenu({
         <DropdownMenuLabel className="p-2 font-normal">
           <div className="flex flex-col space-y-1">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-foreground leading-none">
-                {user.name}
+              <p className="text-xs font-bold text-foreground leading-none truncate max-w-[120px]">
+                {currentUser.name}
               </p>
-              <Badge variant="success" className="h-4 px-1 text-[9px]">
-                Verified
-              </Badge>
+              {currentUser.isVerified ? (
+                <Badge variant="success" className="h-4 px-1 text-[9px]">
+                  Verified
+                </Badge>
+              ) : currentUser.emailVerified ? (
+                <Badge variant="secondary" className="h-4 px-1 text-[9px]">
+                  Email Verified
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="h-4 px-1 text-[9px] text-amber-600 border-amber-500/30">
+                  Unverified
+                </Badge>
+              )}
             </div>
             <p className="text-[11px] text-muted-foreground leading-none truncate">
-              {user.email}
+              {currentUser.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -103,14 +140,20 @@ export function UserMenu({
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="p-0" variant="destructive">
-          <Link
-            href="/login"
-            className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-destructive focus:bg-destructive/10 focus:text-destructive"
+        <DropdownMenuItem className="p-0" variant="destructive" disabled={isSigningOut}>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            disabled={isSigningOut}
+            className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer disabled:opacity-50"
           >
-            <LogOut className="size-3.5" />
-            <span>Sign Out</span>
-          </Link>
+            {isSigningOut ? (
+              <Loader2 className="size-3.5 animate-spin" />
+            ) : (
+              <LogOut className="size-3.5" />
+            )}
+            <span>{isSigningOut ? "Signing out..." : "Sign Out"}</span>
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

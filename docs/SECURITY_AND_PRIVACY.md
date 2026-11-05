@@ -1,12 +1,22 @@
 # UniCareer Community — Security & Privacy Specification
 
-## 1. Authentication & Session Security
+## 1. Authentication & Session Security (Stage 4 Implemented)
 
-1. **Password Hashing**: Strong salted hashing (e.g. bcrypt/argon2 via chosen authentication library).
+1. **Password Hashing & Storage**:
+   - High-cost scrypt cryptographic hashing via Better Auth.
+   - Plaintext passwords are NEVER stored in the database.
+   - Hashed secrets reside exclusively in the `accounts` table and are never returned in user payloads or client session queries.
 2. **Session Integrity**:
-   - HTTP-only, secure, SameSite cookies.
-   - CSRF protection enabled on all mutation endpoints and Server Actions.
-   - Session revocation on password changes or administrative account suspension.
+   - HTTP-only, SameSite: `lax`, and `secure` (in production) cookies (`better-auth.session_token`).
+   - 7-day default session lifetime with automatic 24-hour rolling updates and a 5-minute cookie cache.
+   - Database-backed session invalidation on logout (`POST /api/auth/sign-out`) and account suspension.
+3. **Cryptographic Token Lifecycle**:
+   - Password reset tokens expire in 30 minutes (`resetPasswordTokenExpiresIn: 1800`) and are single-use.
+   - Verification tokens are signed JWTs with expiration bounds.
+   - In development, tokens are captured in an in-memory test store (`lib/email.ts`) and never exposed to unauthenticated public endpoints.
+4. **Two-Layer Route Enforcement**:
+   - **Layer 1 (Network Edge / Proxy)**: `proxy.ts` rejects unauthenticated requests to protected paths (`/dashboard`, `/opportunities`, `/community`, etc.) with a 307 redirect preserving the target `callbackUrl`.
+   - **Layer 2 (Server Component Runtime)**: `app/(dashboard)/layout.tsx` validates session authenticity against PostgreSQL on the server and blocks `SUSPENDED` or `DEACTIVATED` accounts.
 
 ---
 

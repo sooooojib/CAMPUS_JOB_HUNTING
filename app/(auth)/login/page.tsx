@@ -1,5 +1,10 @@
+"use client";
+
+import * as React from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { Lock, Mail, ArrowRight } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Lock, Mail, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,13 +17,65 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
 
-export const metadata = {
-  title: "Member Sign In",
-  description: "Sign in to access your university career opportunities, applications, and community.",
-};
+function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const urlError = searchParams.get("error");
 
-export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    urlError === "account_suspended"
+      ? "Your account has been suspended by campus administration. Please contact registrar support."
+      : null
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+
+    if (!email.trim() || !password) {
+      setErrorMessage("Please enter both your university email and password.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: email.trim().toLowerCase(),
+        password,
+        callbackURL: callbackUrl,
+        rememberMe,
+      });
+
+      if (error) {
+        if (error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD") {
+          setErrorMessage("Invalid university email or password. Please try again.");
+        } else if (error.message) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Authentication failed. Please verify your credentials.");
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      // Successful sign in -> redirect to callbackUrl or dashboard
+      router.push(callbackUrl);
+      router.refresh();
+    } catch (err: any) {
+      console.error("Login submission error:", err);
+      setErrorMessage("An unexpected network error occurred. Please try again.");
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className="border-border shadow-lg">
       <CardHeader className="space-y-1 text-center">
@@ -31,7 +88,14 @@ export default function LoginPage() {
       </CardHeader>
 
       <CardContent>
-        <form className="space-y-4">
+        {errorMessage && (
+          <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+            <AlertCircle className="size-4 shrink-0 mt-0.5" />
+            <div className="leading-relaxed">{errorMessage}</div>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="email">University Email</Label>
             <div className="relative">
@@ -40,9 +104,12 @@ export default function LoginPage() {
                 id="email"
                 name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="student@university.edu"
                 className="pl-9"
                 required
+                disabled={isLoading}
                 autoComplete="email"
               />
             </div>
@@ -64,27 +131,44 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 className="pl-9"
                 required
+                disabled={isLoading}
                 autoComplete="current-password"
               />
             </div>
           </div>
 
           <div className="flex items-center space-x-2 pt-1">
-            <Checkbox id="remember" />
+            <Checkbox
+              id="remember"
+              checked={rememberMe}
+              onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
+              disabled={isLoading}
+            />
             <Label
               htmlFor="remember"
-              className="text-xs font-normal text-muted-foreground cursor-pointer"
+              className="text-xs font-normal text-muted-foreground cursor-pointer select-none"
             >
               Remember this device for 30 days
             </Label>
           </div>
 
-          <Button type="submit" className="w-full gap-2 mt-2">
-            <span>Sign In to Dashboard</span>
-            <ArrowRight className="size-4" />
+          <Button type="submit" disabled={isLoading} className="w-full gap-2 mt-2">
+            {isLoading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                <span>Signing In...</span>
+              </>
+            ) : (
+              <>
+                <span>Sign In to Dashboard</span>
+                <ArrowRight className="size-4" />
+              </>
+            )}
           </Button>
         </form>
       </CardContent>
@@ -101,5 +185,29 @@ export default function LoginPage() {
         </div>
       </CardFooter>
     </Card>
+  );
+}
+
+function LoginFormSkeleton() {
+  return (
+    <Card className="border-border shadow-lg animate-pulse">
+      <CardHeader className="space-y-2 text-center">
+        <div className="h-6 w-36 bg-muted mx-auto rounded" />
+        <div className="h-4 w-60 bg-muted mx-auto rounded" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="h-10 bg-muted rounded" />
+        <div className="h-10 bg-muted rounded" />
+        <div className="h-10 bg-muted rounded mt-2" />
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFormSkeleton />}>
+      <LoginForm />
+    </Suspense>
   );
 }

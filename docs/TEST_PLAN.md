@@ -12,11 +12,16 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 
 ## 2. Test Suites
 
-### 2.1 Authentication & Gatekeeping (Playwright)
-- Unauthenticated user attempting to view `/opportunities` is redirected to `/login?callbackUrl=/opportunities`.
-- Registration enforces email format, password complexity, and institutional details.
-- User with `PENDING` verification status sees verification banner and cannot access restricted feeds.
-- Verified member gets direct access.
+### 2.1 Authentication & Gatekeeping (Vitest & Playwright)
+- **Registration**: Enforces password minimum 8 characters, password confirmation match, terms acceptance, valid institutional email.
+- **Password Security**: Validates that passwords are encrypted with scrypt salt/hash and never saved plaintext to `accounts` or `users`.
+- **Role Isolation**: Verifies that `membershipType` is separate from `systemRole` and cannot be escalated to `ADMIN` on registration.
+- **Login Credentials**: Authenticates valid credentials, rejects invalid passwords, rejects non-existent emails.
+- **Session Lifecycle**: Database session creation, cookie emission (`better-auth.session_token`), session invalidation on logout.
+- **Email Verification**: Generates cryptographic verification token, dispatches through dev email logger, successfully validates token and sets `emailVerified: true`.
+- **Password Reset**: Cryptographic token issuance valid for 30 minutes, token redemption updating password hash, invalidating previous credentials.
+- **Route Protection & Proxy**: Unauthenticated user attempting to view `/dashboard`, `/opportunities`, `/applications`, `/community`, `/referrals`, `/admin` is redirected with 307 to `/login?callbackUrl=...`. Authenticated user on `/login` or `/register` is redirected to `/dashboard`.
+- **Account Status Guard**: Suspended or deactivated accounts are rejected by server layout.
 
 ### 2.2 Opportunity Portal (Playwright & Vitest)
 - Filtering by type (`INTERNSHIP`, `FULL_TIME`) and classification (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`).

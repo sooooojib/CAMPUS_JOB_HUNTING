@@ -69,15 +69,33 @@ flowchart TD
   - **Unit Testing**: Vitest test suite expanded to 11 passing tests.
   - **Production Build**: 24/24 static and partial prerendered routes compiled with Turbopack. Zero TypeScript or ESLint errors.
 
+### Stage 4: Authentication Engine, Accounts & Verification
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 3.
+- **Core Deliverables Delivered**:
+  - **Selected Authentication Core**: Better Auth 1.7.17 configured with Prisma 7 adapter (`@prisma/adapter-pg`) on PostgreSQL 16.
+  - **Account Data Models (`prisma/schema.prisma`)**: `users`, `sessions`, `accounts`, `verifications` tables synced to PostgreSQL.
+  - **Role & Membership Separation**: `membershipType` (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) kept completely separate from `systemRole` (`MEMBER`, `MODERATOR`, `ADMIN`).
+  - **Password Security**: Scrypt salted/hashed password storage in `accounts` table. Plaintext passwords never stored.
+  - **Email Verification Pipeline**: Cryptographic verification token generation, token dispatch via development logger store (`lib/email.ts`), automated redemption at `/verify-email`.
+  - **Password Reset Pipeline**: 30-minute cryptographic recovery token issuance and single-use password update at `/reset-password`.
+  - **Two-Layer Route Protection**:
+    - Network Edge Proxy (`proxy.ts`): 307 temporary redirects for unauthenticated requests on protected routes with preserved `callbackUrl`.
+    - Server Component Layout Guard (`app/(dashboard)/layout.tsx`): Authenticates session against PostgreSQL, enforces account active status (`SUSPENDED`/`DEACTIVATED` rejection).
+  - **Polished Authentication UX**: Fully functional client forms for Login, Multi-Role Registration, Forgot Password, Reset Password, and Email Verification with loading spinners and accessible error states.
+  - **Interactive User Menu**: Integrated live session display with working `signOut()` action.
+  - **Automated Testing**: 27/27 Vitest unit and integration tests passing. Clean Next.js 16 production build.
+
 ---
 
 ## 3. Next Stage Preview
 
-### Stage 4: Authentication Engine, Accounts & Verification
+### Stage 5: Opportunity Portal & Review Engine
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 3.
+- **Prerequisites**: Stage 4.
 - **Core Deliverables**:
-  - Server-side authentication integration (NextAuth / Better Auth) connected to PostgreSQL via Prisma.
-  - Registration flows with role assignment (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`).
-  - Institutional domain verification and email confirmation tokens.
-  - Session management and role-based route middleware protection.
+  - Opportunity lifecycle management (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`).
+  - Opportunity provenance classification (`OFFICIAL_EMPLOYER` vs `COMMUNITY_SHARED`).
+  - Opportunity creation forms with department and skill tagging.
+  - Admin moderation queue and approval/rejection workflows.
+  - Filterable career opportunities directory and detailed view.

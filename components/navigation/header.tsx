@@ -10,9 +10,17 @@ import { UserMenu } from "./user-menu";
 
 interface AppHeaderProps {
   onToggleSidebar?: () => void;
+  user?: {
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    role?: string;
+    isVerified?: boolean;
+    emailVerified?: boolean;
+  };
 }
 
-export function AppHeader({ onToggleSidebar }: AppHeaderProps) {
+export function AppHeader({ onToggleSidebar, user }: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/80 bg-background/80 px-4 backdrop-blur-md sm:px-6">
       {/* Left: Mobile hamburger & Search bar */}
@@ -50,7 +58,7 @@ export function AppHeader({ onToggleSidebar }: AppHeaderProps) {
 
         <NotificationsPopover />
         <ThemeToggle />
-        <UserMenu />
+        <UserMenu user={user} />
       </div>
     </header>
   );

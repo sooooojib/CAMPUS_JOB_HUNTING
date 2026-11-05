@@ -7,9 +7,18 @@ import { MobileNav } from "@/components/navigation/mobile-nav";
 
 interface AuthenticatedShellProps {
   children: React.ReactNode;
+  user?: {
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    membershipType?: string;
+    systemRole?: string;
+    isVerified?: boolean;
+    emailVerified?: boolean;
+  };
 }
 
-export function AuthenticatedShell({ children }: AuthenticatedShellProps) {
+export function AuthenticatedShell({ children, user }: AuthenticatedShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
 
   return (
@@ -27,7 +36,7 @@ export function AuthenticatedShell({ children }: AuthenticatedShellProps) {
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col md:pl-64 min-w-0">
-        <AppHeader onToggleSidebar={() => setMobileNavOpen(true)} />
+        <AppHeader onToggleSidebar={() => setMobileNavOpen(true)} user={user} />
         <main className="flex-1 pb-20 md:pb-10 min-w-0">{children}</main>
       </div>
 

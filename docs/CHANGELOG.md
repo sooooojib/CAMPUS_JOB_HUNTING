@@ -6,6 +6,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 4: Authentication Engine and Account Security] - 2026-11-05
+
+### Added
+- **Authentication Core (`lib/auth.ts`, `lib/auth-client.ts`)**:
+  - Configured Better Auth 1.7.17 with Prisma 7 adapter (`@prisma/adapter-pg`) connected to PostgreSQL 16 on Neon Lakebase.
+  - Implemented high-entropy scrypt password hashing stored securely in `accounts` table. Plaintext passwords never stored.
+  - Configured session management using database-backed sessions with secure HTTP-only cookies (`better-auth.session_token`).
+  - Added cryptographic verification token issuance and automated email verification at `/verify-email`.
+  - Added 30-minute cryptographic password reset token generation and redemption at `/reset-password`.
+- **Account Data Models (`prisma/schema.prisma`)**:
+  - `User`: Base identity entity with `membershipType`, `systemRole`, `accountStatus`, `verificationStatus`.
+  - `Session`: Session tracking entity with expiration timestamps and user cascade.
+  - `Account`: Authentication credentials entity storing scrypt password hashes and provider data.
+  - `Verification`: Token lifecycle entity for email verification and password recovery.
+  - Enforced strict separation between university affiliation (`membershipType`) and platform administrative roles (`systemRole`).
+- **Server-Side Route Gatekeeping (`proxy.ts` & `app/(dashboard)/layout.tsx`)**:
+  - Next.js 16 Proxy boundary (`proxy.ts`) redirecting unauthenticated traffic to `/login?callbackUrl=...`.
+  - Server Component runtime authorization gate (`app/(dashboard)/layout.tsx`) validating sessions against PostgreSQL and rejecting `SUSPENDED` or `DEACTIVATED` accounts.
+- **Authentication Pages & Forms (`app/(auth)/`)**:
+  - `login/page.tsx`: Interactive login form with loading indicators, error banners, and preserved `callbackUrl` redirection.
+  - `register/page.tsx`: Interactive multi-role registration form with client-side password matching, role selection, and terms acknowledgment.
+  - `forgot-password/page.tsx`: Interactive password recovery request form.
+  - `reset-password/page.tsx`: Interactive password reset token redemption view.
+  - `verify-email/page.tsx`: Interactive email verification screen with automated token redemption and resend flow.
+- **Email Infrastructure (`lib/email.ts`)**:
+  - Created development email dispatcher (`devEmailStore`) with terminal logging for local development and test inspection.
+- **Interactive User Menu (`components/navigation/user-menu.tsx`)**:
+  - Connected live session state and functional `signOut` action calling `authClient.signOut()`.
+- **Automated Tests**:
+  - `tests/unit/auth.test.ts`: 8 unit and integration tests verifying registration, hashing, role isolation, credentials authentication, verification, and password resets.
+  - `tests/unit/middleware.test.ts`: 7 unit tests verifying edge proxy route protection and redirection logic.
+
+---
+
 ## [Stage 3: Website Layout and Navigation] - 2026-10-30
 
 ### Added

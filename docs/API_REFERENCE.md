@@ -1,11 +1,51 @@
 # UniCareer Community — API & Server Actions Reference
 
-## 1. Authentication & Session
+## 1. Authentication & Session (Stage 4 Implemented)
 
-- `POST /api/auth/[...nextauth]` or Better Auth handler
-  - Handles credentials sign-in, session refresh, email verification hooks.
-- `GET /api/auth/session`
-  - Returns sanitized current session payload (`id`, `email`, `name`, `membershipType`, `verificationStatus`, `systemRole`).
+### Better Auth Handler: `/api/auth/[...all]`
+Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
+
+- `POST /api/auth/sign-up/email`
+  - Registers a new user.
+  - **Body**: `{ email, password, name, membershipType, callbackURL }`
+  - **Validation**: Passwords must be at least 8 characters. Valid email format. `membershipType` defaults to `STUDENT`.
+  - **Behavior**: Scrypt-hashes password into `accounts` table, creates `users` record, creates `sessions` record, generates email verification token, and calls `sendVerificationEmail`.
+  - **Output**: `{ user: User, session: Session }`
+
+- `POST /api/auth/sign-in/email`
+  - Authenticates an existing user.
+  - **Body**: `{ email, password, rememberMe, callbackURL }`
+  - **Behavior**: Validates scrypt hash, verifies account status is not `SUSPENDED`, creates session cookie `better-auth.session_token`.
+  - **Output**: `{ user: User, session: Session }`
+
+- `POST /api/auth/sign-out`
+  - Terminates the session.
+  - **Behavior**: Deletes session record from PostgreSQL `sessions` table and clears the session cookie.
+  - **Output**: `{ success: true }`
+
+- `GET /api/auth/get-session`
+  - Returns authenticated user and session metadata.
+  - **Headers**: Session cookie or Bearer token.
+  - **Output**: `{ user: User, session: Session }` or `null`.
+
+- `GET /api/auth/verify-email?token=<token>`
+  - Verifies institutional email address.
+  - **Behavior**: Validates cryptographic verification token, sets `users.emailVerified = true`, and returns status.
+  - **Output**: `{ status: true }`
+
+- `POST /api/auth/send-verification-email`
+  - Dispatches a new email verification token.
+  - **Body**: `{ email, callbackURL }`
+
+- `POST /api/auth/request-password-reset` (or `forget-password`)
+  - Initiates password recovery.
+  - **Body**: `{ email, redirectTo }`
+  - **Behavior**: Generates cryptographic token valid for 30 minutes, calls `sendPasswordResetEmail`.
+
+- `POST /api/auth/reset-password`
+  - Sets a new password using recovery token.
+  - **Body**: `{ newPassword, token }`
+  - **Behavior**: Re-hashes new password into `accounts` table, revokes old credentials.
 
 ---
 
