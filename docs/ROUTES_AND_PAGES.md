@@ -51,3 +51,33 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | Route | Purpose | Layout Group | Implementation Status |
 | :--- | :--- | :--- | :--- |
 | `/design-system` | Live Interactive Token & Component Showcase | `app/design-system/layout.tsx` | **Implemented** |
+
+---
+
+## 2. Stage 11: Student Career Tools & Smart Matching (`/career-tools`)
+
+### Overview
+- **Path**: `/career-tools`
+- **Target Role**: Enrolled Students (`STUDENT` membership role).
+- **Access Guard**: `canAccessStudentTools(user)`. Non-student profiles receive a graceful role explanation and redirect links to opportunities and community feeds.
+- **Client View**: `components/career/career-dashboard-view.tsx`
+
+### Functional Tabs & Features:
+1. **Personalized Opportunity Recommendations**:
+   - Algorithmic skill matching score: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
+   - Strict color coding: Green ($\ge 80\%$), Yellow ($50\% - 79\%$), Red ($< 50\%$).
+   - Breakdown of matched vs missing competencies.
+   - Institutional eligibility badge (`ELIGIBLE`, `NOT_ELIGIBLE`, `NEEDS_REVIEW`) and specific checklist warnings (CGPA cutoff, target department, academic year standing, application deadline).
+   - Mandatory disclaimer: High match score does not guarantee academic eligibility, interview shortlisting, or job offers.
+2. **Skill Gap & Curriculum Analytics**:
+   - Real campus market demand frequency calculated across all active approved opportunities.
+   - Categorized view of verified student skills vs missing skills.
+   - Top 5 prioritized learning recommendations based on market demand.
+   - Curated list of verified external learning resources (official documentation, university tracks) matching student's priority gaps.
+3. **Academic Performance & Semester Log**:
+   - Confidential semester transcript logger (`components/career/add-semester-modal.tsx`).
+   - Credit-weighted cumulative CGPA calculation: $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$.
+   - Auto-synced `Profile.currentCgpa` cached field.
+   - Semester history table with Term, GPA, Credits, Standing, Notes, and record removal.
+   - Strict academic privacy: Academic records visible only to the student and platform administrators.
+

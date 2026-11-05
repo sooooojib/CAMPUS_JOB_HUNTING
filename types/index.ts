@@ -118,6 +118,131 @@ export type ReferralStatus =
   | "COMPLETED"
   | "CANCELLED";
 
+export type SkillCategory =
+  | "PROGRAMMING_LANGUAGE"
+  | "FRAMEWORK"
+  | "DATABASE"
+  | "DEVOPS"
+  | "CLOUD"
+  | "DATA_AI"
+  | "DESIGN"
+  | "MOBILE"
+  | "SECURITY"
+  | "MANAGEMENT"
+  | "SOFT_SKILLS"
+  | "OTHER";
+
+export type SkillLevel =
+  | "BEGINNER"
+  | "INTERMEDIATE"
+  | "ADVANCED"
+  | "EXPERT";
+
+export type EligibilityStatus =
+  | "ELIGIBLE"
+  | "NOT_ELIGIBLE"
+  | "NEEDS_REVIEW";
+
+export interface SkillItem {
+  id: string;
+  name: string;
+  category: SkillCategory;
+  description?: string | null;
+}
+
+export interface MemberSkillItem {
+  id: string;
+  skillId: string;
+  name: string;
+  category: SkillCategory;
+  level: SkillLevel;
+}
+
+export interface AcademicRecordItem {
+  id: string;
+  userId: string;
+  semester: string;
+  gpa: number;
+  credits: number;
+  academicYear?: string | null;
+  notes?: string | null;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EligibilityCheckResult {
+  status: EligibilityStatus;
+  isEligible: boolean;
+  canApply: boolean;
+  cgpaEligible: boolean;
+  departmentEligible: boolean;
+  academicYearEligible: boolean;
+  deadlineValid: boolean;
+  statusApproved: boolean;
+  studentCgpa: number | null;
+  minRequiredCgpa: number | null;
+  reasons: string[];
+  warnings: string[];
+}
+
+export interface MatchScoreExplanation {
+  matchPercentage: number;
+  scoreColor: "green" | "yellow" | "red";
+  matchedSkills: string[];
+  missingSkills: string[];
+  totalRequiredSkills: number;
+  eligibility: EligibilityCheckResult;
+  recommendationReasons: string[];
+}
+
+export interface OpportunityRecommendation {
+  opportunity: {
+    id: string;
+    title: string;
+    description: string;
+    companyName: string;
+    companyLogo?: string | null;
+    type: OpportunityType;
+    location: string;
+    workplaceType: string;
+    salaryOrStipend?: string | null;
+    deadline: string;
+    minCgpa?: number | null;
+    minAcademicYear?: string | null;
+    targetDepartments: string[];
+    openToAllDepartments: boolean;
+    requiredSkills: string[];
+  };
+  match: MatchScoreExplanation;
+}
+
+export interface SkillGapAnalysisResult {
+  studentSkills: string[];
+  missingSkills: {
+    name: string;
+    demandCount: number;
+    category: SkillCategory;
+  }[];
+  topDemandedSkills: {
+    name: string;
+    demandCount: number;
+    category: SkillCategory;
+  }[];
+  recommendedPriorities: {
+    name: string;
+    demandCount: number;
+    category: SkillCategory;
+    reason: string;
+  }[];
+  curatedResources: {
+    title: string;
+    provider: string;
+    url: string;
+    skillName: string;
+  }[];
+}
+
 export interface MemberDirectoryItem {
   id: string;
   name: string;

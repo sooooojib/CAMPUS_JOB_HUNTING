@@ -148,4 +148,42 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Recipient responses (`ACCEPTED`, `COMPLETED`, `DECLINED`) with notes.
   - Server-side access authorization (`assertCanAccessReferral`): requester allowed, recipient allowed, admin allowed, unauthorized third-party rejected with 403 Forbidden.
 
+### 2.9 Smart Matching & Student Career Tools (Stage 11: Vitest)
+- **Shared Skill System**:
+  - Controlled skill creation with category and description.
+  - Idempotent retrieval of existing skills without duplication.
+  - Association of skills with member profile and proficiency levels (`BEGINNER`, `INTERMEDIATE`, `ADVANCED`, `EXPERT`).
+  - Automatic synchronization of `Profile.skills` string array on skill association and removal.
+- **Explainable Skill Match Score**:
+  - Mathematical formula verification: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
+  - Edge case of 0 required skills yielding 100% score with empty lists.
+  - Case-insensitive trimming and normalization.
+  - Color-coding thresholds: Green ($\ge 80\%$), Yellow ($50\% - 79\%$), Red ($< 50\%$).
+- **Institutional Opportunity Eligibility Checker**:
+  - Academic year standing parsing ("Freshman"=1, "Sophomore"=2, "Junior"=3, "Senior"=4, "Graduate"=5).
+  - Meets all requirements $\to$ `ELIGIBLE`.
+  - Student CGPA below required cutoff $\to$ `NOT_ELIGIBLE` with descriptive warning.
+  - Student department outside targeted departments $\to$ `NOT_ELIGIBLE`.
+  - Past application deadline $\to$ `NOT_ELIGIBLE`.
+  - Incomplete profile data (missing CGPA or department) $\to$ `NEEDS_REVIEW`.
+- **Skill Gap & Market Demand Analyzer**:
+  - Aggregation of required competencies across all active approved campus opportunities.
+  - Detection of student's verified competencies vs missing skills.
+  - Ranking missing skills by real market frequency.
+  - Production of top 5 prioritized learning recommendations and curated learning resources.
+- **Academic Performance & CGPA Calculation**:
+  - Credit-weighted cumulative CGPA calculation: $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$.
+  - Empty transcript handling returning null.
+  - Database constraint preventing duplicate semesters for the same student (`@@unique([userId, semester])`).
+  - Automatic synchronization of `Profile.currentCgpa` cached field on semester create, update, and delete.
+- **Academic Privacy & Access Control**:
+  - Students can view their own academic transcripts.
+  - Platform administrators can view student academic transcripts.
+  - Third-party members (other students, alumni, employers) are blocked with `ACCESS_DENIED` (403 Forbidden).
+  - Role restriction: non-student accounts (`ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) blocked from student tools via `canAccessStudentTools`.
+- **Personalized Recommendations Ranking**:
+  - Sorting opportunities by match percentage descending, then eligibility status, then deadline.
+  - Inclusion of transparent recommendation reasons and mandatory non-guarantee disclaimer.
+
+
 

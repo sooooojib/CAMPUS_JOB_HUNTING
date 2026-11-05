@@ -108,6 +108,28 @@ enum ReferralStatus {
   CANCELLED
 }
 
+enum SkillCategory {
+  PROGRAMMING_LANGUAGE
+  FRAMEWORK
+  DATABASE
+  DEVOPS
+  CLOUD
+  DATA_AI
+  DESIGN
+  MOBILE
+  SECURITY
+  MANAGEMENT
+  SOFT_SKILLS
+  OTHER
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
 model User {
   id                   String             @id @default(cuid())
   name                 String
@@ -157,6 +179,9 @@ model User {
   receivedConnections     Connection[]          @relation("ReceivedConnections")
   sentReferrals           ReferralRequest[]     @relation("SentReferrals")
   receivedReferrals       ReferralRequest[]     @relation("ReceivedReferrals")
+
+  // Stage 11: Academic Records & Career Tools
+  academicRecords         AcademicRecord[]      @relation("UserAcademicRecords")
 
   @@map("users")
 }
@@ -258,6 +283,7 @@ model Opportunity {
   applications          Application[]
   referencingPosts      Post[]                @relation("OpportunityPosts")
   referralRequests      ReferralRequest[]     @relation("ReferralOpportunities")
+  opportunitySkills     OpportunitySkill[]
 
   @@index([status, deadline])
   @@index([companyId])
@@ -357,6 +383,7 @@ model Profile {
   academicYear   String?
   graduationYear Int?
   degree         String?
+  currentCgpa    Float?
 
   // Professional Information
   company        String?
@@ -365,6 +392,7 @@ model Profile {
   // Structured Information
   skills         String[]  @default([])
   interests      String[]  @default([])
+  memberSkills   MemberSkill[]
   projects       Json?     // Array of { id, title, description, link, techStack }
   experience     Json?     // Array of { id, company, role, period, description }
 
@@ -671,4 +699,71 @@ model ReferralRequest {
   @@index([status])
   @@map("referral_requests")
 }
+
+// Stage 11: Skills & Academic Records Models
+
+model Skill {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  category          SkillCategory      @default(OTHER)
+  description       String?
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  memberSkills      MemberSkill[]
+  opportunitySkills OpportunitySkill[]
+
+  @@index([category])
+  @@map("skills")
+}
+
+model MemberSkill {
+  id        String     @id @default(cuid())
+  profileId String     @map("profile_id")
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skillId   String     @map("skill_id")
+  skill     Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  level     SkillLevel @default(INTERMEDIATE)
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@unique([profileId, skillId])
+  @@index([profileId])
+  @@index([skillId])
+  @@map("member_skills")
+}
+
+model OpportunitySkill {
+  id            String      @id @default(cuid())
+  opportunityId String      @map("opportunity_id")
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  skillId       String      @map("skill_id")
+  skill         Skill       @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  isMandatory   Boolean     @default(true) @map("is_mandatory")
+  minLevel      SkillLevel? @map("min_level")
+  createdAt     DateTime    @default(now()) @map("created_at")
+
+  @@unique([opportunityId, skillId])
+  @@index([opportunityId])
+  @@index([skillId])
+  @@map("opportunity_skills")
+}
+
+model AcademicRecord {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  user         User     @relation("UserAcademicRecords", fields: [userId], references: [id], onDelete: Cascade)
+  semester     String   // e.g. "Fall 2024", "Spring 2025"
+  gpa          Float    // Semester GPA (0.00 - 4.00)
+  credits      Float    @default(3.0) // Credit hours e.g. 3.0 or semester total
+  academicYear String?  @map("academic_year") // e.g. "1st Year", "2nd Year", "3rd Year", "4th Year"
+  notes        String?  // Optional honors / coursework notes
+  isVerified   Boolean  @default(false) @map("is_verified")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, semester])
+  @@index([userId])
+  @@map("academic_records")
+}
+
 

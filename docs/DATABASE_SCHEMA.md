@@ -450,4 +450,94 @@ erDiagram
 | `referral_requests` | `referral_requests_requester_id_idx` | `requesterId` | User outgoing referrals dashboard |
 | `referral_requests` | `referral_requests_recipient_id_idx` | `recipientId` | User incoming referrals inbox |
 | `referral_requests` | `referral_requests_status_idx` | `status` | Status filtering |
+| `member_skills` | `member_skills_profile_id_idx` | `profileId` | Member skills lookup |
+| `member_skills` | `member_skills_skill_id_idx` | `skillId` | Skill directory lookup |
+| `opportunity_skills` | `opportunity_skills_opportunity_id_idx` | `opportunityId` | Opportunity required skills lookup |
+| `opportunity_skills` | `opportunity_skills_skill_id_idx` | `skillId` | Matching index |
+| `academic_records` | `academic_records_user_id_idx` | `userId` | Student transcript history lookup |
+| `academic_records` | `academic_records_user_id_semester_key` | `userId, semester` | Unique semester record constraint |
+
+---
+
+## 11. Stage 11 Models: Skills, Academic Records & Matching
+
+### 11.1 Enums
+
+#### `SkillCategory`
+```prisma
+enum SkillCategory {
+  PROGRAMMING_LANGUAGE
+  FRAMEWORK
+  DATABASE
+  DEVOPS
+  CLOUD
+  DATA_AI
+  DESIGN
+  MOBILE
+  SECURITY
+  MANAGEMENT
+  SOFT_SKILLS
+  OTHER
+}
+```
+
+#### `SkillLevel`
+```prisma
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+```
+
+### 11.2 Tables
+
+#### `skills` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique skill identifier |
+| `name` | String | Unique | Canonical skill name (normalized) |
+| `category` | SkillCategory | Default: `OTHER` | High-level categorization |
+| `description` | String? | Nullable | Optional definition/guidance |
+| `createdAt` | DateTime | Default: `now()` | Skill record creation timestamp |
+| `updatedAt` | DateTime | Updated at | Modification timestamp |
+
+#### `member_skills` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique relationship record identifier |
+| `profileId` | String | FK -> `profiles(id)`, Cascade | Associated student/member profile |
+| `skillId` | String | FK -> `skills(id)`, Cascade | Associated skill record |
+| `level` | SkillLevel | Default: `INTERMEDIATE` | Self-assessed proficiency level |
+| `isVerified` | Boolean | Default: `false` | Endorsed or course-validated indicator |
+| `createdAt` | DateTime | Default: `now()` | Association timestamp |
+| `updatedAt` | DateTime | Updated at | Modification timestamp |
+| Unique | `@@unique([profileId, skillId])` | Prevents duplicate profile-skill bindings |
+
+#### `opportunity_skills` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique record identifier |
+| `opportunityId` | String | FK -> `Opportunity(id)`, Cascade | Target opportunity |
+| `skillId` | String | FK -> `skills(id)`, Cascade | Required competency |
+| `isRequired` | Boolean | Default: `true` | Must-have vs nice-to-have |
+| `minLevel` | SkillLevel | Default: `BEGINNER` | Minimum required proficiency |
+| Unique | `@@unique([opportunityId, skillId])` | Prevents duplicate skill requirements |
+
+#### `academic_records` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique academic record ID |
+| `userId` | String | FK -> `users(id)`, Cascade | Student account owner |
+| `semester` | String | Required (e.g. "Fall 2025") | Academic term descriptor |
+| `gpa` | Float | Check: 0.00 to 4.00 | Term Grade Point Average |
+| `credits` | Float | Default: 3.0, Max: 30.0 | Term credit hours attempted |
+| `academicYear` | String? | Optional | Class standing (Freshman, Senior, etc.) |
+| `isVerified` | Boolean | Default: `false` | Registrar verification flag |
+| `notes` | String? | Optional | Coursework or honors notes |
+| `createdAt` | DateTime | Default: `now()` | Record creation timestamp |
+| `updatedAt` | DateTime | Updated at | Modification timestamp |
+| Unique | `@@unique([userId, semester])` | Prevents duplicate semester entries |
+
 

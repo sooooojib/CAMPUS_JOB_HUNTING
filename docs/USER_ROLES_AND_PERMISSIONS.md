@@ -148,3 +148,25 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
 | **Respond to Referral Request** | ❌ | ✅ (`ACCEPTED`/`DECLINED`/`COMPLETED`) | ❌ **FORBIDDEN (403)** | ✅ |
 | **Cancel Outgoing Referral Request** | ✅ (Requester only) | ❌ | ❌ | ✅ |
 
+---
+
+## 7. Academic Records & Career Tools Governance (Stage 11)
+
+| Capability / Action | Enrolled Student (`STUDENT`) | Alumni / Faculty / Staff | Employer / External | Platform Admin |
+| :--- | :---: | :---: | :---: | :---: |
+| **Access `/career-tools` Dashboard** | ✅ **Full Access** | ❌ (Role Banner + Redirect) | ❌ (Role Banner + Redirect) | ✅ **Full Access** |
+| **View Own Academic Records / GPA** | ✅ | ❌ (Non-student) | ❌ (Non-student) | ✅ |
+| **View Another Member's Academic Records** | ❌ **FORBIDDEN (403)** | ❌ **FORBIDDEN (403)** | ❌ **FORBIDDEN (403)** | ✅ **Registrar Clearance** |
+| **Log / Update Semester GPA & Credits** | ✅ (Own transcript) | ❌ | ❌ | ✅ |
+| **View Explainable Matching Recommendations** | ✅ | ❌ (Directed to general catalog) | ❌ | ✅ |
+| **Access Skill Gap & Curriculum Analytics** | ✅ | ❌ | ❌ | ✅ |
+| **Associate Skills with Profile** | ✅ | ✅ | ✅ | ✅ |
+| **Manage Controlled Skills Dictionary** | ❌ (Standard member) | ❌ | ❌ | ✅ |
+
+### Key Academic Privacy & Integrity Rules:
+1. **Academic Transcript Confidentiality**: `getUserAcademicProfile(viewerUserId, targetUserId)` strictly forbids any member (student, alumni, faculty, staff, employer) from inspecting another student's semester GPA, credit count, or coursework notes. Only the student themselves and institutional platform administrators (`systemRole === "ADMIN"`) have viewing authorization.
+2. **Non-Student Tool Isolation**: Non-student membership types (`ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) are explicitly blocked by `canAccessStudentTools(user)`. Navigating to `/career-tools` displays a polite explanation of institutional scope and directs members to public opportunity discovery and professional community feeds.
+3. **Audit & Calculation Transparency**: Cumulative CGPA is computed using the university standard credit-weighted formula $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$ and cached on `Profile.currentCgpa` to prevent repetitive aggregation during bulk recommendation scoring.
+4. **Explainable Matching Rules**: Skill match percentage is strictly derived from verified mathematical overlap $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$. Eligibility status (`ELIGIBLE`, `NOT_ELIGIBLE`, `NEEDS_REVIEW`) is evaluated as an independent institutional check with mandatory disclaimer notices.
+
+

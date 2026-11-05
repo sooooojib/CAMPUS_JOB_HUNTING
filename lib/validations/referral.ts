@@ -58,3 +58,4 @@ export const referralQuerySchema = z.object({
 export type CreateReferralInput = z.infer<typeof createReferralSchema>;
 export type RespondReferralInput = z.infer<typeof respondReferralSchema>;
 export type ReferralQueryInput = z.infer<typeof referralQuerySchema>;
+

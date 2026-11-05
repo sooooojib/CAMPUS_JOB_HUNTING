@@ -4,6 +4,33 @@
 
 ---
 
+## Stage 11 Verification: Smart Matching and Student Career Tools (2026-11-05)
+
+- **Date**: 2026-11-05
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (145/145 Passing across 13 Test Files, 0 Failures)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/smart-matching-and-career-tools.test.ts` | Controlled Skills Catalog, Explainable Match Scores, Eligibility Verification, Skill Gap Market Analytics & Confidential Academic Transcripts | **PASSED** (20/20) | 1. Creates controlled skills with categories and retrieves without duplicates.<br>2. Associates skills with member profile and syncs `Profile.skills` string array.<br>3. Removes skills from profile and updates array.<br>4. Accurately calculates skill match percentage: `(Matched / Total) * 100`.<br>5. Handles 0 required skills by returning 100% score with empty lists.<br>6. Applies exact color thresholds (>= 80% green, 50-79% yellow, < 50% red).<br>7. Parses academic year standing correctly.<br>8. Evaluates `ELIGIBLE` when student meets all criteria.<br>9. Evaluates `NOT_ELIGIBLE` when student falls below minimum CGPA.<br>10. Evaluates `NOT_ELIGIBLE` when department is outside target departments.<br>11. Evaluates `NOT_ELIGIBLE` when deadline has passed.<br>12. Evaluates `NEEDS_REVIEW` when profile data is incomplete.<br>13. Identifies missing skills, ranks by campus market demand, and curates learning tracks.<br>14. Calculates cumulative CGPA with exact credit weighting: `Sum(GPA * Credits) / Sum(Credits)`.<br>15. Returns null CGPA when records array is empty or 0 credits.<br>16. Prevents duplicate semesters for the same student (`@@unique([userId, semester])`).<br>17. Automatically syncs `Profile.currentCgpa` on record create, update, and delete.<br>18. Enforces strict academic transcript privacy (students access own, admins access, third-parties blocked with `ACCESS_DENIED`).<br>19. Blocks non-student accounts from career tools via `canAccessStudentTools`.<br>20. Returns ranked recommendations with explainable match scores, checklist reasons, and mandatory disclaimers. |
+| `tests/unit/connections-and-referrals.test.ts` | Member Directory Search, Privacy Filters, Connections Engine & Referrals Dossier | **PASSED** (12/12) | Search filters, privacy redaction, connection lifecycle, and referral dossier governance. |
+| `tests/unit/community.test.ts` | Community Posts, Threaded Comments, Reactions, Bookmarks & Moderation | **PASSED** (22/22) | Full community suite passing. |
+| `tests/unit/applications.test.ts` | Applications, Resume Vault & Recruiter Management | **PASSED** (17/17) | Magic bytes inspection, size limits, duplicate prevention, external tracking, withdrawal, recruiter review. |
+| `tests/unit/job-browsing-and-posting.test.ts` | Opportunity Discovery, Multi-Filter Search, Submission & Bookmarks | **PASSED** (14/14) | Browsing, multi-filters, pagination, draft/submit lifecycle, atomic bookmarks, author console. |
+| `tests/unit/companies-and-opportunities.test.ts` | Company Management, Opportunity Lifecycle, Moderation & Permissions | **PASSED** (18/18) | Company CRUD, ownership governance, admin approval, deadline expiration, rejection reasons. |
+| `tests/unit/membership-and-profiles.test.ts` | Membership Verification & Profile Privacy | **PASSED** (15/15) | Validates onboarding submission for all 6 membership types, admin approval/rejection with mandatory reason, profile updates, private student ID & phone redaction. |
+| `tests/unit/auth.test.ts` | Registration, Password Hashing, Role Separation | **PASSED** (8/8) | Validates scrypt hashing (>60 chars, non-plaintext), `membershipType` vs `systemRole` separation, duplicate email rejection, session persistence, email verification, password reset. |
+| `tests/unit/middleware.test.ts` | Server Route Protection & Proxy Gate | **PASSED** (7/7) | Verifies 307 redirects for unauthenticated requests on protected routes and public route access. |
+| `tests/unit/database.test.ts` | Neon PostgreSQL Driver Adapter Connection | **PASSED** (1/1) | Real database connection check via `SELECT 1` on pooled connection. |
+| `tests/unit/foundation.test.ts` | Base Architecture & Config | **PASSED** (5/5) | Environmental parameters, Next.js configuration, system integrity. |
+| `tests/unit/design-system.test.ts` | Design Token System & WCAG Contrast | **PASSED** (2/2) | Token definitions and theme contrast constraints. |
+| `tests/unit/navigation-layout.test.ts` | Template Components & Nav Items | **PASSED** (4/4) | Template structures and sidebar items. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Production Build** (`npm run build`) | Turbopack Production Build | **PASSED** | All 56 App Router routes compiled cleanly with active `ƒ Proxy (Middleware)`. |
+
+---
+
 ## Stage 10 Verification: Member Directory, Connections & Referrals (2026-11-05)
 
 - **Date**: 2026-11-05

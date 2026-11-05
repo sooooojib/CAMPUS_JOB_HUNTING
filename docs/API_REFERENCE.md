@@ -478,13 +478,140 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 7. Career Tools API (Student Only)
+## 7. Stage 11 API: Skills, Academic Records & Smart Career Tools
 
-### `checkCgpaEligibility(studentCgpa: number, opportunityId: string)`
-- **Access**: Verified `STUDENT`
-- **Output**: `{ isEligible: boolean, difference: number, minRequired: number }`
+### 7.1 Controlled Skills Endpoints
 
-### `analyzeSkillGaps(studentSkills: string[], opportunityId: string)`
-- **Access**: Verified `STUDENT`
-- **Output**: `{ matchedSkills: string[], missingSkills: string[], matchPercentage: number }`
+#### `GET /api/skills`
+- **Description**: Returns all platform-controlled skills with optional category filter. Automatically initializes standard university catalog if database is fresh.
+- **Access**: Authenticated member.
+- **Query Params**: `category?: SkillCategory`
+- **Output**: `{ success: true, count: number, skills: SkillItem[] }`
+
+#### `POST /api/skills`
+- **Description**: Registers a new skill in the controlled taxonomy.
+- **Access**: Authenticated member.
+- **Body**: `{ name: string, category?: SkillCategory, description?: string }`
+- **Output**: `{ success: true, skill: SkillItem }`
+
+#### `GET /api/skills/my`
+- **Description**: Returns all associated skills for the authenticated member with proficiency levels and verification badges.
+- **Access**: Authenticated member.
+- **Output**: `{ success: true, skills: MemberSkillItem[] }`
+
+#### `POST /api/skills/my`
+- **Description**: Associates a skill with the authenticated member's profile and updates the cached `profile.skills` array.
+- **Access**: Authenticated member.
+- **Body**: `{ skillName: string, category?: SkillCategory, level?: SkillLevel }`
+- **Output**: `{ success: true, memberSkill: MemberSkillItem }`
+
+#### `DELETE /api/skills/my`
+- **Description**: Unlinks a skill from the member profile and syncs `profile.skills`.
+- **Access**: Authenticated member.
+- **Query Params**: `skillId: string`
+- **Output**: `{ success: true, message: string }`
+
+### 7.2 Academic Records & Cumulative CGPA Endpoints
+
+#### `GET /api/academic/records`
+- **Description**: Retrieves confidential semester transcripts and credit-weighted cumulative CGPA.
+- **Access**: Enrolled student owner or platform `ADMIN` only (`canAccessStudentTools`). All third-party viewers are blocked with HTTP 403 Forbidden.
+- **Query Params**: `userId?: string` (Admin only)
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "records": [
+        { "id": "...", "semester": "Fall 2025", "gpa": 3.85, "credits": 15, "academicYear": "Senior" }
+      ],
+      "cumulativeCgpa": 3.85,
+      "totalCredits": 15,
+      "department": "Computer Science",
+      "academicYear": "Senior"
+    }
+  }
+  ```
+
+#### `POST /api/academic/records`
+- **Description**: Records a semester academic performance entry. Recalculates and caches student cumulative CGPA on `Profile.currentCgpa`.
+- **Access**: Enrolled student (`STUDENT` role).
+- **Body**: `{ semester: string, gpa: number, credits?: number, academicYear?: string, notes?: string }`
+- **Constraints**: Enforces unique semester per student (`@@unique([userId, semester])`).
+- **Output**: `{ success: true, record: AcademicRecordItem, cumulativeCgpa: number }`
+
+#### `PUT /api/academic/records/[id]`
+- **Description**: Updates an existing semester transcript record and refreshes cumulative CGPA.
+- **Access**: Owner of academic record or platform `ADMIN`.
+- **Body**: `{ semester?: string, gpa?: number, credits?: number, academicYear?: string, notes?: string }`
+- **Output**: `{ success: true, record: AcademicRecordItem, cumulativeCgpa: number }`
+
+#### `DELETE /api/academic/records/[id]`
+- **Description**: Deletes a semester record and re-indexes cumulative CGPA automatically.
+- **Access**: Owner of academic record or platform `ADMIN`.
+- **Output**: `{ success: true, cumulativeCgpa: number | null }`
+
+### 7.3 Smart Matching & Career Analytics Endpoints
+
+#### `GET /api/career/recommendations`
+- **Description**: Generates explainable, personalized opportunity recommendations for enrolled students based on exact mathematical skill match scores `(Matched / Total) * 100` and institutional eligibility rules.
+- **Access**: Authenticated student account (`STUDENT`).
+- **Query Params**: `limit?: number`, `departmentFilterOnly?: boolean`
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "count": 12,
+    "recommendations": [
+      {
+        "opportunity": { "id": "...", "title": "...", "companyName": "..." },
+        "match": {
+          "matchPercentage": 85,
+          "scoreColor": "green",
+          "matchedSkills": ["TypeScript", "React"],
+          "missingSkills": ["Docker"],
+          "totalRequiredSkills": 3,
+          "eligibility": {
+            "status": "ELIGIBLE",
+            "isEligible": true,
+            "canApply": true,
+            "cgpaEligible": true,
+            "departmentEligible": true,
+            "academicYearEligible": true,
+            "deadlineValid": true,
+            "statusApproved": true,
+            "reasons": ["Targeted to your academic department (Computer Science)."],
+            "warnings": []
+          },
+          "recommendationReasons": ["High skill overlap (85%)."]
+        }
+      }
+    ],
+    "disclaimer": "Skill match score reflects algorithmic overlap between your verified profile skills and the job's required competencies. A high match score does not guarantee academic eligibility, interview shortlisting, or employment offer."
+  }
+  ```
+
+#### `GET /api/career/skill-gap`
+- **Description**: Analyzes enrolled student's competencies against real campus job market demand, identifying missing competencies, demand rankings, top 5 prioritized learning goals, and verified curated educational resources.
+- **Access**: Authenticated student account (`STUDENT`).
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "studentSkills": ["TypeScript", "Next.js"],
+      "missingSkills": [{ "name": "Kubernetes", "demandCount": 4, "category": "DEVOPS" }],
+      "topDemandedSkills": [{ "name": "TypeScript", "demandCount": 8, "category": "PROGRAMMING_LANGUAGE" }],
+      "recommendedPriorities": [{ "name": "Kubernetes", "demandCount": 4, "reason": "..." }],
+      "curatedResources": [{ "title": "Kubernetes Official Docs", "provider": "Kubernetes.io", "url": "..." }]
+    }
+  }
+  ```
+
+#### `GET /api/career/eligibility`
+- **Description**: Standalone institutional criteria evaluation checking department targeting, CGPA cutoffs, class standing, and deadlines for a specific opportunity.
+- **Access**: Authenticated member.
+- **Query Params**: `opportunityId: string`
+- **Output**: `{ success: true, eligibility: EligibilityCheckResult }`
+
 

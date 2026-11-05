@@ -180,13 +180,29 @@ flowchart TD
 
 ---
 
+### Stage 11: Smart Matching and Student Career Tools
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 10.
+- **Core Deliverables Delivered**:
+  - **Skills & Academic Models (`prisma/schema.prisma`)**: Integrated `Skill`, `MemberSkill`, `OpportunitySkill`, and `AcademicRecord` into PostgreSQL with enums `SkillCategory` (12 categories) and `SkillLevel` (`BEGINNER`, `INTERMEDIATE`, `ADVANCED`, `EXPERT`). Added cached `currentCgpa` on `Profile`.
+  - **Shared Controlled Skill Dictionary (`lib/services/skill.ts`)**: Auto-seeded standard catalog of 30+ engineering, tech, and business skills with category mappings, duplicate prevention, and automated synchronization of `Profile.skills` string array on association and removal.
+  - **Explainable Skill Match Scoring (`lib/services/matching.ts`)**: Mathematical overlap score $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$ with strict color coding (Green $\ge 80\%$, Yellow $50\% - 79\%$, Red $< 50\%$), clean handling of 0 required skills (100% with note), and mandatory non-guarantee disclaimer.
+  - **Institutional Eligibility Checker**: Comprehensive eligibility verification checking minimum CGPA cutoff, target academic departments, academic year standing, application deadline expiration, and opportunity approval status. Evaluates `ELIGIBLE`, `NOT_ELIGIBLE`, or `NEEDS_REVIEW` (for incomplete profile data).
+  - **Skill Gap & Curriculum Market Analyzer**: Aggregation of competencies across all active approved campus opportunities to compute real market demand frequency, contrast student competencies against missing requirements, generate top 5 prioritized recommendations, and curate verified educational resources.
+  - **Confidential Academic Transcript & CGPA Vault (`lib/services/academic.ts`)**: Term GPA and credits tracker using standard credit-weighted formula $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$, unique semester constraint per student (`@@unique([userId, semester])`), and automatic sync of cached `Profile.currentCgpa`.
+  - **Strict Academic Privacy & Non-Student Role Isolation**: Academic transcripts and semester GPAs are confidential, visible ONLY to the student and platform administrators (`ACCESS_DENIED` / 403 Forbidden). Non-student profiles navigating to `/career-tools` are greeted with a graceful explanatory banner and redirected to opportunities and community feeds.
+  - **Personalized Student Career Dashboard (`/career-tools`)**: Interactive multi-tab hub (`CareerDashboardView`) featuring Recommendations (match score badges, reasons, checklist eligibility, filter by department), Skill Gap Analyzer (market demand cards, prioritized recommendations, learning tracks), and Academic Performance (cumulative CGPA gauge, semester transcript log, `AddSemesterModal`).
+  - **Automated Testing**: 20 new unit and integration tests in `tests/unit/smart-matching-and-career-tools.test.ts` (145/145 passing across all 13 test files).
+  - **Production Build**: 56 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
 ## 3. Next Stage Preview
 
-### Stage 11: University Career Tools (Verified Student Profiles)
+### Stage 12: Notification Pipeline & System Observability
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 10.
+- **Prerequisites**: Stage 11.
 - **Core Deliverables**:
-  - CGPA eligibility checker against active campus opportunities.
-  - Course skill matching algorithm and gap analysis.
-  - Personalized opportunity recommendations for verified students.
-  - Resume version selector and career readiness tracker.
+  - In-app notification center for application updates, opportunity approvals, connection requests, and referrals.
+  - Notification preferences and email dispatch triggers.
+  - Audit logging and administrative system metrics.

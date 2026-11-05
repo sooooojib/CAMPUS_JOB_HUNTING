@@ -6,6 +6,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 11: Smart Matching and Student Career Tools] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Skill`: Centralized controlled taxonomy model with unique `name`, `category` (`SkillCategory`), and optional description.
+  - `MemberSkill`: Member proficiency association with `level` (`SkillLevel`), `isVerified` endorsement flag, and composite unique constraint `@@unique([profileId, skillId])`.
+  - `OpportunitySkill`: Required competency association linking opportunities to skills with `isRequired`, `minLevel`, and composite unique constraint `@@unique([opportunityId, skillId])`.
+  - `AcademicRecord`: Student semester transcript model tracking `semester`, term `gpa` (0.00-4.00), term `credits` (0.5-30.0), `academicYear` standing, `isVerified` flag, coursework `notes`, and composite unique constraint `@@unique([userId, semester])`.
+  - `Profile.currentCgpa`: Cached denormalized cumulative CGPA field on `Profile` model for sub-millisecond query performance during bulk opportunity matching.
+  - New Enums: `SkillCategory` (12 categories: `PROGRAMMING_LANGUAGE`, `FRAMEWORK`, `DATABASE`, `DEVOPS`, `CLOUD`, `DATA_AI`, `DESIGN`, `MOBILE`, `SECURITY`, `MANAGEMENT`, `SOFT_SKILLS`, `OTHER`) and `SkillLevel` (`BEGINNER`, `INTERMEDIATE`, `ADVANCED`, `EXPERT`).
+- **Validation Schemas (`lib/validations/skill.ts` & `lib/validations/academic.ts`)**:
+  - `createSkillSchema`: Skill creation validation with category and description.
+  - `addMemberSkillSchema`: Member skill association validation with proficiency level.
+  - `createAcademicRecordSchema`: Semester GPA and credit validation with duplicate semester check.
+  - `updateAcademicRecordSchema`: Semester transcript record update validation.
+- **Backend Services (`lib/services/`)**:
+  - `lib/services/skill.ts`: Controlled skills catalog retrieval, seed catalog initializer (30+ standard skills), `getOrCreateSkill`, `addSkillToProfile` (with automatic `Profile.skills` string array synchronization), `removeSkillFromProfile`, and `getMemberSkills`.
+  - `lib/services/academic.ts`: `calculateCumulativeCgpa` using standard credit-weighted formula $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$, `syncProfileCumulativeCgpa`, `createAcademicRecord` (with duplicate semester prevention), `updateAcademicRecord`, `deleteAcademicRecord`, and `getUserAcademicProfile` (enforcing strict student transcript privacy with HTTP 403 `ACCESS_DENIED` for unauthorized viewers).
+  - `lib/services/matching.ts`:
+    - `calculateSkillMatch`: Exact mathematical score $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$ with strict color coding (Green $\ge 80\%$, Yellow $50\% - 79\%$, Red $< 50\%$) and zero required skills handling (100% score).
+    - `parseAcademicYearLevel`: Academic class standing normalizer ("Freshman"=1, "Sophomore"=2, "Junior"=3, "Senior"=4, "Graduate"=5).
+    - `evaluateEligibility`: Institutional criteria check (CGPA cutoff, department targeting, class standing, deadline, approved status) returning `ELIGIBLE`, `NOT_ELIGIBLE`, or `NEEDS_REVIEW` (for incomplete profile data).
+    - `getPersonalizedRecommendations`: Personalized opportunity recommendation generator with match scores, checklist reasons, and mandatory non-guarantee disclaimer.
+    - `analyzeStudentSkillGaps`: Aggregates competencies across all active approved campus opportunities to compute real market demand frequency, contrast student competencies against missing requirements, generate top 5 prioritized recommendations, and curate verified educational resources.
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/skills`: Returns controlled skills list with auto-seed capability.
+  - `POST /api/skills`: Registers new skill in the controlled taxonomy.
+  - `GET /api/skills/my`, `POST /api/skills/my`, `DELETE /api/skills/my`: Member profile skill management.
+  - `GET /api/academic/records`: Retrieves confidential student academic records and cumulative CGPA.
+  - `POST /api/academic/records`: Records semester GPA and credits.
+  - `PUT /api/academic/records/[id]`, `DELETE /api/academic/records/[id]`: Updates/deletes semester entries.
+  - `GET /api/career/recommendations`: Retrieves personalized opportunity recommendations with match scores and disclaimers.
+  - `GET /api/career/skill-gap`: Returns real market demand skill gap analysis with prioritized recommendations and verified learning tracks.
+  - `GET /api/career/eligibility`: Standalone opportunity eligibility verification endpoint.
+- **Frontend Components & Views (`components/career/` & `app/(dashboard)/career-tools/`)**:
+  - `AddSemesterModal` (`components/career/add-semester-modal.tsx`): Interactive dialog to log semester term, GPA, credits, academic standing, and coursework notes.
+  - `CareerDashboardView` (`components/career/career-dashboard-view.tsx`): Comprehensive student career hub with 3 functional tabs: Recommendations (color-coded score badges, checklist eligibility, reason bullets, department filter), Skill Gap Analyzer (market demand metrics, top 5 prioritized missing skills, verified learning tracks), and Academic Performance (cumulative CGPA gauge, semester transcript table, deletion action).
+  - `CareerToolsPage` (`app/(dashboard)/career-tools/page.tsx`): Server component checking `canAccessStudentTools`. Enforces student role access; displays graceful explanatory banner and navigation links to opportunities and community feeds for non-student profiles.
+- **Automated Testing**:
+  - `tests/unit/smart-matching-and-career-tools.test.ts`: 20 comprehensive unit and integration tests covering match formulas, edge cases, color thresholds, eligibility rules, market gap analysis, credit-weighted CGPA, semester uniqueness, academic transcript privacy, and non-student role gates (145/145 passing across all 13 test files).
+
+---
+
 ## [Stage 10: Member Directory, Connections & Referrals] - 2026-11-05
 
 ### Added

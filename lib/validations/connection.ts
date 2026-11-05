@@ -21,3 +21,4 @@ export const connectionQuerySchema = z.object({
 export type SendConnectionInput = z.infer<typeof sendConnectionSchema>;
 export type RespondConnectionInput = z.infer<typeof respondConnectionSchema>;
 export type ConnectionQueryInput = z.infer<typeof connectionQuerySchema>;
+
