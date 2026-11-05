@@ -407,3 +407,4 @@ export function NotificationsCenterView() {
     </div>
   );
 }
+

@@ -1,0 +1,252 @@
+"use client";
+
+import * as React from "react";
+import {
+  Users,
+  ShieldCheck,
+  Briefcase,
+  FileCheck,
+  AlertTriangle,
+  Building2,
+  FileText,
+  UserX,
+  Clock,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import type { AdminDashboardStats } from "@/types";
+
+interface AdminOverviewViewProps {
+  stats: AdminDashboardStats;
+  onNavigateTab?: (tab: string) => void;
+}
+
+export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewProps) {
+  const verifiedPercentage =
+    stats.totalMembers > 0
+      ? Math.round((stats.verifiedMembers / stats.totalMembers) * 100)
+      : 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Actionable Alerts Bar if there are pending items */}
+      {(stats.pendingVerifications > 0 ||
+        stats.pendingOpportunities > 0 ||
+        stats.pendingReports > 0) && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {stats.pendingVerifications > 0 && (
+            <div className="p-4 rounded-xl border border-amber-200 bg-amber-50/60 dark:border-amber-900/60 dark:bg-amber-950/30 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200">
+                  <Clock className="size-4" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-amber-950 dark:text-amber-100">
+                    {stats.pendingVerifications} Pending Verification{stats.pendingVerifications > 1 ? "s" : ""}
+                  </div>
+                  <div className="text-xs text-amber-700 dark:text-amber-400">
+                    Awaiting registrar clearance
+                  </div>
+                </div>
+              </div>
+              {onNavigateTab && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onNavigateTab("verifications")}
+                  className="border-amber-300 text-amber-900 hover:bg-amber-100 dark:border-amber-800 dark:text-amber-200 h-8 text-xs gap-1"
+                >
+                  Review
+                  <ArrowRight className="size-3" />
+                </Button>
+              )}
+            </div>
+          )}
+
+          {stats.pendingOpportunities > 0 && (
+            <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/60 dark:border-blue-900/60 dark:bg-blue-950/30 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
+                  <Briefcase className="size-4" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-blue-950 dark:text-blue-100">
+                    {stats.pendingOpportunities} Opportunity Review{stats.pendingOpportunities > 1 ? "s" : ""}
+                  </div>
+                  <div className="text-xs text-blue-700 dark:text-blue-400">
+                    Awaiting moderation approval
+                  </div>
+                </div>
+              </div>
+              {onNavigateTab && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onNavigateTab("opportunities")}
+                  className="border-blue-300 text-blue-900 hover:bg-blue-100 dark:border-blue-800 dark:text-blue-200 h-8 text-xs gap-1"
+                >
+                  Review
+                  <ArrowRight className="size-3" />
+                </Button>
+              )}
+            </div>
+          )}
+
+          {stats.pendingReports > 0 && (
+            <div className="p-4 rounded-xl border border-red-200 bg-red-50/60 dark:border-red-900/60 dark:bg-red-950/30 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200">
+                  <AlertTriangle className="size-4" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-red-950 dark:text-red-100">
+                    {stats.pendingReports} Content Report{stats.pendingReports > 1 ? "s" : ""}
+                  </div>
+                  <div className="text-xs text-red-700 dark:text-red-400">
+                    Flagged posts or comments
+                  </div>
+                </div>
+              </div>
+              {onNavigateTab && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onNavigateTab("reports")}
+                  className="border-red-300 text-red-900 hover:bg-red-100 dark:border-red-800 dark:text-red-200 h-8 text-xs gap-1"
+                >
+                  Moderate
+                  <ArrowRight className="size-3" />
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Primary Platform Statistics Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Members Total */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-sm hover:border-primary/40 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Total Members
+            </span>
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Users className="size-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold tracking-tight text-foreground font-mono">
+              {stats.totalMembers.toLocaleString()}
+            </span>
+            <span className="text-xs text-muted-foreground">registered</span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+            <span>Verified: {stats.verifiedMembers}</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+              {verifiedPercentage}% verified
+            </span>
+          </div>
+        </div>
+
+        {/* Opportunities Active */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-sm hover:border-primary/40 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Active Listings
+            </span>
+            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <Briefcase className="size-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold tracking-tight text-foreground font-mono">
+              {stats.activeOpportunities.toLocaleString()}
+            </span>
+            <span className="text-xs text-muted-foreground">open</span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+            <span>Total posted: {stats.totalOpportunities}</span>
+            <span>Approved: {stats.approvedOpportunities}</span>
+          </div>
+        </div>
+
+        {/* Applications */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-sm hover:border-primary/40 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Job Applications
+            </span>
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+              <FileCheck className="size-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold tracking-tight text-foreground font-mono">
+              {stats.totalApplications.toLocaleString()}
+            </span>
+            <span className="text-xs text-muted-foreground">submitted</span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+            <span>Companies: {stats.totalCompanies}</span>
+            <span className="text-primary font-medium">Internal &amp; External</span>
+          </div>
+        </div>
+
+        {/* Community & Safety */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-sm hover:border-primary/40 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Community Feed
+            </span>
+            <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
+              <FileText className="size-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold tracking-tight text-foreground font-mono">
+              {stats.communityPosts.toLocaleString()}
+            </span>
+            <span className="text-xs text-muted-foreground">posts</span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+            <span>Suspended accounts: {stats.suspendedAccounts}</span>
+            <Badge
+              variant={stats.pendingReports > 0 ? "destructive" : "outline"}
+              className="text-[10px] py-0 px-1.5"
+            >
+              {stats.pendingReports} reports
+            </Badge>
+          </div>
+        </div>
+      </div>
+
+      {/* Governance & Architecture Integrity Banner */}
+      <div className="p-6 rounded-2xl border border-primary/20 bg-primary/[0.03] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="size-5 text-primary" />
+            <h3 className="font-semibold text-foreground text-sm">
+              Campus Career Services Governance Protocol
+            </h3>
+          </div>
+          <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed">
+            All administrative decisions (membership approvals, account suspensions, opportunity moderation, and content removal)
+            are cryptographically recorded in the immutable administrative audit trail with administrator IDs, timestamps, and stated reasons.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge variant="outline" className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 text-xs">
+            <CheckCircle2 className="size-3 mr-1" />
+            Audit Logging Active
+          </Badge>
+          <Badge variant="outline" className="border-primary/40 text-primary bg-primary/5 text-xs">
+            Server Gates Enforced
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+}

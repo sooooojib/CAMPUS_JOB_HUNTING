@@ -434,4 +434,174 @@ export interface CalendarEventItem {
   statusBadge?: string | null;
 }
 
+// ----------------------------------------------------------------------
+// STAGE 13: ADMINISTRATIVE GOVERNANCE, AUDIT LOGS & MODERATION
+// ----------------------------------------------------------------------
+
+export type AccountStatus =
+  | "ACTIVE"
+  | "PENDING_VERIFICATION"
+  | "SUSPENDED"
+  | "DEACTIVATED";
+
+export type AdminAuditAction =
+  | "MEMBER_VERIFIED"
+  | "MEMBER_REJECTED"
+  | "ACCOUNT_SUSPENDED"
+  | "ACCOUNT_RESTORED"
+  | "OPPORTUNITY_APPROVED"
+  | "OPPORTUNITY_REJECTED"
+  | "OPPORTUNITY_CLOSED"
+  | "OPPORTUNITY_DELETED"
+  | "CONTENT_REPORT_RESOLVED"
+  | "CONTENT_REPORT_DISMISSED"
+  | "POST_REMOVED"
+  | "COMMENT_REMOVED"
+  | "COMPANY_VERIFIED"
+  | "COMPANY_SUSPENDED"
+  | "COMPANY_RESTORED"
+  | "SYSTEM_SETTINGS_UPDATED";
+
+export type AuditTargetType =
+  | "USER"
+  | "OPPORTUNITY"
+  | "COMPANY"
+  | "POST"
+  | "COMMENT"
+  | "REPORT"
+  | "SETTINGS";
+
+export interface AdminAuditLogItem {
+  id: string;
+  adminId: string;
+  adminName: string;
+  adminEmail: string;
+  action: AdminAuditAction;
+  targetType: AuditTargetType;
+  targetId: string;
+  targetLabel?: string | null;
+  reason?: string | null;
+  details?: Record<string, any> | null;
+  ipAddress?: string | null;
+  createdAt: string;
+}
+
+export interface AdminDashboardStats {
+  totalMembers: number;
+  verifiedMembers: number;
+  pendingVerifications: number;
+  totalOpportunities: number;
+  pendingOpportunities: number;
+  approvedOpportunities: number;
+  rejectedOpportunities: number;
+  activeOpportunities: number;
+  totalApplications: number;
+  communityPosts: number;
+  pendingReports: number;
+  suspendedAccounts: number;
+  totalCompanies: number;
+}
+
+export interface AdminMemberItem {
+  id: string;
+  name: string;
+  email: string;
+  membershipType: MembershipType;
+  systemRole: SystemRole;
+  accountStatus: AccountStatus;
+  verificationStatus: VerificationStatus;
+  department?: string | null;
+  studentId?: string | null;
+  headline?: string | null;
+  createdAt: string;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  lastVerificationRequest?: {
+    id: string;
+    membershipType: MembershipType;
+    status: string;
+    organization?: string | null;
+    designation?: string | null;
+    connectionNote?: string | null;
+    proofDetails?: string | null;
+    createdAt: string;
+  } | null;
+}
+
+export interface AdminReportItem {
+  id: string;
+  reporterId: string;
+  reporterName: string;
+  reporterEmail: string;
+  targetType: "POST" | "COMMENT";
+  reason: string;
+  description?: string | null;
+  status: "PENDING" | "REVIEWED" | "RESOLVED" | "DISMISSED";
+  createdAt: string;
+  postId?: string | null;
+  commentId?: string | null;
+  contentSnippet?: string;
+  authorId?: string | null;
+  authorName?: string | null;
+  authorEmail?: string | null;
+  authorSuspended?: boolean;
+}
+
+export interface AdminCompanyItem {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string | null;
+  description?: string | null;
+  website?: string | null;
+  industry?: string | null;
+  location?: string | null;
+  isVerified: boolean;
+  isSuspended: boolean;
+  createdAt: string;
+  createdById: string;
+  creatorName: string;
+  creatorEmail: string;
+  opportunitiesCount: number;
+  membersCount: number;
+}
+
+export interface AdminOpportunityItem {
+  id: string;
+  title: string;
+  type: string;
+  location: string;
+  workplaceType: string;
+  targetDepartments: string[];
+  openToAllDepartments: boolean;
+  minCgpa?: number | null;
+  salaryOrStipend?: string | null;
+  deadline: string;
+  status: "DRAFT" | "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED" | "CLOSED";
+  rejectionReason?: string | null;
+  sourceType: string;
+  isOfficial: boolean;
+  companyId?: string | null;
+  companyName: string;
+  companyLogo?: string | null;
+  posterId: string;
+  posterName: string;
+  posterEmail: string;
+  posterRole: string;
+  posterVerificationStatus: string;
+  applicationsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminAnalyticsData {
+  memberGrowth: { period: string; count: number }[];
+  opportunityActivity: { period: string; created: number; approved: number }[];
+  applicationActivity: { period: string; count: number }[];
+  departmentParticipation: { department: string; members: number; applications: number }[];
+  opportunityTypes: { type: string; count: number }[];
+  verificationBreakdown: { status: string; count: number }[];
+}
+
+
 

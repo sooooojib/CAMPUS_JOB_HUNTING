@@ -212,6 +212,40 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Safe error handling without credential leakage when email provider is unreachable.
   - Verification that dev environment captures outbound notification emails in `devEmailStore`.
 
+### 2.11 Administrative Governance, Moderation & Audit System (Stage 13: Vitest)
+- **Admin Access Control & Role Decoupling**:
+  - Platform administrator identification (`isPlatformAdmin`).
+  - Assertion gatekeeper (`assertAdmin`) throwing `FORBIDDEN_ADMIN_ACCESS` for non-admin accounts.
+  - Decoupling verification: verifying platform `ADMIN` status can be held across different membership types (`STUDENT`, `EMPLOYER`, etc.).
+- **Live Platform Dashboard Statistics**:
+  - Accurate calculation of real database aggregates (total members, verified members, pending verifications, total/active opportunities, applications, community posts, pending reports, suspended accounts, companies).
+  - Mathematical integrity: verified members $\le$ total members; active opportunities $\le$ total opportunities.
+- **Member Management & Suspension Safeguards**:
+  - Search and multi-criteria filtering across membership types, verification statuses, and account statuses.
+  - Account suspension toggling (`adminToggleUserSuspension`) setting `accountStatus = "SUSPENDED"`.
+  - Self-suspension safeguard: administrator attempting to suspend their own account is blocked with forbidden error.
+  - Account restoration setting `accountStatus = "ACTIVE"`.
+  - Notification dispatch upon suspension/restoration.
+- **Opportunity Moderation Workflows**:
+  - Opportunity review queue retrieval with status filtering.
+  - Opportunity approval: status set to `APPROVED`, reviewer attribution recorded, audit log entry written.
+  - Mandatory rejection feedback: rejecting without a reason or with $< 5$ characters is rejected by validation; valid rejection sets status to `REJECTED` and dispatches notification with feedback.
+  - Opportunity closure and permanent deletion with audit tracking.
+- **Company Profile Moderation**:
+  - Institutional company verification (`isVerified: true`) and suspension (`isSuspended: true`).
+  - Restoration of company posting privileges.
+- **Content Moderation & Report Processing**:
+  - Content report queue retrieval with flagged snippet preview and author details.
+  - Resolution with content removal: updating post/comment status to `REMOVED`.
+  - Resolution with author suspension: triggering account suspension on the author.
+  - Dismissal leaving content intact.
+- **Immutable Audit Trail Operations**:
+  - Structured audit log persistence via `logAdminAction`.
+  - Query filtering by administrator, action type, and target entity with pagination.
+- **Institutional Analytics Compilation**:
+  - Verification of non-fabricated time-series aggregates (`memberGrowth`, `opportunityActivity`, `applicationActivity`, `departmentParticipation`, `opportunityTypes`, `verificationBreakdown`).
+
+
 
 
 

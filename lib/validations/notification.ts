@@ -57,3 +57,4 @@ export const updateNotificationPreferencesSchema = z.object({
 
 export type NotificationQueryInput = z.infer<typeof notificationQuerySchema>;
 export type UpdateNotificationPreferencesInput = z.infer<typeof updateNotificationPreferencesSchema>;
+

@@ -1,7 +1,7 @@
 # UniCareer Community — User Roles & Permissions Matrix
 
-> **Status**: Stage 8 Implemented & Verified  
-> **Verification & Profile Engine**: Better Auth 1.7.17 + PostgreSQL 16 via Prisma 7 `@prisma/adapter-pg` + Secure Private Resume Vault
+> **Status**: Stage 13 Implemented & Verified  
+> **Verification & Governance Engine**: Better Auth 1.7.17 + PostgreSQL 16 via Prisma 7 `@prisma/adapter-pg` + Immutable Audit Logs + Server-Side Authorization Gates
 
 ---
 
@@ -168,5 +168,29 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
 2. **Non-Student Tool Isolation**: Non-student membership types (`ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) are explicitly blocked by `canAccessStudentTools(user)`. Navigating to `/career-tools` displays a polite explanation of institutional scope and directs members to public opportunity discovery and professional community feeds.
 3. **Audit & Calculation Transparency**: Cumulative CGPA is computed using the university standard credit-weighted formula $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$ and cached on `Profile.currentCgpa` to prevent repetitive aggregation during bulk recommendation scoring.
 4. **Explainable Matching Rules**: Skill match percentage is strictly derived from verified mathematical overlap $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$. Eligibility status (`ELIGIBLE`, `NOT_ELIGIBLE`, `NEEDS_REVIEW`) is evaluated as an independent institutional check with mandatory disclaimer notices.
+
+---
+
+## 8. Administrative Governance, Moderation & Audit Trail (Stage 13)
+
+| Capability / Action | Standard Member | Suspended Member | Community Moderator | Platform Admin (`ADMIN`) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Access `/admin` Dashboard** | ❌ **FORBIDDEN (403)** | ❌ **FORBIDDEN (403)** | ❌ (Unless elevated) | ✅ **Full Clearance** |
+| **View Real-Time Platform Stats** | ❌ | ❌ | ❌ | ✅ **Live DB Queries** |
+| **Search & Inspect All Members** | ❌ (Directory only) | ❌ | ❌ | ✅ **Full Administrative Access** |
+| **Approve / Reject Verification Claims** | ❌ | ❌ | ❌ | ✅ |
+| **Suspend / Restore Member Account** | ❌ | ❌ | ❌ | ✅ (Self-suspension blocked) |
+| **Moderate Opportunities (Approve/Reject/Close/Delete)** | ❌ (Own opps only) | ❌ | ❌ | ✅ (Mandatory reason on reject) |
+| **Moderate Content Reports (Dismiss/Remove/Suspend)** | ❌ | ❌ | ❌ | ✅ |
+| **Verify / Suspend Companies** | ❌ | ❌ | ❌ | ✅ |
+| **Inspect Immutable Audit Trail** | ❌ | ❌ | ❌ | ✅ (Filterable by action/target) |
+| **View Platform Analytics Visualizations** | ❌ | ❌ | ❌ | ✅ (Real Recharts Aggregates) |
+
+### Key Administrative Safeguards:
+1. **Server-Side Gate Enforcement**: Every administrative endpoint (`/api/admin/*`) and service strictly validates `isPlatformAdmin(user)`. Non-admin sessions receive HTTP 403 Forbidden with `{ error: { code: "FORBIDDEN", message: "Administrator clearance required." } }`.
+2. **Account Suspension Safeguard**: Administrators are strictly prevented from suspending their own accounts (`adminUserId === targetUserId` throws `FORBIDDEN`). Suspended accounts immediately have authenticated capabilities (applications, job postings, discussions) revoked across the platform.
+3. **Mandatory Feedback on Rejection**: Rejecting an opportunity posting requires a detailed administrative reason ($\ge 5$ characters) that is dispatched to the author via in-app notification and email.
+4. **Immutable Audit Register**: All administrative actions are recorded in the `AdminAuditLog` table with administrator ID, action enum, target type, target entity ID, human-readable label, stated reason, structured JSON metadata, and client IP address.
+
 
 

@@ -197,6 +197,26 @@
    - Outbound notification emails log structured events safely without leaking API keys, credentials, or session cookies.
    - Fallback error handlers catch provider timeouts and delivery errors gracefully without crashing parent business transactions.
 
+---
+
+## 13. Administrative Governance, Account Suspension & Audit Trail Security (Stage 13 Implemented)
+
+1. **Server-Side Administrative Enforcement**:
+   - Every administrative API endpoint (`/api/admin/*`) and administrative server component strictly verifies `isPlatformAdmin(user)`.
+   - Access by unauthenticated sessions returns HTTP 401 Unauthorized; access by authenticated non-admin accounts returns HTTP 403 Forbidden.
+   - Frontend UI hiding is never relied upon as a security boundary.
+2. **Account Suspension Safeguard & Impact**:
+   - Platform administrators cannot suspend their own account (`adminUserId === targetUserId` triggers an immediate forbidden exception).
+   - Suspended accounts (`accountStatus: "SUSPENDED"`) are immediately blocked from creating opportunities, submitting applications, publishing community posts, writing comments, and participating in networking features.
+   - Every suspension requires a mandatory stated justification ($\ge 5$ characters) that is recorded in the audit log and dispatched to the affected user.
+3. **Mandatory Feedback on Opportunity Rejections**:
+   - Opportunity rejections require a clear administrative explanation ($\ge 5$ characters) to prevent arbitrary censorship. The rejection reason is recorded in the database, logged in the audit trail, and sent to the posting author.
+4. **Immutable Security Audit Log (`AdminAuditLog`)**:
+   - All critical administrative actions (membership verification/rejection, account suspension/restoration, opportunity moderation/deletion, report resolution/dismissal, content removal, company verification/suspension) are written to the append-only `admin_audit_logs` table.
+   - Each audit record cryptographically attributes the performing administrator (`adminId`), action type (`AdminAuditAction`), affected entity (`targetType`, `targetId`, `targetLabel`), stated reason, client IP address, and structured pre/post state metadata.
+   - Audit logs are permanently retained and cannot be edited or deleted by normal administrative accounts.
+
+
 
 
 

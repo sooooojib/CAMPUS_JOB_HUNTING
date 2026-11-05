@@ -123,3 +123,52 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
   - Instant preferences synchronization with `/api/notifications/preferences`.
   - Notification suppression: When a channel is toggled off, automated notification services suppress dispatches accordingly.
 
+---
+
+## 4. Stage 13: Complete Admin Dashboard and Moderation Command Center (`/admin`)
+
+### Overview
+- **Path**: `/admin`
+- **Target Role**: Platform Administrators (`systemRole === "ADMIN"`).
+- **Access Guard**: `isPlatformAdmin(currentUser)`. Non-admins receive an immediate HTTP 403 / Access Restricted interface.
+- **Client Container**: `components/admin/admin-dashboard-container.tsx`
+- **Layout**: `AdminTemplate` with real-time clearance badges and action alerts.
+
+### Functional Command Tabs:
+1. **Overview (`components/admin/admin-overview-view.tsx`)**:
+   - Institutional governance metric cards: Total registered members, verified members, active opportunities, total applications, community posts, pending reports, suspended accounts, and registered companies.
+   - Actionable alert banners with direct navigation buttons for pending verifications, opportunity reviews, and content reports.
+   - Zero fake data guarantee: All metrics computed directly from PostgreSQL rows.
+2. **Members Management (`components/admin/admin-members-table.tsx`)**:
+   - Search by name, email, department, or student ID.
+   - Granular filters by Membership Type, Verification Status, and Account Status.
+   - Member profile and latest verification claim inspection modal.
+   - Account Suspension / Restoration modal with mandatory stated reason ($\ge 5$ characters) and self-suspension blocking.
+3. **Opportunity Moderation (`components/admin/admin-opportunity-table.tsx`)**:
+   - Status tabs: Pending Review, Approved, Rejected, Closed, All.
+   - Search by title, keyword, company; filter by opportunity type.
+   - Moderation actions: Approve, Reject (with mandatory feedback reason $\ge 5$ characters sent to author), Close, Delete.
+   - Comprehensive posting details dialog with department targeting and applications count.
+4. **Verifications Queue (`components/admin/verification-table.tsx`)**:
+   - In-depth review of student, alumni, faculty, staff, employer, and external connection credential requests.
+   - Approval and rejection with registrar feedback.
+5. **Content Moderation (`components/admin/admin-reports-table.tsx`)**:
+   - Community moderation queue for flagged posts and comments.
+   - Previews flagged content snippets, reporter justifications, and author details.
+   - Actions: Dismiss Report, Remove Inappropriate Content, Suspend Author.
+6. **Company Management (`components/admin/admin-companies-table.tsx`)**:
+   - View all employer companies, creators, member counts, and opportunity counts.
+   - Actions: Verify / Unverify organization, Suspend / Restore company profile (suspending prevents posting).
+7. **Institutional Analytics (`components/admin/admin-analytics-view.tsx`)**:
+   - Recharts visual graphs computed from actual database aggregates:
+     - Member Registrations Over Time (Line Chart)
+     - Opportunity Volume: Created vs Approved (Bar Chart)
+     - Department Participation: Members & Applications (Horizontal Bar Chart)
+     - Opportunity Types & Member Verification Distributions (Donut / Pie Charts)
+8. **Audit Trail (`components/admin/admin-audit-table.tsx`)**:
+   - Searchable, filterable security event ledger.
+   - Filter by Action Enum and Target Entity Type.
+   - Displays timestamp, administrator, action badge, target entity/label, stated reason, and client IP address.
+   - Modal to inspect full JSON payload and pre/post transition state metadata.
+
+

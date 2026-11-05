@@ -1,47 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import {
-  getPendingOpportunities,
-  reviewOpportunity,
-} from "@/lib/services/opportunity";
+import { requireAdminSession } from "@/lib/auth/admin-auth";
+import { getAdminOpportunitiesList } from "@/lib/services/admin";
+import { reviewOpportunity } from "@/lib/services/opportunity";
+import { adminOpportunityQuerySchema } from "@/lib/validations/admin";
 import { adminReviewOpportunitySchema } from "@/lib/validations/opportunity";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
+    const { admin, errorResponse } = await requireAdminSession(request);
+    if (errorResponse) return errorResponse;
+
+    const { searchParams } = new URL(request.url);
+    const query = adminOpportunityQuerySchema.parse({
+      status: searchParams.get("status") || undefined,
+      type: searchParams.get("type") || undefined,
+      q: searchParams.get("q") || undefined,
+      page: searchParams.get("page") || undefined,
+      pageSize: searchParams.get("pageSize") || undefined,
     });
 
-    if (!session || !session.user) {
-      return NextResponse.json(
-        { error: "UNAUTHORIZED", message: "Sign in required." },
-        { status: 401 }
-      );
-    }
+    const result = await getAdminOpportunitiesList(query);
 
-    const pending = await getPendingOpportunities(session.user.id);
-    return NextResponse.json({ success: true, data: pending });
+    return NextResponse.json({
+      success: true,
+      data: result.opportunities,
+      totalCount: result.totalCount,
+      pagination: result.pagination,
+    });
   } catch (error: any) {
-    const status = error.message?.includes("FORBIDDEN") ? 403 : 500;
+    console.error("Error retrieving admin opportunities list:", error);
     return NextResponse.json(
-      { error: "ADMIN_ERROR", message: error.message || "Failed to fetch pending opportunities." },
-      { status }
+      { success: false, error: { message: error.message || "Failed to retrieve opportunities." } },
+      { status: 500 }
     );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
-    if (!session || !session.user) {
-      return NextResponse.json(
-        { error: "UNAUTHORIZED", message: "Sign in required." },
-        { status: 401 }
-      );
-    }
+    const { admin, errorResponse } = await requireAdminSession(request);
+    if (errorResponse) return errorResponse;
 
     const body = await request.json();
     const parsed = adminReviewOpportunitySchema.safeParse(body);
@@ -57,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await reviewOpportunity(session.user.id, parsed.data);
+    const result = await reviewOpportunity(admin!.id, parsed.data);
     return NextResponse.json({ success: true, data: result });
   } catch (error: any) {
     const status = error.message?.includes("FORBIDDEN")
@@ -71,3 +69,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

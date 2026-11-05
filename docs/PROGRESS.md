@@ -215,10 +215,30 @@ flowchart TD
 
 ## 3. Next Stage Preview
 
-### Stage 13: Administrative Governance & Audit Reporting
-- **Status**: Planned (Next)
+### Stage 13: Complete Admin Dashboard and Moderation System
+- **Status**: **COMPLETE** (2026-11-05)
 - **Prerequisites**: Stage 12.
+- **Core Deliverables Delivered**:
+  - **Administrative Models & Schema (`prisma/schema.prisma`)**: Integrated `AdminAuditLog` model into PostgreSQL with enums `AdminAuditAction` (16 governance actions) and `AuditTargetType` (7 target entity classifications). Added `isVerified` and `isSuspended` columns to `Company`.
+  - **Strict Server-Side Admin Access Control (`lib/auth/admin-auth.ts`)**: `requireAdminSession` helper enforcing `isPlatformAdmin(user)` across all 11 admin API routes and server components. Non-admin access rejected with HTTP 403 Forbidden.
+  - **Live Platform Dashboard Statistics (`getAdminDashboardStats`)**: Real database queries aggregating 13 platform indicators (total members, verified members, pending verifications, total opportunities, pending opportunities, approved opportunities, rejected opportunities, active opportunities, total applications, community posts, pending reports, suspended accounts, companies) with zero fake data.
+  - **Member Management & Suspension (`AdminMembersTable`)**: Search and multi-criteria filters (membership type, verification status, account status), member profile and verification dossier inspection modal, account suspension/restoration modal requiring mandatory stated reason ($\ge 5$ characters), and self-suspension blocking.
+  - **Opportunity Moderation Console (`AdminOpportunityTable`)**: Review queue with status tabs (Pending, Approved, Rejected, Closed, All), search & type filters, approval action, rejection with mandatory feedback reason ($\ge 5$ characters) dispatched to author, closure, and deletion with audit logging.
+  - **Content Moderation & Reports Queue (`AdminReportsTable`)**: Queue of flagged community posts and comments with snippet previews, reporter justifications, and author details. Actions: Dismiss Report, Remove Inappropriate Content (`status: REMOVED`), and Suspend Author.
+  - **Company Governance Console (`AdminCompaniesTable`)**: Searchable list of registered companies with verification and suspension actions (suspension blocks opportunity posting).
+  - **Administrative Audit Trail (`AdminAuditTable`)**: Comprehensive ledger of security and governance events with action badges, timestamps, administrator attribution, stated reasons, client IP addresses, and modal to inspect JSON payload metadata.
+  - **Institutional Analytics Visualizations (`AdminAnalyticsView`)**: Recharts visual graphs computed from real PostgreSQL records: Member Registrations Over Time (Line Chart), Opportunity Volume: Created vs Approved (Bar Chart), Department Participation: Members & Applications (Bar Chart), Opportunity Types & Verification Distributions (Donut/Pie Charts).
+  - **Comprehensive Automated Testing**: 13 unit and integration tests in `tests/unit/admin-and-moderation.test.ts` (170/170 passing across all 15 test files, 100% pass rate).
+  - **Production Build**: 68 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
+## 3. Next Stage Preview
+
+### Stage 14: Platform Hardening, End-to-End QA & Deployment Verification
+- **Status**: Planned (Next)
+- **Prerequisites**: Stage 13.
 - **Core Deliverables**:
-  - Centralized admin audit trail and platform oversight.
-  - Advanced institutional reports and analytics exports.
-  - Account suspension and role administration workflows.
+  - Full end-to-end integration and user journey verification.
+  - Performance optimization, caching policies, and bundle inspection.
+  - Production deployment configuration and environment readiness audit.

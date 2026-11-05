@@ -1,8 +1,8 @@
 # UniCareer Community — Database Schema Specification
 
-> **Architectural Status**: Stage 10 (Member Directory, Connections, and Referrals) Complete  
+> **Architectural Status**: Stage 13 (Admin Dashboard, Moderation & Audit Logs) Complete  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Session`, `Account`, `Verification`
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `ProfileSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification`
 
 ---
 
@@ -677,6 +677,46 @@ enum CalendarEventType {
 | `channel` | String | Default: `IN_APP` | Notification dispatch medium |
 | `sentAt` | DateTime | Default: `now()` | Dispatch timestamp |
 | Unique | `@@unique([userId, opportunityId, reminderType, channel])` | Prevents duplicate deadline alerts across cron iterations |
+
+---
+
+### 11. Administrative Governance & Moderation (Stage 13)
+
+#### `admin_audit_logs` Table
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `id` | String | PK, cuid() | Unique audit record identifier |
+| `adminId` | String | FK -> `users(id)`, Cascade | Platform administrator executing the action |
+| `action` | AdminAuditAction | Required enum | Specific action executed |
+| `targetType` | AuditTargetType | Required enum | Classification of affected entity |
+| `targetId` | String | Required | Target entity unique identifier |
+| `targetLabel` | String? | Optional | Human-readable title or name of the target entity |
+| `reason` | String? | Optional (Text) | Mandatory or optional stated administrative justification |
+| `details` | Json? | Optional | Structured JSON payload containing pre/post state metadata |
+| `ipAddress` | String? | Optional | Originating client IP address |
+| `createdAt` | DateTime | Default: `now()` | Timestamp of action execution |
+| Index | `@@index([adminId])` | Fast filtering of actions by administrator |
+| Index | `@@index([action])` | Fast filtering by governance action type |
+| Index | `@@index([targetType, targetId])` | Entity-specific audit history lookup |
+| Index | `@@index([createdAt])` | Chronological descending audit feed |
+
+#### `Company` Table Additions (Stage 13)
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `isVerified` | Boolean | Default: `false` | Explicit institutional verification of corporate entity |
+| `isSuspended` | Boolean | Default: `false` | Administrative suspension blocking opportunity publishing |
+| Index | `@@index([isVerified])` | Filter verified employer organizations |
+| Index | `@@index([isSuspended])` | Filter active vs suspended organizations |
+
+#### `AdminAuditAction` Enum
+- `MEMBER_VERIFIED`, `MEMBER_REJECTED`, `ACCOUNT_SUSPENDED`, `ACCOUNT_RESTORED`
+- `OPPORTUNITY_APPROVED`, `OPPORTUNITY_REJECTED`, `OPPORTUNITY_CLOSED`, `OPPORTUNITY_DELETED`
+- `CONTENT_REPORT_RESOLVED`, `CONTENT_REPORT_DISMISSED`, `POST_REMOVED`, `COMMENT_REMOVED`
+- `COMPANY_VERIFIED`, `COMPANY_SUSPENDED`, `COMPANY_RESTORED`, `COMPANY_MODERATED`
+
+#### `AuditTargetType` Enum
+- `USER`, `OPPORTUNITY`, `REPORT`, `POST`, `COMMENT`, `COMPANY`, `SYSTEM`
+
 
 
 

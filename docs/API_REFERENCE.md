@@ -784,5 +784,106 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   }
   ```
 
+---
+
+## 9. Administrative Governance & Moderation Endpoints (Stage 13)
+
+### 9.1 Platform Statistics & Analytics
+
+#### `GET /api/admin/stats`
+- **Description**: Returns live, real-time platform statistics aggregated directly from PostgreSQL.
+- **Access**: Platform `ADMIN` only (`systemRole === "ADMIN"`).
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "totalMembers": 128,
+      "verifiedMembers": 94,
+      "pendingVerifications": 12,
+      "totalOpportunities": 45,
+      "pendingOpportunities": 6,
+      "approvedOpportunities": 32,
+      "rejectedOpportunities": 4,
+      "activeOpportunities": 28,
+      "totalApplications": 215,
+      "communityPosts": 87,
+      "pendingReports": 2,
+      "suspendedAccounts": 1,
+      "totalCompanies": 19
+    }
+  }
+  ```
+
+#### `GET /api/admin/analytics`
+- **Description**: Compiles institutional career analytics for visual charts (member growth, opportunity activity, application activity, department participation, opportunity types, verification breakdown).
+- **Access**: Platform `ADMIN` only.
+- **Output**: `{ "success": true, "data": AdminAnalyticsData }`
+
+### 9.2 Member Governance & Suspension
+
+#### `GET /api/admin/members`
+- **Description**: Retrieves searchable, filterable roster of all platform members including verification claims and account status.
+- **Access**: Platform `ADMIN` only.
+- **Query Params**: `q?: string`, `membershipType?: string`, `verificationStatus?: string`, `accountStatus?: string`, `page?: number`, `pageSize?: number`.
+- **Output**: `{ "success": true, "data": AdminMemberItem[], "totalCount": number, "pagination": {...} }`
+
+#### `POST /api/admin/members/[id]/suspend`
+- **Description**: Suspends or restores a member account. Self-suspension is blocked. Records audit log and dispatches notification.
+- **Access**: Platform `ADMIN` only.
+- **Body**: `{ "action": "SUSPEND" | "RESTORE", "reason": "string (min 5 chars)" }`
+- **Output**: `{ "success": true, "data": User }`
+
+### 9.3 Opportunity Moderation
+
+#### `GET /api/admin/opportunities`
+- **Description**: Retrieves opportunities across all statuses (PENDING, APPROVED, REJECTED, CLOSED) with keyword search and type filter.
+- **Access**: Platform `ADMIN` only.
+- **Query Params**: `status?: string`, `type?: string`, `q?: string`, `page?: number`, `pageSize?: number`.
+- **Output**: `{ "success": true, "data": AdminOpportunityItem[], "totalCount": number, "pagination": {...} }`
+
+#### `POST /api/admin/opportunities/[id]/moderate`
+- **Description**: Moderates an opportunity posting (APPROVE, REJECT with mandatory reason, CLOSE, DELETE).
+- **Access**: Platform `ADMIN` only.
+- **Body**: `{ "action": "APPROVE" | "REJECT" | "CLOSE" | "DELETE", "reason": "string (min 5 for REJECT)" }`
+- **Output**: `{ "success": true, "data": { ... } }`
+
+### 9.4 Content Moderation & Reports
+
+#### `GET /api/admin/reports`
+- **Description**: Lists reported community posts and comments with author details and content snippet.
+- **Access**: Platform `ADMIN` only.
+- **Query Params**: `status?: string`, `targetType?: string`, `page?: number`, `pageSize?: number`.
+- **Output**: `{ "success": true, "data": AdminReportItem[], "totalCount": number, "pagination": {...} }`
+
+#### `POST /api/admin/reports/[id]/action`
+- **Description**: Resolves or dismisses a report, removes offending content, or suspends the author.
+- **Access**: Platform `ADMIN` only.
+- **Body**: `{ "action": "RESOLVE" | "DISMISS" | "REMOVE_CONTENT" | "SUSPEND_AUTHOR", "reviewNotes": "string" }`
+- **Output**: `{ "success": true, "data": { ... } }`
+
+### 9.5 Company Governance
+
+#### `GET /api/admin/companies`
+- **Description**: Lists all registered companies with verified/suspended flags and counts.
+- **Access**: Platform `ADMIN` only.
+- **Query Params**: `q?: string`, `isVerified?: boolean`, `isSuspended?: boolean`, `page?: number`, `pageSize?: number`.
+- **Output**: `{ "success": true, "data": AdminCompanyItem[], "totalCount": number, "pagination": {...} }`
+
+#### `POST /api/admin/companies/[id]/moderate`
+- **Description**: Verifies, unverifies, suspends, or restores an employer company profile.
+- **Access**: Platform `ADMIN` only.
+- **Body**: `{ "action": "VERIFY" | "UNVERIFY" | "SUSPEND" | "RESTORE", "reason": "string" }`
+- **Output**: `{ "success": true, "data": Company }`
+
+### 9.6 Administrative Audit Trail
+
+#### `GET /api/admin/audit`
+- **Description**: Retrieves immutable historical audit log entries with action, target, administrator, and timestamp filters.
+- **Access**: Platform `ADMIN` only.
+- **Query Params**: `action?: string`, `targetType?: string`, `adminId?: string`, `page?: number`, `pageSize?: number`.
+- **Output**: `{ "success": true, "data": AdminAuditLogItem[], "totalCount": number, "pagination": {...} }`
+
+
 
 

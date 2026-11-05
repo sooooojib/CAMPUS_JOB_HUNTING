@@ -6,6 +6,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 13: Complete Admin Dashboard and Moderation System] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `AdminAuditLog`: Immutable audit trail table recording `id`, `adminId`, `action` (`AdminAuditAction`), `targetType` (`AuditTargetType`), `targetId`, `targetLabel`, `reason`, `details` (JSON), `ipAddress`, and `createdAt` with indexes on `[adminId]`, `[action]`, `[targetType, targetId]`, and `[createdAt]`.
+  - Added `isVerified Boolean @default(false)` and `isSuspended Boolean @default(false)` fields with indexes to `Company`.
+  - Added `adminAuditLogs` relation to `User`.
+  - New Enums:
+    - `AdminAuditAction` (16 actions: `MEMBER_VERIFIED`, `MEMBER_REJECTED`, `ACCOUNT_SUSPENDED`, `ACCOUNT_RESTORED`, `OPPORTUNITY_APPROVED`, `OPPORTUNITY_REJECTED`, `OPPORTUNITY_CLOSED`, `OPPORTUNITY_DELETED`, `CONTENT_REPORT_RESOLVED`, `CONTENT_REPORT_DISMISSED`, `POST_REMOVED`, `COMMENT_REMOVED`, `COMPANY_VERIFIED`, `COMPANY_SUSPENDED`, `COMPANY_RESTORED`, `COMPANY_MODERATED`).
+    - `AuditTargetType` (`USER`, `OPPORTUNITY`, `REPORT`, `POST`, `COMMENT`, `COMPANY`, `SYSTEM`).
+- **Validation Schemas (`lib/validations/admin.ts`)**:
+  - `adminMemberQuerySchema`: Pagination, search keyword, and filters for role, verification status, and account status.
+  - `adminSuspendUserSchema`: Action (`SUSPEND` | `RESTORE`) with mandatory stated justification ($\ge 5$ characters).
+  - `adminOpportunityQuerySchema`: Status tabs, opportunity type, and keyword search validation.
+  - `adminOpportunityReviewSchema`: Action (`APPROVE` | `REJECT` | `CLOSE` | `DELETE`) with refinement enforcing mandatory feedback reason ($\ge 5$ characters) for rejections.
+  - `adminReportActionSchema`: Action (`RESOLVE` | `DISMISS` | `REMOVE_CONTENT` | `SUSPEND_AUTHOR`) with optional review notes.
+  - `adminCompanyActionSchema`: Action (`VERIFY` | `UNVERIFY` | `SUSPEND` | `RESTORE`) with optional administrative reason.
+  - `adminAuditQuerySchema`: Action, targetType, adminId, and pagination query filters.
+- **Backend Services (`lib/services/`)**:
+  - `lib/services/audit.ts`:
+    - `logAdminAction`: Records structured administrative events into PostgreSQL with administrator attribution, stated reason, structured metadata, and client IP address.
+    - `getAdminAuditLogs`: Paginated audit log querying with multi-criteria filters.
+  - `lib/services/admin.ts`:
+    - `getAdminDashboardStats`: Live calculation of platform statistics across 13 core indicators with zero fake data.
+    - `getAdminMembersList`: Member searching, multi-filter querying, and latest verification claim details.
+    - `adminToggleUserSuspension`: Suspends or restores member accounts, prevents self-suspension, logs audit trail, and notifies user.
+    - `getAdminOpportunitiesList`: Retrieves opportunities across all statuses with search and pagination.
+    - `adminModerateOpportunity`: Approves, rejects (with mandatory reason), closes, or deletes opportunity listings with audit logging and author notifications.
+    - `getAdminReportsList`: Retrieves reported posts and comments queue with context snippets and author status.
+    - `adminResolveReport`: Dismisses or resolves reports, marks content `REMOVED`, and optionally suspends the author with audit logging.
+    - `getAdminCompaniesList`: Lists registered companies with verified/suspended status and member/opportunity counts.
+    - `adminModerateCompany`: Verifies, unverifies, suspends, or restores employer company profiles with audit logs.
+    - `getAdminAnalyticsData`: Compiles genuine database metrics (member growth, opportunity volume, applications, department distribution, opportunity types, verification breakdown).
+- **Authentication & Security Helper (`lib/auth/admin-auth.ts`)**:
+  - `requireAdminSession`: Validates incoming requests against active sessions and platform `ADMIN` role (`systemRole === "ADMIN"`), returning 401 Unauthorized or 403 Forbidden on failure.
+- **API Route Handlers (`app/api/admin/`)**:
+  - `GET /api/admin/stats`: Real-time dashboard statistics.
+  - `GET /api/admin/members`: Member roster querying.
+  - `POST /api/admin/members/[id]/suspend`: Account suspension toggling.
+  - `GET /api/admin/opportunities`: Filterable opportunities moderation queue.
+  - `POST /api/admin/opportunities/[id]/moderate`: Opportunity review execution.
+  - `GET /api/admin/reports`: Community moderation queue.
+  - `POST /api/admin/reports/[id]/action`: Content report resolution.
+  - `GET /api/admin/companies`: Company list with verified/suspended status.
+  - `POST /api/admin/companies/[id]/moderate`: Company profile verification & suspension.
+  - `GET /api/admin/audit`: Searchable audit log history.
+  - `GET /api/admin/analytics`: Institutional analytics data endpoint.
+- **Frontend Components & Views (`components/admin/`)**:
+  - `AdminDashboardContainer` (`components/admin/admin-dashboard-container.tsx`): Tabbed navigation container with live badge counters for pending items across Overview, Members, Opportunities, Verifications, Reports, Companies, Analytics, and Audit Trail.
+  - `AdminOverviewView` (`components/admin/admin-overview-view.tsx`): Metric stat cards, actionable pending item banners with direct navigation, and governance integrity cards.
+  - `AdminMembersTable` (`components/admin/admin-members-table.tsx`): Members table with live search, role/status dropdowns, verification dossier viewer dialog, and suspension modal.
+  - `AdminOpportunityTable` (`components/admin/admin-opportunity-table.tsx`): Opportunities moderation table with status tabs, opportunity inspection modal, and moderation action dialog.
+  - `AdminReportsTable` (`components/admin/admin-reports-table.tsx`): Community moderation queue with snippet previews, reporter justifications, and dismiss/remove/suspend dialogs.
+  - `AdminCompaniesTable` (`components/admin/admin-companies-table.tsx`): Company management console with verify/suspend actions.
+  - `AdminAuditTable` (`components/admin/admin-audit-table.tsx`): Audit ledger with action badges, timestamps, administrator attribution, and JSON payload inspector dialog.
+  - `AdminAnalyticsView` (`components/admin/admin-analytics-view.tsx`): Recharts visual graphs for member growth, opportunity volume, department participation, and verification health.
+- **Automated Testing Suite (`tests/unit/admin-and-moderation.test.ts`)**:
+  - 13 comprehensive test cases covering admin permissions, stats calculation, member suspension, opportunity review, content reports, company verification, audit logging, and analytics aggregation.
+
+---
+
 ## [Stage 12: Notifications and Personal Career Calendar] - 2026-11-05
 
 ### Added
