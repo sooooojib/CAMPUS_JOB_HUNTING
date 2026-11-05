@@ -23,11 +23,31 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - **Route Protection & Proxy**: Unauthenticated user attempting to view `/dashboard`, `/opportunities`, `/applications`, `/community`, `/referrals`, `/admin` is redirected with 307 to `/login?callbackUrl=...`. Authenticated user on `/login` or `/register` is redirected to `/dashboard`.
 - **Account Status Guard**: Suspended or deactivated accounts are rejected by server layout.
 
-### 2.2 Opportunity Portal (Playwright & Vitest)
-- Filtering by type (`INTERNSHIP`, `FULL_TIME`) and classification (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`).
-- Submitting an opportunity defaults to `PENDING` status.
-- Admin approving the opportunity promotes it to `APPROVED` and visible in search.
-- Expired opportunities are excluded from active search results.
+### 2.2 Companies, Opportunities, and Approval System (Vitest)
+- **Company Management**:
+  - Registered members can create a company and become `OWNER` with full management clearance.
+  - Authorized company members can update company metadata.
+  - Ordinary/unauthorized members are blocked with `403 FORBIDDEN_COMPANY_MODIFICATION`.
+  - Adding company members with custom roles (`MEMBER`, `ADMIN`) and capability flags.
+- **Opportunity Creation & Posting Clearance**:
+  - Unverified users (`PENDING`, `REJECTED`, `SUSPENDED`) are blocked from publishing opportunities.
+  - Verified members can post `COMMUNITY_SHARED` opportunities with required external application URLs.
+  - Verified company members with `canPostOpportunities: true` can publish `OFFICIAL_EMPLOYER` opportunities.
+  - Non-company members attempting to publish `OFFICIAL_EMPLOYER` opportunities are rejected.
+  - Validation: Future deadline check, required description length (min 20 characters), external URL requirement when `applicationMethod = EXTERNAL`.
+- **Admin Moderation & Review Workflow**:
+  - Submitted opportunities enter `PENDING` status and are queued for administrator review.
+  - Platform administrators can approve an opportunity (`APPROVED`), making it visible immediately in catalog.
+  - Platform administrators can reject an opportunity with a mandatory rejection reason (`REJECTED`).
+  - Reviewer ID and review timestamp are permanently recorded in the database.
+- **Access Control & Anti-IDOR**:
+  - `DRAFT`, `PENDING`, and `REJECTED` opportunities are completely hidden from regular members.
+  - Only the author, authorized company managers, or platform `ADMIN` can retrieve non-approved opportunities.
+  - Only the author, company managers, or admin can update, submit, or close opportunities.
+- **Department Targeting & Filtering**:
+  - Filtering opportunities targeting a specific department (e.g. `Computer Science & Engineering`) matches both explicitly targeted and open-to-all opportunities.
+- **Opportunity Lifecycle & Expiration**:
+  - `expireOverdueOpportunities()` transitions past-deadline opportunities to `EXPIRED` status.
 
 ### 2.3 Applications & Resume Safeguard (Playwright)
 - Applying internally with a resume upload.

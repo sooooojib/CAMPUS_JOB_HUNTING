@@ -112,26 +112,128 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 3. Opportunities API & Actions
+## 3. Companies & Corporate Directory API (Stage 6 Implemented)
 
-### `createOpportunity(input: CreateOpportunitySchema)`
-- **Access**: Verified Members
-- **Input**: Title, company, location, isRemote, type, classification, description, requirements, minCgpa, applyType, externalUrl, deadline.
-- **Behavior**: Creates record with status `PENDING`. Dispatches notification to admin moderation queue.
-- **Output**: `{ success: boolean, opportunityId: string }`
+### Endpoints: `/api/companies`
 
-### `getOpportunities(filters: OpportunityFilterSchema)`
-- **Access**: Verified Members
-- **Parameters**: `query`, `type`, `classification`, `location`, `isRemote`, `minCgpa`, `page`, `limit`.
-- **Behavior**: Returns paginated list of approved and active opportunities.
+- `GET /api/companies?query=<term>&industry=<term>&limit=20`
+  - Lists verified corporate partner entities and employers.
+  - **Access**: Authenticated members.
+  - **Output**: `{ success: true, data: Company[] }`
 
-### `moderateOpportunity(id: string, action: 'APPROVE' | 'REJECT', reason?: string)`
-- **Access**: `ADMIN`, `MODERATOR`
-- **Behavior**: Updates status, writes to `AuditLog`, notifies author.
+- `POST /api/companies`
+  - Registers a new corporate entity profile.
+  - **Access**: Authenticated member. Creator is automatically designated as `OWNER` with `canManageCompany: true` and `canPostOpportunities: true`.
+  - **Body**: `{ name, logo?, description?, website?, industry?, location? }`
+  - **Output**: `{ success: true, data: Company }`
+
+### Endpoints: `/api/companies/[id]`
+
+- `GET /api/companies/[id]`
+  - Retrieves detailed company profile including authorized company members.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: CompanyWithMembers }`
+
+- `PUT /api/companies/[id]`
+  - Updates corporate metadata.
+  - **Access**: Company managers (`OWNER`, `ADMIN`, or member with `canManageCompany: true`) and platform `ADMIN`.
+  - **Body**: `{ name?, logo?, description?, website?, industry?, location? }`
+  - **Output**: `{ success: true, data: Company }`
+
+### Endpoints: `/api/companies/[id]/members`
+
+- `POST /api/companies/[id]/members`
+  - Associates a verified member with a company.
+  - **Access**: Company managers (`OWNER`, `ADMIN`) or platform `ADMIN`.
+  - **Body**: `{ userId, role?, canPostOpportunities?, canManageCompany? }`
+  - **Output**: `{ success: true, data: CompanyMember }`
 
 ---
 
-## 3. Applications API & Actions
+## 4. University Departments API (Stage 6 Implemented)
+
+### Endpoint: `/api/departments`
+
+- `GET /api/departments?faculty=<term>`
+  - Retrieves active university faculties and academic departments for targeting and filtering.
+  - **Access**: Authenticated members.
+  - **Output**: `{ success: true, data: Department[] }`
+
+---
+
+## 5. Opportunities & Career Postings API (Stage 6 Implemented)
+
+### Endpoints: `/api/opportunities`
+
+- `GET /api/opportunities`
+  - Retrieves approved and active opportunities with department, search, and type filtering.
+  - **Access**: Authenticated members.
+  - **Query Params**: `query`, `type`, `department`, `workplaceType`, `sourceType`, `page`, `limit`.
+  - **Filtering**: Returns postings where `status = APPROVED` and `deadline > now()`. When filtered by department, includes both department-matched and `openToAllDepartments = true` postings.
+  - **Output**: `{ success: true, data: Opportunity[], pagination: { total, page, limit, totalPages } }`
+
+- `POST /api/opportunities`
+  - Creates a new career opportunity (internship or job).
+  - **Access**: Authorized members with `canPostOpportunities: true`.
+  - **Validation**: Enforces future deadline, required description (min 20 chars), and external URL when application method is `EXTERNAL`.
+  - **Provenance**:
+    - If `sourceType: OFFICIAL_EMPLOYER`: Requires valid `companyId` and asserts poster is an authorized company member.
+    - If `sourceType: COMMUNITY_SHARED`: Accessible to verified members/alumni sharing external leads with explicit disclaimer.
+  - **Initial State**: Sets status to `PENDING` (or `DRAFT` if `submitForReview: false`).
+  - **Output**: `{ success: true, data: Opportunity }`
+
+### Endpoints: `/api/opportunities/[id]`
+
+- `GET /api/opportunities/[id]`
+  - Retrieves opportunity details.
+  - **Access Gating**:
+    - `APPROVED`: Accessible to all authenticated members.
+    - `DRAFT`, `PENDING`, `REJECTED`, `CLOSED`: Strictly restricted to original poster, associated company managers, or platform `ADMIN`.
+  - **Output**: `{ success: true, data: Opportunity }`
+
+- `PUT /api/opportunities/[id]`
+  - Modifies an existing opportunity.
+  - **Access**: Original poster, associated company managers, or platform `ADMIN`.
+  - **Output**: `{ success: true, data: Opportunity }`
+
+- `DELETE /api/opportunities/[id]`
+  - Deletes an opportunity record.
+  - **Access**: Original poster, associated company managers, or platform `ADMIN`.
+  - **Output**: `{ success: true, message: string }`
+
+### Endpoints: `/api/opportunities/[id]/submit` & `/close`
+
+- `POST /api/opportunities/[id]/submit`
+  - Submits a `DRAFT` opportunity to the administrator moderation queue (`PENDING`).
+  - **Access**: Authorized poster or company manager.
+
+- `POST /api/opportunities/[id]/close`
+  - Manually closes an opportunity before deadline (`CLOSED`).
+  - **Access**: Authorized poster or company manager.
+
+---
+
+## 6. Admin Opportunity Moderation API (Stage 6 Implemented)
+
+### Endpoints: `/api/admin/opportunities`
+
+- `GET /api/admin/opportunities?status=PENDING`
+  - Retrieves pending opportunities queued for institutional moderation.
+  - **Access**: Platform `ADMIN` only.
+  - **Output**: `{ success: true, data: Opportunity[] }`
+
+- `POST /api/admin/opportunities`
+  - Evaluates an opportunity dossier (`APPROVE` or `REJECT`).
+  - **Access**: Platform `ADMIN` only.
+  - **Body**: `{ opportunityId, action: 'APPROVE' | 'REJECT', rejectionReason? }`
+  - **Rules**:
+    - If `APPROVE`: Transitions status to `APPROVED`, records `reviewerId` and `reviewedAt`. Immediately becomes visible in member listings.
+    - If `REJECT`: Requires a non-empty `rejectionReason`. Sets status to `REJECTED`, records explanation and reviewer metadata.
+  - **Output**: `{ success: true, data: Opportunity }`
+
+---
+
+## 7. Applications API & Actions (Upcoming Stage 7)
 
 ### `submitApplication(opportunityId: string, data: SubmitApplicationSchema)`
 - **Access**: Verified Members (Students/Alumni)

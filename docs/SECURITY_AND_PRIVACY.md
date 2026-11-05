@@ -63,3 +63,29 @@
 
 1. **Immutable Request History**: Rejections and resubmissions create distinct records in `membership_requests`, ensuring complete historical traceability of credential reviews and rejection justifications.
 2. **Reviewer Attribution**: Every approved or rejected verification logs the `reviewerId` and `reviewedAt` timestamp in PostgreSQL.
+
+---
+
+## 6. Corporate Authorization & Anti-IDOR Controls (Stage 6 Implemented)
+
+1. **Company Management Boundary (`assertCanManageCompany`)**:
+   - Updates to corporate profiles (`PUT /api/companies/[id]`) and member associations (`POST /api/companies/[id]/members`) strictly enforce server-side validation.
+   - Only platform `ADMIN` or users holding `OWNER`, `ADMIN`, or `canManageCompany: true` for that specific company can modify company information.
+   - Any attempt by ordinary members to edit unmanaged companies throws `FORBIDDEN_COMPANY_MODIFICATION (403)`.
+2. **Official Employer Representation Boundary (`assertCanPostForCompany`)**:
+   - An opportunity submitted with `sourceType = OFFICIAL_EMPLOYER` requires a verified `companyId` and asserts that the posting member has active company posting authorization (`canPostOpportunities: true`).
+   - Ordinary members cannot claim an official employer affiliation without verified company membership.
+
+---
+
+## 7. Opportunity Moderation Isolation & Anti-Leak Controls (Stage 6 Implemented)
+
+1. **Review Queue Isolation**:
+   - `DRAFT`, `PENDING`, and `REJECTED` opportunities are completely isolated from standard member discovery endpoints (`GET /api/opportunities`).
+   - Detail queries (`GET /api/opportunities/[id]`) for non-approved listings enforce strict authorization: only the original author, authorized company managers, or platform `ADMIN` can retrieve them.
+2. **Opportunity Modification Ownership (`assertCanModifyOpportunity`)**:
+   - Updates and deletions (`PUT /api/opportunities/[id]`, `DELETE /api/opportunities/[id]`) verify that the acting user is the original poster, an authorized company manager, or a platform administrator. Unauthorized users receive `403 FORBIDDEN`.
+3. **Temporal Application Cutoff**:
+   - Opportunity creation enforces a future deadline (`deadline > now()`).
+   - Expired postings are automatically filtered out from active feeds and marked `EXPIRED` via `expireOverdueOpportunities()`.
+

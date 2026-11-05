@@ -99,16 +99,30 @@ flowchart TD
   - **Server-Enforced Opportunity Posting Clearance (`lib/permissions.ts`)**: `canPostOpportunity` and `assertCanPostOpportunity` guarantee that unverified members cannot publish opportunities by altering frontend state.
   - **Automated Testing**: 42/42 Vitest unit and integration tests passing. Clean Next.js 16 production build.
 
+### Stage 6: Companies, Opportunities, and Approval System
+- **Status**: **COMPLETE** (2026-11-05)
+- **Prerequisites**: Stage 5.
+- **Core Deliverables Delivered**:
+  - **Company Database Model & RBAC (`prisma/schema.prisma`)**: Integrated `Company` and `CompanyMember` models with role-based governance (`OWNER`, `ADMIN`, `MEMBER`) and granular capability flags (`canManageCompany`, `canPostOpportunities`). Creator is automatically assigned as company `OWNER`.
+  - **Opportunity Model & Lifecycle**: Comprehensive `Opportunity` schema supporting 5 opportunity types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), 2 provenance classifications (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`), 6 statuses (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), workplace types, application methods, minimum CGPA scale, academic year, and compensation.
+  - **University Department Targeting**: Seeded 16 canonical Jagannath University departments into `departments` table. Supported department-specific targeting and `openToAllDepartments` filtering.
+  - **Institutional Approval & Moderation System**: Server-side review queue (`getPendingOpportunities`, `reviewOpportunity`). Platform administrators evaluate opportunities with mandatory rejection feedback and permanent reviewer attribution.
+  - **Anti-IDOR & Permission Assertion Services (`lib/services/`)**: `assertCanManageCompany`, `assertCanPostForCompany`, `assertCanModifyOpportunity`, and `createOpportunity` enforce server-side boundaries preventing unauthorized publishing, company editing, or unapproved posting discovery.
+  - **REST API Suite (`app/api/`)**: Implemented `/api/companies`, `/api/companies/[id]`, `/api/companies/[id]/members`, `/api/departments`, `/api/opportunities`, `/api/opportunities/[id]`, `/api/opportunities/[id]/submit`, `/api/opportunities/[id]/close`, and `/api/admin/opportunities`.
+  - **Interactive Admin Moderation UI (`components/admin/opportunity-review-table.tsx`)**: Live administrative review table integrated into `/admin` with modal dialogues for Approve and Reject with mandatory justification.
+  - **Automated Testing**: 18 new unit and integration tests (60/60 passing across all 8 test files).
+  - **Production Build**: 37 App Router routes compiled cleanly with Next.js Turbopack.
+
 ---
 
 ## 3. Next Stage Preview
 
-### Stage 6: Opportunity Portal & Review Engine
+### Stage 7: Opportunity Portal & Candidate Applications
 - **Status**: Planned (Next)
-- **Prerequisites**: Stage 5.
+- **Prerequisites**: Stage 6.
 - **Core Deliverables**:
-  - Opportunity lifecycle management (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`).
-  - Opportunity provenance classification (`OFFICIAL_EMPLOYER` vs `COMMUNITY_SHARED`).
-  - Opportunity creation forms with department and skill tagging.
-  - Admin moderation queue and approval/rejection workflows.
-  - Filterable career opportunities directory and detailed view.
+  - Member opportunity catalog browsing and filterable search interface (`/opportunities`).
+  - Detailed opportunity view with company badge and provenance banner (`/opportunities/[id]`).
+  - Opportunity creation wizard for verified members and company representatives (`/opportunities/post`).
+  - Internal application submission with private resume vault upload.
+  - Application lifecycle management (submission, withdrawal, employer candidate review).

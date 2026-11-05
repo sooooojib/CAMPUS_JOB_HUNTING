@@ -1,5 +1,5 @@
 // Prisma schema for UniCareer Community
-// Stage 5: Membership Verification & User Profile Engine
+// Stage 6: Companies, Opportunities & Moderation Engine
 
 generator client {
   provider = "prisma-client"
@@ -45,6 +45,45 @@ enum VerificationRequestStatus {
   REJECTED
 }
 
+enum CompanyMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum OpportunityType {
+  INTERNSHIP
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  OTHER
+}
+
+enum OpportunitySourceType {
+  OFFICIAL_EMPLOYER
+  COMMUNITY_SHARED
+}
+
+enum OpportunityStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+  CLOSED
+}
+
+enum WorkplaceType {
+  ON_SITE
+  REMOTE
+  HYBRID
+}
+
+enum ApplicationMethod {
+  INTERNAL
+  EXTERNAL
+}
+
 model User {
   id                   String             @id @default(cuid())
   name                 String
@@ -62,13 +101,118 @@ model User {
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
-  sessions           Session[]
-  accounts           Account[]
-  profile            Profile?
-  membershipRequests MembershipRequest[] @relation("UserMembershipRequests")
-  reviewedRequests   MembershipRequest[] @relation("ReviewedRequests")
+  sessions             Session[]
+  accounts             Account[]
+  profile              Profile?
+  membershipRequests   MembershipRequest[] @relation("UserMembershipRequests")
+  reviewedRequests     MembershipRequest[] @relation("ReviewedRequests")
+
+  // Stage 6: Company & Opportunity Relations
+  createdCompanies      Company[]           @relation("CreatedCompanies")
+  companyMemberships    CompanyMember[]
+  postedOpportunities   Opportunity[]       @relation("PostedOpportunities")
+  reviewedOpportunities Opportunity[]       @relation("ReviewedOpportunities")
 
   @@map("users")
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  logo        String?
+  description String?
+  website     String?
+  industry    String?
+  location    String?
+  createdById String
+  createdBy   User     @relation("CreatedCompanies", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members       CompanyMember[]
+  opportunities Opportunity[]
+
+  @@index([name])
+  @@map("companies")
+}
+
+model CompanyMember {
+  id                   String            @id @default(cuid())
+  companyId            String
+  company              Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userId               String
+  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role                 CompanyMemberRole @default(MEMBER)
+  canPostOpportunities Boolean           @default(true)
+  canManageCompany     Boolean           @default(false)
+  title                String?           // e.g. "Senior Campus Recruiter"
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  @@unique([companyId, userId])
+  @@index([userId])
+  @@index([companyId])
+  @@map("company_members")
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  code      String   @unique // e.g. "CSE", "EEE", "BBA", "MATH"
+  name      String   @unique // e.g. "Computer Science & Engineering"
+  faculty   String   // e.g. "Faculty of Science", "Faculty of Business Studies"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("departments")
+}
+
+model Opportunity {
+  id                    String                @id @default(cuid())
+  title                 String
+  description           String
+  companyId             String?
+  company               Company?              @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  companyName           String                // Denormalized for community-shared posts
+  companyLogo           String?
+  type                  OpportunityType       @default(FULL_TIME)
+  posterId              String
+  poster                User                  @relation("PostedOpportunities", fields: [posterId], references: [id], onDelete: Cascade)
+  sourceType            OpportunitySourceType @default(COMMUNITY_SHARED)
+  status                OpportunityStatus     @default(PENDING)
+
+  // Academic Targeting & Eligibility Criteria
+  minCgpa               Float?
+  minAcademicYear       String?               // e.g. "3rd Year", "Senior", "Graduate"
+  requiredSkills        String[]              @default([])
+  targetDepartments     String[]              @default([]) // Canonical department names/codes
+  openToAllDepartments  Boolean               @default(true)
+
+  // Compensation & Working Model
+  salaryOrStipend       String?
+  location              String
+  workplaceType         WorkplaceType         @default(ON_SITE)
+
+  // Application Method & Routing
+  applicationMethod     ApplicationMethod     @default(INTERNAL)
+  externalUrl           String?
+  contactEmail          String?
+  deadline              DateTime
+
+  // Administrative Moderation
+  reviewerId            String?
+  reviewer              User?                 @relation("ReviewedOpportunities", fields: [reviewerId], references: [id], onDelete: SetNull)
+  reviewedAt            DateTime?
+  rejectionReason       String?
+
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+
+  @@index([status, deadline])
+  @@index([companyId])
+  @@index([posterId])
+  @@index([sourceType])
+  @@map("opportunities")
 }
 
 model Profile {

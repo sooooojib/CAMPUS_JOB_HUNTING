@@ -6,6 +6,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Stage 6: Companies, Opportunities, and Approval System] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Company`: Corporate partner model storing name (unique), logo, description, website, industry, location, and creator reference (`createdById`).
+  - `CompanyMember`: Association model tracking user memberships within companies with roles (`OWNER`, `ADMIN`, `MEMBER`) and permissions (`canPostOpportunities`, `canManageCompany`), protected by a composite unique constraint `@@unique([companyId, userId])`.
+  - `Department`: University academic disciplines table seeded with 16 canonical Jagannath University departments across 6 faculties.
+  - `Opportunity`: Core career listing model supporting 5 types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), 2 source types (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`), 6 statuses (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), minimum CGPA threshold, academic year, required skills, target departments, open-to-all flag, location, workplace type, application method, external URL, contact email, future deadline, reviewer ID, review timestamp, and rejection reason.
+  - New Enums: `CompanyMemberRole`, `OpportunityType`, `OpportunitySourceType`, `OpportunityStatus`, `WorkplaceType`, `ApplicationMethod`.
+- **Validation Schemas (`lib/validations/`)**:
+  - `lib/validations/company.ts`: Zod schemas for company creation, updates, and member additions.
+  - `lib/validations/opportunity.ts`: Comprehensive Zod schemas for opportunity creation (enforcing future deadline and external application URL validation), opportunity updates, admin review evaluations, and query filtering.
+- **Backend Services & Security Enforcements (`lib/services/`)**:
+  - `lib/services/company.ts`: Functions for `createCompany`, `updateCompany`, `getCompany`, `listCompanies`, `addCompanyMember`, `getUserCompanies`, `assertCanManageCompany`, and `assertCanPostForCompany`.
+  - `lib/services/opportunity.ts`: Functions for `createOpportunity`, `updateOpportunity`, `submitOpportunityForReview`, `closeOpportunity`, `deleteOpportunity`, `getOpportunityById`, `getApprovedOpportunities`, `expireOverdueOpportunities`, `getPendingOpportunities`, `reviewOpportunity`, and `assertCanModifyOpportunity`.
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/companies`, `POST /api/companies`: Corporate directory querying and company registration.
+  - `GET /api/companies/[id]`, `PUT /api/companies/[id]`: Company profile retrieval and manager updates.
+  - `POST /api/companies/[id]/members`: Company member assignment and capability delegation.
+  - `GET /api/departments`: Canonical university departments directory with faculty filtering.
+  - `GET /api/opportunities`, `POST /api/opportunities`: Filterable public opportunities listing and opportunity posting.
+  - `GET /api/opportunities/[id]`, `PUT /api/opportunities/[id]`, `DELETE /api/opportunities/[id]`: Protected opportunity details, updates, and deletion.
+  - `POST /api/opportunities/[id]/submit`: Draft submission to administrator review queue.
+  - `POST /api/opportunities/[id]/close`: Manual opportunity closure.
+  - `GET /api/admin/opportunities`, `POST /api/admin/opportunities`: Administrative moderation queue and Approve/Reject execution.
+- **Admin Governance Interface**:
+  - `components/admin/opportunity-review-table.tsx`: Live moderation table for administrators with status indicators, metadata pills, and interactive dialogues for Approve and Reject with mandatory justification.
+  - `app/(dashboard)/admin/page.tsx`: Integrated live opportunities counts and moderation tab.
+- **Automated Testing (`tests/unit/companies-and-opportunities.test.ts`)**:
+  - 18 new integration and unit tests covering company creation, manager updates, unauthorized access rejection, company membership delegation, opportunity creation, posting clearance checks, company association assertions, community shared opportunities, future deadline enforcement, external URL validation, review queue isolation, admin approvals, admin rejection reasons, modification permissions, closure, automated expiration, and department targeting. Total test suite expanded to 60 passing tests across 8 test files.
+
+---
+
 ## [Stage 5: Membership Verification and User Profiles] - 2026-11-05
 
 ### Added
