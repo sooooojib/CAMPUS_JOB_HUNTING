@@ -95,4 +95,20 @@ describe("Stage 4: Server Route Protection & Proxy Tests", () => {
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe("http://localhost:3000/opportunities");
   });
+
+  it("8. permits access to /login when signout=true even if a session cookie is present and expires cookies", () => {
+    const req = createMockRequest(
+      "/login",
+      { "better-auth.session_token": "valid-active-session-token" },
+      "?signout=true"
+    );
+    const res = proxy(req);
+
+    // Should NOT redirect back to /dashboard
+    expect(res.status).toBe(200);
+    expect(res.headers.get("location")).toBeNull();
+    // Should set expired cookie header
+    const setCookie = res.headers.get("set-cookie");
+    expect(setCookie).toBeTruthy();
+  });
 });

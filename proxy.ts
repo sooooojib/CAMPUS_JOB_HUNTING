@@ -28,12 +28,46 @@ const AUTH_ROUTES = [
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
+  const isSignoutAction = request.nextUrl.searchParams.get("signout") === "true";
+
+  // Check if current route is an auth route
+  const isAuthRoute = AUTH_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
+  // If explicit signout requested on auth route, strip session cookies and render auth page cleanly
+  if (isAuthRoute && isSignoutAction) {
+    const response = NextResponse.next();
+    const cookieNames = [
+      "better-auth.session_token",
+      "__Secure-better-auth.session_token",
+      "better-auth.session_data",
+      "__Secure-better-auth.session_data",
+      "better-auth.dont_remember",
+      "__Secure-better-auth.dont_remember",
+    ];
+    for (const name of cookieNames) {
+      response.cookies.delete(name);
+      response.cookies.set({
+        name,
+        value: "",
+        path: "/",
+        maxAge: 0,
+        expires: new Date(0),
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+      });
+    }
+    return response;
+  }
+
   // Retrieve Better Auth session token cookie
-  const sessionToken =
+  const rawSessionToken =
     request.cookies.get("better-auth.session_token")?.value ||
     request.cookies.get("__Secure-better-auth.session_token")?.value;
 
-  const isAuthenticated = Boolean(sessionToken);
+  const isAuthenticated = Boolean(rawSessionToken && rawSessionToken.trim() !== "");
 
   // Check if current route is protected
   const isProtectedRoute = PROTECTED_ROUTES.some(
@@ -47,11 +81,6 @@ export function proxy(request: NextRequest) {
     loginUrl.searchParams.set("callbackUrl", callbackUrl);
     return NextResponse.redirect(loginUrl);
   }
-
-  // Check if current route is an auth route
-  const isAuthRoute = AUTH_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  );
 
   // 2. Authenticated users accessing login/register -> Redirect to requested callbackUrl or /dashboard
   if (isAuthRoute && isAuthenticated) {

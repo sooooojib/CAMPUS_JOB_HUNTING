@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { EditProfileModal } from "@/components/profile/edit-profile-modal";
 import { ResubmitVerificationModal } from "@/components/profile/resubmit-verification-modal";
+import { ProfileSignOutButton } from "@/components/profile/profile-sign-out-button";
 
 export const metadata = {
   title: "My Profile | UniCareer Community",
@@ -223,6 +224,7 @@ export default async function MyProfilePage() {
                   membershipType: memberData.membershipType,
                 }}
               />
+              <ProfileSignOutButton />
             </div>
           </div>
         }

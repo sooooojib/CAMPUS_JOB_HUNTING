@@ -16,6 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
+import { performClientSignOut } from "@/lib/auth-logout";
 
 interface UserMenuProps {
   user?: {
@@ -56,12 +57,10 @@ export function UserMenu({
   const handleSignOut = async () => {
     setIsSigningOut(true);
     try {
-      await authClient.signOut();
-      router.push("/login");
-      router.refresh();
+      await performClientSignOut();
     } catch (error) {
       console.error("Sign out error:", error);
-      window.location.href = "/login";
+      window.location.href = "/login?signout=true";
     } finally {
       setIsSigningOut(false);
     }
@@ -147,20 +146,21 @@ export function UserMenu({
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="p-0" variant="destructive" disabled={isSigningOut}>
-          <button
-            type="button"
-            onClick={handleSignOut}
-            disabled={isSigningOut}
-            className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer disabled:opacity-50"
-          >
-            {isSigningOut ? (
-              <Loader2 className="size-3.5 animate-spin" />
-            ) : (
-              <LogOut className="size-3.5" />
-            )}
-            <span>{isSigningOut ? "Signing out..." : "Sign Out"}</span>
-          </button>
+        <DropdownMenuItem
+          variant="destructive"
+          disabled={isSigningOut}
+          onSelect={async (e) => {
+            e.preventDefault();
+            await handleSignOut();
+          }}
+          className="flex items-center gap-2 text-xs text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer px-2 py-1.5"
+        >
+          {isSigningOut ? (
+            <Loader2 className="size-3.5 animate-spin" />
+          ) : (
+            <LogOut className="size-3.5" />
+          )}
+          <span>{isSigningOut ? "Signing out..." : "Sign Out"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

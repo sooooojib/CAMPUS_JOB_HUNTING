@@ -10,9 +10,18 @@ import { AppSidebar } from "./sidebar";
 interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
+  user?: {
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    membershipType?: string;
+    systemRole?: string;
+    isVerified?: boolean;
+    emailVerified?: boolean;
+  };
 }
 
-export function MobileNav({ isOpen, onClose }: MobileNavProps) {
+export function MobileNav({ isOpen, onClose, user }: MobileNavProps) {
   const pathname = usePathname();
 
   // Prevent background scrolling when mobile drawer is open
@@ -55,7 +64,7 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
             >
               <X className="size-5" />
             </button>
-            <AppSidebar onNavigate={onClose} />
+            <AppSidebar onNavigate={onClose} user={user} />
           </div>
         </div>
       )}

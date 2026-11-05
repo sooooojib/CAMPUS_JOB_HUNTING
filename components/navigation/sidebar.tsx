@@ -16,9 +16,13 @@ import {
   Settings,
   ShieldAlert,
   ChevronRight,
+  LogOut,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { authClient } from "@/lib/auth-client";
+import { performClientSignOut } from "@/lib/auth-logout";
 
 interface NavItem {
   title: string;
@@ -97,10 +101,50 @@ const secondaryNavItems: NavItem[] = [
 interface AppSidebarProps {
   className?: string;
   onNavigate?: () => void;
+  user?: {
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    membershipType?: string;
+    systemRole?: string;
+    isVerified?: boolean;
+    emailVerified?: boolean;
+  };
 }
 
-export function AppSidebar({ className, onNavigate }: AppSidebarProps) {
+export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebarProps) {
   const pathname = usePathname();
+  const [isSigningOut, setIsSigningOut] = React.useState(false);
+  const { data: session } = authClient.useSession();
+
+  const currentUser = {
+    name: session?.user?.name || propUser?.name || "Verified Member",
+    email: session?.user?.email || propUser?.email || "member@university.edu",
+    avatarUrl: session?.user?.image || propUser?.avatarUrl,
+    role: (session?.user as any)?.membershipType || propUser?.membershipType || "MEMBER",
+    isVerified: (session?.user as any)?.verificationStatus === "VERIFIED" || propUser?.isVerified || false,
+  };
+
+  const initials = currentUser.name
+    .split(" ")
+    .map((n) => n[0])
+    .filter(Boolean)
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() || "UC";
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    try {
+      if (onNavigate) onNavigate();
+      await performClientSignOut();
+    } catch (err) {
+      console.error("Sign out error from sidebar:", err);
+      window.location.href = "/login?signout=true";
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <aside
@@ -221,31 +265,47 @@ export function AppSidebar({ className, onNavigate }: AppSidebarProps) {
                 </Link>
               );
             })}
+
+            <button
+              type="button"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+              className="flex items-center justify-between w-full rounded-lg px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <div className="flex items-center gap-2.5">
+                {isSigningOut ? (
+                  <Loader2 className="size-4 shrink-0 animate-spin" />
+                ) : (
+                  <LogOut className="size-4 shrink-0 text-destructive" />
+                )}
+                <span>{isSigningOut ? "Signing out..." : "Sign Out"}</span>
+              </div>
+            </button>
           </nav>
         </div>
       </div>
 
       {/* User Institutional ID footer card */}
-      <div className="border-t border-sidebar-border p-3.5">
+      <div className="border-t border-sidebar-border p-3.5 space-y-2">
         <Link
           href="/profile/me"
           onClick={onNavigate}
           className="flex items-center justify-between rounded-lg p-2 text-xs transition-colors hover:bg-sidebar-accent"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs border border-primary/20">
-              SM
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs border border-primary/20">
+              {initials}
             </div>
-            <div>
-              <p className="font-bold text-sidebar-foreground leading-tight">
-                Sarah Miller
+            <div className="truncate">
+              <p className="font-bold text-sidebar-foreground leading-tight truncate">
+                {currentUser.name}
               </p>
-              <p className="text-[10px] text-muted-foreground">
-                CSE &apos;26 • Verified Student
+              <p className="text-[10px] text-muted-foreground truncate">
+                {currentUser.role.replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
               </p>
             </div>
           </div>
-          <ChevronRight className="size-4 text-muted-foreground" />
+          <ChevronRight className="size-4 text-muted-foreground shrink-0" />
         </Link>
       </div>
     </aside>

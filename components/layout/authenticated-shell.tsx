@@ -30,7 +30,7 @@ export function AuthenticatedShell({ children, user }: AuthenticatedShellProps) 
             <div className="flex h-full w-64 flex-col border-r border-border/80 bg-sidebar" />
           }
         >
-          <AppSidebar />
+          <AppSidebar user={user} />
         </React.Suspense>
       </div>
 
@@ -45,6 +45,7 @@ export function AuthenticatedShell({ children, user }: AuthenticatedShellProps) 
         <MobileNav
           isOpen={mobileNavOpen}
           onClose={() => setMobileNavOpen(false)}
+          user={user}
         />
       </React.Suspense>
     </div>

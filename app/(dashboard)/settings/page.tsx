@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NotificationPreferencesCard } from "@/components/settings/notification-preferences-card";
+import { SessionSecurityCard } from "@/components/settings/session-security-card";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -158,6 +159,17 @@ export default function SettingsPage() {
             Configure how and when you receive in-app alerts and email notifications across the platform.
           </p>
           <NotificationPreferencesCard />
+        </section>
+
+        {/* Session & Device Security */}
+        <section className="space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
+            5. Session &amp; Device Security
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Terminate your active credentials across this browser and clear all session tokens.
+          </p>
+          <SessionSecurityCard />
         </section>
       </form>
     </FormTemplate>
