@@ -44,7 +44,9 @@ export type ApplicationStatus =
   | "SUBMITTED"
   | "UNDER_REVIEW"
   | "SHORTLISTED"
+  | "INTERVIEW"
   | "INTERVIEWING"
+  | "SELECTED"
   | "OFFERED"
   | "REJECTED"
   | "WITHDRAWN";

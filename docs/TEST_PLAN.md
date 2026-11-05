@@ -57,11 +57,33 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - Bookmark toggling: verifies atomic bookmark creation and removal; confirms duplicate prevention with composite unique index.
 - Author management console: verifies status filtering, closure, and rejected resubmission workflows.
 
-### 2.4 Applications & Resume Safeguard (Stage 8 - Playwright)
-- Applying internally with a resume upload.
-- Preventing duplicate submissions by the same user to the same opportunity.
-- Withdrawing an application and verifying status change.
-- Verifying resume URL signature expiration and authorization walls.
+### 2.4 Applications & Applicant Management (Stage 8 - Vitest & Integration)
+- **Pre-Application Eligibility**:
+  - Verifies department restrictions, CGPA warnings (advisory vs disqualifying), open deadline checks.
+  - Verifies that closed, draft, pending, or expired opportunities reject applications.
+- **Resume Vault Management**:
+  - File upload with magic-bytes inspection (`%PDF-` for PDF, `PK\x03\x04` for DOCX). Rejects spoofed MIME types.
+  - File size validation (<= 5MB).
+  - Private disk storage (`storage/resumes/` outside public web directory).
+  - Anti-IDOR download authorization: permits owner, employer reviewing candidate application, or platform admin. Blocks unauthorized third-party members.
+  - Setting default resume and deleting unused resumes.
+- **Internal Application Workflow**:
+  - Submitting application with existing vault resume or immediate upload.
+  - Optional cover letter and metadata tracking.
+  - Audit trail logging initial status transition (`SUBMITTED`) in `ApplicationStatusHistory`.
+- **Database Duplicate Prevention**:
+  - Composite unique constraint `@@unique([opportunityId, applicantId])` blocks second application attempt with `DUPLICATE_APPLICATION`.
+- **External Application Tracking**:
+  - Redirects to external corporate career URL with disclaimer notice.
+  - Records user's manual tracking state (`method: EXTERNAL`) without claiming automated ATS sync.
+- **Candidate Self-Service**:
+  - Viewing user's active/historic applications with real-time status badges.
+  - Application withdrawal (`WITHDRAWN`) with reason tracking in history log.
+- **Employer Pipeline Management**:
+  - Candidate dossier review: profile, department, skills, resume access.
+  - Status updates: `SUBMITTED` -> `UNDER_REVIEW` -> `SHORTLISTED` -> `INTERVIEW` -> `SELECTED` / `REJECTED`.
+  - Recruiter notes and audit logging of state changes with reviewer ID and timestamp.
+  - **Community Poster Strict Restriction**: Verified community member sharing `COMMUNITY_SHARED` opportunity is blocked with 403 Forbidden from viewing applicants or downloading candidate resumes.
 
 ### 2.4 Career Tools & CGPA Checking (Vitest)
 - Student with GPA 3.4 checks opportunity requiring GPA 3.5: reports `isEligible: false`.

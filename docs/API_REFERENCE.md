@@ -252,25 +252,77 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 7. Applications API & Actions (Upcoming Stage 8)
+## 7. Resume Vault & Application APIs (Stage 8 Implemented)
 
-### `submitApplication(opportunityId: string, data: SubmitApplicationSchema)`
-- **Access**: Verified Members (Students/Alumni)
-- **Validation**: Enforces non-duplicate application per opportunity; checks deadline.
-- **Input**: `resumeFile` (uploaded to private bucket) or `savedResumeId`, `coverLetter`.
-- **Output**: `{ success: boolean, applicationId: string }`
+### Endpoints: `/api/resumes`
 
-### `withdrawApplication(applicationId: string)`
-- **Access**: Applicant owner
-- **Behavior**: Marks application `WITHDRAWN`.
+- `GET /api/resumes`
+  - Retrieves all active resume documents in the authenticated user's private vault.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: Resume[] }`
 
-### `updateApplicantStatus(applicationId: string, status: ApplicationStatus)`
-- **Access**: Authorized employer of the target opportunity, or Admin.
-- **Behavior**: Transitions applicant lifecycle state; records timestamp.
+- `POST /api/resumes`
+  - Uploads a new PDF/DOCX resume file (max 5 MB). Validates magic bytes to prevent content-type spoofing.
+  - **Access**: Authenticated member.
+  - **Body**: `multipart/form-data` with `file`.
+  - **Output**: `{ success: true, data: Resume }`
+
+### Endpoints: `/api/resumes/[id]` & `/download`
+
+- `DELETE /api/resumes/[id]`
+  - Deletes a resume from user's vault.
+  - **Access**: Resume owner only.
+
+- `GET /api/resumes/[id]/download`
+  - Securely streams binary resume buffer with proper content headers.
+  - **Access**: Owner, authorized employer whose opportunity received an application with this resume, or platform `ADMIN`. Strictly prevents IDOR access.
+
+### Endpoints: `/api/applications`
+
+- `GET /api/applications?status=ALL`
+  - Retrieves all applications submitted or recorded by the authenticated member.
+  - **Access**: Authenticated member.
+  - **Output**: `{ success: true, data: Application[], counts: Record<string, number> }`
+
+- `POST /api/applications`
+  - Submits an internal application or records an external company portal application.
+  - **Access**: Authenticated member.
+  - **Body (INTERNAL)**: `{ opportunityId, resumeId?, coverLetter?, method: 'INTERNAL' }`
+  - **Body (EXTERNAL)**: `{ opportunityId, externalNotes?, method: 'EXTERNAL' }`
+  - **Output**: `{ success: true, data: Application }`
+
+### Endpoints: `/api/applications/[id]` & `/withdraw`
+
+- `GET /api/applications/[id]`
+  - Retrieves complete application dossier including cover letter, resume, and status change audit log.
+  - **Access**: Applicant owner, authorized employer for that opportunity, or platform `ADMIN`.
+
+- `POST /api/applications/[id]/withdraw`
+  - Retracts submitted application, transitioning status to `WITHDRAWN`.
+  - **Access**: Applicant owner only.
+  - **Body**: `{ reason?: string }`
+
+### Endpoints: `/api/opportunities/[id]/eligibility`
+
+- `GET /api/opportunities/[id]/eligibility`
+  - Evaluates deadline status, duplicate application checks, and academic criteria advisory warnings prior to submission.
+  - **Access**: Authenticated member.
+
+### Endpoints: `/api/opportunities/[id]/applicants` & `.../status`
+
+- `GET /api/opportunities/[id]/applicants?status=ALL`
+  - Retrieves all candidates who applied to the opportunity with permitted recruitment data.
+  - **Access**: Authorized employer representing the opportunity's company, or platform `ADMIN`. Community-shared job posters are strictly blocked.
+  - **Output**: `{ success: true, data: ApplicantDossier[], opportunity: Opportunity, counts: Record<string, number> }`
+
+- `POST /api/opportunities/[id]/applicants/[applicationId]/status`
+  - Updates candidate recruitment stage (`UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`) and logs status change history.
+  - **Access**: Authorized employer for the opportunity, or platform `ADMIN`.
+  - **Body**: `{ status: ApplicationStatus, note?: string, employerNotes?: string }`
 
 ---
 
-## 4. Community API & Actions
+## 8. Community API & Actions (Upcoming Stage 9)
 
 ### `createPost(input: CreatePostSchema)`
 - **Access**: Verified Members

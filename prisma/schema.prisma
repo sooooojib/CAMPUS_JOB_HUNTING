@@ -84,6 +84,16 @@ enum ApplicationMethod {
   EXTERNAL
 }
 
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  SHORTLISTED
+  INTERVIEW
+  SELECTED
+  REJECTED
+  WITHDRAWN
+}
+
 model User {
   id                   String             @id @default(cuid())
   name                 String
@@ -108,11 +118,17 @@ model User {
   reviewedRequests     MembershipRequest[] @relation("ReviewedRequests")
 
   // Stage 6: Company & Opportunity Relations
-  createdCompanies      Company[]           @relation("CreatedCompanies")
-  companyMemberships    CompanyMember[]
-  postedOpportunities   Opportunity[]       @relation("PostedOpportunities")
-  reviewedOpportunities Opportunity[]       @relation("ReviewedOpportunities")
+  createdCompanies        Company[]             @relation("CreatedCompanies")
+  companyMemberships      CompanyMember[]
+  postedOpportunities     Opportunity[]         @relation("PostedOpportunities")
+  reviewedOpportunities   Opportunity[]         @relation("ReviewedOpportunities")
   bookmarkedOpportunities OpportunityBookmark[]
+
+  // Stage 8: Applications & Resumes Relations
+  resumes                 Resume[]
+  applications            Application[]         @relation("UserApplications")
+  reviewedApplications    Application[]         @relation("ReviewedApplications")
+  changedApplicationStatuses ApplicationStatusHistory[] @relation("ChangedApplicationStatuses")
 
   @@map("users")
 }
@@ -210,6 +226,7 @@ model Opportunity {
   updatedAt             DateTime              @updatedAt
 
   bookmarks             OpportunityBookmark[]
+  applications          Application[]
 
   @@index([status, deadline])
   @@index([companyId])
@@ -230,6 +247,69 @@ model OpportunityBookmark {
   @@index([userId])
   @@index([opportunityId])
   @@map("opportunity_bookmarks")
+}
+
+// Stage 8: Secure Resume Storage & Application Systems
+model Resume {
+  id           String        @id @default(cuid())
+  userId       String        @map("user_id")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName     String        @map("file_name")
+  fileSize     Int           @map("file_size") // bytes
+  mimeType     String        @map("mime_type")
+  storageKey   String        @unique @map("storage_key")
+  isDefault    Boolean       @default(false) @map("is_default")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  applications Application[]
+
+  @@index([userId])
+  @@map("resumes")
+}
+
+model Application {
+  id                 String                   @id @default(cuid())
+  opportunityId      String                   @map("opportunity_id")
+  opportunity        Opportunity              @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  applicantId        String                   @map("applicant_id")
+  applicant          User                     @relation("UserApplications", fields: [applicantId], references: [id], onDelete: Cascade)
+  resumeId           String?                  @map("resume_id")
+  resume             Resume?                  @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+  resumeFileName     String?                  @map("resume_file_name")
+  coverLetter        String?                  @map("cover_letter") @db.Text
+  method             ApplicationMethod        @default(INTERNAL)
+  status             ApplicationStatus        @default(SUBMITTED)
+  externalAppliedAt  DateTime?                @map("external_applied_at")
+  externalNotes      String?                  @map("external_notes")
+  employerNotes      String?                  @map("employer_notes") @db.Text
+  reviewedById       String?                  @map("reviewed_by_id")
+  reviewedBy         User?                    @relation("ReviewedApplications", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt         DateTime?                @map("reviewed_at")
+  submittedAt        DateTime                 @default(now()) @map("submitted_at")
+  updatedAt          DateTime                 @updatedAt @map("updated_at")
+
+  statusHistory      ApplicationStatusHistory[]
+
+  @@unique([opportunityId, applicantId])
+  @@index([opportunityId])
+  @@index([applicantId])
+  @@index([status])
+  @@map("applications")
+}
+
+model ApplicationStatusHistory {
+  id            String            @id @default(cuid())
+  applicationId String            @map("application_id")
+  application   Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  status        ApplicationStatus
+  note          String?           @db.Text
+  changedById   String?           @map("changed_by_id")
+  changedBy     User?             @relation("ChangedApplicationStatuses", fields: [changedById], references: [id], onDelete: SetNull)
+  createdAt     DateTime          @default(now()) @map("created_at")
+
+  @@index([applicationId])
+  @@map("application_status_history")
 }
 
 model Profile {

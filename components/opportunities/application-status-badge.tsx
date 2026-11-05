@@ -30,16 +30,18 @@ export function ApplicationStatusBadge({
           Shortlisted
         </Badge>
       );
+    case "INTERVIEW":
     case "INTERVIEWING":
       return (
         <Badge variant="warning" className={className}>
-          Interviewing
+          Interview
         </Badge>
       );
+    case "SELECTED":
     case "OFFERED":
       return (
         <Badge variant="success" className={className}>
-          Offer Extended
+          Selected
         </Badge>
       );
     case "REJECTED":

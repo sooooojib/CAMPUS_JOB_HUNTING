@@ -51,15 +51,43 @@
 
 ---
 
-## 4. Resume & File Storage Security
+## 4. Resume & Private File Storage Security (Stage 8 Implemented)
 
-1. **Private Object Storage**: Resumes and verification proof documents are stored in private, unguessable storage buckets (never in `/public/`).
-2. **Time-Limited Signed URLs**: Resumes are accessed exclusively via temporary pre-signed download URLs with an expiration lifetime of at most 15 minutes.
-3. **MIME-Type & Virus Validation**: File uploads enforce strict MIME-type checking (`application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`) and file size limits (max 5MB).
+1. **Private Local Vault Storage**:
+   - Resume documents are stored on disk in `storage/resumes/` outside of the Next.js `public/` web root. Resumes can NEVER be reached by direct static HTTP URL access.
+2. **Magic-Bytes Inspection Against MIME-Spoofing**:
+   - The system inspects file magic bytes (signatures) on upload:
+     - PDF: `%PDF-` (`0x25 0x50 0x44 0x46`)
+     - DOCX / OpenXML: `PK\x03\x04` (`0x50 0x4B 0x03 0x04`)
+     - DOC: `\xD0\xCF\x11\xE0`
+   - Rejects spoofed text files, HTML scripts, executables, or disguised binaries even if given a `.pdf` extension.
+   - Enforces a strict maximum file size of 5 MB (5,242,880 bytes).
+3. **Cryptographic Storage Keys**:
+   - Physical filenames on disk use non-guessable random tokens: `${userId}-${Date.now()}-${random16HexBytes}${extension}` with strict file permission `0o600`.
+4. **Anti-IDOR Authorization Gate on Downloads (`assertCanAccessResume`)**:
+   - Downloading a resume via `/api/resumes/[id]/download` requires authenticated verification:
+     - Is the user the owner of the resume? -> ALLOW.
+     - Is the user a platform `ADMIN`? -> ALLOW.
+     - Is the user an authorized recruiter/manager of a company whose opportunity received an application with this resume? -> ALLOW.
+     - Any other member (even other verified members) -> REJECT with `403 Forbidden`.
 
 ---
 
-## 5. Audit Trails & Governance History
+## 5. Applications & Recruitment Authorization Security (Stage 8 Implemented)
+
+1. **Database-Level Duplicate Application Prevention**:
+   - The PostgreSQL table `applications` enforces a composite unique constraint `@@unique([opportunityId, applicantId])`. Duplicate submissions cannot occur even under concurrent race conditions.
+2. **Strict Community Poster Isolation**:
+   - Verified community members who share leads (`sourceType: COMMUNITY_SHARED`) are strictly prevented from viewing or managing candidate applicant dossiers.
+   - Only authorized company representatives (`CompanyMember` with `role: OWNER | ADMIN` or `canManageCompany: true | canPostOpportunities: true`) for official employer postings can access candidate applications.
+3. **Recruiter Stage Transition Audit Trail**:
+   - Recruiter status transitions (`UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`) create immutable records in `application_status_history` storing timestamp, `changedById`, and feedback notes.
+4. **Candidate Withdrawal Safeguards**:
+   - Candidates can withdraw their submitted applications at any point, with full audit trail preservation. Other members cannot withdraw another candidate's application.
+
+---
+
+## 6. Audit Trails & Governance History
 
 1. **Immutable Request History**: Rejections and resubmissions create distinct records in `membership_requests`, ensuring complete historical traceability of credential reviews and rejection justifications.
 2. **Reviewer Attribution**: Every approved or rejected verification logs the `reviewerId` and `reviewedAt` timestamp in PostgreSQL.

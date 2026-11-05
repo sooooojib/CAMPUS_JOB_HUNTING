@@ -109,6 +109,18 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
     session.user.systemRole === "ADMIN" ||
     opportunity.posterId === session.user.id;
 
+  const canManageApplicants =
+    session.user.systemRole === "ADMIN" ||
+    (opportunity.companyId &&
+      (opportunity.company as any)?.members?.some(
+        (m: any) =>
+          m.userId === session.user.id &&
+          (m.role === "OWNER" ||
+            m.role === "ADMIN" ||
+            m.canManageCompany ||
+            m.canPostOpportunities)
+      ));
+
   const isExpired = new Date(opportunity.deadline).getTime() < Date.now();
 
   const workplaceLabel =
@@ -209,8 +221,7 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
               opportunityId={opportunity.id}
               initialBookmarked={bookmarked}
               canEdit={canEdit}
-              applicationMethod={opportunity.applicationMethod}
-              externalUrl={opportunity.externalUrl}
+              canManageApplicants={canManageApplicants}
             />
           </div>
         </div>
@@ -256,10 +267,14 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
               </div>
 
               <OpportunityApplyButton
+                opportunityId={opportunity.id}
+                opportunityTitle={opportunity.title}
+                companyName={opportunity.companyName}
                 applicationMethod={opportunity.applicationMethod}
                 externalUrl={opportunity.externalUrl}
                 deadline={opportunity.deadline}
                 isExpired={isExpired}
+                minCgpa={opportunity.minCgpa}
               />
             </CardContent>
           </Card>

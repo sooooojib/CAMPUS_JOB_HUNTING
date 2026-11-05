@@ -244,6 +244,49 @@ erDiagram
 | `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Submission timestamp |
 | `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
 
+### `resumes` (Stage 8 Implemented)
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique resume identifier |
+| `userId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Owning candidate referencing `users(id)` ON DELETE CASCADE |
+| `fileName` | `VARCHAR(100)` | `NOT NULL` | Sanitized original document name |
+| `fileSize` | `INTEGER` | `NOT NULL` | File byte length (max 5 MB) |
+| `mimeType` | `VARCHAR(100)` | `NOT NULL` | Validated MIME type (`application/pdf`, `application/vnd.openxmlformats...`) |
+| `storageKey` | `VARCHAR(255)` | `NOT NULL`, `UNIQUE` | Non-guessable storage filename in private vault |
+| `isDefault` | `BOOLEAN` | `DEFAULT false` | Primary candidate resume flag |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Upload timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
+
+### `applications` (Stage 8 Implemented)
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique application dossier identifier |
+| `opportunityId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Target opportunity referencing `opportunities(id)` ON DELETE CASCADE |
+| `applicantId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Candidate referencing `users(id)` ON DELETE CASCADE |
+| `resumeId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Attached resume referencing `resumes(id)` ON DELETE SET NULL |
+| `resumeFileName` | `VARCHAR(100)` | `NULLABLE` | Snapshot of resume filename at time of submission |
+| `coverLetter` | `TEXT` | `NULLABLE` | Optional candidate introduction (max 5000 chars) |
+| `method` | `ApplicationMethod` | `DEFAULT INTERNAL` | `INTERNAL` vs `EXTERNAL` |
+| `status` | `ApplicationStatus` | `DEFAULT SUBMITTED` | `SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN` |
+| `externalAppliedAt` | `TIMESTAMPTZ` | `NULLABLE` | External company portal completion timestamp |
+| `externalNotes` | `TEXT` | `NULLABLE` | Candidate tracking notes for external applications |
+| `employerNotes` | `TEXT` | `NULLABLE` | Private recruiter notes |
+| `reviewedById` | `VARCHAR(30)` | `NULLABLE`, `FK` | Reviewer referencing `users(id)` ON DELETE SET NULL |
+| `reviewedAt` | `TIMESTAMPTZ` | `NULLABLE` | Timestamp of recruiter stage update |
+| `submittedAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Application submission timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last status modification timestamp |
+| *Constraints* | `UNIQUE(opportunityId, applicantId)` | Database-level unique | **Prevents duplicate applications** |
+
+### `application_status_history` (Stage 8 Implemented)
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique audit history entry identifier |
+| `applicationId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Associated application referencing `applications(id)` ON DELETE CASCADE |
+| `status` | `ApplicationStatus` | `NOT NULL` | New lifecycle status reached |
+| `note` | `TEXT` | `NULLABLE` | Transition reason or candidate-facing note |
+| `changedById` | `VARCHAR(30)` | `NULLABLE`, `FK` | Actor who triggered transition referencing `users(id)` ON DELETE SET NULL |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Status change timestamp |
+
 ---
 
 ## 3. Database Indexes
@@ -259,3 +302,9 @@ erDiagram
 | `opportunities` | `opportunities_companyId_idx` | `companyId` | Official company listing lookups |
 | `opportunities` | `opportunities_type_idx` | `type` | Filtering internships vs full-time jobs |
 | `opportunities` | `opportunities_deadline_idx` | `deadline` | Expiration daemon queries |
+| `resumes` | `resumes_userId_idx` | `userId` | Rapid retrieval of user's vault documents |
+| `applications` | `applications_opportunityId_applicantId_key` | `opportunityId, applicantId` (UNIQUE) | **Database-level duplicate prevention** |
+| `applications` | `applications_opportunityId_idx` | `opportunityId` | Fast employer applicant queue querying |
+| `applications` | `applications_applicantId_idx` | `applicantId` | Fast candidate application dashboard queries |
+| `applications` | `applications_status_idx` | `status` | Stage filtering for recruiter workflows |
+| `application_status_history` | `application_status_history_applicationId_idx` | `applicationId` | Fast chronological audit trail queries |

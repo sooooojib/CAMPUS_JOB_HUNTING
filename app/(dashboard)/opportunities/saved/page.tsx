@@ -18,3 +18,4 @@ export default async function SavedOpportunitiesPage() {
 
   return <OpportunitiesBrowser />;
 }
+

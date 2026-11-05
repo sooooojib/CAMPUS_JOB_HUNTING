@@ -4,6 +4,30 @@
 
 ---
 
+## Stage 8 Verification: Applications and Applicant Management (2026-11-05)
+
+- **Date**: 2026-11-05
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (91/91 Passing across 10 Test Files)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/applications.test.ts` | Applications, Resume Vault & Recruiter Management | **PASSED** (17/17) | 1. Accepts valid PDF with `%PDF-` header magic bytes.<br>2. Accepts valid DOCX with `PK\x03\x04` zip header magic bytes.<br>3. Rejects executable/spoofed file attempting to disguise as PDF.<br>4. Rejects resume exceeding 5MB size limit.<br>5. Stores resume securely on disk and records database metadata.<br>6. Verifies eligibility and returns CGPA advisory warning when CGPA is below cutoff.<br>7. Prevents application submission past opportunity deadline.<br>8. Prevents application submission to closed opportunities.<br>9. Submits internal application with selected resume and cover letter.<br>10. Prevents duplicate internal application submission via database constraint.<br>11. Records external application with metadata.<br>12. Allows applicant to retrieve their own applications list.<br>13. Allows applicant to withdraw their application with audit history.<br>14. Prevents non-employer community poster from managing applicants (403 Forbidden).<br>15. Allows authorized company representative to list applicants.<br>16. Allows authorized company representative to update applicant status with notes.<br>17. Protects resume binary downloads with anti-IDOR authorization. |
+| `tests/unit/job-browsing-and-posting.test.ts` | Opportunity Discovery, Multi-Filter Search, Submission & Bookmarks | **PASSED** (14/14) | Browsing, multi-filters, pagination, draft/submit lifecycle, atomic bookmarks, author console. |
+| `tests/unit/companies-and-opportunities.test.ts` | Company Management, Opportunity Lifecycle, Moderation & Permissions | **PASSED** (18/18) | Company CRUD, ownership governance, admin approval, deadline expiration, rejection reasons. |
+| `tests/unit/membership-and-profiles.test.ts` | Membership Verification & Profile Privacy | **PASSED** (15/15) | Validates onboarding submission for all 6 membership types, admin approval/rejection with mandatory reason, profile updates, private student ID & phone redaction. |
+| `tests/unit/auth.test.ts` | Registration, Password Hashing, Role Separation | **PASSED** (8/8) | Validates scrypt hashing (>60 chars, non-plaintext), `membershipType` vs `systemRole` separation, duplicate email rejection, session persistence, email verification, password reset. |
+| `tests/unit/middleware.test.ts` | Server Route Protection & Proxy Gate | **PASSED** (7/7) | Verifies 307 redirects for unauthenticated requests on protected routes and public route access. |
+| `tests/unit/database.test.ts` | Neon PostgreSQL Driver Adapter Connection | **PASSED** (1/1) | Real database connection check via `SELECT 1` on pooled connection. |
+| `tests/unit/foundation.test.ts` | Base Architecture & Config | **PASSED** (5/5) | Environmental parameters, Next.js configuration, system integrity. |
+| `tests/unit/design-system.test.ts` | Design Token System & WCAG Contrast | **PASSED** (2/2) | Token definitions and theme contrast constraints. |
+| `tests/unit/navigation-layout.test.ts` | Template Components & Nav Items | **PASSED** (4/4) | Template structures and sidebar items. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Production Build** (`npm run build`) | Turbopack Production Build | **PASSED** | All 44 static and dynamic App Router routes compiled cleanly with active `ƒ Proxy (Middleware)`. |
+
+---
+
 ## Stage 7 Verification: Job Browsing, Searching, and Posting Interfaces (2026-11-05)
 
 - **Date**: 2026-11-05

@@ -6,7 +6,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Stage 7: Job Browsing, Searching, and Posting Interfaces] - 2026-11-05
+## [Stage 8: Applications and Applicant Management] - 2026-11-05
+
+### Added
+- **Database Schema Models & Enums (`prisma/schema.prisma`)**:
+  - `Application`: Core candidate application model with composite unique constraint `@@unique([opportunityId, applicantId])`, tracking application method (`INTERNAL` vs `EXTERNAL`), status (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`), cover letter, employer notes, reviewer ID, reviewed timestamp, and relations to `Opportunity`, `User` (applicant), `Resume`, and `ApplicationStatusHistory`.
+  - `Resume`: Vault metadata model with unique `storageKey`, filename, MIME type, file size, isDefault flag, and relation to `User`.
+  - `ApplicationStatusHistory`: Audit log tracking status transitions with `fromStatus`, `toStatus`, changed by user ID, notes, and timestamp.
+  - New Enums: `ApplicationStatus` (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`).
+- **Validation Schemas & File Inspection (`lib/validations/application.ts`)**:
+  - `inspectFileMagicBytes`: Binary inspection verifying real magic numbers (`%PDF-` / `0x25 0x50 0x44 0x46` for PDF, `PK\x03\x04` for DOCX) to ensure filenames and browser-supplied MIME types are never trusted alone.
+  - Zod schemas: `submitInternalApplicationSchema`, `recordExternalApplicationSchema`, `updateApplicationStatusSchema`, and `withdrawApplicationSchema`.
+- **Backend Services & Security Enforcements (`lib/services/`)**:
+  - `lib/services/resume.ts`: Secure disk vault storage in `storage/resumes/` outside public web directory, magic-bytes verification, 5MB limit enforcement, `assertCanAccessResume` anti-IDOR checks, binary retrieval, default setting, and deletion.
+  - `lib/services/application.ts`: Full lifecycle service with `checkApplicationEligibility`, `submitInternalApplication`, `recordExternalApplication`, `withdrawApplication`, `getUserApplications`, `assertCanManageApplicantsForOpportunity`, `getOpportunityApplicants`, `updateApplicationStatus`, and `getApplicationById`.
+- **API Route Handlers (`app/api/`)**:
+  - `GET /api/resumes`, `POST /api/resumes`: Resume vault retrieval and multipart file upload with header inspection.
+  - `DELETE /api/resumes/[id]`: Secure resume deletion.
+  - `GET /api/resumes/[id]/download`: Secure binary stream with `Content-Disposition` and anti-IDOR authorization checks.
+  - `GET /api/applications`, `POST /api/applications`: Candidate dashboard retrieval and application submission.
+  - `GET /api/applications/[id]`: Application dossier retrieval for applicant or employer.
+  - `POST /api/applications/[id]/withdraw`: Candidate application withdrawal with audit trail.
+  - `GET /api/opportunities/[id]/eligibility`: Real-time pre-flight eligibility check.
+  - `GET /api/opportunities/[id]/applicants`: Recruiter candidate pipeline endpoint.
+  - `POST /api/opportunities/[id]/applicants/[applicationId]/status`: Recruiter status transition endpoint with audit logging.
+- **Frontend Components & Pages**:
+  - `components/applications/apply-modal.tsx`: Multi-step application modal with eligibility checking, CGPA advisory warning, resume selector/vault upload, optional cover letter, and confirmation step.
+  - `components/applications/external-apply-dialog.tsx`: External portal redirect dialog with clear third-party notice and manual activity tracking.
+  - `components/applications/my-applications-view.tsx`: Candidate dashboard with status tabs, search, resume downloads, details modal, and withdrawal.
+  - `components/applications/employer-applicant-manager.tsx`: Recruiter management console with candidate profile details, resume download, status update dialog, and history log.
+  - `app/(dashboard)/applications/page.tsx`: Live candidate dashboard page.
+  - `app/(dashboard)/opportunities/[id]/applicants/page.tsx`: Server-protected recruiter management page with `assertCanManageApplicantsForOpportunity`.
+  - Updated `components/opportunities/opportunity-detail-actions.tsx`: Wired "Manage Applicants" button for recruiters, and connected apply buttons to `ApplyModal` and `ExternalApplyDialog`.
+  - Updated `components/opportunities/my-opportunities-view.tsx`: Added "Applicants" action button for official employer listings.
+- **Automated Testing (`tests/unit/applications.test.ts`)**:
+  - 17 new unit tests verifying magic-byte detection, size checks, eligibility, deadlines, closed listings, duplicate prevention, external tracking, candidate retrieval, withdrawal, community poster isolation (403), employer status management, and anti-IDOR resume download security. Total test suite expanded to 91 passing tests across 10 test files.
+
+---
+
+
 
 ### Added
 - **Database Schema Models & Relations (`prisma/schema.prisma`)**:

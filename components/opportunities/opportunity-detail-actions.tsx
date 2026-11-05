@@ -1,52 +1,45 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, Share2, ExternalLink, Edit3, ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { Bookmark, Share2, Edit3, ExternalLink, Send, Users, Check } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-interface OpportunityDetailActionsProps {
-  opportunityId: string;
-  initialBookmarked: boolean;
-  canEdit: boolean;
-  applicationMethod: "INTERNAL" | "EXTERNAL";
-  externalUrl?: string | null;
-}
+import { ApplyModal } from "@/components/applications/apply-modal";
+import { ExternalApplyDialog } from "@/components/applications/external-apply-dialog";
 
 export function OpportunityDetailActions({
   opportunityId,
-  initialBookmarked,
-  canEdit,
-  applicationMethod,
-  externalUrl,
-}: OpportunityDetailActionsProps) {
-  const [bookmarked, setBookmarked] = React.useState(initialBookmarked);
-  const [loading, setLoading] = React.useState(false);
+  initialBookmarked = false,
+  canEdit = false,
+  canManageApplicants = false,
+}: {
+  opportunityId: string;
+  initialBookmarked?: boolean;
+  canEdit?: boolean;
+  canManageApplicants?: boolean;
+}) {
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
+  const [loading, setLoading] = useState(false);
 
   const toggleBookmark = async () => {
     setLoading(true);
-    const nextState = !bookmarked;
-    setBookmarked(nextState);
-
     try {
       const res = await fetch(`/api/opportunities/${opportunityId}/bookmark`, {
         method: "POST",
       });
       const data = await res.json();
       if (data.success) {
-        if (data.data.bookmarked) {
-          toast.success("Opportunity saved to your bookmarks");
-        } else {
-          toast.info("Removed from your bookmarks");
-        }
-      } else {
-        throw new Error(data.error);
+        setBookmarked(data.bookmarked);
+        toast.success(
+          data.bookmarked
+            ? "Saved to your Bookmarks collection."
+            : "Opportunity removed from bookmarks."
+        );
       }
-    } catch (err: any) {
-      setBookmarked(!nextState);
-      toast.error(err.message || "Failed to update bookmark");
+    } catch {
+      toast.error("Could not update bookmark status.");
     } finally {
       setLoading(false);
     }
@@ -55,12 +48,25 @@ export function OpportunityDetailActions({
   const shareOpportunity = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Opportunity link copied to clipboard");
+      toast.success("Opportunity URL copied to clipboard.");
     }
   };
 
   return (
     <div className="flex flex-wrap items-center gap-2">
+      {canManageApplicants && (
+        <Link
+          href={`/opportunities/${opportunityId}/applicants`}
+          className={cn(
+            buttonVariants({ variant: "default", size: "sm" }),
+            "gap-1.5 text-xs font-semibold shadow-xs"
+          )}
+        >
+          <Users className="size-3.5" />
+          <span>Manage Applicants</span>
+        </Link>
+      )}
+
       {canEdit && (
         <Link
           href={`/opportunities/post?editId=${opportunityId}`}
@@ -102,16 +108,27 @@ export function OpportunityDetailActions({
 }
 
 export function OpportunityApplyButton({
+  opportunityId,
+  opportunityTitle,
+  companyName,
   applicationMethod,
   externalUrl,
   deadline,
   isExpired,
+  minCgpa,
 }: {
+  opportunityId: string;
+  opportunityTitle: string;
+  companyName: string;
   applicationMethod: "INTERNAL" | "EXTERNAL";
   externalUrl?: string | null;
   deadline: Date;
   isExpired: boolean;
+  minCgpa?: number | null;
 }) {
+  const [internalModalOpen, setInternalModalOpen] = useState(false);
+  const [externalModalOpen, setExternalModalOpen] = useState(false);
+
   if (isExpired) {
     return (
       <Button disabled className="w-full text-xs font-semibold">
@@ -120,34 +137,54 @@ export function OpportunityApplyButton({
     );
   }
 
-  if (applicationMethod === "EXTERNAL" && externalUrl) {
+  if (applicationMethod === "EXTERNAL") {
     return (
-      <a
-        href={externalUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cn(
-          buttonVariants({ variant: "default", size: "default" }),
-          "w-full gap-2 font-semibold shadow-xs"
+      <>
+        <Button
+          onClick={() => setExternalModalOpen(true)}
+          className="w-full gap-2 font-semibold shadow-xs"
+          size="default"
+        >
+          <span>Apply on Company Portal</span>
+          <ExternalLink className="size-4" />
+        </Button>
+
+        {externalModalOpen && (
+          <ExternalApplyDialog
+            isOpen={externalModalOpen}
+            onClose={() => setExternalModalOpen(false)}
+            opportunityId={opportunityId}
+            opportunityTitle={opportunityTitle}
+            companyName={companyName}
+            externalUrl={externalUrl || "#"}
+          />
         )}
-      >
-        <span>Apply on Company Portal</span>
-        <ExternalLink className="size-4" />
-      </a>
+      </>
     );
   }
 
   return (
-    <div className="space-y-2 w-full">
+    <>
       <Button
-        disabled
-        className="w-full font-semibold bg-primary/20 text-primary border border-primary/30"
+        onClick={() => setInternalModalOpen(true)}
+        className="w-full font-semibold gap-2 shadow-xs"
+        size="default"
       >
-        Direct Institutional Application
+        <Send className="size-4" />
+        <span>Apply Now</span>
       </Button>
-      <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-        Internal candidate resume uploads open in the upcoming application cycle. Bookmark this opportunity to track submission readiness.
-      </p>
-    </div>
+
+      {internalModalOpen && (
+        <ApplyModal
+          isOpen={internalModalOpen}
+          onClose={() => setInternalModalOpen(false)}
+          opportunityId={opportunityId}
+          opportunityTitle={opportunityTitle}
+          companyName={companyName}
+          deadline={deadline}
+          minCgpa={minCgpa}
+        />
+      )}
+    </>
   );
 }

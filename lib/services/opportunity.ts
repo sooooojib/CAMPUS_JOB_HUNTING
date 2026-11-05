@@ -102,7 +102,11 @@ export async function createOpportunity(userId: string, input: CreateOpportunity
       deadline: new Date(validated.deadline),
     },
     include: {
-      company: true,
+      company: {
+        include: {
+          members: true,
+        },
+      },
       poster: {
         select: {
           id: true,
@@ -214,7 +218,11 @@ export async function getOpportunityById(opportunityId: string, viewerUserId?: s
   const opportunity = await prisma.opportunity.findUnique({
     where: { id: opportunityId },
     include: {
-      company: true,
+      company: {
+        include: {
+          members: true,
+        },
+      },
       poster: {
         select: {
           id: true,
@@ -447,7 +455,11 @@ export async function getPendingOpportunities(adminUserId: string) {
     where: { status: "PENDING" },
     orderBy: { createdAt: "desc" },
     include: {
-      company: true,
+      company: {
+        include: {
+          members: true,
+        },
+      },
       poster: {
         select: {
           id: true,

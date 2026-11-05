@@ -18,6 +18,7 @@ import {
   ShieldAlert,
   Building2,
   XCircle,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -298,6 +299,17 @@ export function MyOpportunitiesView() {
 
                   {/* Actions Bar */}
                   <div className="flex flex-wrap items-center gap-2 shrink-0">
+                    {/* Manage Applicants for Official Employer posts */}
+                    {opp.sourceType === "OFFICIAL_EMPLOYER" && (isApproved || isClosed) && (
+                      <Link
+                        href={`/opportunities/${opp.id}/applicants`}
+                        className={buttonVariants({ variant: "default", size: "sm" })}
+                      >
+                        <Users className="size-3.5 mr-1" />
+                        <span>Applicants</span>
+                      </Link>
+                    )}
+
                     {/* View Live */}
                     {(isApproved || isClosed || isExpired) && (
                       <Link

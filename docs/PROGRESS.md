@@ -131,12 +131,29 @@ flowchart TD
 
 ## 3. Next Stage Preview
 
-### Stage 8: Applications & Private Resume Vault
-- **Status**: Planned (Next)
+### Stage 8: Applications and Applicant Management
+- **Status**: **COMPLETE** (2026-11-05)
 - **Prerequisites**: Stage 7.
+- **Core Deliverables Delivered**:
+  - **Application Database & Unique Constraints (`prisma/schema.prisma`)**: Integrated `Application`, `Resume`, and `ApplicationStatusHistory` models with database-level composite unique constraint `@@unique([opportunityId, applicantId])` preventing duplicate applications.
+  - **Secure Private Resume Vault (`lib/services/resume.ts`)**: Private disk storage in `storage/resumes/` outside public web root with magic-bytes inspection (`%PDF-` for PDF, `PK\x03\x04` for DOCX) verifying actual file headers rather than browser-supplied MIME types. Anti-IDOR download authorization (`/api/resumes/[id]/download`).
+  - **Dual Application Methods**: Supported `INTERNAL_APPLICATION` (direct via UniCareer with resume selection/upload and cover letter) and `EXTERNAL_APPLICATION` (redirects to third-party employer portal with disclaimer and manual activity recording).
+  - **Eligibility & Pre-Flight Validation**: Real-time pre-flight verification checking department eligibility, deadline expiration, opportunity status, and advisory CGPA warnings.
+  - **Candidate Self-Service Dashboard (`/applications`)**: Live applicant dashboard (`MyApplicationsView`) displaying applied opportunities, real-time status badges, submitted resume downloads, application detail modal, and application withdrawal.
+  - **Employer Applicant Management Console (`/opportunities/[id]/applicants`)**: Live recruiter dashboard (`EmployerApplicantManager`) for authorized company managers with candidate dossier review, candidate resume access, status transition management (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`), status audit trail, and private recruiter notes.
+  - **Community Poster Strict Isolation**: Server-enforced verification (`assertCanManageApplicantsForOpportunity`) ensuring members who merely shared job leads (`COMMUNITY_SHARED`) cannot access candidate dossiers or download resumes (403 Forbidden).
+  - **Automated Testing**: 17 new unit tests in `tests/unit/applications.test.ts` (91/91 passing across all 10 test files).
+  - **Production Build**: 44 App Router routes compiled cleanly with Next.js Turbopack.
+
+---
+
+## 3. Next Stage Preview
+
+### Stage 9: Community Feed & Discussions
+- **Status**: Planned (Next)
+- **Prerequisites**: Stage 8.
 - **Core Deliverables**:
-  - Internal application submission workflow (`/opportunities/[id]/apply`).
-  - Secure private resume storage with time-limited signed URL generation.
-  - Duplicate application prevention and application withdrawal capability.
-  - Employer applicant management dashboard with status transitions (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `REJECTED`, `ACCEPTED`).
-  - Applicant tracking table with resume access controls and candidate communication notes.
+  - Community feed with threaded discussions, career questions, and referral requests.
+  - Post categorization (general, referral request, interview experience, job question).
+  - Reactions, comments, and replies with moderation controls.
+  - Member profile integration and connection requests.

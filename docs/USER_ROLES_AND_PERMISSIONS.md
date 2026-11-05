@@ -1,7 +1,7 @@
 # UniCareer Community — User Roles & Permissions Matrix
 
-> **Status**: Stage 5 Implemented & Verified  
-> **Verification & Profile Engine**: Better Auth 1.7.17 + PostgreSQL 16 via Prisma 7 `@prisma/adapter-pg`
+> **Status**: Stage 8 Implemented & Verified  
+> **Verification & Profile Engine**: Better Auth 1.7.17 + PostgreSQL 16 via Prisma 7 `@prisma/adapter-pg` + Secure Private Resume Vault
 
 ---
 
@@ -105,3 +105,25 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
 | `REJECTED` | ❌ Blocked | ✅ View with Reason | ✅ View with Reason | ✅ View / Edit |
 | `EXPIRED` | ❌ Excluded from Feed | ✅ View Archive | ✅ View Archive | ✅ View Archive |
 | `CLOSED` | ❌ Excluded from Feed | ✅ View Archive | ✅ View Archive | ✅ View Archive |
+
+---
+
+## 5. Application & Applicant Management Governance (Stage 8)
+
+| Capability / Action | Candidate / Applicant | Community Poster (`COMMUNITY_SHARED`) | Official Employer Manager | Platform Admin |
+| :--- | :---: | :---: | :---: | :---: |
+| **Apply to Active Opportunity** | ✅ (`STUDENT` / `ALUMNI`) | ❌ (Own post) | ❌ (Own post) | ✅ (Testing) |
+| **Withdraw Own Application** | ✅ | ❌ | ❌ | ✅ |
+| **View Own Application Dossier** | ✅ | ❌ | ❌ | ✅ |
+| **Manage Opportunity Applicants** | ❌ | ❌ **FORBIDDEN (403)** | ✅ (For Authorized Company) | ✅ (All) |
+| **Update Applicant Status** | ❌ | ❌ | ✅ (`SUBMITTED` -> `SELECTED`/`REJECTED`) | ✅ |
+| **Download Candidate Resume** | ✅ (Own resume) | ❌ **FORBIDDEN (403)** | ✅ (For Applied Opportunity) | ✅ |
+| **Write Internal Recruiter Notes** | ❌ | ❌ | ✅ | ✅ |
+
+### Key Security & Authorization Directives:
+1. **Community Poster Isolation**: Community members who post external job leads (`COMMUNITY_SHARED`) **CANNOT** view candidate profiles, download resumes, or manage application pipelines. Only verified company representatives with confirmed corporate domain or institutional affiliation (`canReviewApplicants === true` and company member role `OWNER`/`ADMIN`/`MEMBER`) have access to candidate data.
+2. **Resume Anti-IDOR Authorization**: `assertCanAccessResume(userId, resumeId)` verifies either:
+   - The user is the owner of the resume (`resume.userId === userId`).
+   - The user is a platform `ADMIN`.
+   - The user is an authorized employer reviewing an active or historic application referencing the resume for their company.
+3. **Database-Level Duplicate Prevention**: Composite unique index `@@unique([opportunityId, applicantId])` guarantees at the database engine level that no member can submit duplicate applications to the same opportunity.
