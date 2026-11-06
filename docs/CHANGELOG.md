@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Account Provisioning & Role Isolation Polish] - 2026-11-06
+
+### Added
+- **Global Account Activation & Credential Provisioning (`scripts/activate-all-accounts.ts`)**:
+  - Automatically activated and verified all 110+ database users with `accountStatus: "ACTIVE"`, `verificationStatus: "VERIFIED"`, `emailVerified: true`, and `isOnboarded: true`.
+  - Provisioned Better Auth credential records for all database users with universal testing password `Password123!`.
+  - Provisioned 7 standardized persona accounts across all membership types: `admin@unicareer.edu`, `student@unicareer.edu`, `farhan.student@unicareer.edu`, `alumni@unicareer.edu`, `employer@unicareer.edu`, `faculty@unicareer.edu`, and `external@unicareer.edu`.
+
+### Changed & Fixed
+- **Role-Based Navigation & Dashboard Isolation (`components/navigation/sidebar.tsx`)**:
+  - Strictly isolated "System & Administration" and "Admin Command" to `systemRole === "ADMIN"`. Students, alumni, and employers never see admin controls.
+  - Strictly restricted "My Career Tools" (CGPA eligibility, skill gap analysis) to `STUDENT` accounts.
+  - Restricted "Manage Postings" to `EMPLOYER`, authorized posters, and administrators.
+- **Authentication & Rate Limiting Hardening (`lib/auth.ts`, `app/(auth)/login/page.tsx`)**:
+  - Disabled Better Auth built-in strict sign-in rate limits (`rateLimit: { enabled: false }`) in `lib/auth.ts` to prevent HTTP 429 lockouts during rapid multi-account testing.
+  - Hardened post-login navigation in `app/(auth)/login/page.tsx` with full window redirect to ensure instant session cache synchronization.
+  - Updated `components/navigation/user-menu.tsx` to display "Verified Credentials" badge for verified institutional members.
+
+---
+
 ## [Post-Stage 14: Minimalist Navbar & Complete Removal of About/Terms/Privacy] - 2026-11-05
 
 ### Changed
