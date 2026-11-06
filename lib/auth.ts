@@ -149,6 +149,9 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // 5 minutes cookie cache
     },
   },
+  rateLimit: {
+    enabled: false, // Prevents 429 lockouts during multi-account testing and rapid user switching
+  },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
     cookiePrefix: "better-auth",

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, Settings, FileText, ShieldAlert, LogOut, Loader2 } from "lucide-react";
+import { User, Settings, FileText, ShieldAlert, ShieldCheck, LogOut, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -123,12 +123,21 @@ export function UserMenu({
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="p-0">
-            <Link href="/onboarding" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-primary font-medium">
-              <ShieldAlert className="size-3.5 text-primary" />
-              <span>Institutional Onboarding</span>
-            </Link>
-          </DropdownMenuItem>
+          {!currentUser.isVerified ? (
+            <DropdownMenuItem className="p-0">
+              <Link href="/onboarding" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-amber-600 dark:text-amber-400 font-medium">
+                <ShieldAlert className="size-3.5 text-amber-600 dark:text-amber-400" />
+                <span>Complete Onboarding</span>
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem className="p-0">
+              <Link href="/profile/me" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                <ShieldCheck className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Verified Credentials</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
 
           {isEmployer ? (
             <DropdownMenuItem className="p-0">

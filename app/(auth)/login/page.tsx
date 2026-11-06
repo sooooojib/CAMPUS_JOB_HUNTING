@@ -68,9 +68,8 @@ function LoginForm() {
         return;
       }
 
-      // Successful sign in -> redirect to callbackUrl or dashboard
-      router.push(callbackUrl);
-      router.refresh();
+      // Successful sign in -> hard redirect to callbackUrl or dashboard to reload fresh session state
+      window.location.href = callbackUrl;
     } catch (err: any) {
       console.error("Login submission error:", err);
       setErrorMessage("An unexpected network error occurred. Please try again.");

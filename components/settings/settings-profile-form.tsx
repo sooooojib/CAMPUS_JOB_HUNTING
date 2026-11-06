@@ -278,3 +278,4 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
     </form>
   );
 }
+
