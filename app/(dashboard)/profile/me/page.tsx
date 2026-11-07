@@ -166,7 +166,7 @@ export default async function MyProfilePage() {
                     </span>
                   </Badge>
                   <Badge variant="outline" className="text-xs font-semibold">
-                    {memberData.membershipType.replace("_", " ")}
+                    {(memberData.membershipType || "MEMBER").replace("_", " ")}
                   </Badge>
                   {profile?.graduationYear && (
                     <Badge variant="outline" className="text-xs">

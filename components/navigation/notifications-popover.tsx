@@ -76,7 +76,7 @@ export function NotificationsPopover() {
       const res = await fetch("/api/notifications?pageSize=5");
       if (res.ok) {
         const data = await res.json();
-        setNotifications(data.notifications || []);
+        setNotifications(data.notifications || data.data || []);
         setUnreadCount(data.unreadCount || 0);
       }
     } catch {

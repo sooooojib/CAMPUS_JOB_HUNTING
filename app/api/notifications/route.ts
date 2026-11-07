@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: data.items,
+      notifications: data.items,
       unreadCount: data.unreadCount,
       pagination: data.pagination,
     });

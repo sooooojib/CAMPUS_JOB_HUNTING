@@ -22,7 +22,7 @@ import { authClient } from "@/lib/auth-client";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/feed";
   const urlError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
@@ -166,7 +166,7 @@ function LoginForm() {
               </>
             ) : (
               <>
-                <span>Sign In to Dashboard</span>
+                <span>Sign In to Community</span>
                 <ArrowRight className="size-4" />
               </>
             )}

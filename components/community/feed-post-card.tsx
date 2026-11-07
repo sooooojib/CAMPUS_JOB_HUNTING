@@ -129,8 +129,8 @@ export function FeedPostCard({
         .toUpperCase()
     : "U";
 
-  const typeMeta = POST_TYPE_META[postType] || {
-    label: postType.replace("_", " "),
+  const typeMeta = (postType && POST_TYPE_META[postType]) || {
+    label: (postType || "").replace("_", " "),
     icon: MessageSquare,
     badgeVariant: "secondary",
   };
@@ -279,7 +279,7 @@ export function FeedPostCard({
                   {authorName}
                 </Link>
                 <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider py-0 px-1">
-                  {authorMembership.replace("_", " ")}
+                  {(authorMembership || "MEMBER").replace("_", " ")}
                 </Badge>
                 {authorVerificationStatus === "VERIFIED" && (
                   <Badge variant="secondary" className="text-[9px] py-0 px-1 text-emerald-600 dark:text-emerald-400 font-medium">

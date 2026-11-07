@@ -112,7 +112,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
       {/* Profile Information Section */}
       <section className="space-y-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border/60 pb-2">
-          1. Profile &amp; Role Identity ({user.membershipType.replace("_", " ")})
+          1. Profile &amp; Role Identity ({(user.membershipType || "MEMBER").replace("_", " ")})
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -272,7 +272,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
       <div className="pt-2">
         <Button type="submit" disabled={isSaving} className="gap-2 cursor-pointer">
           {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
-          <span>{isSaving ? "Saving Changes..." : "Save Settings & Profile"}</span>
+          <span>{isSaving ? "Saving Changes..." : "Save Profile Details"}</span>
         </Button>
       </div>
     </form>

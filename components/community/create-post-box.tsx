@@ -47,12 +47,6 @@ const POST_TYPE_OPTIONS: {
     badgeClass: "hover:bg-muted",
   },
   {
-    type: "JOB_ANNOUNCEMENT",
-    label: "Job & Internship",
-    icon: Briefcase,
-    badgeClass: "hover:bg-emerald-500/10 hover:text-emerald-600",
-  },
-  {
     type: "REFERRAL_REQUEST",
     label: "Referral",
     icon: Award,

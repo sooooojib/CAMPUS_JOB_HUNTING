@@ -68,7 +68,7 @@ export function MemberProfileCard({
                   {name}
                 </Link>
                 <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider">
-                  {membershipType.replace("_", " ")}
+                  {(membershipType || "MEMBER").replace("_", " ")}
                 </Badge>
               </div>
 

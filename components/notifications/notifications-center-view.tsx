@@ -98,7 +98,7 @@ export function NotificationsCenterView() {
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
-        let items: NotificationItem[] = data.notifications || [];
+        let items: NotificationItem[] = data.notifications || data.data || [];
 
         // In-memory filter for specific categories
         if (selectedFilter === "OPPORTUNITY") {

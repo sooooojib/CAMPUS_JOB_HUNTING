@@ -14,6 +14,7 @@ import {
   Sparkles,
   Share2,
   Settings,
+  User,
   ShieldAlert,
   ChevronRight,
   LogOut,
@@ -191,7 +192,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       {/* Brand Header */}
       <div className="flex h-16 items-center border-b border-sidebar-border px-6">
         <Link
-          href="/dashboard"
+          href="/feed"
           onClick={onNavigate}
           className="flex items-center gap-2.5 font-bold tracking-tight text-sidebar-foreground"
         >
@@ -297,19 +298,19 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               onClick={onNavigate}
               className={cn(
                 "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
-                pathname.startsWith("/settings")
+                pathname.startsWith("/settings") || pathname === "/profile"
                   ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <Settings
+                <User
                   className={cn(
                     "size-4 shrink-0",
-                    pathname.startsWith("/settings") ? "text-primary" : "text-muted-foreground"
+                    pathname.startsWith("/settings") || pathname === "/profile" ? "text-primary" : "text-muted-foreground"
                   )}
                 />
-                <span>Settings & Profile</span>
+                <span>Profile</span>
               </div>
             </Link>
 
@@ -348,7 +349,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                 {currentUser.name}
               </p>
               <p className="text-[10px] text-muted-foreground truncate">
-                {currentUser.membershipType.replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
+                {(currentUser.membershipType || "MEMBER").replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
               </p>
             </div>
           </div>

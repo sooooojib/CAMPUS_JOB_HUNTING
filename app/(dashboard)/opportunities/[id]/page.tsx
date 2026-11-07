@@ -172,7 +172,7 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
               <div className="flex flex-wrap items-center gap-2">
                 <EmployerBadge classification={opportunity.sourceType} />
                 <Badge variant="outline" className="text-xs uppercase font-medium">
-                  {opportunity.type.replace("_", " ")}
+                  {(opportunity.type || "").replace("_", " ")}
                 </Badge>
                 {opportunity.status !== "APPROVED" && (
                   <Badge
@@ -321,7 +321,7 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
                     {opportunity.poster.name}
                   </div>
                   <div className="text-[10px] font-mono text-muted-foreground">
-                    {opportunity.poster.membershipType.replace("_", " ")}
+                    {(opportunity.poster?.membershipType || "MEMBER").replace("_", " ")}
                   </div>
                 </div>
               </div>

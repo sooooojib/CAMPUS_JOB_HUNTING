@@ -163,7 +163,7 @@ export default async function PublicProfilePage(
                     </Badge>
                   )}
                   <Badge variant="outline" className="text-xs font-semibold">
-                    {profileData.membershipType.replace("_", " ")}
+                    {(profileData.membershipType || "MEMBER").replace("_", " ")}
                   </Badge>
                   {profileData.graduationYear && (
                     <Badge variant="outline" className="text-xs">
@@ -223,7 +223,7 @@ export default async function PublicProfilePage(
               <CardContent className="pt-4 space-y-3 text-xs">
                 <div className="space-y-1">
                   <span className="text-muted-foreground">Membership Type:</span>
-                  <p className="font-semibold text-foreground">{profileData.membershipType.replace("_", " ")}</p>
+                  <p className="font-semibold text-foreground">{(profileData.membershipType || "MEMBER").replace("_", " ")}</p>
                 </div>
                 <div className="space-y-1">
                   <span className="text-muted-foreground">Network Standing:</span>
@@ -468,7 +468,7 @@ export default async function PublicProfilePage(
                   >
                     <div className="flex items-center justify-between gap-2">
                       <Badge variant="outline" className="text-[10px] font-mono uppercase">
-                        {post.postType.replace("_", " ")}
+                        {(post.postType || "POST").replace("_", " ")}
                       </Badge>
                       <span className="text-[11px] text-muted-foreground">
                         {new Date(post.createdAt).toLocaleDateString("en-US", {

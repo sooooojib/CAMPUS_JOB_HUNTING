@@ -82,13 +82,13 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Authenticated users accessing login/register -> Redirect to requested callbackUrl or /dashboard
+  // 2. Authenticated users accessing login/register -> Redirect to requested callbackUrl or /feed
   if (isAuthRoute && isAuthenticated) {
     const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
     const destination =
-      callbackUrl && callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")
+      callbackUrl && callbackUrl.startsWith("/") && !callbackUrl.startsWith("//") && callbackUrl !== "/dashboard"
         ? callbackUrl
-        : "/dashboard";
+        : "/feed";
     return NextResponse.redirect(new URL(destination, request.url));
   }
 

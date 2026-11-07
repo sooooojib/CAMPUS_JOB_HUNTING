@@ -157,8 +157,8 @@ export function UserMenu({
 
           <DropdownMenuItem className="p-0">
             <Link href="/settings" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
-              <Settings className="size-3.5 text-muted-foreground" />
-              <span>Account Settings</span>
+              <User className="size-3.5 text-muted-foreground" />
+              <span>Profile</span>
             </Link>
           </DropdownMenuItem>
 

@@ -108,7 +108,7 @@ export function ResubmitVerificationModal({
         <DialogHeader>
           <DialogTitle>Institutional Verification Resubmission</DialogTitle>
           <DialogDescription>
-            Provide updated credentials to substantiate your {membershipType.toLowerCase().replace("_", " ")} identity.
+            Provide updated credentials to substantiate your {(membershipType || "member").toLowerCase().replace("_", " ")} identity.
           </DialogDescription>
         </DialogHeader>
 

@@ -20,7 +20,7 @@ export default async function CommunityFeedPage() {
   return (
     <DashboardTemplate
       title="University Community Feed & Discussions"
-      subtitle="Connect with verified students, alumni, faculty, and industry partners across Jagannath University."
+      subtitle="Connect with verified students, alumni, and administrators across the campus community."
       actions={
         <div className="flex items-center gap-2">
           <Link

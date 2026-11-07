@@ -215,6 +215,9 @@ export async function getCommunityFeed(
 
   if (filters.postType && filters.postType !== "ALL") {
     where.postType = filters.postType;
+  } else {
+    // Exclude job announcements from the community feed because jobs/internships have their dedicated tab (/opportunities)
+    where.postType = { not: "JOB_ANNOUNCEMENT" };
   }
 
   if (filters.authorId) {

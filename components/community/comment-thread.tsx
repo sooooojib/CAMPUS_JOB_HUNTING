@@ -312,7 +312,7 @@ export function CommentThread({
                       {comment.author.name}
                     </span>
                     <Badge variant="outline" className="text-[9px] py-0 px-1 font-mono uppercase">
-                      {comment.author.membershipType.replace("_", " ")}
+                      {(comment.author?.membershipType || "MEMBER").replace("_", " ")}
                     </Badge>
                   </div>
                   <span className="text-[10px] text-muted-foreground">

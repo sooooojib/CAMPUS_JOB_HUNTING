@@ -29,7 +29,7 @@ import { authClient } from "@/lib/auth-client";
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/feed";
 
   const [membershipType, setMembershipType] = useState<string>("STUDENT");
   const [fullName, setFullName] = useState("");

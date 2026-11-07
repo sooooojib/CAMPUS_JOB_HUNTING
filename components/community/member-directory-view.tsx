@@ -288,7 +288,7 @@ export function MemberDirectoryView() {
                           )}
                         </div>
                         <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider mt-0.5">
-                          {member.membershipType.replace("_", " ")}
+                          {(member.membershipType || "MEMBER").replace("_", " ")}
                         </Badge>
                       </div>
                     </div>

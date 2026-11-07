@@ -30,7 +30,7 @@ export async function getUserCareerCalendar(
   endDate.setDate(endDate.getDate() + 7);
   endDate.setHours(23, 59, 59, 999);
 
-  const [customEvents, appliedOpportunities, bookmarkedOpportunities] = await Promise.all([
+  const [customEvents, appliedOpportunities, manualApplications, bookmarkedOpportunities] = await Promise.all([
     // 1. Custom calendar events
     prisma.careerCalendarEvent.findMany({
       where: {
@@ -61,7 +61,14 @@ export async function getUserCareerCalendar(
       },
     }),
 
-    // 3. Saved / Bookmarked opportunities
+    // 3. Manual external applications tracked by user
+    prisma.manualApplication.findMany({
+      where: {
+        userId,
+      },
+    }),
+
+    // 4. Saved / Bookmarked opportunities
     prisma.opportunityBookmark.findMany({
       where: {
         userId,
@@ -104,12 +111,33 @@ export async function getUserCareerCalendar(
     });
   }
 
-  // Map Applied Opportunity Deadlines
+  // Map Applied Opportunity Deadlines & Submission Events
   const appliedOppIds = new Set<string>();
   for (const app of appliedOpportunities) {
     appliedOppIds.add(app.opportunityId);
     const deadline = app.opportunity.deadline;
+    const appliedDate = app.submittedAt;
 
+    // Auto-show application submission on the calendar
+    if (appliedDate >= startDate && appliedDate <= endDate) {
+      events.push({
+        id: `app_submitted_${app.id}`,
+        title: `Applied: ${app.opportunity.title}`,
+        description: `Direct application submitted for ${app.opportunity.title} at ${app.opportunity.companyName}.`,
+        eventType: "APPLICATION_DEADLINE",
+        startDate: appliedDate.toISOString(),
+        endDate: null,
+        isAllDay: true,
+        relatedOpportunityId: app.opportunity.id,
+        relatedApplicationId: app.id,
+        isSystemGenerated: true,
+        companyName: app.opportunity.companyName,
+        actionUrl: `/applications`,
+        statusBadge: `Applied: ${(app.status || "PENDING").replace("_", " ")}`,
+      });
+    }
+
+    // Opportunity deadline event
     if (deadline >= startDate && deadline <= endDate) {
       events.push({
         id: `app_deadline_${app.id}`,
@@ -124,7 +152,7 @@ export async function getUserCareerCalendar(
         isSystemGenerated: true,
         companyName: app.opportunity.companyName,
         actionUrl: `/applications`,
-        statusBadge: `Applied: ${app.status.replace("_", " ")}`,
+        statusBadge: `Deadline`,
       });
     }
 
@@ -144,6 +172,47 @@ export async function getUserCareerCalendar(
         companyName: app.opportunity.companyName,
         actionUrl: `/applications`,
         statusBadge: "Interview Scheduled",
+      });
+    }
+  }
+
+  // Map Manual Applications
+  for (const manual of manualApplications) {
+    const appliedDate = manual.appliedDate || manual.createdAt;
+
+    if (appliedDate >= startDate && appliedDate <= endDate) {
+      events.push({
+        id: `manual_app_${manual.id}`,
+        title: `Tracked: ${manual.roleTitle}`,
+        description: `Manual application logged for ${manual.roleTitle} at ${manual.companyName}.`,
+        eventType: "APPLICATION_DEADLINE",
+        startDate: appliedDate.toISOString(),
+        endDate: null,
+        isAllDay: true,
+        relatedOpportunityId: undefined,
+        relatedApplicationId: manual.id,
+        isSystemGenerated: true,
+        companyName: manual.companyName,
+        actionUrl: `/applications`,
+        statusBadge: `Manual: ${(manual.status || "APPLIED").replace("_", " ")}`,
+      });
+    }
+
+    if (manual.status === "INTERVIEWING") {
+      events.push({
+        id: `manual_interview_${manual.id}`,
+        title: `Interview: ${manual.roleTitle}`,
+        description: `Interview stage active for ${manual.roleTitle} at ${manual.companyName}.`,
+        eventType: "INTERVIEW",
+        startDate: manual.updatedAt.toISOString(),
+        endDate: null,
+        isAllDay: false,
+        relatedOpportunityId: undefined,
+        relatedApplicationId: manual.id,
+        isSystemGenerated: true,
+        companyName: manual.companyName,
+        actionUrl: `/applications`,
+        statusBadge: "Interview Stage",
       });
     }
   }
