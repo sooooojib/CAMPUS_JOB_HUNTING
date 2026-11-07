@@ -58,10 +58,7 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       const types = [
         "STUDENT",
         "ALUMNI",
-        "FACULTY",
-        "STAFF",
-        "EMPLOYER",
-        "EXTERNAL_CONNECTION",
+        "ADMIN",
       ] as const;
 
       for (const mType of types) {
@@ -162,25 +159,24 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       adminUser = await createTestUser({
         email: `admin_${timestamp}@university.edu`,
         name: "Campus Career Admin",
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
         verificationStatus: "VERIFIED",
       });
 
       applicantUser = await createTestUser({
         email: `applicant_${timestamp}@partner.com`,
-        name: "Corporate Talent Lead",
-        membershipType: "EMPLOYER",
+        name: "Alumni Talent Lead",
+        membershipType: "ALUMNI",
         verificationStatus: "PENDING",
       });
 
       const req = await submitVerificationRequest(applicantUser.id, {
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         organization: "Google Bangladesh Partner",
         designation: "University Recruiter",
         workEmail: "recruiter@partner.com",
-        connectionNote: "Formal campus hiring partnership with Jagannath University Career Center.",
-        proofDetails: "MoU document signed October 2026.",
+        proofDetails: "Graduation diploma submitted October 2026.",
       });
 
       requestId = req.id;
@@ -226,7 +222,6 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       expect(decision.user.verificationStatus).toBe("VERIFIED");
       expect(decision.user.verifiedBy).toBe(adminUser.id);
       expect(decision.user.canPostOpportunities).toBe(true);
-      expect(decision.user.canReviewApplicants).toBe(true);
     });
 
     it("supports resubmission when a request is rejected", async () => {
@@ -340,7 +335,7 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       const admin = await createTestUser({
         email: `audit_admin_${timestamp}@university.edu`,
         name: "Admin Auditor",
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
       });
 
@@ -389,10 +384,11 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
         membershipType: "EMPLOYER",
         verificationStatus: "VERIFIED",
       };
-      const verifiedFaculty = {
+      const verifiedAlumni = {
         systemRole: "MEMBER",
-        membershipType: "FACULTY",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
+        canPostOpportunities: true,
       };
       const verifiedStudent = {
         systemRole: "MEMBER",
@@ -402,21 +398,19 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       };
 
       expect(canPostOpportunity(adminUser)).toBe(true);
-      expect(canPostOpportunity(verifiedEmployer)).toBe(true);
-      expect(canPostOpportunity(verifiedFaculty)).toBe(true);
+      expect(canPostOpportunity(verifiedAlumni)).toBe(true);
       expect(canPostOpportunity(verifiedStudent)).toBe(false); // Students cannot post opportunities by default
     });
 
     it("verifies applicant review and student career tools permissions", () => {
+      const admin = { systemRole: "ADMIN", membershipType: "ADMIN", verificationStatus: "VERIFIED" };
       const student = { membershipType: "STUDENT", verificationStatus: "VERIFIED" };
-      const employer = { membershipType: "EMPLOYER", verificationStatus: "VERIFIED" };
-      const faculty = { membershipType: "FACULTY", verificationStatus: "VERIFIED" };
+      const alumni = { membershipType: "ALUMNI", verificationStatus: "VERIFIED" };
 
       expect(canAccessStudentTools(student)).toBe(true);
-      expect(canAccessStudentTools(employer)).toBe(false);
-      expect(canAccessStudentTools(faculty)).toBe(false);
+      expect(canAccessStudentTools(alumni)).toBe(false);
 
-      expect(canReviewApplicants(employer)).toBe(true);
+      expect(canReviewApplicants(admin)).toBe(true);
       expect(canReviewApplicants(student)).toBe(false);
     });
   });

@@ -72,7 +72,8 @@ describe("Stage 8: Applications & Applicant Management Test Suite", () => {
       data: {
         name: `Talent Lead ${ts}`,
         email: `talent_${ts}@techpartner.com`,
-        membershipType: "EMPLOYER",
+        membershipType: "ADMIN",
+        systemRole: "ADMIN",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
         canReviewApplicants: true,

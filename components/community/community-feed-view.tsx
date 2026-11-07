@@ -43,12 +43,9 @@ interface CommunityFeedViewProps {
 
 const FEED_TABS: { key: string; label: string; icon: React.ElementType }[] = [
   { key: "ALL", label: "All Feed", icon: MessageSquare },
-  { key: "GENERAL_DISCUSSION", label: "Discussions", icon: MessageSquare },
-  { key: "CAREER_ADVICE", label: "Career Advice", icon: Sparkles },
-  { key: "QUESTION", label: "Questions", icon: HelpCircle },
-  { key: "REFERRAL_REQUEST", label: "Referral Requests", icon: Award },
-  { key: "JOB_ANNOUNCEMENT", label: "Job Leads", icon: Briefcase },
-  { key: "INTERNSHIP_ANNOUNCEMENT", label: "Internships", icon: Briefcase },
+  { key: "GENERAL_DISCUSSION", label: "Discussions & Q&A", icon: MessageSquare },
+  { key: "JOB_ANNOUNCEMENT", label: "Jobs & Internships", icon: Briefcase },
+  { key: "REFERRAL_REQUEST", label: "Referrals", icon: Award },
   { key: "ACHIEVEMENT", label: "Achievements", icon: Sparkles },
   { key: "BOOKMARKED", label: "Saved Posts", icon: Bookmark },
 ];

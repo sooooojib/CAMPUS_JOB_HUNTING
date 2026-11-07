@@ -29,7 +29,7 @@ describe("Stage 13: Administration, Moderation, and Governance System", () => {
     emailSuffix: string,
     name: string,
     systemRole: "ADMIN" | "MEMBER" = "MEMBER",
-    membershipType: "STUDENT" | "EMPLOYER" | "FACULTY" = "STUDENT",
+    membershipType: "STUDENT" | "ALUMNI" | "ADMIN" = "STUDENT",
     verificationStatus: "PENDING" | "VERIFIED" = "VERIFIED"
   ) {
     const user = await prisma.user.create({
@@ -142,12 +142,12 @@ describe("Stage 13: Administration, Moderation, and Governance System", () => {
 
     it("verifies that platform ADMIN is completely decoupled from membershipType", async () => {
       const studentAdmin = await createTestUser("student_admin", "Admin Student", "ADMIN", "STUDENT");
-      const employerAdmin = await createTestUser("employer_admin", "Admin Employer", "ADMIN", "EMPLOYER");
+      const alumniAdmin = await createTestUser("alumni_admin", "Admin Alumni", "ADMIN", "ALUMNI");
 
       expect(isPlatformAdmin(studentAdmin)).toBe(true);
       expect(studentAdmin.membershipType).toBe("STUDENT");
-      expect(isPlatformAdmin(employerAdmin)).toBe(true);
-      expect(employerAdmin.membershipType).toBe("EMPLOYER");
+      expect(isPlatformAdmin(alumniAdmin)).toBe(true);
+      expect(alumniAdmin.membershipType).toBe("ALUMNI");
     });
   });
 

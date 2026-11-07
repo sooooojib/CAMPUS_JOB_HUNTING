@@ -4,7 +4,7 @@ import { CommunityFeedView } from "@/components/community/community-feed-view";
 import { DashboardTemplate } from "@/components/templates/dashboard-template";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { Briefcase, Award } from "lucide-react";
+import { Briefcase, Users } from "lucide-react";
 
 export const metadata = {
   title: "Community Feed & Discussions",
@@ -31,11 +31,11 @@ export default async function CommunityFeedPage() {
             <span>Post Opportunity</span>
           </Link>
           <Link
-            href="/referrals"
+            href="/community"
             className={buttonVariants({ variant: "default", size: "sm" })}
           >
-            <Award className="size-3.5 mr-1.5" />
-            <span>Request Referral</span>
+            <Users className="size-3.5 mr-1.5" />
+            <span>Member Network</span>
           </Link>
         </div>
       }

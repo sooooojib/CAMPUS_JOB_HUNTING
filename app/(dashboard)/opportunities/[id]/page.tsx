@@ -30,6 +30,7 @@ import {
   OpportunityDetailActions,
   OpportunityApplyButton,
 } from "@/components/opportunities/opportunity-detail-actions";
+import { OpportunityComments } from "@/components/opportunities/opportunity-comments";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
@@ -433,23 +434,44 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Required Technical & Professional Skills */}
+        {/* Required Technical & Professional Skills - Skill Table */}
         {opportunity.requiredSkills.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
               <Layers className="size-4 text-primary" />
-              <span>Required Competencies &amp; Skills</span>
+              <span>Competencies &amp; Skills Specification Table</span>
             </h3>
 
-            <div className="flex flex-wrap gap-2">
-              {opportunity.requiredSkills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-2xs"
-                >
-                  {skill}
-                </span>
-              ))}
+            <div className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xs">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-muted/60 text-[11px] uppercase tracking-wider font-mono text-muted-foreground border-b border-border/60">
+                  <tr>
+                    <th className="px-4 py-2.5 font-bold">#</th>
+                    <th className="px-4 py-2.5 font-bold">Skill / Competency</th>
+                    <th className="px-4 py-2.5 font-bold">Priority / Level</th>
+                    <th className="px-4 py-2.5 font-bold">Requirement</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/40">
+                  {opportunity.requiredSkills.map((skill, idx) => (
+                    <tr key={skill} className="hover:bg-muted/20 transition-colors">
+                      <td className="px-4 py-2.5 font-mono text-muted-foreground">{idx + 1}</td>
+                      <td className="px-4 py-2.5 font-semibold text-foreground">{skill}</td>
+                      <td className="px-4 py-2.5">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-primary/10 text-primary border border-primary/20">
+                          {idx === 0 ? "Core Focus" : "Required Proficiency"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                          <CheckCircle2 className="size-3" />
+                          <span>Mandatory</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -508,6 +530,12 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
             </div>
           </div>
         )}
+
+        {/* Opportunity Discussion & Comments */}
+        <OpportunityComments
+          opportunityId={opportunity.id}
+          currentUserId={session.user.id}
+        />
       </div>
     </DetailsTemplate>
   );

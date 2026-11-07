@@ -973,6 +973,42 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     count: vg._count.id,
   }));
 
+  // Detailed member activity metrics ("সবার Details")
+  const memberActivityUsers = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      membershipType: true,
+      verificationStatus: true,
+      accountStatus: true,
+      createdAt: true,
+      _count: {
+        select: {
+          applications: true,
+          postedOpportunities: true,
+          posts: true,
+          comments: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const memberActivityDetails = memberActivityUsers.map((u) => ({
+    id: u.id,
+    name: u.name,
+    email: u.email,
+    membershipType: u.membershipType,
+    verificationStatus: u.verificationStatus,
+    accountStatus: u.accountStatus,
+    createdAt: u.createdAt.toISOString(),
+    applicationsCount: u._count.applications,
+    opportunitiesCount: u._count.postedOpportunities,
+    postsCount: u._count.posts,
+    commentsCount: u._count.comments,
+  }));
+
   return {
     memberGrowth: memberGrowth.length > 0 ? memberGrowth : [{ period: "Current", count: allUsers.length }],
     opportunityActivity:
@@ -984,5 +1020,6 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     departmentParticipation,
     opportunityTypes,
     verificationBreakdown,
+    memberActivityDetails,
   };
 }

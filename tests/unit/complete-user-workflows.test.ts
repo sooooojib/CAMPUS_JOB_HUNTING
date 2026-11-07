@@ -56,7 +56,7 @@ describe("Stage 14: Comprehensive User Workflow & Security Tests", () => {
   async function registerUser(
     roleSuffix: string,
     name: string,
-    membershipType: "STUDENT" | "ALUMNI" | "FACULTY" | "STAFF" | "EMPLOYER" | "EXTERNAL_CONNECTION" = "STUDENT",
+    membershipType: "STUDENT" | "ALUMNI" | "ADMIN" = "STUDENT",
     systemRole: "MEMBER" | "ADMIN" = "MEMBER"
   ) {
     const user = await prisma.user.create({
@@ -135,7 +135,7 @@ describe("Stage 14: Comprehensive User Workflow & Security Tests", () => {
     });
 
     it("Step 3 & 4: Submits university details and receives registrar verification", async () => {
-      admin = await registerUser("admin_wf", "Campus Dean", "FACULTY", "ADMIN");
+      admin = await registerUser("admin_wf", "Campus Dean", "ADMIN", "ADMIN");
       await prisma.user.update({ where: { id: admin.id }, data: { emailVerified: true, verificationStatus: "VERIFIED" } });
 
       const request = await submitVerificationRequest(student.id, {
@@ -181,8 +181,8 @@ describe("Stage 14: Comprehensive User Workflow & Security Tests", () => {
     });
 
     it("Step 6, 7 & 8: Browses opportunities, filters, and views details", async () => {
-      // Setup employer and approved opportunity
-      employer = await registerUser("emp_wf", "Recruiter Jane", "EMPLOYER");
+      // Setup alumni poster and approved opportunity
+      employer = await registerUser("emp_wf", "Recruiter Jane", "ALUMNI");
       await prisma.user.update({ where: { id: employer.id }, data: { emailVerified: true, verificationStatus: "VERIFIED", canPostOpportunities: true } });
 
       company = await prisma.company.create({
@@ -430,13 +430,13 @@ describe("Stage 14: Comprehensive User Workflow & Security Tests", () => {
     let candidate: any;
 
     it("Step 1, 2, 3 & 4: Recruiter registers, verifies email, and receives verification", async () => {
-      recruiter = await registerUser("recruiter_wf", "Sarah Talent", "EMPLOYER");
+      recruiter = await registerUser("recruiter_wf", "Sarah Talent", "ALUMNI");
       const admin = await prisma.user.findFirst({ where: { systemRole: "ADMIN" } });
 
       await prisma.user.update({ where: { id: recruiter.id }, data: { emailVerified: true } });
 
       const req = await submitVerificationRequest(recruiter.id, {
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         organization: "Vercel Platform Labs",
         designation: "University Relations Lead",
         workEmail: "sarah.talent@vercel.com",

@@ -18,13 +18,6 @@ export default function CommunityPage() {
       primaryAction={
         <div className="flex items-center gap-2">
           <Link
-            href="/referrals"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            <UserCheck className="size-3.5 mr-1.5 text-amber-500" />
-            <span>Referrals Hub</span>
-          </Link>
-          <Link
             href="/feed"
             className={buttonVariants({ variant: "default", size: "sm" })}
           >

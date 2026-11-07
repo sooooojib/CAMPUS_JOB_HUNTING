@@ -52,13 +52,6 @@ const mainNavItems: NavItem[] = [
     icon: Users,
   },
   {
-    title: "Alumni Referrals",
-    href: "/referrals",
-    icon: Award,
-    badge: "High Trust",
-    badgeVariant: "warning",
-  },
-  {
     title: "My Applications",
     href: "/applications",
     icon: FileText,
@@ -67,13 +60,6 @@ const mainNavItems: NavItem[] = [
     title: "Career Calendar",
     href: "/calendar",
     icon: Calendar,
-  },
-  {
-    title: "My Career Tools",
-    href: "/career-tools",
-    icon: Sparkles,
-    badge: "Student",
-    badgeVariant: "secondary",
   },
   {
     title: "My Contributions",
@@ -112,10 +98,9 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
     canPostOpportunities: (session?.user as any)?.canPostOpportunities || propUser?.canPostOpportunities || false,
   };
 
-  const isAdmin = currentUser.systemRole === "ADMIN";
+  const isAdmin = currentUser.systemRole === "ADMIN" || currentUser.membershipType === "ADMIN";
   const isStudent = currentUser.membershipType === "STUDENT";
   const isAlumni = currentUser.membershipType === "ALUMNI";
-  const isEmployer = currentUser.membershipType === "EMPLOYER" || currentUser.membershipType === "EXTERNAL_CONNECTION";
 
   const initials = currentUser.name
     .split(" ")
@@ -141,13 +126,13 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       },
     ];
 
-    // For Employers, authorized posters, or Admin: show Manage Postings
-    if (isEmployer || currentUser.canPostOpportunities || isAdmin) {
+    // For Admin, Alumni, or authorized posters: show Manage Postings
+    if (isAdmin || isAlumni || currentUser.canPostOpportunities) {
       items.push({
         title: "Manage Postings",
         href: "/opportunities/my",
         icon: Briefcase,
-        badge: isEmployer ? "Hiring" : undefined,
+        badge: isAdmin ? "Admin" : undefined,
         badgeVariant: "warning",
       });
     }
@@ -159,25 +144,12 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       icon: Users,
     });
 
-    // Referrals (Students, Alumni, Faculty, Admin)
-    if (!isEmployer) {
-      items.push({
-        title: "Alumni Referrals",
-        href: "/referrals",
-        icon: Award,
-        badge: isAlumni ? "Alumni" : "High Trust",
-        badgeVariant: "warning",
-      });
-    }
-
-    // Applications: Students and Alumni (employers don't submit student applications)
-    if (isStudent || isAlumni || isAdmin) {
-      items.push({
-        title: "My Applications",
-        href: "/applications",
-        icon: FileText,
-      });
-    }
+    // Applications: Students and Alumni
+    items.push({
+      title: "My Applications",
+      href: "/applications",
+      icon: FileText,
+    });
 
     // Career Calendar (for everyone)
     items.push({
@@ -185,17 +157,6 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       href: "/calendar",
       icon: Calendar,
     });
-
-    // My Career Tools: STUDENTS ONLY (or Admin)
-    if (isStudent || isAdmin) {
-      items.push({
-        title: "My Career Tools",
-        href: "/career-tools",
-        icon: Sparkles,
-        badge: "Student",
-        badgeVariant: "secondary",
-      });
-    }
 
     // My Contributions (Discussions, Posts)
     items.push({
@@ -205,7 +166,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
     });
 
     return items;
-  }, [isAdmin, isStudent, isAlumni, isEmployer, currentUser.canPostOpportunities]);
+  }, [isAdmin, isStudent, isAlumni, currentUser.canPostOpportunities]);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, Award, Users, Menu, X } from "lucide-react";
+import { Home, Briefcase, Award, Users, Menu, X, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppSidebar } from "./sidebar";
 
@@ -39,7 +39,7 @@ export function MobileNav({ isOpen, onClose, user }: MobileNavProps) {
   const bottomItems = [
     { title: "Feed", href: "/feed", icon: Home },
     { title: "Jobs", href: "/opportunities", icon: Briefcase },
-    { title: "Referrals", href: "/referrals", icon: Award },
+    { title: "Applications", href: "/applications", icon: FileText },
     { title: "Network", href: "/community", icon: Users },
   ];
 

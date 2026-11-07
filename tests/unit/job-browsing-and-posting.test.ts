@@ -33,12 +33,12 @@ describe("Stage 7: Job Browsing, Searching, and Posting Interfaces", () => {
       },
     });
 
-    // 2. Create a verified employer user with posting clearance
+    // 2. Create a verified alumni/poster user with posting clearance
     employerUser = await prisma.user.create({
       data: {
         name: `Stage 7 Recruiter ${timestamp}`,
         email: `recruiter_stg7_${timestamp}@company.com`,
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
         emailVerified: true,

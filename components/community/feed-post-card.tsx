@@ -75,13 +75,10 @@ const POST_TYPE_META: Record<
   string,
   { label: string; icon: React.ElementType; badgeVariant: "default" | "secondary" | "outline" | "info" | "warning" }
 > = {
-  GENERAL_DISCUSSION: { label: "Discussion", icon: MessageSquare, badgeVariant: "secondary" },
-  CAREER_ADVICE: { label: "Career Advice", icon: Sparkles, badgeVariant: "info" },
-  JOB_ANNOUNCEMENT: { label: "Job Lead", icon: Briefcase, badgeVariant: "default" },
-  INTERNSHIP_ANNOUNCEMENT: { label: "Internship Lead", icon: Briefcase, badgeVariant: "default" },
-  REFERRAL_REQUEST: { label: "Referral Request", icon: Award, badgeVariant: "warning" },
+  GENERAL_DISCUSSION: { label: "Discussion & Q&A", icon: MessageSquare, badgeVariant: "secondary" },
+  JOB_ANNOUNCEMENT: { label: "Job & Internship", icon: Briefcase, badgeVariant: "default" },
+  REFERRAL_REQUEST: { label: "Referral", icon: Award, badgeVariant: "warning" },
   ACHIEVEMENT: { label: "Achievement", icon: Sparkles, badgeVariant: "outline" },
-  QUESTION: { label: "Question", icon: HelpCircle, badgeVariant: "secondary" },
 };
 
 export function FeedPostCard({
@@ -461,12 +458,13 @@ export function FeedPostCard({
 
             <Button
               variant="ghost"
-              size="icon-xs"
+              size="xs"
               onClick={handleShare}
               aria-label="Share post"
-              className="text-muted-foreground hover:text-foreground"
+              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
               <Share2 className="size-3.5" />
+              <span className="hidden sm:inline">Share</span>
             </Button>
           </div>
         </div>

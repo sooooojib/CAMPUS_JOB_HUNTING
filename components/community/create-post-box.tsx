@@ -42,39 +42,21 @@ const POST_TYPE_OPTIONS: {
 }[] = [
   {
     type: "GENERAL_DISCUSSION",
-    label: "Discussion",
+    label: "Discussion & Questions",
     icon: MessageSquare,
     badgeClass: "hover:bg-muted",
   },
   {
-    type: "CAREER_ADVICE",
-    label: "Career Advice",
-    icon: Sparkles,
-    badgeClass: "hover:bg-sky-500/10 hover:text-sky-600",
-  },
-  {
-    type: "QUESTION",
-    label: "Ask Question",
-    icon: HelpCircle,
-    badgeClass: "hover:bg-purple-500/10 hover:text-purple-600",
-  },
-  {
-    type: "REFERRAL_REQUEST",
-    label: "Referral Request",
-    icon: Award,
-    badgeClass: "hover:bg-amber-500/10 hover:text-amber-600",
-  },
-  {
     type: "JOB_ANNOUNCEMENT",
-    label: "Job Lead",
+    label: "Job & Internship",
     icon: Briefcase,
     badgeClass: "hover:bg-emerald-500/10 hover:text-emerald-600",
   },
   {
-    type: "INTERNSHIP_ANNOUNCEMENT",
-    label: "Internship Lead",
-    icon: Briefcase,
-    badgeClass: "hover:bg-indigo-500/10 hover:text-indigo-600",
+    type: "REFERRAL_REQUEST",
+    label: "Referral",
+    icon: Award,
+    badgeClass: "hover:bg-amber-500/10 hover:text-amber-600",
   },
   {
     type: "ACHIEVEMENT",

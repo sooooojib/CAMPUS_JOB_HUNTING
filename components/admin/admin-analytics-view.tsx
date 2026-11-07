@@ -25,8 +25,19 @@ import {
   Users,
   Loader2,
   RefreshCw,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { AdminAnalyticsData } from "@/types";
 
 const COLORS = [
@@ -43,6 +54,7 @@ const COLORS = [
 export function AdminAnalyticsView() {
   const [data, setData] = React.useState<AdminAnalyticsData | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const [memberSearch, setMemberSearch] = React.useState("");
 
   const fetchAnalytics = React.useCallback(async () => {
     setLoading(true);
@@ -317,6 +329,113 @@ export function AdminAnalyticsView() {
           </div>
         </div>
       </div>
+
+      {/* Institutional Member Activity Breakdown ("সবার Details") */}
+      {data.memberActivityDetails && data.memberActivityDetails.length > 0 && (
+        <div className="rounded-2xl border border-border bg-card shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Users className="size-4 text-primary" />
+                <span>Member Activity &amp; Engagement Audit (&quot;সবার Details&quot;)</span>
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                Exhaustive activity breakdown per verified institutional member.
+              </p>
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+              <Input
+                value={memberSearch}
+                onChange={(e) => setMemberSearch(e.target.value)}
+                placeholder="Search member name or email..."
+                className="pl-8 h-8 text-xs bg-background"
+              />
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader className="bg-muted/40">
+                <TableRow>
+                  <TableHead className="w-[260px]">Member</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Verification</TableHead>
+                  <TableHead className="text-center">Applications</TableHead>
+                  <TableHead className="text-center">Postings</TableHead>
+                  <TableHead className="text-center">Posts / Comments</TableHead>
+                  <TableHead>Joined Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-border/60">
+                {data.memberActivityDetails
+                  .filter((m) => {
+                    const q = memberSearch.toLowerCase();
+                    return (
+                      !q ||
+                      m.name.toLowerCase().includes(q) ||
+                      m.email.toLowerCase().includes(q)
+                    );
+                  })
+                  .slice(0, 50)
+                  .map((member) => (
+                    <TableRow key={member.id} className="hover:bg-muted/20 text-xs">
+                      <TableCell>
+                        <div className="space-y-0.5">
+                          <p className="font-semibold text-foreground">{member.name}</p>
+                          <p className="text-[11px] text-muted-foreground font-mono">{member.email}</p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            member.membershipType === "ADMIN"
+                              ? "destructive"
+                              : member.membershipType === "ALUMNI"
+                              ? "outline"
+                              : "secondary"
+                          }
+                          className="text-[10px] font-mono"
+                        >
+                          {member.membershipType}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={member.verificationStatus === "VERIFIED" ? "secondary" : "outline"}
+                          className={`text-[10px] font-mono ${
+                            member.verificationStatus === "VERIFIED"
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : ""
+                          }`}
+                        >
+                          {member.verificationStatus}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-center font-mono font-semibold">
+                        {member.applicationsCount}
+                      </TableCell>
+                      <TableCell className="text-center font-mono font-semibold">
+                        {member.opportunitiesCount}
+                      </TableCell>
+                      <TableCell className="text-center font-mono text-muted-foreground">
+                        <span className="font-semibold text-foreground">{member.postsCount}</span>
+                        <span className="mx-1">/</span>
+                        <span>{member.commentsCount}</span>
+                      </TableCell>
+                      <TableCell className="font-mono text-muted-foreground text-[11px]">
+                        {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(
+                          new Date(member.createdAt)
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

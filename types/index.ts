@@ -5,10 +5,7 @@
 export type MembershipType =
   | "STUDENT"
   | "ALUMNI"
-  | "FACULTY"
-  | "STAFF"
-  | "EMPLOYER"
-  | "EXTERNAL_CONNECTION";
+  | "ADMIN";
 
 export type VerificationStatus =
   | "PENDING"
@@ -65,12 +62,9 @@ export type PostCategory =
 
 export type PostType =
   | "GENERAL_DISCUSSION"
-  | "CAREER_ADVICE"
   | "JOB_ANNOUNCEMENT"
-  | "INTERNSHIP_ANNOUNCEMENT"
   | "REFERRAL_REQUEST"
-  | "ACHIEVEMENT"
-  | "QUESTION";
+  | "ACHIEVEMENT";
 
 export type ModerationStatus =
   | "ACTIVE"
@@ -601,7 +595,50 @@ export interface AdminAnalyticsData {
   departmentParticipation: { department: string; members: number; applications: number }[];
   opportunityTypes: { type: string; count: number }[];
   verificationBreakdown: { status: string; count: number }[];
+  memberActivityDetails?: {
+    id: string;
+    name: string;
+    email: string;
+    membershipType: string;
+    verificationStatus: string;
+    accountStatus: string;
+    createdAt: string;
+    applicationsCount: number;
+    opportunitiesCount: number;
+    postsCount: number;
+    commentsCount: number;
+  }[];
 }
+
+export interface ManualApplicationItem {
+  id: string;
+  userId: string;
+  companyName: string;
+  roleTitle: string;
+  location?: string | null;
+  jobUrl?: string | null;
+  notes?: string | null;
+  status: "APPLIED" | "INTERVIEWING" | "OFFERED" | "REJECTED";
+  appliedDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OpportunityCommentItem {
+  id: string;
+  opportunityId: string;
+  authorId: string;
+  author: {
+    id: string;
+    name: string;
+    image?: string | null;
+    membershipType: MembershipType;
+    verificationStatus: VerificationStatus;
+  };
+  content: string;
+  createdAt: string;
+}
+
 
 
 

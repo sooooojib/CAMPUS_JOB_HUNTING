@@ -81,7 +81,7 @@ describe("Stage 9: Community Feed, Discussions & Moderation Test Suite", () => {
       data: {
         name: `Community Admin ${ts}`,
         email: `admin_${ts}@university.edu`,
-        membershipType: "FACULTY",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
         verificationStatus: "VERIFIED",
         emailVerified: true,
@@ -388,7 +388,7 @@ describe("Stage 9: Community Feed, Discussions & Moderation Test Suite", () => {
       questionPost = await createCommunityPost(peerUser.id, {
         title: "How to prepare for System Design interviews as a junior?",
         content: "What are the best resources for low-level design vs high-level architecture?",
-        postType: "QUESTION",
+        postType: "GENERAL_DISCUSSION",
         tags: ["SystemDesign", "Interviews"],
         visibility: "PUBLIC",
       });
@@ -396,21 +396,21 @@ describe("Stage 9: Community Feed, Discussions & Moderation Test Suite", () => {
       advicePost = await createCommunityPost(authorUser.id, {
         title: "My experience passing the Jane Street Quant Software assessment",
         content: "Here is a breakdown of the algorithms, complexity questions, and OCaml/C++ tips.",
-        postType: "CAREER_ADVICE",
+        postType: "ACHIEVEMENT",
         tags: ["Quant", "CareerAdvice"],
         visibility: "PUBLIC",
       });
     });
 
-    it("19. filters community feed by PostType (QUESTION)", async () => {
+    it("19. filters community feed by PostType (GENERAL_DISCUSSION)", async () => {
       const feed = await getCommunityFeed(authorUser.id, {
-        postType: "QUESTION",
+        postType: "GENERAL_DISCUSSION",
         page: 1,
         limit: 10,
       });
 
       expect(feed.items.length).toBeGreaterThanOrEqual(1);
-      const allQuestions = feed.items.every((p) => p.postType === "QUESTION");
+      const allQuestions = feed.items.every((p) => p.postType === "GENERAL_DISCUSSION");
       expect(allQuestions).toBe(true);
     });
 

@@ -76,7 +76,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       companyOwner = await createTestUser({
         email: `comp_owner_${timestamp}@partner.com`,
         name: "Enterprise Talent Partner",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
       });
@@ -129,7 +129,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       const recruiterUser = await createTestUser({
         email: `recruiter_${timestamp}@partner.com`,
         name: "Associate Recruiter",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
       });
@@ -165,7 +165,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       adminUser = await createTestUser({
         email: `admin_opp_${timestamp}@university.edu`,
         name: "Career Services Dean",
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
         canPostOpportunities: true,
       });
@@ -173,7 +173,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       verifiedEmployer = await createTestUser({
         email: `verified_emp_${timestamp}@company.com`,
         name: "Tech Recruiter",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
       });
@@ -370,7 +370,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       deptPoster = await createTestUser({
         email: `dept_poster_${timestamp}@university.edu`,
         name: "Dept Chair",
-        membershipType: "FACULTY",
+        membershipType: "ALUMNI",
         verificationStatus: "VERIFIED",
         canPostOpportunities: true,
       });
@@ -487,7 +487,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       const poster = await createTestUser({
         email: `expire_poster_${timestamp}@university.edu`,
         name: "Test Poster",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
         canPostOpportunities: true,
       });
 

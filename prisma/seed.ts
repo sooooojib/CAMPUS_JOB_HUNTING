@@ -53,7 +53,7 @@ async function main() {
   }: {
     email: string;
     name: string;
-    membershipType: "STUDENT" | "ALUMNI" | "FACULTY" | "STAFF" | "EMPLOYER" | "EXTERNAL_CONNECTION";
+    membershipType: "STUDENT" | "ALUMNI" | "ADMIN";
     systemRole?: "MEMBER" | "ADMIN";
     canPostOpportunities?: boolean;
     canReviewApplicants?: boolean;
@@ -132,7 +132,7 @@ async function main() {
   const adminUser = await seedAccount({
     email: "admin@unicareer.edu",
     name: "Dean Arthur Vance",
-    membershipType: "STAFF",
+    membershipType: "ADMIN",
     systemRole: "ADMIN",
     canPostOpportunities: true,
     canReviewApplicants: true,
@@ -279,7 +279,7 @@ async function main() {
   const employerUser = await seedAccount({
     email: "sarah.recruiter@vercel.com",
     name: "Sarah Jenkins",
-    membershipType: "EMPLOYER",
+    membershipType: "ALUMNI",
     canPostOpportunities: true,
     canReviewApplicants: true,
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80",
@@ -299,7 +299,7 @@ async function main() {
   const facultyUser = await seedAccount({
     email: "mahbub.faculty@unicareer.edu",
     name: "Dr. Mahbubur Rahman",
-    membershipType: "FACULTY",
+    membershipType: "ALUMNI",
     canPostOpportunities: true,
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80",
     profileData: {
@@ -857,7 +857,7 @@ async function main() {
       title: "Welcome to Fall 2026 Campus Recruiting Season — A Note from Faculty",
       content:
         "Welcome scholars, alumni, and industry partners to the new recruitment cycle! Over 35 partner companies are participating this year. To our graduating seniors: focus on demonstrating authentic project ownership, clean architectural tradeoffs, and communicative clarity. Feel free to connect with our verified alumni in the directory for referral guidance.",
-      postType: "CAREER_ADVICE",
+      postType: "GENERAL_DISCUSSION",
       visibility: "PUBLIC",
       isPinned: true,
       tags: ["CareerAdvice", "CampusRecruitment", "CSE", "DeanMessage"],
@@ -872,7 +872,7 @@ async function main() {
       title: "How to Prepare for High-Scale Systems & Cloud Interviews",
       content:
         "Having interviewed over 50 campus candidates at Databricks and previously in cloud tech, here is the #1 gap fresh graduates have: knowing *why* a particular data store or queue was chosen.\n\nDon't just say 'I used Kafka'. Explain the throughput expectations, partitioning key strategy, and failure recovery semantics. If you want a mock review of your system design portfolio, comment below or send a connection request!",
-      postType: "CAREER_ADVICE",
+      postType: "GENERAL_DISCUSSION",
       visibility: "PUBLIC",
       tags: ["DistributedSystems", "SystemDesign", "InterviewTips", "Databricks"],
       likesCount: 29,

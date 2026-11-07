@@ -4,10 +4,7 @@ export const submitVerificationRequestSchema = z.object({
   membershipType: z.enum([
     "STUDENT",
     "ALUMNI",
-    "FACULTY",
-    "STAFF",
-    "EMPLOYER",
-    "EXTERNAL_CONNECTION",
+    "ADMIN",
   ]),
   institutionalId: z.string().max(100).optional(),
   department: z.string().max(100).optional(),

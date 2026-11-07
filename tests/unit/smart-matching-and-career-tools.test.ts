@@ -428,7 +428,7 @@ describe("Stage 11: Smart Matching and Student Career Tools", () => {
       const employer = await createTestUser({
         email: `employer_gap_${timestamp}@univ.edu`,
         name: "Gap Employer",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
       });
       const company = await createTestCompany(`Gap Labs ${timestamp}`, employer.id);
 
@@ -578,7 +578,7 @@ describe("Stage 11: Smart Matching and Student Career Tools", () => {
       const admin = await createTestUser({
         email: `admin_priv_${timestamp}@univ.edu`,
         name: "Platform Admin",
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
       });
 
@@ -607,10 +607,7 @@ describe("Stage 11: Smart Matching and Student Career Tools", () => {
     it("should block non-student accounts from career tools via canAccessStudentTools", async () => {
       expect(canAccessStudentTools({ membershipType: "STUDENT", accountStatus: "ACTIVE" })).toBe(true);
       expect(canAccessStudentTools({ membershipType: "ALUMNI", accountStatus: "ACTIVE" })).toBe(false);
-      expect(canAccessStudentTools({ membershipType: "FACULTY", accountStatus: "ACTIVE" })).toBe(false);
-      expect(canAccessStudentTools({ membershipType: "STAFF", accountStatus: "ACTIVE" })).toBe(false);
-      expect(canAccessStudentTools({ membershipType: "EMPLOYER", accountStatus: "ACTIVE" })).toBe(false);
-      expect(canAccessStudentTools({ membershipType: "EXTERNAL_CONNECTION", accountStatus: "ACTIVE" })).toBe(false);
+      expect(canAccessStudentTools({ membershipType: "ADMIN", accountStatus: "ACTIVE" })).toBe(false);
       expect(canAccessStudentTools({ membershipType: "STUDENT", accountStatus: "SUSPENDED" })).toBe(false);
     });
   });
@@ -623,7 +620,7 @@ describe("Stage 11: Smart Matching and Student Career Tools", () => {
       const employer = await createTestUser({
         email: `rec_employer_${timestamp}@univ.edu`,
         name: "Rec Employer",
-        membershipType: "EMPLOYER",
+        membershipType: "ALUMNI",
       });
       const company = await createTestCompany(`Rec Company ${timestamp}`, employer.id);
 

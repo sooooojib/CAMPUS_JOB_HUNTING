@@ -157,3 +157,24 @@ export function inspectFileMagicBytes(buffer: Buffer): {
   };
 }
 
+export const createManualApplicationSchema = z.object({
+  companyName: z.string().trim().min(1, "Company name is required.").max(150),
+  roleTitle: z.string().trim().min(1, "Role title is required.").max(150),
+  location: z.string().trim().max(150).optional().nullable(),
+  jobUrl: z.string().trim().url("Must be a valid URL").optional().or(z.literal("")),
+  notes: z.string().trim().max(2000).optional().nullable(),
+  status: z.enum(["APPLIED", "INTERVIEWING", "OFFERED", "REJECTED"]).default("APPLIED"),
+  appliedDate: z.string().optional(),
+});
+
+export const updateManualApplicationSchema = z.object({
+  companyName: z.string().trim().min(1).max(150).optional(),
+  roleTitle: z.string().trim().min(1).max(150).optional(),
+  location: z.string().trim().max(150).optional().nullable(),
+  jobUrl: z.string().trim().url().optional().or(z.literal("")),
+  notes: z.string().trim().max(2000).optional().nullable(),
+  status: z.enum(["APPLIED", "INTERVIEWING", "OFFERED", "REJECTED"]).optional(),
+  appliedDate: z.string().optional(),
+});
+
+

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, MessageSquare, Award, Briefcase, TrendingUp } from "lucide-react";
+import { Plus, MessageSquare, Award, Briefcase } from "lucide-react";
 import { DashboardTemplate } from "@/components/templates/dashboard-template";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -37,23 +37,14 @@ export default function ContributionsPage() {
         </Link>
       }
       metrics={
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
             <div className="flex items-center justify-between text-muted-foreground mb-1">
               <span className="text-xs font-medium">Shared Leads</span>
               <Briefcase className="size-4 text-primary" />
             </div>
             <div className="text-2xl font-bold text-foreground">1</div>
-            <div className="text-[11px] text-emerald-600 mt-1">1 active on board</div>
-          </div>
-
-          <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-            <div className="flex items-center justify-between text-muted-foreground mb-1">
-              <span className="text-xs font-medium">Referrals Sponsored</span>
-              <Award className="size-4 text-amber-500" />
-            </div>
-            <div className="text-2xl font-bold text-foreground">2</div>
-            <div className="text-[11px] text-muted-foreground mt-1">1 candidate placed</div>
+            <div className="text-[11px] text-emerald-600 mt-1">Active on board</div>
           </div>
 
           <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
@@ -62,16 +53,16 @@ export default function ContributionsPage() {
               <MessageSquare className="size-4 text-blue-500" />
             </div>
             <div className="text-2xl font-bold text-foreground">6</div>
-            <div className="text-[11px] text-muted-foreground mt-1">34 community replies</div>
+            <div className="text-[11px] text-muted-foreground mt-1">Discussions &amp; achievements</div>
           </div>
 
           <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
             <div className="flex items-center justify-between text-muted-foreground mb-1">
-              <span className="text-xs font-medium">Impact Score</span>
-              <TrendingUp className="size-4 text-indigo-500" />
+              <span className="text-xs font-medium">Community Engagement</span>
+              <Award className="size-4 text-amber-500" />
             </div>
-            <div className="text-2xl font-bold text-foreground">94</div>
-            <div className="text-[11px] text-indigo-600 dark:text-indigo-400 mt-1">Top contributor tier</div>
+            <div className="text-2xl font-bold text-foreground">34</div>
+            <div className="text-[11px] text-muted-foreground mt-1">Community replies &amp; interactions</div>
           </div>
         </div>
       }

@@ -289,45 +289,18 @@ export async function completeOnboarding(userId: string, payload: OnboardingPayl
       };
       break;
 
-    case "FACULTY":
-    case "STAFF":
-      if (!facultyData) throw new Error("MISSING_FACULTY_DATA: Faculty/Staff onboarding fields required.");
+    case "ADMIN":
+    default:
       profileUpdates = {
-        department: facultyData.department,
-        designation: facultyData.designation,
-        headline: facultyData.headline || `${facultyData.designation}, Department of ${facultyData.department}`,
-        bio: facultyData.bio,
+        headline: "Campus Administrator",
+        bio: "University platform administration and community governance.",
         skills: [],
         interests: [],
         showEmail: true,
       };
       verificationPayload = {
-        membershipType,
-        department: facultyData.department,
-        designation: facultyData.designation,
-        workEmail: facultyData.workEmail,
-        proofDetails: facultyData.proofDetails,
-      };
-      break;
-
-    case "EMPLOYER":
-    case "EXTERNAL_CONNECTION":
-      if (!employerData) throw new Error("MISSING_EMPLOYER_DATA: Employer/Partner onboarding fields required.");
-      profileUpdates = {
-        company: employerData.company,
-        designation: employerData.designation,
-        headline: employerData.headline || `${employerData.designation} at ${employerData.company}`,
-        skills: [],
-        interests: [],
-        showEmail: true,
-      };
-      verificationPayload = {
-        membershipType,
-        organization: employerData.company,
-        designation: employerData.designation,
-        workEmail: employerData.workEmail,
-        connectionNote: employerData.connectionNote,
-        proofDetails: employerData.proofDetails,
+        membershipType: "ADMIN",
+        proofDetails: "Administrative staff account",
       };
       break;
   }

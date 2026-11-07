@@ -35,19 +35,16 @@ export default async function DashboardPage() {
   const userId = session?.user?.id;
   const userRole = user?.membershipType || "STUDENT";
   const systemRole = user?.systemRole || "MEMBER";
-  const isAdmin = systemRole === "ADMIN";
+  const isAdmin = systemRole === "ADMIN" || userRole === "ADMIN";
   const isStudent = userRole === "STUDENT";
   const isAlumni = userRole === "ALUMNI";
-  const isEmployer = userRole === "EMPLOYER" || userRole === "EXTERNAL_CONNECTION";
-  const isFacultyStaff = userRole === "FACULTY" || userRole === "STAFF";
-  const canPost = Boolean(user?.canPostOpportunities || isAdmin);
+  const canPost = Boolean(user?.canPostOpportunities || isAdmin || isAlumni);
 
   // Real aggregate metrics from PostgreSQL
   const [
     opportunitiesCount,
     postsCount,
     userApplicationsCount,
-    employerPostingsCount,
     pendingVerificationsCount,
     verifiedUsersCount,
     featuredOpportunity,
@@ -61,11 +58,6 @@ export default async function DashboardPage() {
     userId && (isStudent || isAlumni)
       ? prisma.application.count({
           where: { applicantId: userId },
-        })
-      : 0,
-    userId && (isEmployer || canPost)
-      ? prisma.opportunity.count({
-          where: { posterId: userId },
         })
       : 0,
     isAdmin
@@ -93,23 +85,15 @@ export default async function DashboardPage() {
 
   const dashboardTitle = isAdmin
     ? "Administrative Command & Community Dispatch"
-    : isEmployer
-    ? "Employer Recruitment & Talent Dispatch"
     : isAlumni
     ? "Alumni Network & Career Discussions"
-    : isFacultyStaff
-    ? "Academic Faculty & Career Dispatch"
     : "Student Career Hub & Opportunities";
 
   const dashboardSubtitle = isAdmin
     ? "Campus platform governance, member verifications, and approved job postings."
-    : isEmployer
-    ? "Campus talent pipeline, opportunity management, and university candidate engagement."
     : isAlumni
-    ? "Connect with fellow graduates, offer career referrals, and discover opportunities."
-    : isFacultyStaff
-    ? "Institutional announcements, department student discussions, and career opportunities."
-    : "Curated campus listings, verified alumni referrals, and academic discussions.";
+    ? "Connect with fellow graduates, explore postings, and discover opportunities."
+    : "Curated campus listings, verified community networking, and discussions.";
 
   return (
     <DashboardTemplate
@@ -134,23 +118,6 @@ export default async function DashboardPage() {
                 <span>Post Opportunity</span>
               </Link>
             </>
-          ) : isEmployer ? (
-            <>
-              <Link
-                href="/opportunities/post"
-                className={buttonVariants({ variant: "default", size: "sm" })}
-              >
-                <Briefcase className="size-3.5 mr-1.5" />
-                <span>Post Job Opening</span>
-              </Link>
-              <Link
-                href="/opportunities/my"
-                className={buttonVariants({ variant: "outline", size: "sm" })}
-              >
-                <FileText className="size-3.5 mr-1.5" />
-                <span>Manage Postings</span>
-              </Link>
-            </>
           ) : isAlumni ? (
             <>
               {canPost && (
@@ -160,25 +127,6 @@ export default async function DashboardPage() {
                 >
                   <Briefcase className="size-3.5 mr-1.5" />
                   <span>Share Lead</span>
-                </Link>
-              )}
-              <Link
-                href="/referrals"
-                className={buttonVariants({ variant: "default", size: "sm" })}
-              >
-                <Award className="size-3.5 mr-1.5" />
-                <span>Referral Desk</span>
-              </Link>
-            </>
-          ) : isFacultyStaff ? (
-            <>
-              {canPost && (
-                <Link
-                  href="/opportunities/post"
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
-                >
-                  <Briefcase className="size-3.5 mr-1.5" />
-                  <span>Post Announcement</span>
                 </Link>
               )}
               <Link
@@ -199,11 +147,11 @@ export default async function DashboardPage() {
                 <span>Browse Opportunities</span>
               </Link>
               <Link
-                href="/referrals"
+                href="/applications"
                 className={buttonVariants({ variant: "default", size: "sm" })}
               >
-                <Award className="size-3.5 mr-1.5" />
-                <span>Request Referral</span>
+                <FileText className="size-3.5 mr-1.5" />
+                <span>My Applications</span>
               </Link>
             </>
           )}
@@ -239,14 +187,10 @@ export default async function DashboardPage() {
               <span className="text-xs font-medium">
                 {isAdmin
                   ? "Pending Verifications"
-                  : isEmployer
-                  ? "My Job Postings"
                   : "My Applications"}
               </span>
               {isAdmin ? (
                 <ShieldAlert className="size-4 text-destructive" />
-              ) : isEmployer ? (
-                <Briefcase className="size-4 text-blue-500" />
               ) : (
                 <FileText className="size-4 text-blue-500" />
               )}
@@ -254,18 +198,12 @@ export default async function DashboardPage() {
             <div className="text-2xl font-bold text-foreground">
               {isAdmin
                 ? pendingVerificationsCount
-                : isEmployer
-                ? employerPostingsCount
                 : userApplicationsCount}
             </div>
             <div className="text-[11px] text-blue-600 dark:text-blue-400 mt-1">
               {isAdmin ? (
                 <Link href="/admin" className="hover:underline">
                   Review queue →
-                </Link>
-              ) : isEmployer ? (
-                <Link href="/opportunities/my" className="hover:underline">
-                  Manage candidates →
                 </Link>
               ) : (
                 <Link href="/applications" className="hover:underline">
@@ -282,7 +220,7 @@ export default async function DashboardPage() {
             </div>
             <div className="text-2xl font-bold text-foreground">{verifiedUsersCount}</div>
             <div className="text-[11px] text-muted-foreground mt-1">
-              Students, alumni &amp; faculty
+              Students &amp; alumni
             </div>
           </div>
         </div>
@@ -368,60 +306,18 @@ export default async function DashboardPage() {
                 </Link>
               </CardContent>
             </Card>
-          ) : isEmployer ? (
-            <Card className="rounded-xl border border-blue-200/80 bg-blue-50/50 dark:border-blue-900/60 dark:bg-blue-950/20 shadow-xs">
-              <CardContent className="p-5 space-y-3">
-                <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wide">
-                  <Briefcase className="size-4" />
-                  <span>Employer Desk</span>
-                </div>
-                <h4 className="text-sm font-bold text-foreground">
-                  Campus Talent Recruitment
-                </h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Submit official company vacancies, track verified student applicants, and update hiring statuses.
-                </p>
-                <Link
-                  href="/opportunities/post"
-                  className={buttonVariants({ variant: "default", size: "sm", className: "w-full text-xs" })}
-                >
-                  Post Vacancy Now
-                </Link>
-              </CardContent>
-            </Card>
           ) : isAlumni ? (
             <Card className="rounded-xl border border-amber-500/30 bg-amber-500/5 shadow-xs">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wide">
-                  <Award className="size-4" />
-                  <span>Alumni Referral Desk</span>
-                </div>
-                <h4 className="text-sm font-bold text-foreground">
-                  Refer Enrolled Students
-                </h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Junior students and upcoming graduates from your department are looking for career guidance and referrals.
-                </p>
-                <Link
-                  href="/referrals"
-                  className={buttonVariants({ variant: "default", size: "sm", className: "w-full text-xs" })}
-                >
-                  View Referral Requests
-                </Link>
-              </CardContent>
-            </Card>
-          ) : isFacultyStaff ? (
-            <Card className="rounded-xl border border-indigo-500/30 bg-indigo-500/5 shadow-xs">
-              <CardContent className="p-5 space-y-3">
-                <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wide">
                   <Users className="size-4" />
-                  <span>Faculty Academic Network</span>
+                  <span>Campus &amp; Alumni Network</span>
                 </div>
                 <h4 className="text-sm font-bold text-foreground">
-                  Department Mentorship
+                  Connect With Campus Community
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Engage with enrolled students and alumni, publish academic notices, and verify departmental connections.
+                  Engage with students, alumni, and campus initiatives through the verified university network.
                 </p>
                 <Link
                   href="/community"
@@ -432,24 +328,24 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
           ) : (
-            /* Student Academic Career Tools Widget */
+            /* Student Applications Tracker Widget */
             <Card className="rounded-xl border border-blue-200/80 bg-blue-50/50 dark:border-blue-900/60 dark:bg-blue-950/20 shadow-xs">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wide">
-                  <Sparkles className="size-4" />
-                  <span>Career Tooling</span>
+                  <FileText className="size-4" />
+                  <span>Applications Hub</span>
                 </div>
                 <h4 className="text-sm font-bold text-foreground">
-                  Check Academic CGPA &amp; Skill Eligibility
+                  Track Your Job &amp; Internship Applications
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Run an automated match against all open campus opportunities using your verified transcript.
+                  Monitor application review stages across campus opportunities and externally tracked portals.
                 </p>
                 <Link
-                  href="/career-tools"
+                  href="/applications"
                   className={buttonVariants({ variant: "default", size: "sm", className: "w-full text-xs" })}
                 >
-                  Launch Career Toolkit
+                  View My Applications
                 </Link>
               </CardContent>
             </Card>

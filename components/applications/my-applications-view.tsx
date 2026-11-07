@@ -41,6 +41,7 @@ import { ConfirmDialog } from "@/components/feedback/confirm-dialog";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { ManualApplicationsView } from "@/components/applications/manual-applications-view";
 
 interface ApplicationItem {
   id: string;
@@ -96,6 +97,7 @@ const STATUS_TABS = [
 ];
 
 export function MyApplicationsView() {
+  const [mode, setMode] = useState<"AUTOMATIC" | "MANUAL">("AUTOMATIC");
   const [activeTab, setActiveTab] = useState("ALL");
   const [applications, setApplications] = useState<ApplicationItem[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -174,51 +176,83 @@ export function MyApplicationsView() {
   return (
     <ListingTemplate
       title="My Applications"
-      subtitle="Track your submissions, monitor employer recruiter review stages, access your attached resume dossier, and manage application lifecycles."
-      searchFilterBar={
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search applied roles or companies..."
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-          />
+      subtitle="Track your applications across internal platform postings and external career portals."
+      primaryAction={
+        <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-xl border border-border/60">
+          <button
+            type="button"
+            onClick={() => setMode("AUTOMATIC")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              mode === "AUTOMATIC"
+                ? "bg-background text-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Automatic (Platform Direct)
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("MANUAL")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              mode === "MANUAL"
+                ? "bg-background text-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Manual (External Tracker)
+          </button>
         </div>
+      }
+      searchFilterBar={
+        mode === "AUTOMATIC" ? (
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search applied roles or companies..."
+              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+        ) : undefined
       }
       activeFiltersBar={
-        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
-          {STATUS_TABS.map((tab) => {
-            const count = counts[tab.key] ?? 0;
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-xs"
-                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span
-                  className={`text-[10px] font-mono px-1.5 py-0.2 rounded-md ${
+        mode === "AUTOMATIC" ? (
+          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
+            {STATUS_TABS.map((tab) => {
+              const count = counts[tab.key] ?? 0;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
                     isActive
-                      ? "bg-primary-foreground/20 text-primary-foreground"
-                      : "bg-background text-muted-foreground"
+                      ? "bg-primary text-primary-foreground shadow-xs"
+                      : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-md ${
+                      isActive
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-background text-muted-foreground"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        ) : undefined
       }
     >
-      {loading ? (
+      {mode === "MANUAL" ? (
+        <ManualApplicationsView />
+      ) : loading ? (
         <div className="rounded-2xl border border-border bg-card p-12 text-center space-y-3">
           <Loader2 className="size-8 animate-spin mx-auto text-primary" />
           <p className="text-xs text-muted-foreground">Loading your submitted applications...</p>

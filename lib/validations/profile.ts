@@ -89,10 +89,7 @@ export const onboardingPayloadSchema = z.object({
   membershipType: z.enum([
     "STUDENT",
     "ALUMNI",
-    "FACULTY",
-    "STAFF",
-    "EMPLOYER",
-    "EXTERNAL_CONNECTION",
+    "ADMIN",
   ]),
   studentData: onboardingStudentSchema.optional(),
   alumniData: onboardingAlumniSchema.optional(),
@@ -109,10 +106,7 @@ export const memberDirectoryQuerySchema = z.object({
     .enum([
       "STUDENT",
       "ALUMNI",
-      "FACULTY",
-      "STAFF",
-      "EMPLOYER",
-      "EXTERNAL_CONNECTION",
+      "ADMIN",
     ])
     .optional(),
   company: z.string().trim().optional(),

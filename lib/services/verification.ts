@@ -142,8 +142,8 @@ export async function reviewVerificationRequest(
     });
 
     // 2. Grant permissions based on verified membership type
-    const isEmployer = request.membershipType === "EMPLOYER";
-    const isInstitutionalPoster = ["EMPLOYER", "FACULTY", "STAFF"].includes(request.membershipType);
+    const canPost = request.membershipType === "ADMIN" || request.membershipType === "ALUMNI";
+    const canReview = request.membershipType === "ADMIN";
 
     const updatedUser = await prisma.user.update({
       where: { id: request.userId },
@@ -152,8 +152,8 @@ export async function reviewVerificationRequest(
         verificationStatus: "VERIFIED",
         verifiedAt: now,
         verifiedBy: adminUserId,
-        canPostOpportunities: isInstitutionalPoster,
-        canReviewApplicants: isEmployer,
+        canPostOpportunities: canPost,
+        canReviewApplicants: canReview,
       },
     });
 

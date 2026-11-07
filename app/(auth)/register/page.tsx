@@ -143,10 +143,6 @@ function RegisterForm() {
               <SelectContent>
                 <SelectItem value="STUDENT">Current Student (Enrolled)</SelectItem>
                 <SelectItem value="ALUMNI">University Alumnus / Alumna</SelectItem>
-                <SelectItem value="FACULTY">Faculty Member / Academic Advisor</SelectItem>
-                <SelectItem value="STAFF">University Career Staff</SelectItem>
-                <SelectItem value="EMPLOYER">Corporate Recruiter / Employer Partner</SelectItem>
-                <SelectItem value="EXTERNAL_CONNECTION">Verified External Professional</SelectItem>
               </SelectContent>
             </Select>
           </div>

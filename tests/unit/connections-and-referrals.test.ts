@@ -216,7 +216,7 @@ describe("Stage 10: Member Directory, Connections, and Referrals", () => {
       const memberWithPublicEmail = await createTestMember({
         email: `public_email_${timestamp}@campus.edu`,
         name: `Public Email Member ${timestamp}`,
-        membershipType: "FACULTY",
+        membershipType: "ALUMNI",
         profile: {
           showEmail: true,
           department: "Mathematics",
@@ -232,7 +232,7 @@ describe("Stage 10: Member Directory, Connections, and Referrals", () => {
       const adminViewer = await createTestMember({
         email: `admin_viewer_${timestamp}@campus.edu`,
         name: `Admin Viewer ${timestamp}`,
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
       });
 
@@ -540,7 +540,7 @@ describe("Stage 10: Member Directory, Connections, and Referrals", () => {
       const admin = await createTestMember({
         email: `privacy_admin_${timestamp}@campus.edu`,
         name: `Privacy Admin ${timestamp}`,
-        membershipType: "STAFF",
+        membershipType: "ADMIN",
         systemRole: "ADMIN",
       });
 

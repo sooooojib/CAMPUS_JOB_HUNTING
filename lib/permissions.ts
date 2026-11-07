@@ -30,7 +30,7 @@ export function isAccountActive(user?: UserPermissionContext | null): boolean {
  */
 export function isPlatformAdmin(user?: UserPermissionContext | null): boolean {
   if (!user) return false;
-  return user.systemRole === "ADMIN";
+  return user.systemRole === "ADMIN" || user.membershipType === "ADMIN";
 }
 
 /**
@@ -47,8 +47,7 @@ export function isVerifiedMember(user?: UserPermissionContext | null): boolean {
  * RULES (Non-negotiable):
  * 1. Unverified users (PENDING, REJECTED, SUSPENDED) CANNOT post opportunities.
  * 2. Platform ADMINs can always post.
- * 3. Verified EMPLOYER, FACULTY, STAFF, or verified members with explicit
- *    canPostOpportunities authorization can post.
+ * 3. Verified ALUMNI, or verified members with explicit canPostOpportunities authorization can post.
  * 4. Frontend state cannot bypass this; server must assert this before saving.
  */
 export function canPostOpportunity(user?: UserPermissionContext | null): boolean {
@@ -63,9 +62,8 @@ export function canPostOpportunity(user?: UserPermissionContext | null): boolean
   // If explicit permission flag is set
   if (user.canPostOpportunities === true) return true;
 
-  // Verified Institutional Roles that inherently hold posting permissions
-  const authorizedRoles = ["EMPLOYER", "FACULTY", "STAFF"];
-  if (user.membershipType && authorizedRoles.includes(user.membershipType)) {
+  // Verified Alumni can post opportunities/job leads
+  if (user.membershipType === "ALUMNI") {
     return true;
   }
 
@@ -74,14 +72,14 @@ export function canPostOpportunity(user?: UserPermissionContext | null): boolean
 
 /**
  * Checks whether a member can review and manage candidate applications for an opportunity.
- * Restricted to verified Employers and Platform Administrators.
+ * Restricted to Platform Administrators and Authorized posters.
  */
 export function canReviewApplicants(user?: UserPermissionContext | null): boolean {
   if (!user || !isAccountActive(user)) return false;
   if (isPlatformAdmin(user)) return true;
   if (!isVerifiedMember(user)) return false;
 
-  return user.membershipType === "EMPLOYER" || user.canReviewApplicants === true;
+  return user.membershipType === "ALUMNI" || user.canReviewApplicants === true;
 }
 
 /**

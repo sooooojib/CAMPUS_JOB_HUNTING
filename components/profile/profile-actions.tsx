@@ -53,26 +53,6 @@ export function ProfileActions({
         size="sm"
         onStateChange={(newState) => setConnectionState(newState)}
       />
-
-      {canRequestReferral && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsReferralOpen(true)}
-          className="gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/10"
-        >
-          <Send className="size-3.5" />
-          <span>Request Referral</span>
-        </Button>
-      )}
-
-      <RequestReferralModal
-        open={isReferralOpen}
-        onOpenChange={setIsReferralOpen}
-        recipientId={targetUserId}
-        recipientName={targetName}
-        recipientCompany={targetCompany}
-      />
     </div>
   );
 }

@@ -24,9 +24,8 @@ async function main() {
 
   for (const user of allUsers) {
     // Determine permissions based on role
-    const isEmployer = user.membershipType === "EMPLOYER" || user.membershipType === "EXTERNAL_CONNECTION";
-    const isAdmin = user.systemRole === "ADMIN";
-    const isFacultyStaff = user.membershipType === "FACULTY" || user.membershipType === "STAFF";
+    const isAdmin = user.systemRole === "ADMIN" || user.membershipType === "ADMIN";
+    const isAlumni = user.membershipType === "ALUMNI";
 
     await prisma.user.update({
       where: { id: user.id },
@@ -35,8 +34,8 @@ async function main() {
         verificationStatus: "VERIFIED",
         emailVerified: true,
         verifiedAt: user.verifiedAt || new Date(),
-        canPostOpportunities: isEmployer || isAdmin || isFacultyStaff,
-        canReviewApplicants: isEmployer || isAdmin,
+        canPostOpportunities: isAdmin || isAlumni,
+        canReviewApplicants: isAdmin,
       },
     });
     updatedUsersCount++;
@@ -92,11 +91,22 @@ async function main() {
   // 3. Ensure clean persona alias accounts exist
   const aliases = [
     {
+      email: "admin@unicareer.edu",
+      name: "Campus Administrator",
+      membershipType: "ADMIN" as const,
+      systemRole: "ADMIN" as const,
+      headline: "Chief Career Services & Campus Administrator",
+      canPost: true,
+      canReview: true,
+    },
+    {
       email: "student@unicareer.edu",
       name: "Standard Student",
       membershipType: "STUDENT" as const,
       systemRole: "MEMBER" as const,
       headline: "Enrolled Student | Computer Science & Engineering",
+      canPost: false,
+      canReview: false,
     },
     {
       email: "alumni@unicareer.edu",
@@ -106,38 +116,12 @@ async function main() {
       headline: "University Alumnus | Industry Professional",
       company: "Tech Global Inc",
       designation: "Software Engineer",
-    },
-    {
-      email: "employer@unicareer.edu",
-      name: "Standard Employer",
-      membershipType: "EMPLOYER" as const,
-      systemRole: "MEMBER" as const,
-      headline: "Corporate Recruiter | Talent Partner",
-      company: "Apex Technologies",
-      designation: "Campus Recruiting Specialist",
-    },
-    {
-      email: "faculty@unicareer.edu",
-      name: "Standard Faculty",
-      membershipType: "FACULTY" as const,
-      systemRole: "MEMBER" as const,
-      headline: "Academic Faculty Member | Department Advisor",
-      department: "Computer Science & Engineering",
-      designation: "Assistant Professor",
-    },
-    {
-      email: "external@unicareer.edu",
-      name: "Standard External Connection",
-      membershipType: "EXTERNAL_CONNECTION" as const,
-      systemRole: "MEMBER" as const,
-      headline: "Approved External Affiliate | Industry Mentor",
-      company: "Silicon Bridge Ventures",
-      designation: "Principal Advisor",
+      canPost: true,
+      canReview: false,
     },
   ];
 
   for (const alias of aliases) {
-    const isEmployer = alias.membershipType === "EMPLOYER" || alias.membershipType === "EXTERNAL_CONNECTION";
     const user = await prisma.user.upsert({
       where: { email: alias.email },
       update: {
@@ -147,8 +131,8 @@ async function main() {
         accountStatus: "ACTIVE",
         verificationStatus: "VERIFIED",
         emailVerified: true,
-        canPostOpportunities: isEmployer,
-        canReviewApplicants: isEmployer,
+        canPostOpportunities: alias.canPost,
+        canReviewApplicants: alias.canReview,
       },
       create: {
         email: alias.email,
@@ -158,8 +142,8 @@ async function main() {
         accountStatus: "ACTIVE",
         verificationStatus: "VERIFIED",
         emailVerified: true,
-        canPostOpportunities: isEmployer,
-        canReviewApplicants: isEmployer,
+        canPostOpportunities: alias.canPost,
+        canReviewApplicants: alias.canReview,
       },
     });
 

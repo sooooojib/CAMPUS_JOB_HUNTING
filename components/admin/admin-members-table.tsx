@@ -193,10 +193,7 @@ export function AdminMembersTable({ currentAdminId }: AdminMembersTableProps) {
             <option value="">All Membership Types</option>
             <option value="STUDENT">Student</option>
             <option value="ALUMNI">Alumni</option>
-            <option value="FACULTY">Faculty</option>
-            <option value="STAFF">Staff</option>
-            <option value="EMPLOYER">Employer</option>
-            <option value="EXTERNAL_CONNECTION">External Connection</option>
+            <option value="ADMIN">Admin</option>
           </select>
 
           {/* Verification Status */}

@@ -28,7 +28,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ConnectionButton, ConnectionState } from "@/components/community/connection-button";
-import { RequestReferralModal } from "@/components/referrals/request-referral-modal";
 import { MemberDirectoryItem, MembershipType } from "@/types";
 
 export function MemberDirectoryView() {
@@ -45,10 +44,6 @@ export function MemberDirectoryView() {
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
   const [totalCount, setTotalCount] = React.useState(0);
-
-  // Referral modal state
-  const [referralTarget, setReferralTarget] = React.useState<MemberDirectoryItem | null>(null);
-  const [isReferralOpen, setIsReferralOpen] = React.useState(false);
 
   // Fetch directory members
   const fetchMembers = React.useCallback(async () => {
@@ -145,10 +140,7 @@ export function MemberDirectoryView() {
                 <SelectItem value="ALL">All Roles</SelectItem>
                 <SelectItem value="STUDENT">Students</SelectItem>
                 <SelectItem value="ALUMNI">Alumni</SelectItem>
-                <SelectItem value="FACULTY">Faculty</SelectItem>
-                <SelectItem value="STAFF">University Staff</SelectItem>
-                <SelectItem value="EMPLOYER">Employers &amp; Partners</SelectItem>
-                <SelectItem value="EXTERNAL_CONNECTION">External Connections</SelectItem>
+                <SelectItem value="ADMIN">Admins</SelectItem>
               </SelectContent>
             </Select>
 
@@ -264,7 +256,6 @@ export function MemberDirectoryView() {
               .toUpperCase();
 
             const isSelf = member.connectionStatus === "SELF";
-            const canRequestReferral = !isSelf && (member.company || member.membershipType === "ALUMNI" || member.membershipType === "EMPLOYER");
 
             return (
               <Card
@@ -376,20 +367,6 @@ export function MemberDirectoryView() {
                       <ExternalLink className="size-3" />
                     </Link>
 
-                    {canRequestReferral && (
-                      <Button
-                        variant="outline"
-                        size="xs"
-                        onClick={() => {
-                          setReferralTarget(member);
-                          setIsReferralOpen(true);
-                        }}
-                        className="gap-1 text-xs font-medium text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/10"
-                      >
-                        <Send className="size-3" />
-                        <span>Request Referral</span>
-                      </Button>
-                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -424,20 +401,6 @@ export function MemberDirectoryView() {
             Next
           </Button>
         </div>
-      )}
-
-      {/* Referral Request Modal */}
-      {referralTarget && (
-        <RequestReferralModal
-          open={isReferralOpen}
-          onOpenChange={setIsReferralOpen}
-          recipientId={referralTarget.id}
-          recipientName={referralTarget.name}
-          recipientCompany={referralTarget.company}
-          onSuccess={() => {
-            fetchMembers();
-          }}
-        />
       )}
     </div>
   );

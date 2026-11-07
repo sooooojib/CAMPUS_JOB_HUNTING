@@ -2,12 +2,9 @@ import { z } from "zod";
 
 export const POST_TYPES = [
   "GENERAL_DISCUSSION",
-  "CAREER_ADVICE",
   "JOB_ANNOUNCEMENT",
-  "INTERNSHIP_ANNOUNCEMENT",
   "REFERRAL_REQUEST",
   "ACHIEVEMENT",
-  "QUESTION",
 ] as const;
 
 export const POST_VISIBILITIES = [
