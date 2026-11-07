@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -73,6 +73,7 @@ interface OpportunityFormProps {
   userMembershipType: string;
   managedCompanies: CompanyOption[];
   existingOpportunity?: any;
+  editId?: string;
 }
 
 export function OpportunityForm({
@@ -80,10 +81,10 @@ export function OpportunityForm({
   userMembershipType,
   managedCompanies,
   existingOpportunity,
+  editId: propEditId,
 }: OpportunityFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const editId = searchParams.get("editId") || existingOpportunity?.id;
+  const editId = propEditId || existingOpportunity?.id;
 
   const [activeTab, setActiveTab] = React.useState<"form" | "preview">("form");
   const [skillInput, setSkillInput] = React.useState("");

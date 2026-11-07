@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -15,6 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Loader2 } from "lucide-react";
 
 export const metadata = {
   title: "Publish Career Opportunity",
@@ -22,7 +24,7 @@ export const metadata = {
 };
 
 interface PageProps {
-  searchParams: Promise<{ editId?: string }>;
+  searchParams?: Promise<{ editId?: string }>;
 }
 
 export default async function PostOpportunityPage({ searchParams }: PageProps) {
@@ -42,10 +44,16 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
   }
 
   const userCanPost = canPostOpportunity(user);
-  const memberships = await getUserCompanies(user.id);
-  const managedCompanies = memberships.map((m) => m.company);
+  let managedCompanies: any[] = [];
+  try {
+    const memberships = await getUserCompanies(user.id);
+    managedCompanies = memberships.map((m) => m.company);
+  } catch (err) {
+    console.error("Could not fetch user companies:", err);
+  }
 
-  const { editId } = await searchParams;
+  const sp = searchParams ? await searchParams : {};
+  const editId = sp?.editId;
   let existingOpportunity = null;
 
   if (editId) {
@@ -69,7 +77,7 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              <BreadcrumbLink href="/feed">Feed</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -85,12 +93,22 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
         </Breadcrumb>
       }
     >
-      <OpportunityForm
-        canPost={userCanPost}
-        userMembershipType={user.membershipType}
-        managedCompanies={managedCompanies}
-        existingOpportunity={existingOpportunity}
-      />
+      <Suspense
+        fallback={
+          <div className="flex flex-col items-center justify-center p-12 text-sm text-muted-foreground gap-3">
+            <Loader2 className="size-6 animate-spin text-primary" />
+            <p>Loading opportunity form...</p>
+          </div>
+        }
+      >
+        <OpportunityForm
+          editId={editId}
+          canPost={userCanPost}
+          userMembershipType={user.membershipType}
+          managedCompanies={managedCompanies}
+          existingOpportunity={existingOpportunity}
+        />
+      </Suspense>
     </FormTemplate>
   );
 }

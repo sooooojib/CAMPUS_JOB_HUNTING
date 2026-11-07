@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { canPostOpportunity } from "@/lib/permissions";
 import { CommunityFeedView } from "@/components/community/community-feed-view";
 import { DashboardTemplate } from "@/components/templates/dashboard-template";
 import Link from "next/link";
@@ -17,19 +18,31 @@ export default async function CommunityFeedPage() {
     headers: reqHeaders,
   });
 
+  const userCanPost = session?.user ? canPostOpportunity(session.user) : false;
+
   return (
     <DashboardTemplate
       title="University Community Feed & Discussions"
       subtitle="Connect with verified students, alumni, and administrators across the campus community."
       actions={
         <div className="flex items-center gap-2">
-          <Link
-            href="/opportunities/post"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            <Briefcase className="size-3.5 mr-1.5" />
-            <span>Post Opportunity</span>
-          </Link>
+          {userCanPost ? (
+            <Link
+              href="/opportunities/post"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <Briefcase className="size-3.5 mr-1.5" />
+              <span>Post Opportunity</span>
+            </Link>
+          ) : (
+            <Link
+              href="/opportunities"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <Briefcase className="size-3.5 mr-1.5" />
+              <span>Browse Opportunities</span>
+            </Link>
+          )}
           <Link
             href="/community"
             className={buttonVariants({ variant: "default", size: "sm" })}
