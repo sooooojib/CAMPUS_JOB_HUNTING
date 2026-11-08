@@ -16,6 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { JobCard } from "@/components/opportunities/job-card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -266,47 +267,55 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
         )}
       </div>
 
-      {/* Primary Discovery Tabs: All vs Bookmarked */}
-      <div className="flex items-center gap-2 border-b border-border/40 pb-3">
-        <Button
-          variant={activeTab === "ALL" ? "secondary" : "ghost"}
-          size="sm"
-          onClick={() => {
-            setActiveTab("ALL");
-            setPage(1);
-          }}
-          className="gap-2 text-xs font-semibold"
-        >
-          <Briefcase className="size-3.5" />
-          <span>All Opportunities</span>
-          {activeTab === "ALL" && (
-            <Badge variant="outline" className="text-[10px] ml-1 px-1.5 py-0">
+      {/* Primary Discovery Tabs: All vs Bookmarked (Pill Switcher Container) */}
+      <div className="flex items-center">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-muted/50 border border-border/70 shadow-2xs">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab("ALL");
+              setPage(1);
+            }}
+            className={cn(
+              "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
+              activeTab === "ALL"
+                ? "bg-card text-foreground shadow-xs border border-border/60"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Briefcase className="size-3.5 text-primary" />
+            <span>All Opportunities</span>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
               {pagination.total}
-            </Badge>
-          )}
-        </Button>
+            </span>
+          </button>
 
-        <Button
-          variant={activeTab === "BOOKMARKED" ? "secondary" : "ghost"}
-          size="sm"
-          onClick={() => {
-            setActiveTab("BOOKMARKED");
-            setPage(1);
-          }}
-          className="gap-2 text-xs font-semibold"
-        >
-          <Bookmark className="size-3.5" />
-          <span>Bookmarked Positions</span>
-          {activeTab === "BOOKMARKED" && (
-            <Badge variant="outline" className="text-[10px] ml-1 px-1.5 py-0">
-              {pagination.total}
-            </Badge>
-          )}
-        </Button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab("BOOKMARKED");
+              setPage(1);
+            }}
+            className={cn(
+              "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
+              activeTab === "BOOKMARKED"
+                ? "bg-card text-foreground shadow-xs border border-border/60"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Bookmark className="size-3.5 text-primary" />
+            <span>Bookmarked Positions</span>
+            {activeTab === "BOOKMARKED" && (
+              <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                {pagination.total}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Search Bar & Multi-Dimensional Filters */}
-      <div className="rounded-3xl border border-border/50 bg-card/80 backdrop-blur-md p-5 sm:p-6 space-y-4 shadow-xs">
+      {/* Search Bar & Multi-Dimensional Filters - Elevated Card with Visible Borders & Generous Breathing Room */}
+      <div className="rounded-3xl border border-border/80 bg-card p-6 sm:p-7 space-y-5 shadow-sm shadow-slate-200/40">
         {/* Search Input */}
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -314,7 +323,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by role title, required skill (e.g. Go, Java, Figma), company name, or location..."
-            className="pl-11 pr-11 bg-muted/40 border-border/50 text-sm h-12 rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/20 transition-all"
+            className="pl-11 pr-11 bg-background/70 hover:bg-background focus:bg-background border-border/80 text-sm h-12 rounded-2xl shadow-2xs focus-visible:ring-2 focus-visible:ring-primary/20 transition-all"
           />
           {searchQuery && (
             <button
@@ -326,12 +335,12 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           )}
         </div>
 
-        {/* Filter Controls Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
+        {/* Filter Controls Grid with Defined Input Borders and Ample Spacing */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-1">
           {/* Opportunity Type */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">
-              Role Type
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+              <span>Role Type</span>
             </label>
             <Select
               value={typeFilter}
@@ -342,7 +351,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
                 <SelectValue placeholder="All Roles" />
               </SelectTrigger>
               <SelectContent>
@@ -357,9 +366,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Workplace Type */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">
-              Workplace
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+              <span>Workplace</span>
             </label>
             <Select
               value={workplaceFilter}
@@ -370,7 +379,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
                 <SelectValue placeholder="All Workplaces" />
               </SelectTrigger>
               <SelectContent>
@@ -383,9 +392,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Source Classification */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">
-              Posting Source
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+              <span>Posting Source</span>
             </label>
             <Select
               value={sourceTypeFilter}
@@ -396,7 +405,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
                 <SelectValue placeholder="All Sources" />
               </SelectTrigger>
               <SelectContent>
@@ -408,9 +417,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Academic Department */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">
-              Department / Major
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+              <span>Department / Major</span>
             </label>
             <Select
               value={departmentFilter}
@@ -421,7 +430,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
                 <SelectValue placeholder="All Departments" />
               </SelectTrigger>
               <SelectContent>
@@ -436,9 +445,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Minimum CGPA Requirement */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">
-              Max Min CGPA
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+              <span>Max Min CGPA</span>
             </label>
             <Select
               value={cgpaFilter}
@@ -449,7 +458,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
                 <SelectValue placeholder="Any CGPA Requirement" />
               </SelectTrigger>
               <SelectContent>
@@ -464,31 +473,31 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
 
         {/* Active Filters Reset Bar */}
         {hasActiveFilters && (
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border/60 text-xs">
             <div className="flex flex-wrap items-center gap-1.5 text-muted-foreground">
               <span>Active filters:</span>
               {debouncedQuery && (
-                <Badge variant="secondary" className="text-[11px] font-normal gap-1">
+                <Badge variant="secondary" className="text-[11px] font-normal gap-1 rounded-full px-2.5">
                   Query: &quot;{debouncedQuery}&quot;
                 </Badge>
               )}
               {typeFilter !== "ALL" && (
-                <Badge variant="secondary" className="text-[11px] font-normal">
+                <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
                   {typeFilter.replace("_", " ")}
                 </Badge>
               )}
               {workplaceFilter !== "ALL" && (
-                <Badge variant="secondary" className="text-[11px] font-normal">
+                <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
                   {workplaceFilter}
                 </Badge>
               )}
               {sourceTypeFilter !== "ALL" && (
-                <Badge variant="secondary" className="text-[11px] font-normal">
+                <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
                   {sourceTypeFilter === "OFFICIAL_EMPLOYER" ? "Official" : "Community Lead"}
                 </Badge>
               )}
               {departmentFilter !== "ALL" && (
-                <Badge variant="secondary" className="text-[11px] font-normal">
+                <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
                   {departmentFilter}
                 </Badge>
               )}
@@ -498,7 +507,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
               variant="ghost"
               size="xs"
               onClick={resetFilters}
-              className="text-destructive hover:bg-destructive/10 text-xs"
+              className="text-destructive hover:bg-destructive/10 text-xs rounded-full px-3"
             >
               <X className="size-3 mr-1" />
               <span>Reset all filters</span>
@@ -509,7 +518,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
 
       {/* Main Opportunity Stream / Skeletons / Empty State */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {[1, 2, 3, 4, 5, 6].map((idx) => (
             <div
               key={idx}
@@ -586,7 +595,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
       ) : (
         <div className="space-y-6">
           {/* Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {opportunities.map((opp) => (
               <JobCard
                 key={opp.id}

@@ -166,14 +166,14 @@ export function NotificationsPopover() {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative inline-flex size-8 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+        className="relative inline-flex size-9 items-center justify-center rounded-full border border-border/70 bg-card/80 text-muted-foreground hover:bg-muted hover:text-foreground transition-all shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
         aria-label={`Notifications (${unreadCount} unread)`}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
       >
         <Bell className="size-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex min-w-4 h-4 px-1 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-xs animate-in zoom-in-75 duration-150">
+          <span className="absolute -top-1 -right-1 flex min-w-4.5 h-4.5 px-1 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-xs animate-in zoom-in-75 duration-150">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
@@ -183,7 +183,7 @@ export function NotificationsPopover() {
         <div
           role="dialog"
           aria-label="Recent notifications"
-          className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl border border-border bg-card text-card-foreground shadow-xl z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150"
+          className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl border border-border/80 bg-card text-card-foreground shadow-2xl z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/80 px-4 py-3 bg-muted/30">

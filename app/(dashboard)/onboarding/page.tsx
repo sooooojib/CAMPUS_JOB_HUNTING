@@ -163,16 +163,6 @@ export default async function OnboardingPage() {
                     Class of {user.profile?.graduationYear || 2027}
                   </div>
                 </div>
-
-                <div className="p-3.5 rounded-2xl border border-border/70 bg-card/60 space-y-1">
-                  <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                    <ShieldCheck className="size-3.5 text-emerald-600" />
-                    <span>Verification Level</span>
-                  </div>
-                  <div className="font-bold text-emerald-700 text-sm">
-                    Level 3 • Registrar Sealed
-                  </div>
-                </div>
               </div>
 
               <div className="mt-5 p-3.5 rounded-2xl bg-muted/40 border border-border/60 flex items-center gap-3 text-xs text-muted-foreground">

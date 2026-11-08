@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import {
   MessageSquare,
-  Share2,
   Bookmark,
   Briefcase,
   Pin,
@@ -173,16 +172,6 @@ export function FeedPostCard({
       toast.error(err.message || "Failed to update bookmark");
     } finally {
       setIsTogglingBookmark(false);
-    }
-  }
-
-  function handleShare() {
-    const url = `${window.location.origin}/feed?post=${id}`;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      toast.success("Post link copied to clipboard!");
-    } else {
-      toast.info(`Post URL: ${url}`);
     }
   }
 
@@ -429,7 +418,7 @@ export function FeedPostCard({
             onReact={handleToggleReaction}
           />
 
-          {/* Comment, Bookmark, Share */}
+          {/* Comment, Bookmark */}
           <div className="flex items-center gap-1.5">
             <Button
               variant={showComments ? "secondary" : "ghost"}
@@ -454,17 +443,6 @@ export function FeedPostCard({
               )}
             >
               <Bookmark className={cn("size-3.5", isBookmarked && "fill-current")} />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="xs"
-              onClick={handleShare}
-              aria-label="Share post"
-              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground rounded-full px-3 py-1"
-            >
-              <Share2 className="size-3.5" />
-              <span className="hidden sm:inline">Share</span>
             </Button>
           </div>
         </div>

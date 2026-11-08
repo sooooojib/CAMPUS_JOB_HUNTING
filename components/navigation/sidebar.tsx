@@ -185,24 +185,26 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
   return (
     <aside
       className={cn(
-        "flex h-full w-64 flex-col border-r border-border/80 bg-sidebar text-sidebar-foreground",
+        "flex h-full w-64 flex-col border-r border-border/60 bg-sidebar/95 backdrop-blur-xl text-sidebar-foreground transition-all",
         className
       )}
     >
       {/* Brand Header */}
-      <div className="flex h-16 items-center border-b border-sidebar-border px-6">
+      <div className="flex h-16 items-center border-b border-sidebar-border/60 px-5">
         <Link
           href="/feed"
           onClick={onNavigate}
-          className="flex items-center gap-2.5 font-bold tracking-tight text-sidebar-foreground"
+          className="flex items-center gap-3 font-bold tracking-tight text-sidebar-foreground group"
         >
-          <div className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-xs">
+          <div className="flex size-9 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-primary-foreground shadow-sm shadow-primary/25 transition-transform group-hover:scale-105">
             <GraduationCap className="size-5" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-bold leading-tight">UniCareer</span>
-            <span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
-              Community Hub
+            <span className="text-base font-extrabold leading-tight text-foreground tracking-tight">
+              UniCareer
+            </span>
+            <span className="text-[10px] font-bold tracking-wider text-primary uppercase">
+              Campus Community
             </span>
           </div>
         </Link>
@@ -211,10 +213,10 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       {/* Main Navigation Items */}
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         <div>
-          <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-2.5">
             Main Platform
           </p>
-          <nav className="space-y-1" aria-label="Main Navigation">
+          <nav className="space-y-1.5" aria-label="Main Navigation">
             {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -228,26 +230,33 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                   href={item.href}
                   onClick={onNavigate}
                   className={cn(
-                    "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
+                    "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
-                      : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                      ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 font-bold"
+                      : "text-sidebar-foreground/75 hover:bg-muted/70 hover:text-sidebar-foreground hover:translate-x-0.5"
                   )}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon
+                    <div
                       className={cn(
-                        "size-4 shrink-0",
-                        isActive ? "text-primary" : "text-muted-foreground"
+                        "flex size-7 items-center justify-center rounded-xl transition-colors",
+                        isActive
+                          ? "bg-primary-foreground/20 text-primary-foreground"
+                          : "bg-muted/50 text-muted-foreground group-hover:bg-background group-hover:text-foreground"
                       )}
-                    />
+                    >
+                      <Icon className="size-3.5 shrink-0" />
+                    </div>
                     <span>{item.title}</span>
                   </div>
 
                   {item.badge && (
                     <Badge
                       variant={item.badgeVariant || "outline"}
-                      className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono rounded-full"
+                      className={cn(
+                        "h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono rounded-full",
+                        isActive && "bg-primary-foreground/20 text-primary-foreground border-transparent"
+                      )}
                     >
                       {item.badge}
                     </Badge>
@@ -261,22 +270,31 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
         {/* System & Administration - STRICTLY VISIBLE ONLY TO PLATFORM ADMINS */}
         {isAdmin && (
           <div>
-            <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-destructive font-mono mb-2">
-              System & Administration
+            <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-destructive/90 font-mono mb-2.5">
+              System &amp; Administration
             </p>
-            <nav className="space-y-1" aria-label="Administrative Navigation">
+            <nav className="space-y-1.5" aria-label="Administrative Navigation">
               <Link
                 href="/admin"
                 onClick={onNavigate}
                 className={cn(
-                  "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
+                  "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                   pathname.startsWith("/admin")
-                    ? "bg-destructive/10 text-destructive shadow-2xs font-bold"
-                    : "text-sidebar-foreground/80 hover:bg-destructive/10 hover:text-destructive"
+                    ? "bg-destructive text-destructive-foreground shadow-sm shadow-destructive/20 font-bold"
+                    : "text-sidebar-foreground/75 hover:bg-destructive/10 hover:text-destructive hover:translate-x-0.5"
                 )}
               >
                 <div className="flex items-center gap-2.5">
-                  <ShieldAlert className="size-4 shrink-0 text-destructive" />
+                  <div
+                    className={cn(
+                      "flex size-7 items-center justify-center rounded-xl transition-colors",
+                      pathname.startsWith("/admin")
+                        ? "bg-destructive-foreground/20 text-destructive-foreground"
+                        : "bg-destructive/10 text-destructive group-hover:bg-destructive/20"
+                    )}
+                  >
+                    <ShieldAlert className="size-3.5 shrink-0" />
+                  </div>
                   <span>Admin Command</span>
                 </div>
                 <Badge variant="destructive" className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono rounded-full">
@@ -289,27 +307,31 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
 
         {/* Account & Preferences - ALWAYS SHOWN FOR ALL USERS */}
         <div>
-          <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
-            Account & Preferences
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-2.5">
+            Account &amp; Preferences
           </p>
-          <nav className="space-y-1" aria-label="Account Navigation">
+          <nav className="space-y-1.5" aria-label="Account Navigation">
             <Link
               href="/settings"
               onClick={onNavigate}
               className={cn(
-                "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
+                "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                 pathname.startsWith("/settings") || pathname === "/profile"
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 font-bold"
+                  : "text-sidebar-foreground/75 hover:bg-muted/70 hover:text-sidebar-foreground hover:translate-x-0.5"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <User
+                <div
                   className={cn(
-                    "size-4 shrink-0",
-                    pathname.startsWith("/settings") || pathname === "/profile" ? "text-primary" : "text-muted-foreground"
+                    "flex size-7 items-center justify-center rounded-xl transition-colors",
+                    pathname.startsWith("/settings") || pathname === "/profile"
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-muted/50 text-muted-foreground group-hover:bg-background group-hover:text-foreground"
                   )}
-                />
+                >
+                  <User className="size-3.5 shrink-0" />
+                </div>
                 <span>Profile</span>
               </div>
             </Link>
@@ -318,19 +340,23 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               href="/onboarding"
               onClick={onNavigate}
               className={cn(
-                "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
+                "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                 pathname.startsWith("/onboarding")
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 font-bold"
+                  : "text-sidebar-foreground/75 hover:bg-muted/70 hover:text-sidebar-foreground hover:translate-x-0.5"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <GraduationCap
+                <div
                   className={cn(
-                    "size-4 shrink-0",
-                    pathname.startsWith("/onboarding") ? "text-primary" : "text-muted-foreground"
+                    "flex size-7 items-center justify-center rounded-xl transition-colors",
+                    pathname.startsWith("/onboarding")
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-muted/50 text-muted-foreground group-hover:bg-background group-hover:text-foreground"
                   )}
-                />
+                >
+                  <GraduationCap className="size-3.5 shrink-0" />
+                </div>
                 <span>Academic Verification</span>
               </div>
             </Link>
@@ -339,14 +365,16 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               type="button"
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="flex items-center justify-between w-full rounded-xl px-3.5 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors cursor-pointer disabled:opacity-50"
+              className="group flex items-center justify-between w-full rounded-2xl px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-all duration-150 cursor-pointer disabled:opacity-50"
             >
               <div className="flex items-center gap-2.5">
-                {isSigningOut ? (
-                  <Loader2 className="size-4 shrink-0 animate-spin" />
-                ) : (
-                  <LogOut className="size-4 shrink-0 text-destructive" />
-                )}
+                <div className="flex size-7 items-center justify-center rounded-xl bg-destructive/10 text-destructive group-hover:bg-destructive/20 transition-colors">
+                  {isSigningOut ? (
+                    <Loader2 className="size-3.5 shrink-0 animate-spin" />
+                  ) : (
+                    <LogOut className="size-3.5 shrink-0 text-destructive" />
+                  )}
+                </div>
                 <span>{isSigningOut ? "Signing out..." : "Sign Out"}</span>
               </div>
             </button>
@@ -354,27 +382,27 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
         </div>
       </div>
 
-      {/* User Institutional ID footer card */}
-      <div className="border-t border-sidebar-border p-3.5 space-y-2">
+      {/* User Institutional ID footer card - Elevated human-friendly floating card */}
+      <div className="border-t border-sidebar-border/60 p-3 space-y-2">
         <Link
           href="/profile/me"
           onClick={onNavigate}
-          className="flex items-center justify-between rounded-2xl p-2 text-xs transition-colors hover:bg-sidebar-accent"
+          className="flex items-center justify-between rounded-2xl p-2.5 text-xs bg-card border border-border/70 shadow-xs hover:border-primary/40 hover:shadow-md transition-all group"
         >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs border border-primary/20">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-blue-500/15 text-primary font-bold text-xs border border-primary/25 shadow-2xs">
               {initials}
             </div>
             <div className="truncate">
-              <p className="font-bold text-sidebar-foreground leading-tight truncate">
+              <p className="font-bold text-sidebar-foreground leading-tight truncate group-hover:text-primary transition-colors">
                 {currentUser.name}
               </p>
-              <p className="text-[10px] text-muted-foreground truncate">
+              <p className="text-[10px] text-muted-foreground truncate font-medium mt-0.5">
                 {(currentUser.membershipType || "MEMBER").replace("_", " ")} {currentUser.isVerified ? "• Verified" : ""}
               </p>
             </div>
           </div>
-          <ChevronRight className="size-4 text-muted-foreground shrink-0" />
+          <ChevronRight className="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
         </Link>
       </div>
     </aside>
