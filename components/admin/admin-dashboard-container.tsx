@@ -15,22 +15,19 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { AdminOverviewView } from "@/components/admin/admin-overview-view";
-import { VerificationTable } from "@/components/admin/verification-table";
 import { AdminReportsTable } from "@/components/admin/admin-reports-table";
 import { AdminCompaniesTable } from "@/components/admin/admin-companies-table";
 import { AdminAnalyticsView } from "@/components/admin/admin-analytics-view";
-import { AdminAuditTable } from "@/components/admin/admin-audit-table";
 import type { AdminDashboardStats } from "@/types";
 
 interface AdminDashboardContainerProps {
   stats: AdminDashboardStats;
-  initialPendingRequests: any[];
+  initialPendingRequests?: any[];
   currentAdminId: string;
 }
 
 export function AdminDashboardContainer({
   stats,
-  initialPendingRequests,
   currentAdminId,
 }: AdminDashboardContainerProps) {
   const [activeTab, setActiveTab] = React.useState<string>("overview");
@@ -44,16 +41,6 @@ export function AdminDashboardContainer({
             <TabsTrigger value="overview" className="text-xs gap-1.5 py-1.5 px-3">
               <LayoutDashboard className="size-3.5" />
               <span>Overview</span>
-            </TabsTrigger>
-
-            <TabsTrigger value="verifications" className="text-xs gap-1.5 py-1.5 px-3">
-              <FileCheck className="size-3.5" />
-              <span>Verifications</span>
-              {stats.pendingVerifications > 0 && (
-                <Badge variant="outline" className="ml-1 text-[9px] py-0 px-1 border-amber-400 text-amber-600 bg-amber-50 dark:bg-amber-950/40">
-                  {stats.pendingVerifications}
-                </Badge>
-              )}
             </TabsTrigger>
 
             <TabsTrigger value="reports" className="text-xs gap-1.5 py-1.5 px-3">
@@ -76,11 +63,6 @@ export function AdminDashboardContainer({
               <BarChart3 className="size-3.5" />
               <span>Analytics</span>
             </TabsTrigger>
-
-            <TabsTrigger value="audit" className="text-xs gap-1.5 py-1.5 px-3">
-              <ShieldCheck className="size-3.5" />
-              <span>Audit Trail</span>
-            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -89,29 +71,19 @@ export function AdminDashboardContainer({
           <AdminOverviewView stats={stats} onNavigateTab={setActiveTab} />
         </TabsContent>
 
-        {/* Tab 2: Verifications */}
-        <TabsContent value="verifications" className="space-y-4">
-          <VerificationTable initialRequests={initialPendingRequests} />
-        </TabsContent>
-
-        {/* Tab 5: Content Reports */}
+        {/* Tab 2: Content Reports */}
         <TabsContent value="reports" className="space-y-4">
           <AdminReportsTable />
         </TabsContent>
 
-        {/* Tab 6: Companies */}
+        {/* Tab 3: Companies */}
         <TabsContent value="companies" className="space-y-4">
           <AdminCompaniesTable />
         </TabsContent>
 
-        {/* Tab 7: Analytics */}
+        {/* Tab 4: Analytics */}
         <TabsContent value="analytics" className="space-y-4">
           <AdminAnalyticsView />
-        </TabsContent>
-
-        {/* Tab 8: Audit Trail */}
-        <TabsContent value="audit" className="space-y-4">
-          <AdminAuditTable />
         </TabsContent>
       </Tabs>
     </div>

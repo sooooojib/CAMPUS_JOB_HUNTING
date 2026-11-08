@@ -31,65 +31,32 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
 
   return (
     <div className="space-y-6">
-      {/* Actionable Alerts Bar if there are pending items */}
-      {(stats.pendingVerifications > 0 || stats.pendingReports > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {stats.pendingVerifications > 0 && (
-            <div className="p-4 rounded-xl border border-amber-200 bg-amber-50/60 dark:border-amber-900/60 dark:bg-amber-950/30 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200">
-                  <Clock className="size-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-amber-950 dark:text-amber-100">
-                    {stats.pendingVerifications} Pending Verification{stats.pendingVerifications > 1 ? "s" : ""}
-                  </div>
-                  <div className="text-xs text-amber-700 dark:text-amber-400">
-                    Awaiting registrar clearance
-                  </div>
-                </div>
-              </div>
-              {onNavigateTab && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onNavigateTab("verifications")}
-                  className="border-amber-300 text-amber-900 hover:bg-amber-100 dark:border-amber-800 dark:text-amber-200 h-8 text-xs gap-1"
-                >
-                  Review
-                  <ArrowRight className="size-3" />
-                </Button>
-              )}
+      {/* Actionable Alerts Bar if there are pending reports */}
+      {stats.pendingReports > 0 && (
+        <div className="p-4 rounded-2xl border border-red-200 bg-red-50/60 dark:border-red-900/60 dark:bg-red-950/30 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200">
+              <AlertTriangle className="size-4" />
             </div>
-          )}
-
-          {stats.pendingReports > 0 && (
-            <div className="p-4 rounded-xl border border-red-200 bg-red-50/60 dark:border-red-900/60 dark:bg-red-950/30 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200">
-                  <AlertTriangle className="size-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-red-950 dark:text-red-100">
-                    {stats.pendingReports} Content Report{stats.pendingReports > 1 ? "s" : ""}
-                  </div>
-                  <div className="text-xs text-red-700 dark:text-red-400">
-                    Flagged posts or comments
-                  </div>
-                </div>
+            <div>
+              <div className="text-sm font-semibold text-red-950 dark:text-red-100">
+                {stats.pendingReports} Content Report{stats.pendingReports > 1 ? "s" : ""}
               </div>
-              {onNavigateTab && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onNavigateTab("reports")}
-                  className="border-red-300 text-red-900 hover:bg-red-100 dark:border-red-800 dark:text-red-200 h-8 text-xs gap-1"
-                >
-                  Moderate
-                  <ArrowRight className="size-3" />
-                </Button>
-              )}
+              <div className="text-xs text-red-700 dark:text-red-400">
+                Flagged posts or comments awaiting moderation
+              </div>
             </div>
+          </div>
+          {onNavigateTab && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onNavigateTab("reports")}
+              className="border-red-300 text-red-900 hover:bg-red-100 dark:border-red-800 dark:text-red-200 h-8 text-xs gap-1 rounded-full"
+            >
+              Moderate
+              <ArrowRight className="size-3" />
+            </Button>
           )}
         </div>
       )}

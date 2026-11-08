@@ -1,18 +1,16 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { ShieldCheck, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isPlatformAdmin } from "@/lib/permissions";
 import { getAdminDashboardStats } from "@/lib/services/admin";
-import { getPendingVerificationRequests } from "@/lib/services/verification";
 import { AdminTemplate } from "@/components/templates/admin-template";
-import { Badge } from "@/components/ui/badge";
 import { AdminDashboardContainer } from "@/components/admin/admin-dashboard-container";
 
 export const metadata = {
   title: "Admin Command & Moderation | UniCareer Community",
-  description: "Institutional governance, opportunity verification, member management, and audit log.",
+  description: "Institutional governance, content moderation, partner companies, and platform telemetry.",
 };
 
 export const instant = false;
@@ -46,19 +44,15 @@ export default async function AdminPage() {
   }
 
   // Fetch real database records (Zero fabricated statistics)
-  const [stats, pendingRequests] = await Promise.all([
-    getAdminDashboardStats(),
-    getPendingVerificationRequests(session.user.id),
-  ]);
+  const stats = await getAdminDashboardStats();
 
   return (
     <AdminTemplate
       title="Governance &amp; Moderation Center"
-      subtitle="University career services staff command center. Moderate community discussions, review institutional credential claims, govern partner companies, and inspect immutable audit trails."
+      subtitle="University career services administration center. Moderate community discussions, review content reports, manage partner companies, and monitor platform health."
     >
       <AdminDashboardContainer
         stats={stats}
-        initialPendingRequests={pendingRequests as any}
         currentAdminId={session.user.id}
       />
     </AdminTemplate>

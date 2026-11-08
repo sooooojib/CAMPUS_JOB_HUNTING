@@ -19,6 +19,7 @@ import {
   AlertTriangle,
   Loader2,
   Filter,
+  Mail,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -512,6 +513,15 @@ export function MemberDirectoryView({
             const isSuspended = member.accountStatus === "SUSPENDED";
             const isSelf = member.id === currentAdminId;
 
+            const hasMetadata = Boolean(
+              member.department ||
+              (isAdmin && member.studentId) ||
+              member.company ||
+              member.designation ||
+              member.headline ||
+              member.bio
+            );
+
             const initials = member.name
               .split(" ")
               .map((n: string) => n[0])
@@ -523,125 +533,116 @@ export function MemberDirectoryView({
             return (
               <Card
                 key={member.id}
-                className={`rounded-3xl border transition-all hover:border-primary/40 hover:shadow-lg flex flex-col justify-between p-6 ${
+                className={`rounded-3xl border transition-all hover:border-primary/40 hover:shadow-md flex flex-col justify-between p-5 sm:p-6 ${
                   isSuspended
                     ? "border-destructive/40 bg-destructive/5"
                     : "border-border/70 bg-card"
                 }`}
               >
-                <CardContent className="p-0 space-y-4">
-                  {/* Member Header */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3.5 min-w-0 flex-1">
-                      <Avatar className="size-12 border-2 border-background shadow-xs shrink-0 rounded-2xl">
-                        <AvatarImage src={member.image || undefined} alt={member.name} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm rounded-2xl">
-                          {initials}
-                        </AvatarFallback>
-                      </Avatar>
+                <div className="space-y-4">
+                  {/* Member Top Section: Avatar + Identity Header */}
+                  <div className="flex items-start gap-3.5">
+                    <Avatar className="size-12 border border-border/80 shadow-2xs shrink-0 rounded-full bg-muted/40">
+                      <AvatarImage src={member.image || undefined} alt={member.name} />
+                      <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm rounded-full">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
 
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <Link
-                            href={`/profile/${member.id}`}
-                            className="text-base font-bold text-foreground hover:text-primary transition-colors leading-snug break-words"
-                          >
-                            {member.name}
-                          </Link>
-                          {isVerified && (
-                            <span title="Registrar-Verified Member">
-                              <ShieldCheck className="size-4 text-emerald-600 shrink-0" />
-                            </span>
-                          )}
-                        </div>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <Link
+                          href={`/profile/${member.id}`}
+                          className="text-base font-bold text-foreground hover:text-primary transition-colors leading-tight truncate block"
+                          title={member.name}
+                        >
+                          {member.name}
+                        </Link>
 
-                        {/* Email for admin */}
-                        {isAdmin && member.email && (
-                          <div className="text-[11px] text-muted-foreground font-mono truncate">
-                            {member.email}
-                          </div>
+                        {/* Non-Admin: Connection Button */}
+                        {!isAdmin && (
+                          <ConnectionButton
+                            userId={member.id}
+                            initialState={(member.connectionStatus as ConnectionState) || "NONE"}
+                            connectionId={member.connectionId}
+                            size="xs"
+                            className="rounded-full px-3 py-1 font-semibold shrink-0"
+                            onStateChange={() => {
+                              fetchMembers();
+                            }}
+                          />
                         )}
+                      </div>
 
-                        <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                          <Badge
-                            variant="outline"
-                            className="text-[10px] uppercase font-mono tracking-wider rounded-full px-2 py-0.5"
-                          >
-                            {(member.membershipType || "MEMBER").replace("_", " ")}
+                      {/* Badges line: Role + Verification + Account Status */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] uppercase font-mono tracking-wider rounded-full px-2 py-0.5"
+                        >
+                          {(member.membershipType || "MEMBER").replace("_", " ")}
+                        </Badge>
+                        {renderVerificationBadge(member.verificationStatus)}
+                        {isSuspended && (
+                          <Badge variant="destructive" className="text-[10px] rounded-full px-2 py-0.5">
+                            Suspended
                           </Badge>
-                          {isAdmin && (
-                            <>
-                              {renderVerificationBadge(member.verificationStatus)}
-                              {isSuspended && (
-                                <Badge variant="destructive" className="text-[10px] rounded-full px-2 py-0.5">
-                                  Suspended
-                                </Badge>
-                              )}
-                            </>
-                          )}
+                        )}
+                      </div>
+
+                      {/* Monospace Email for Admin with mail icon */}
+                      {isAdmin && member.email && (
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono truncate pt-0.5">
+                          <Mail className="size-3 shrink-0 text-muted-foreground/70" />
+                          <span className="truncate">{member.email}</span>
                         </div>
-                      </div>
+                      )}
                     </div>
-
-                    {/* Non-Admin: Connection Button */}
-                    {!isAdmin && (
-                      <div className="shrink-0 pt-0.5">
-                        <ConnectionButton
-                          userId={member.id}
-                          initialState={(member.connectionStatus as ConnectionState) || "NONE"}
-                          connectionId={member.connectionId}
-                          size="xs"
-                          className="rounded-full px-3 py-1 font-semibold"
-                          onStateChange={() => {
-                            fetchMembers();
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
 
-                  {/* Headline & Bio */}
-                  {member.headline ? (
-                    <p className="text-xs text-foreground/90 font-medium line-clamp-2">
-                      {member.headline}
-                    </p>
-                  ) : member.bio ? (
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {member.bio}
-                    </p>
-                  ) : null}
+                  {/* Context Info (Only rendered if actual metadata exists) */}
+                  {hasMetadata && (
+                    <div className="space-y-1.5 text-xs text-muted-foreground pt-2.5 border-t border-border/40">
+                      {member.department && (
+                        <div className="flex items-center gap-1.5 truncate">
+                          <GraduationCap className="size-3.5 text-primary shrink-0" />
+                          <span className="truncate text-foreground/80 font-medium">
+                            {member.department}
+                            {member.graduationYear
+                              ? ` ('${String(member.graduationYear).slice(-2)})`
+                              : ""}
+                          </span>
+                        </div>
+                      )}
 
-                  {/* Context Info (Dept, Student ID, Company) */}
-                  <div className="space-y-1.5 text-xs text-muted-foreground pt-1 border-t border-border/50">
-                    {member.department && (
-                      <div className="flex items-center gap-1.5 truncate">
-                        <GraduationCap className="size-3.5 text-primary shrink-0" />
-                        <span className="truncate">
-                          {member.department}
-                          {member.graduationYear
-                            ? ` ('${String(member.graduationYear).slice(-2)})`
-                            : ""}
-                        </span>
-                      </div>
-                    )}
+                      {isAdmin && member.studentId && (
+                        <div className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
+                          <span className="text-muted-foreground/80">Student ID:</span>
+                          <span className="font-semibold text-foreground">{member.studentId}</span>
+                        </div>
+                      )}
 
-                    {isAdmin && member.studentId && (
-                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground truncate">
-                        <span>Student ID:</span>
-                        <span className="font-semibold text-foreground">{member.studentId}</span>
-                      </div>
-                    )}
+                      {(member.company || member.designation) && (
+                        <div className="flex items-center gap-1.5 truncate">
+                          <Building2 className="size-3.5 text-primary shrink-0" />
+                          <span className="truncate">
+                            {member.designation ? `${member.designation} at ` : ""}
+                            {member.company || "Enterprise Partner"}
+                          </span>
+                        </div>
+                      )}
 
-                    {(member.company || member.designation) && (
-                      <div className="flex items-center gap-1.5 truncate">
-                        <Building2 className="size-3.5 text-primary shrink-0" />
-                        <span className="truncate">
-                          {member.designation ? `${member.designation} at ` : ""}
-                          {member.company || "Enterprise Partner"}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                      {member.headline ? (
+                        <p className="text-xs text-foreground/90 font-medium line-clamp-2 pt-0.5">
+                          {member.headline}
+                        </p>
+                      ) : member.bio ? (
+                        <p className="text-xs text-muted-foreground line-clamp-2 pt-0.5">
+                          {member.bio}
+                        </p>
+                      ) : null}
+                    </div>
+                  )}
 
                   {/* Skills tags (for non-admin or general view) */}
                   {!isAdmin && member.skills && member.skills.length > 0 && (
@@ -661,95 +662,94 @@ export function MemberDirectoryView({
                       )}
                     </div>
                   )}
+                </div>
 
-                  {/* Admin Moderation Toolbar on Each Card */}
-                  {isAdmin ? (
-                    <div className="pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-1.5">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {/* Verify / Revoke Verification */}
-                        {isVerified ? (
+                {/* Footer Action Controls */}
+                {isAdmin ? (
+                  <div className="pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-2 mt-4">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {/* Verify / Revoke */}
+                      {isVerified ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setConfirmRevokeMember(member)}
+                          className="h-8 px-3 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full border-amber-500/30 font-medium"
+                        >
+                          Revoke
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => handleVerifyMember(member.id, member.name)}
+                          className="h-8 px-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-full gap-1 shadow-2xs font-medium"
+                        >
+                          <CheckCircle2 className="size-3.5" />
+                          <span>Verify</span>
+                        </Button>
+                      )}
+
+                      {/* Suspend / Restore (blocked for current admin self) */}
+                      {!isSelf && (
+                        isSuspended ? (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => setConfirmRevokeMember(member)}
-                            className="h-7 px-2.5 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full"
+                            onClick={() => handleOpenSuspendModal(member, "RESTORE")}
+                            className="h-8 px-3 text-xs border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10 rounded-full gap-1 font-medium"
                           >
-                            <span>Revoke</span>
+                            <UserCheck className="size-3.5" />
+                            <span>Restore</span>
                           </Button>
                         ) : (
                           <Button
                             size="sm"
-                            variant="default"
-                            onClick={() => handleVerifyMember(member.id, member.name)}
-                            className="h-7 px-2.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-full gap-1"
+                            variant="outline"
+                            onClick={() => handleOpenSuspendModal(member, "SUSPEND")}
+                            className="h-8 px-3 text-xs border-destructive/40 text-destructive hover:bg-destructive/10 rounded-full gap-1 font-medium"
                           >
-                            <CheckCircle2 className="size-3" />
-                            <span>Verify</span>
+                            <UserX className="size-3.5" />
+                            <span>Suspend</span>
                           </Button>
-                        )}
-
-                        {/* Suspend / Restore (blocked for current admin self) */}
-                        {!isSelf && (
-                          isSuspended ? (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleOpenSuspendModal(member, "RESTORE")}
-                              className="h-7 px-2.5 text-xs border-emerald-500/40 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 rounded-full gap-1"
-                            >
-                              <UserCheck className="size-3" />
-                              <span>Restore</span>
-                            </Button>
-                          ) : (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleOpenSuspendModal(member, "SUSPEND")}
-                              className="h-7 px-2.5 text-xs border-destructive/40 text-destructive hover:bg-destructive/10 rounded-full gap-1"
-                            >
-                              <UserX className="size-3" />
-                              <span>Suspend</span>
-                            </Button>
-                          )
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        {/* Delete account */}
-                        {!isSelf && (
-                          <Button
-                            size="icon-sm"
-                            variant="ghost"
-                            onClick={() => setConfirmDeleteMember(member)}
-                            className="size-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full"
-                            title="Delete member permanently"
-                          >
-                            <Trash2 className="size-3.5" />
-                          </Button>
-                        )}
-
-                        <Link
-                          href={`/profile/${member.id}`}
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2 rounded-full hover:bg-primary/5 transition-colors"
-                        >
-                          <span>Profile</span>
-                          <ExternalLink className="size-3" />
-                        </Link>
-                      </div>
+                        )
+                      )}
                     </div>
-                  ) : (
-                    /* Non-Admin Actions */
-                    <div className="pt-2 border-t border-border/50 flex items-center justify-between gap-2">
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      {/* Delete account */}
+                      {!isSelf && (
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={() => setConfirmDeleteMember(member)}
+                          className="size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full"
+                          title="Delete member permanently"
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      )}
+
                       <Link
                         href={`/profile/${member.id}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2.5 rounded-full hover:bg-primary/5 transition-colors"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 py-1.5 px-3 rounded-full hover:bg-primary/5 transition-colors border border-border/50"
                       >
-                        <span>View Profile</span>
+                        <span>Profile</span>
                         <ExternalLink className="size-3" />
                       </Link>
                     </div>
-                  )}
-                </CardContent>
+                  </div>
+                ) : (
+                  /* Non-Admin Actions */
+                  <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2 mt-4">
+                    <Link
+                      href={`/profile/${member.id}`}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2.5 rounded-full hover:bg-primary/5 transition-colors"
+                    >
+                      <span>View Profile</span>
+                      <ExternalLink className="size-3" />
+                    </Link>
+                  </div>
+                )}
               </Card>
             );
           })}
