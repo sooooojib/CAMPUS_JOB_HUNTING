@@ -31,7 +31,7 @@ export const metadata = {
   description: "View and manage your verified university member credentials.",
 };
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export default async function MyProfilePage() {
   const reqHeaders = await headers();

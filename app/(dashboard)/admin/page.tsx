@@ -13,7 +13,7 @@ export const metadata = {
   description: "Institutional governance, content moderation, partner companies, and platform telemetry.",
 };
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const reqHeaders = await headers();

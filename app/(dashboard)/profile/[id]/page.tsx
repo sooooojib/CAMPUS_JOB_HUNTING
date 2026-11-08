@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ProfileActions } from "@/components/profile/profile-actions";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export default async function PublicProfilePage(
   props: { params: Promise<{ id: string }> }

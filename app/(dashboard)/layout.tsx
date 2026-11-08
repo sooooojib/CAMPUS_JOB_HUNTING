@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AuthenticatedShell } from "@/components/layout/authenticated-shell";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({
   children,
