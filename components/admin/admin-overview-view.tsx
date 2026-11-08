@@ -222,31 +222,6 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
           </div>
         </div>
       </div>
-
-      {/* Governance & Architecture Integrity Banner */}
-      <div className="p-6 rounded-2xl border border-primary/20 bg-primary/[0.03] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="size-5 text-primary" />
-            <h3 className="font-semibold text-foreground text-sm">
-              Campus Career Services Governance Protocol
-            </h3>
-          </div>
-          <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed">
-            All administrative decisions (membership approvals, account suspensions, opportunity moderation, and content removal)
-            are cryptographically recorded in the immutable administrative audit trail with administrator IDs, timestamps, and stated reasons.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="outline" className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 text-xs">
-            <CheckCircle2 className="size-3 mr-1" />
-            Audit Logging Active
-          </Badge>
-          <Badge variant="outline" className="border-primary/40 text-primary bg-primary/5 text-xs">
-            Server Gates Enforced
-          </Badge>
-        </div>
-      </div>
     </div>
   );
 }

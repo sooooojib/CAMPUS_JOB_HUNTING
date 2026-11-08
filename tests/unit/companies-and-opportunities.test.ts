@@ -237,7 +237,7 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       ).rejects.toThrow("FORBIDDEN_COMPANY_POSTING");
     });
 
-    it("successfully creates an OFFICIAL_EMPLOYER opportunity with PENDING status", async () => {
+    it("successfully creates an OFFICIAL_EMPLOYER opportunity with APPROVED status (Instant Live Publishing)", async () => {
       const futureDeadline = new Date(Date.now() + 86400000 * 30).toISOString();
 
       const opp = await createOpportunity(verifiedEmployer.id, {
@@ -264,14 +264,14 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       createdOpportunityIds.push(opp.id);
 
       expect(opp.id).toBeDefined();
-      expect(opp.status).toBe("PENDING");
+      expect(opp.status).toBe("APPROVED");
       expect(opp.sourceType).toBe("OFFICIAL_EMPLOYER");
       expect(opp.minCgpa).toBe(3.25);
       expect(opp.openToAllDepartments).toBe(false);
       expect(opp.targetDepartments).toEqual(["Computer Science & Engineering", "Software Engineering"]);
     });
 
-    it("successfully creates a COMMUNITY_SHARED opportunity with PENDING status", async () => {
+    it("successfully creates a COMMUNITY_SHARED opportunity with APPROVED status (Instant Live Publishing)", async () => {
       const futureDeadline = new Date(Date.now() + 86400000 * 20).toISOString();
 
       const opp = await createOpportunity(verifiedStudent.id, {
@@ -291,41 +291,32 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       communityOppId = opp.id;
       createdOpportunityIds.push(opp.id);
 
-      expect(opp.status).toBe("PENDING");
+      expect(opp.status).toBe("APPROVED");
       expect(opp.sourceType).toBe("COMMUNITY_SHARED");
       expect(opp.companyName).toBe("Databricks Inc.");
       expect(opp.externalUrl).toBe("https://databricks.com/company/careers/internships");
     });
 
-    it("prevents general members from viewing PENDING opportunities", async () => {
-      // General student trying to view pending official opp
-      await expect(
-        getOpportunityById(officialOppId, unverifiedUser.id)
-      ).rejects.toThrow("FORBIDDEN_OPPORTUNITY_ACCESS");
-
-      // Anonymous / null user trying to view pending opp
-      await expect(
-        getOpportunityById(officialOppId, null)
-      ).rejects.toThrow("FORBIDDEN_OPPORTUNITY_ACCESS");
-
-      // But the poster themselves CAN view their own pending submission
-      const posterView = await getOpportunityById(officialOppId, verifiedEmployer.id);
-      expect(posterView.id).toBe(officialOppId);
-
-      // And an administrator CAN view pending opportunities
-      const adminView = await getOpportunityById(officialOppId, adminUser.id);
-      expect(adminView.id).toBe(officialOppId);
+    it("allows members to immediately view the live published opportunity without pre-approval delays", async () => {
+      // General member can immediately view the live opportunity
+      const memberView = await getOpportunityById(officialOppId, unverifiedUser.id);
+      expect(memberView.id).toBe(officialOppId);
+      expect(memberView.status).toBe("APPROVED");
     });
 
-    it("allows admin to inspect pending opportunities queue", async () => {
+    it("supports legacy pending queue and review when an opportunity has PENDING status", async () => {
+      // Set to PENDING to test moderation review logic
+      await prisma.opportunity.update({
+        where: { id: officialOppId },
+        data: { status: "PENDING" },
+      });
+
       const queue = await getPendingOpportunities(adminUser.id);
-      expect(queue.length).toBeGreaterThanOrEqual(2);
+      expect(queue.length).toBeGreaterThanOrEqual(1);
       const found = queue.find((o) => o.id === officialOppId);
       expect(found).toBeDefined();
       expect(found?.title).toContain("Associate Software Engineer");
-    });
 
-    it("approves opportunity, records reviewer attribution, and makes it available to members", async () => {
       const approved = await reviewOpportunity(adminUser.id, {
         opportunityId: officialOppId,
         decision: "APPROVE",
@@ -334,14 +325,15 @@ describe("Stage 6: Companies, Opportunities & Moderation Engine", () => {
       expect(approved.status).toBe("APPROVED");
       expect(approved.reviewerId).toBe(adminUser.id);
       expect(approved.reviewedAt).toBeDefined();
-
-      // Now general members CAN view the approved opportunity
-      const memberView = await getOpportunityById(officialOppId, unverifiedUser.id);
-      expect(memberView.id).toBe(officialOppId);
-      expect(memberView.status).toBe("APPROVED");
     });
 
     it("requires a specific reason when admin rejects an opportunity", async () => {
+      // Set to PENDING to test rejection logic
+      await prisma.opportunity.update({
+        where: { id: communityOppId },
+        data: { status: "PENDING" },
+      });
+
       await expect(
         reviewOpportunity(adminUser.id, {
           opportunityId: communityOppId,

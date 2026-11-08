@@ -55,14 +55,6 @@ export default async function AdminPage() {
     <AdminTemplate
       title="Governance &amp; Moderation Center"
       subtitle="University career services staff command center. Govern institutional membership, evaluate opportunities, moderate community discussions, and inspect immutable audit trails."
-      actions={
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs font-mono gap-1 border-primary/30 text-primary bg-primary/5">
-            <ShieldCheck className="size-3.5" />
-            <span>Admin Clearance: Active</span>
-          </Badge>
-        </div>
-      }
     >
       <AdminDashboardContainer
         stats={stats}

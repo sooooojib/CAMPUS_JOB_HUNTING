@@ -74,8 +74,8 @@ export async function createOpportunity(userId: string, input: CreateOpportunity
     companyLogo = comp.logo || companyLogo;
   }
 
-  // Initial status: DRAFT or PENDING review
-  const status = validated.submitForReview ? "PENDING" : "DRAFT";
+  // Initial status: DRAFT or APPROVED (Instant Live Publishing)
+  const status = validated.submitForReview ? "APPROVED" : "DRAFT";
 
   const opportunity = await prisma.opportunity.create({
     data: {
@@ -638,11 +638,59 @@ export async function getUserBookmarkedOpportunities(
  */
 export async function getUserAuthoredOpportunities(
   userId: string,
-  statusFilter?: string
+  statusFilter?: string,
+  options?: {
+    isAdminView?: boolean;
+    roleType?: string;
+    workplaceType?: string;
+    sourceType?: string;
+    department?: string;
+    maxMinCgpa?: number;
+  }
 ) {
-  const where: any = { posterId: userId };
+  const where: any = {};
+  if (!options?.isAdminView) {
+    where.posterId = userId;
+  }
+
   if (statusFilter && statusFilter !== "ALL") {
     where.status = statusFilter;
+  }
+
+  if (options?.roleType && options.roleType !== "ALL") {
+    where.type = options.roleType;
+  }
+
+  if (options?.workplaceType && options.workplaceType !== "ALL") {
+    where.workplaceType = options.workplaceType;
+  }
+
+  if (options?.sourceType && options.sourceType !== "ALL") {
+    where.sourceType = options.sourceType;
+  }
+
+  if (options?.department && options.department !== "ALL") {
+    where.OR = [
+      { openToAllDepartments: true },
+      { targetDepartments: { has: options.department } },
+    ];
+  }
+
+  if (options?.maxMinCgpa !== undefined && !isNaN(options.maxMinCgpa)) {
+    where.AND = [
+      ...(where.AND || []),
+      {
+        OR: [
+          { minCgpa: null },
+          { minCgpa: { lte: options.maxMinCgpa } },
+        ],
+      },
+    ];
+  }
+
+  const countWhere: any = {};
+  if (!options?.isAdminView) {
+    countWhere.posterId = userId;
   }
 
   const [items, counts] = await Promise.all([
@@ -651,6 +699,14 @@ export async function getUserAuthoredOpportunities(
       orderBy: { createdAt: "desc" },
       include: {
         company: true,
+        poster: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            membershipType: true,
+          },
+        },
         _count: {
           select: {
             bookmarks: true,
@@ -660,7 +716,7 @@ export async function getUserAuthoredOpportunities(
     }),
     prisma.opportunity.groupBy({
       by: ["status"],
-      where: { posterId: userId },
+      where: countWhere,
       _count: {
         id: true,
       },

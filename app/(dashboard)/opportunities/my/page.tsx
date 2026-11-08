@@ -27,6 +27,8 @@ export default async function MyOpportunitiesPage() {
     redirect("/opportunities");
   }
 
-  return <MyOpportunitiesView />;
+  const isAdmin = user.systemRole === "ADMIN" || user.membershipType === "ADMIN";
+
+  return <MyOpportunitiesView isAdmin={isAdmin} />;
 }
 

@@ -481,11 +481,11 @@ describe("Stage 14: Comprehensive User Workflow & Security Tests", () => {
         openToAllDepartments: true,
       });
       createdOpportunityIds.push(opportunity.id);
-      expect(opportunity.status).toBe("PENDING");
+      expect(opportunity.status).toBe("APPROVED");
       expect(opportunity.sourceType).toBe("OFFICIAL_EMPLOYER");
     });
 
-    it("Step 9 & 10: Admin approves opportunity and employer manages applicant pipeline", async () => {
+    it("Step 9 & 10: Opportunity is live immediately and employer manages applicant pipeline", async () => {
       const admin = await prisma.user.findFirst({ where: { systemRole: "ADMIN" } });
       await adminModerateOpportunity(admin!.id, opportunity.id, { action: "APPROVE" });
 

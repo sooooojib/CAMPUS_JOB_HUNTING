@@ -3,30 +3,45 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  FileText,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  Archive,
-  Calendar,
-  Edit3,
-  Trash2,
-  Send,
-  Plus,
-  ArrowRight,
-  ExternalLink,
-  ShieldAlert,
   Building2,
-  XCircle,
-  Users,
+  Trash2,
+  Plus,
+  ShieldAlert,
+  Filter,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { ConfirmDialog } from "@/components/feedback/confirm-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const CANONICAL_DEPARTMENTS = [
+  "Computer Science & Engineering",
+  "Software Engineering",
+  "Electrical & Electronic Engineering",
+  "Mathematics",
+  "Statistics",
+  "Physics",
+  "Chemistry",
+  "Finance & Banking",
+  "Marketing",
+  "Accounting & Information Systems",
+  "Management Studies",
+  "English Language & Literature",
+  "Law & Justice",
+  "Economics",
+  "Pharmacy",
+  "Microbiology",
+];
 
 interface MyOpportunity {
   id: string;
@@ -40,102 +55,108 @@ interface MyOpportunity {
   workplaceType: string;
   salaryOrStipend?: string | null;
   deadline: string;
-  rejectionReason?: string | null;
   createdAt: string;
+  poster?: {
+    id: string;
+    name: string;
+    email: string;
+    membershipType: string;
+  };
   _count?: {
     bookmarks: number;
   };
 }
 
-export function MyOpportunitiesView() {
+interface MyOpportunitiesViewProps {
+  isAdmin?: boolean;
+}
+
+export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProps) {
   const [opportunities, setOpportunities] = React.useState<MyOpportunity[]>([]);
   const [counts, setCounts] = React.useState<Record<string, number>>({
     ALL: 0,
-    DRAFT: 0,
-    PENDING: 0,
     APPROVED: 0,
-    REJECTED: 0,
     CLOSED: 0,
     EXPIRED: 0,
   });
   const [activeTab, setActiveTab] = React.useState<string>("ALL");
   const [loading, setLoading] = React.useState(true);
 
+  // Admin filter dropdown states (Screenshot 3)
+  const [roleType, setRoleType] = React.useState<string>("ALL");
+  const [workplaceType, setWorkplaceType] = React.useState<string>("ALL");
+  const [sourceType, setSourceType] = React.useState<string>("ALL");
+  const [department, setDepartment] = React.useState<string>("ALL");
+  const [maxMinCgpa, setMaxMinCgpa] = React.useState<string>("ALL");
+
   // Dialog states
   const [confirmCloseId, setConfirmCloseId] = React.useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = React.useState<string | null>(null);
-  const [actionLoading, setActionLoading] = React.useState(false);
 
-  const fetchMyOpportunities = React.useCallback(async (status: string) => {
+  const fetchOpportunities = React.useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/opportunities/my?status=${status}`);
+      const params = new URLSearchParams();
+      if (activeTab !== "ALL") params.set("status", activeTab);
+      if (isAdmin) {
+        if (roleType !== "ALL") params.set("roleType", roleType);
+        if (workplaceType !== "ALL") params.set("workplaceType", workplaceType);
+        if (sourceType !== "ALL") params.set("sourceType", sourceType);
+        if (department !== "ALL") params.set("department", department);
+        if (maxMinCgpa !== "ALL") params.set("maxMinCgpa", maxMinCgpa);
+      }
+
+      const res = await fetch(`/api/opportunities/my?${params.toString()}`);
       const json = await res.json();
       if (json.success) {
         setOpportunities(json.data || []);
         if (json.counts) {
-          setCounts(json.counts);
+          setCounts({
+            ALL: json.counts.ALL || 0,
+            APPROVED: json.counts.APPROVED || 0,
+            CLOSED: json.counts.CLOSED || 0,
+            EXPIRED: json.counts.EXPIRED || 0,
+          });
         }
       } else {
         throw new Error(json.error || "Failed to load opportunities");
       }
     } catch (err: any) {
-      toast.error(err.message || "Could not fetch your postings");
+      toast.error(err.message || "Could not fetch postings");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab, isAdmin, roleType, workplaceType, sourceType, department, maxMinCgpa]);
 
   React.useEffect(() => {
-    fetchMyOpportunities(activeTab);
-  }, [activeTab, fetchMyOpportunities]);
-
-  const handleSubmitForReview = async (id: string) => {
-    setActionLoading(true);
-    try {
-      const res = await fetch(`/api/opportunities/${id}/submit`, { method: "POST" });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed to submit opportunity");
-      toast.success("Opportunity submitted for institutional review!");
-      fetchMyOpportunities(activeTab);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to submit opportunity");
-    } finally {
-      setActionLoading(false);
-    }
-  };
+    fetchOpportunities();
+  }, [fetchOpportunities]);
 
   const handleCloseOpportunity = async () => {
     if (!confirmCloseId) return;
-    setActionLoading(true);
     try {
       const res = await fetch(`/api/opportunities/${confirmCloseId}/close`, { method: "POST" });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to close opportunity");
       toast.success("Opportunity successfully closed.");
       setConfirmCloseId(null);
-      fetchMyOpportunities(activeTab);
+      fetchOpportunities();
     } catch (err: any) {
       toast.error(err.message || "Failed to close opportunity");
-    } finally {
-      setActionLoading(false);
     }
   };
 
   const handleDeleteOpportunity = async () => {
     if (!confirmDeleteId) return;
-    setActionLoading(true);
     try {
       const res = await fetch(`/api/opportunities/${confirmDeleteId}`, { method: "DELETE" });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to delete opportunity");
-      toast.success("Opportunity deleted.");
+      toast.success("Opportunity removed from the platform.");
       setConfirmDeleteId(null);
-      fetchMyOpportunities(activeTab);
+      fetchOpportunities();
     } catch (err: any) {
       toast.error(err.message || "Failed to delete opportunity");
-    } finally {
-      setActionLoading(false);
     }
   };
 
@@ -152,10 +173,12 @@ export function MyOpportunitiesView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/60">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-            My Opportunity Postings
+            {isAdmin ? "Manage Career Opportunities" : "My Opportunity Postings"}
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Manage your submitted openings, track institutional review status, and update listings.
+            {isAdmin
+              ? "Platform-wide opportunity moderation console. Filter, close, or remove postings across the campus network."
+              : "Manage your submitted openings, track status, and close listings."}
           </p>
         </div>
 
@@ -168,7 +191,109 @@ export function MyOpportunitiesView() {
         </Link>
       </div>
 
-      {/* Status Filter Tabs */}
+      {/* Admin Advanced Filter Bar (Screenshot 3) */}
+      {isAdmin && (
+        <div className="rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-2xs space-y-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {/* 1. Role Type */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
+                Role Type
+              </label>
+              <Select value={roleType} onValueChange={(val) => setRoleType(val || "ALL")}>
+                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
+                  <SelectValue placeholder="ALL" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  <SelectItem value="INTERNSHIP">Internship</SelectItem>
+                  <SelectItem value="FULL_TIME">Full Time</SelectItem>
+                  <SelectItem value="PART_TIME">Part Time</SelectItem>
+                  <SelectItem value="CONTRACT">Contract</SelectItem>
+                  <SelectItem value="OTHER">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 2. Workplace */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
+                Workplace
+              </label>
+              <Select value={workplaceType} onValueChange={(val) => setWorkplaceType(val || "ALL")}>
+                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
+                  <SelectValue placeholder="ALL" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  <SelectItem value="ON_SITE">On-Site</SelectItem>
+                  <SelectItem value="REMOTE">Remote</SelectItem>
+                  <SelectItem value="HYBRID">Hybrid</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 3. Posting Source */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
+                Posting Source
+              </label>
+              <Select value={sourceType} onValueChange={(val) => setSourceType(val || "ALL")}>
+                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
+                  <SelectValue placeholder="ALL" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  <SelectItem value="OFFICIAL_EMPLOYER">Official Employer</SelectItem>
+                  <SelectItem value="COMMUNITY_SHARED">Community Shared</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 4. Department / Major */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
+                Department / Major
+              </label>
+              <Select value={department} onValueChange={(val) => setDepartment(val || "ALL")}>
+                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
+                  <SelectValue placeholder="ALL" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl max-h-56">
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  {CANONICAL_DEPARTMENTS.map((dept) => (
+                    <SelectItem key={dept} value={dept}>
+                      {dept}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 5. Max Min CGPA */}
+            <div className="space-y-1.5 col-span-2 sm:col-span-1">
+              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
+                Max Min CGPA
+              </label>
+              <Select value={maxMinCgpa} onValueChange={(val) => setMaxMinCgpa(val || "ALL")}>
+                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
+                  <SelectValue placeholder="ALL" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  <SelectItem value="3.00">3.00</SelectItem>
+                  <SelectItem value="3.25">3.25</SelectItem>
+                  <SelectItem value="3.50">3.50</SelectItem>
+                  <SelectItem value="3.75">3.75</SelectItem>
+                  <SelectItem value="4.00">4.00</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Status Filter Tabs (Only Active, Closed, Expired) */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-border/40 scrollbar-none">
         {TABS.map((tab) => (
           <Button
@@ -176,7 +301,7 @@ export function MyOpportunitiesView() {
             variant={activeTab === tab.key ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setActiveTab(tab.key)}
-            className="text-xs font-semibold shrink-0 gap-1.5"
+            className="text-xs font-semibold shrink-0 gap-1.5 rounded-full"
           >
             <span>{tab.label}</span>
             <span
@@ -208,8 +333,8 @@ export function MyOpportunitiesView() {
           title={`No ${activeTab === "ALL" ? "" : activeTab.toLowerCase()} opportunities`}
           description={
             activeTab === "ALL"
-              ? "You haven't created or published any career opportunities yet."
-              : `You have no opportunities currently in ${activeTab.toLowerCase()} status.`
+              ? "No career opportunities found matching current filters."
+              : `There are currently no opportunities in ${activeTab.toLowerCase()} status.`
           }
           action={
             <Link
@@ -217,7 +342,7 @@ export function MyOpportunitiesView() {
               className={buttonVariants({ variant: "default", size: "sm" })}
             >
               <Plus className="size-4 mr-1.5" />
-              <span>Create Your First Posting</span>
+              <span>Post New Opening</span>
             </Link>
           }
         />
@@ -225,9 +350,6 @@ export function MyOpportunitiesView() {
         <div className="space-y-4">
           {opportunities.map((opp) => {
             const isApproved = opp.status === "APPROVED";
-            const isPending = opp.status === "PENDING";
-            const isDraft = opp.status === "DRAFT";
-            const isRejected = opp.status === "REJECTED";
             const isClosed = opp.status === "CLOSED";
             const isExpired = opp.status === "EXPIRED";
 
@@ -243,20 +365,24 @@ export function MyOpportunitiesView() {
                         variant={
                           isApproved
                             ? "default"
-                            : isPending
-                            ? "warning"
-                            : isRejected
-                            ? "destructive"
+                            : isClosed
+                            ? "secondary"
                             : "outline"
                         }
-                        className="text-xs uppercase font-mono"
+                        className="text-xs uppercase font-mono rounded-full px-2.5 py-0.5"
                       >
-                        {opp.status}
+                        {isApproved ? "LIVE" : opp.status}
                       </Badge>
 
-                      <Badge variant="outline" className="text-xs font-normal">
+                      <Badge variant="outline" className="text-xs font-normal rounded-full">
                         {opp.type.replace("_", " ")}
                       </Badge>
+
+                      {isAdmin && opp.poster && (
+                        <span className="text-[11px] text-muted-foreground font-mono">
+                          Posted by: {opp.poster.name} ({opp.poster.membershipType})
+                        </span>
+                      )}
                     </div>
 
                     <h3 className="text-lg font-bold text-foreground">
@@ -290,88 +416,39 @@ export function MyOpportunitiesView() {
 
                   {/* Actions Bar */}
                   <div className="flex flex-wrap items-center gap-2 shrink-0">
-                    {/* View Live */}
-                    {(isApproved || isClosed || isExpired) && (
-                      <Link
-                        href={`/opportunities/${opp.id}`}
-                        className={buttonVariants({ variant: "outline", size: "sm" })}
-                      >
-                        <span>View Details</span>
-                      </Link>
-                    )}
+                    {/* View Details */}
+                    <Link
+                      href={`/opportunities/${opp.id}`}
+                      className={buttonVariants({ variant: "outline", size: "sm" })}
+                    >
+                      <span>View Details</span>
+                    </Link>
 
-                    {/* Edit */}
-                    {(isDraft || isPending || isRejected || isApproved) && (
-                      <Link
-                        href={`/opportunities/post?editId=${opp.id}`}
-                        className={buttonVariants({ variant: "outline", size: "sm" })}
-                      >
-                        <Edit3 className="size-3.5 mr-1" />
-                        <span>Edit</span>
-                      </Link>
-                    )}
-
-                    {/* Submit Draft */}
-                    {isDraft && (
-                      <Button
-                        size="sm"
-                        disabled={actionLoading}
-                        onClick={() => handleSubmitForReview(opp.id)}
-                        className="gap-1.5"
-                      >
-                        <Send className="size-3.5" />
-                        <span>Submit for Review</span>
-                      </Button>
-                    )}
-
-                    {/* Close Active */}
+                    {/* Close Active Opportunity */}
                     {isApproved && (
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setConfirmCloseId(opp.id)}
-                        className="text-amber-600 hover:text-amber-700 hover:bg-amber-500/10"
+                        className="text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full text-xs"
                       >
                         <span>Close Opportunity</span>
                       </Button>
                     )}
 
-                    {/* Delete Draft */}
-                    {isDraft && (
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        onClick={() => setConfirmDeleteId(opp.id)}
-                        className="text-muted-foreground hover:text-destructive"
-                        aria-label="Delete draft"
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    )}
+                    {/* Delete / Remove Opportunity (Admin or Author) */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setConfirmDeleteId(opp.id)}
+                      className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full text-xs gap-1"
+                      aria-label="Remove opportunity"
+                    >
+                      <Trash2 className="size-3.5 text-destructive" />
+                      <span className="text-destructive font-medium">Remove</span>
+                    </Button>
                   </div>
                 </div>
-
-                {/* Rejection Alert Box */}
-                {isRejected && opp.rejectionReason && (
-                  <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 space-y-2 text-xs">
-                    <div className="flex items-center gap-1.5 font-bold text-destructive">
-                      <AlertCircle className="size-4 shrink-0" />
-                      <span>Reviewer Feedback / Rejection Justification:</span>
-                    </div>
-                    <p className="text-foreground/90 leading-relaxed pl-5 font-mono">
-                      {opp.rejectionReason}
-                    </p>
-                    <div className="pt-2 pl-5">
-                      <Link
-                        href={`/opportunities/post?editId=${opp.id}`}
-                        className={buttonVariants({ variant: "destructive", size: "xs" })}
-                      >
-                        <span>Revise &amp; Resubmit Listing</span>
-                        <ArrowRight className="size-3.5 ml-1" />
-                      </Link>
-                    </div>
-                  </div>
-                )}
 
                 {/* Footer Info */}
                 <div className="pt-3 border-t border-border/40 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground font-mono">
@@ -406,7 +483,7 @@ export function MyOpportunitiesView() {
         open={!!confirmCloseId}
         onOpenChange={(open) => !open && setConfirmCloseId(null)}
         title="Close this opportunity?"
-        description="Closing this opportunity will archive it immediately and remove it from active member feeds. Applicants will no longer be able to discover or apply to it."
+        description="Closing this opportunity will archive it immediately and mark it closed. Candidates will see that applications are no longer accepted."
         confirmLabel="Confirm Closure"
         variant="default"
         onConfirm={handleCloseOpportunity}
@@ -415,9 +492,13 @@ export function MyOpportunitiesView() {
       <ConfirmDialog
         open={!!confirmDeleteId}
         onOpenChange={(open) => !open && setConfirmDeleteId(null)}
-        title="Delete this draft?"
-        description="Are you sure you want to delete this draft opportunity? This action is permanent and cannot be undone."
-        confirmLabel="Delete Draft"
+        title={isAdmin ? "Remove this opportunity from platform?" : "Delete this opportunity?"}
+        description={
+          isAdmin
+            ? "Are you sure you want to remove this opportunity? It will be deleted from the university network immediately."
+            : "Are you sure you want to delete this opportunity? This action cannot be undone."
+        }
+        confirmLabel="Remove Opportunity"
         variant="destructive"
         onConfirm={handleDeleteOpportunity}
       />

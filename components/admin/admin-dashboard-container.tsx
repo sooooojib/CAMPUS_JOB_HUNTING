@@ -54,16 +54,6 @@ export function AdminDashboardContainer({
               <span className="text-[10px] text-muted-foreground ml-0.5">({stats.totalMembers})</span>
             </TabsTrigger>
 
-            <TabsTrigger value="opportunities" className="text-xs gap-1.5 py-1.5 px-3">
-              <Briefcase className="size-3.5" />
-              <span>Opportunities</span>
-              {stats.pendingOpportunities > 0 && (
-                <Badge variant="outline" className="ml-1 text-[9px] py-0 px-1 border-blue-400 text-blue-600 bg-blue-50 dark:bg-blue-950/40">
-                  {stats.pendingOpportunities}
-                </Badge>
-              )}
-            </TabsTrigger>
-
             <TabsTrigger value="verifications" className="text-xs gap-1.5 py-1.5 px-3">
               <FileCheck className="size-3.5" />
               <span>Verifications</span>
@@ -110,11 +100,6 @@ export function AdminDashboardContainer({
         {/* Tab 2: Members */}
         <TabsContent value="members" className="space-y-4">
           <AdminMembersTable currentAdminId={currentAdminId} />
-        </TabsContent>
-
-        {/* Tab 3: Opportunities */}
-        <TabsContent value="opportunities" className="space-y-4">
-          <AdminOpportunityTable />
         </TabsContent>
 
         {/* Tab 4: Verifications */}

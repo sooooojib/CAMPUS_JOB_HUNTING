@@ -234,11 +234,11 @@ export function OpportunityForm({
         throw new Error(json.error || json.message || "Failed to save opportunity.");
       }
 
-      const assignedStatus = submitForReview ? "PENDING" : "DRAFT";
+      const assignedStatus = submitForReview ? "APPROVED" : "DRAFT";
       setSubmittedStatus(assignedStatus);
 
       if (submitForReview) {
-        toast.success("Opportunity submitted for institutional verification!");
+        toast.success("Opportunity published and live!");
       } else {
         toast.success("Opportunity saved as Draft!");
       }
@@ -293,24 +293,24 @@ export function OpportunityForm({
 
         <div className="space-y-2">
           <h2 className="text-2xl font-extrabold text-foreground tracking-tight">
-            {submittedStatus === "PENDING"
-              ? "Opportunity Submitted for Review"
+            {submittedStatus === "APPROVED"
+              ? "Opportunity Published & Live"
               : "Draft Opportunity Saved"}
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {submittedStatus === "PENDING"
-              ? "Your opportunity has been queued for institutional review by University Career Services. You will receive notification once accredited."
-              : "Your opportunity has been saved as a draft. You can revise it and submit it for institutional review anytime."}
+            {submittedStatus === "APPROVED"
+              ? "Your opportunity is now live on the university opportunity board for students to explore and apply directly."
+              : "Your opportunity has been saved as a draft. You can revise it and publish it anytime."}
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-2 text-xs font-mono">
           <span className="text-muted-foreground">Status:</span>
           <Badge
-            variant={submittedStatus === "PENDING" ? "warning" : "secondary"}
+            variant={submittedStatus === "APPROVED" ? "default" : "secondary"}
             className="uppercase font-mono"
           >
-            {submittedStatus}
+            {submittedStatus === "APPROVED" ? "LIVE" : submittedStatus}
           </Badge>
         </div>
 
