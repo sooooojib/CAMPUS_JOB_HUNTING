@@ -2,6 +2,7 @@ import * as React from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { AuthenticatedShell } from "@/components/layout/authenticated-shell";
 
 export const instant = false;
@@ -20,24 +21,44 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  // Fetch real-time user record from database
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      name: true,
+      email: true,
+      image: true,
+      membershipType: true,
+      systemRole: true,
+      verificationStatus: true,
+      accountStatus: true,
+      canPostOpportunities: true,
+      canReviewApplicants: true,
+      emailVerified: true,
+    },
+  });
+
+  if (!dbUser) {
+    redirect("/login");
+  }
+
   // Account status security gate
-  const user = session.user as any;
-  if (user.accountStatus === "SUSPENDED" || user.accountStatus === "DEACTIVATED") {
+  if (dbUser.accountStatus === "SUSPENDED" || dbUser.accountStatus === "DEACTIVATED") {
     redirect("/login?error=account_suspended");
   }
 
   return (
     <AuthenticatedShell
       user={{
-        name: session.user.name,
-        email: session.user.email,
-        avatarUrl: session.user.image ?? undefined,
-        membershipType: user.membershipType || "STUDENT",
-        systemRole: user.systemRole || "MEMBER",
-        isVerified: user.verificationStatus === "VERIFIED",
-        emailVerified: session.user.emailVerified,
-        canPostOpportunities: user.canPostOpportunities || user.systemRole === "ADMIN",
-        canReviewApplicants: user.canReviewApplicants || user.systemRole === "ADMIN",
+        name: dbUser.name || session.user.name,
+        email: dbUser.email || session.user.email,
+        avatarUrl: dbUser.image ?? session.user.image ?? undefined,
+        membershipType: dbUser.membershipType || "STUDENT",
+        systemRole: dbUser.systemRole || "MEMBER",
+        isVerified: dbUser.verificationStatus === "VERIFIED",
+        emailVerified: dbUser.emailVerified ?? session.user.emailVerified,
+        canPostOpportunities: dbUser.canPostOpportunities || dbUser.systemRole === "ADMIN",
+        canReviewApplicants: dbUser.canReviewApplicants || dbUser.systemRole === "ADMIN",
       }}
     >
       {children}

@@ -157,6 +157,18 @@ export async function reviewVerificationRequest(
       },
     });
 
+    // Ensure profile reflects onboarded status
+    await prisma.profile.upsert({
+      where: { userId: request.userId },
+      create: {
+        userId: request.userId,
+        isOnboarded: true,
+      },
+      update: {
+        isOnboarded: true,
+      },
+    });
+
     createNotification({
       recipientId: request.userId,
       type: "MEMBERSHIP_APPROVED",

@@ -60,8 +60,8 @@ export default async function MyProfilePage() {
 
   return (
     <div className="space-y-6">
-      {/* Onboarding Incomplete Banner */}
-      {!profile?.isOnboarded && (
+      {/* Onboarding Incomplete Banner (only shown if not verified and onboarding incomplete) */}
+      {!isVerified && !profile?.isOnboarded && (
         <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-primary text-primary-foreground shrink-0">

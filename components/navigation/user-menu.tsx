@@ -39,15 +39,15 @@ export function UserMenu({
   const [isSigningOut, setIsSigningOut] = React.useState(false);
   const { data: session } = authClient.useSession();
 
-  // Prefer active live session, fallback to propUser or default
+  // Prefer live database propUser, fallback to session or default
   const currentUser = {
-    name: session?.user?.name || propUser?.name || "Verified Member",
-    email: session?.user?.email || propUser?.email || "member@university.edu",
-    avatarUrl: session?.user?.image || propUser?.avatarUrl,
-    membershipType: (session?.user as any)?.membershipType || propUser?.membershipType || propUser?.role || "STUDENT",
-    systemRole: (session?.user as any)?.systemRole || propUser?.systemRole || "MEMBER",
-    isVerified: (session?.user as any)?.verificationStatus === "VERIFIED" || propUser?.isVerified || false,
-    emailVerified: session?.user?.emailVerified ?? propUser?.emailVerified ?? false,
+    name: propUser?.name || session?.user?.name || "Verified Member",
+    email: propUser?.email || session?.user?.email || "member@university.edu",
+    avatarUrl: propUser?.avatarUrl || (session?.user?.image ?? undefined),
+    membershipType: propUser?.membershipType || (session?.user as any)?.membershipType || propUser?.role || "STUDENT",
+    systemRole: propUser?.systemRole || (session?.user as any)?.systemRole || "MEMBER",
+    isVerified: propUser?.isVerified ?? ((session?.user as any)?.verificationStatus === "VERIFIED" || false),
+    emailVerified: propUser?.emailVerified ?? (session?.user?.emailVerified ?? false),
   };
 
   const isAdmin = currentUser.systemRole === "ADMIN";
