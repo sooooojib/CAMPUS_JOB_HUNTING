@@ -47,9 +47,9 @@ export default function AuthLayout({
           {children}
         </main>
 
-        {/* University & Career Vector Illustrations at Bottom Corners */}
-        <CampusCareerIllustrationLeft className="absolute -bottom-1 left-2 sm:left-6 md:left-10 w-44 sm:w-52 md:w-60 z-0 hidden lg:block" />
-        <CampusCareerIllustrationRight className="absolute -bottom-1 right-2 sm:right-6 md:right-10 w-40 sm:w-48 md:w-56 z-0 hidden lg:block" />
+        {/* Animated University & Career Vector Motion Illustrations at Bottom Corners */}
+        <CampusCareerIllustrationLeft className="absolute bottom-2 sm:bottom-3 left-2 sm:left-5 md:left-7 w-48 sm:w-56 md:w-64 z-0 hidden lg:block" />
+        <CampusCareerIllustrationRight className="absolute bottom-2 sm:bottom-3 right-2 sm:right-5 md:right-7 w-44 sm:w-52 md:w-60 z-0 hidden lg:block" />
 
         {/* Footer info line */}
         <footer className="relative z-20 text-center text-[11px] text-muted-foreground/75 pt-1 shrink-0">
