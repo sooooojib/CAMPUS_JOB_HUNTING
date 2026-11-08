@@ -144,13 +144,13 @@ export function CreatePostBox({
     : "U";
 
   return (
-    <Card className={cn("rounded-xl border border-border/80 bg-card p-4 shadow-xs", className)}>
+    <Card className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-xs transition-all", className)}>
       <CardContent className="p-0">
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="flex items-start gap-3">
-            <Avatar className="size-10 border border-border shrink-0">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          <div className="flex items-start gap-3.5">
+            <Avatar className="size-11 border-2 border-background shadow-xs shrink-0 rounded-2xl">
               <AvatarImage src={currentUser.avatarUrl || undefined} alt={currentUser.name} />
-              <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+              <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs rounded-2xl">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -163,7 +163,7 @@ export function CreatePostBox({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={150}
-                  className="text-xs font-semibold bg-background"
+                  className="text-xs sm:text-sm font-semibold bg-background rounded-2xl border-border/60 h-10"
                 />
               )}
 
@@ -175,8 +175,8 @@ export function CreatePostBox({
                 onChange={(e) => setContent(e.target.value)}
                 maxLength={5000}
                 className={cn(
-                  "w-full resize-none transition-all text-xs leading-relaxed bg-background",
-                  isExpanded ? "min-h-[110px]" : "min-h-[44px]"
+                  "w-full resize-none transition-all text-xs sm:text-sm leading-relaxed bg-background rounded-2xl border-border/60 p-3.5",
+                  isExpanded ? "min-h-[120px]" : "min-h-[48px]"
                 )}
               />
             </div>

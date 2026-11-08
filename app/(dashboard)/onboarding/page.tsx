@@ -99,7 +99,7 @@ export default async function OnboardingPage() {
                   <div>
                     <CardTitle className="text-lg font-bold flex items-center gap-2">
                       <span>{user.name}</span>
-                      <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white gap-1 text-[11px]">
+                      <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white gap-1 text-[11px] rounded-full px-2.5">
                         <CheckCircle2 className="size-3" />
                         <span>Verified {user.membershipType}</span>
                       </Badge>
@@ -108,11 +108,6 @@ export default async function OnboardingPage() {
                       {roleLabel} • Jagannath University
                     </CardDescription>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium">
-                  <ShieldCheck className="size-4 shrink-0" />
-                  <span>Authenticated Clearance</span>
                 </div>
               </div>
             </CardHeader>

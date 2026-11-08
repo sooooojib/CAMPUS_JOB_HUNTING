@@ -238,11 +238,8 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
       {/* Top Header & Action Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/60">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-2.5">
-            <span>Career Opportunities &amp; Placements</span>
-            <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-              Verified Network
-            </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+            Career Opportunities &amp; Placements
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Official employer listings and authenticated alumni leads. Direct priority access for Jagannath University members.
@@ -309,20 +306,20 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
       </div>
 
       {/* Search Bar & Multi-Dimensional Filters */}
-      <div className="rounded-2xl border border-border/70 bg-card/60 backdrop-blur-md p-4 sm:p-5 space-y-4 shadow-2xs">
+      <div className="rounded-3xl border border-border/50 bg-card/80 backdrop-blur-md p-5 sm:p-6 space-y-4 shadow-xs">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by role title, required skill (e.g. Go, Java, Figma), company name, or location..."
-            className="pl-10 pr-10 bg-background text-sm h-11 rounded-xl"
+            className="pl-11 pr-11 bg-muted/40 border-border/50 text-sm h-12 rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/20 transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <X className="size-4" />
             </button>
@@ -332,9 +329,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
         {/* Filter Controls Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
           {/* Opportunity Type */}
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono font-medium text-muted-foreground">
-              ROLE TYPE
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">
+              Role Type
             </label>
             <Select
               value={typeFilter}
@@ -345,7 +342,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-9 text-xs">
+              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
                 <SelectValue placeholder="All Roles" />
               </SelectTrigger>
               <SelectContent>
@@ -360,9 +357,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Workplace Type */}
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono font-medium text-muted-foreground">
-              WORKPLACE
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">
+              Workplace
             </label>
             <Select
               value={workplaceFilter}
@@ -373,7 +370,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-9 text-xs">
+              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
                 <SelectValue placeholder="All Workplaces" />
               </SelectTrigger>
               <SelectContent>
@@ -386,9 +383,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Source Classification */}
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono font-medium text-muted-foreground">
-              POSTING PROVENANCE
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">
+              Posting Source
             </label>
             <Select
               value={sourceTypeFilter}
@@ -399,11 +396,11 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-9 text-xs">
-                <SelectValue placeholder="All Postings" />
+              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
+                <SelectValue placeholder="All Sources" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All Postings</SelectItem>
+                <SelectItem value="ALL">All Sources</SelectItem>
                 <SelectItem value="OFFICIAL_EMPLOYER">Official Employer Direct</SelectItem>
                 <SelectItem value="COMMUNITY_SHARED">Community / Alumni Lead</SelectItem>
               </SelectContent>
@@ -411,9 +408,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Academic Department */}
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono font-medium text-muted-foreground">
-              DEPARTMENT / MAJOR
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">
+              Department / Major
             </label>
             <Select
               value={departmentFilter}
@@ -424,7 +421,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-9 text-xs">
+              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
                 <SelectValue placeholder="All Departments" />
               </SelectTrigger>
               <SelectContent>
@@ -439,9 +436,9 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           </div>
 
           {/* Minimum CGPA Requirement */}
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono font-medium text-muted-foreground">
-              MAX MIN CGPA
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">
+              Max Min CGPA
             </label>
             <Select
               value={cgpaFilter}
@@ -452,7 +449,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 }
               }}
             >
-              <SelectTrigger className="w-full bg-background h-9 text-xs">
+              <SelectTrigger className="w-full bg-background h-10 text-xs rounded-xl border-border/60">
                 <SelectValue placeholder="Any CGPA Requirement" />
               </SelectTrigger>
               <SelectContent>

@@ -57,7 +57,7 @@ export default function WelcomePage() {
                 href="/register"
                 className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm px-8 py-4 shadow-md hover:bg-primary/90 transition-all hover:scale-102 hover:shadow-lg"
               >
-                <span>Join the Verified Network</span>
+                <span>Join UniCareer Community</span>
                 <ArrowRight className="size-4 ml-2" />
               </Link>
 

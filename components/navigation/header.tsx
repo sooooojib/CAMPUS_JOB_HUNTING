@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu, ShieldCheck } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NotificationsPopover } from "./notifications-popover";
@@ -37,13 +37,8 @@ export function AppHeader({ onToggleSidebar, user }: AppHeaderProps) {
         )}
       </div>
 
-      {/* Right: Network status badge, notifications, theme, user menu */}
+      {/* Right: Notifications, theme, user menu */}
       <div className="flex items-center gap-2 sm:gap-3">
-        <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-2.5 py-1 text-xs font-semibold text-muted-foreground">
-          <ShieldCheck className="size-3.5 text-blue-600 dark:text-blue-400" />
-          <span>Verified University Network</span>
-        </div>
-
         <NotificationsPopover />
         <ThemeToggle />
         <UserMenu user={user} />

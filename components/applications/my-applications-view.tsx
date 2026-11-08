@@ -87,13 +87,6 @@ interface ApplicationItem {
 
 const STATUS_TABS = [
   { key: "ALL", label: "All Applications" },
-  { key: "SUBMITTED", label: "Submitted" },
-  { key: "UNDER_REVIEW", label: "Under Review" },
-  { key: "SHORTLISTED", label: "Shortlisted" },
-  { key: "INTERVIEW", label: "Interview" },
-  { key: "SELECTED", label: "Selected" },
-  { key: "REJECTED", label: "Declined" },
-  { key: "WITHDRAWN", label: "Withdrawn" },
 ];
 
 export function MyApplicationsView() {
@@ -178,11 +171,11 @@ export function MyApplicationsView() {
       title="My Applications"
       subtitle="Track your applications across internal platform postings and external career portals."
       primaryAction={
-        <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-xl border border-border/60">
+        <div className="flex items-center gap-1.5 bg-muted/50 p-1.5 rounded-2xl border border-border/50">
           <button
             type="button"
             onClick={() => setMode("AUTOMATIC")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               mode === "AUTOMATIC"
                 ? "bg-background text-foreground shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground"
@@ -193,7 +186,7 @@ export function MyApplicationsView() {
           <button
             type="button"
             onClick={() => setMode("MANUAL")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               mode === "MANUAL"
                 ? "bg-background text-foreground shadow-xs font-bold"
                 : "text-muted-foreground hover:text-foreground"
@@ -205,47 +198,27 @@ export function MyApplicationsView() {
       }
       searchFilterBar={
         mode === "AUTOMATIC" ? (
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search applied roles or companies..."
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-2xl border border-border/60 bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-xs"
             />
           </div>
         ) : undefined
       }
       activeFiltersBar={
         mode === "AUTOMATIC" ? (
-          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
-            {STATUS_TABS.map((tab) => {
-              const count = counts[tab.key] ?? 0;
-              const isActive = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-xs"
-                      : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
-                >
-                  <span>{tab.label}</span>
-                  <span
-                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-md ${
-                      isActive
-                        ? "bg-primary-foreground/20 text-primary-foreground"
-                        : "bg-background text-muted-foreground"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+              <span>All Applications</span>
+              <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">
+                {counts.ALL ?? applications.length}
+              </span>
+            </div>
           </div>
         ) : undefined
       }
@@ -253,7 +226,7 @@ export function MyApplicationsView() {
       {mode === "MANUAL" ? (
         <ManualApplicationsView />
       ) : loading ? (
-        <div className="rounded-2xl border border-border bg-card p-12 text-center space-y-3">
+        <div className="rounded-3xl border border-border/60 bg-card p-12 text-center space-y-3">
           <Loader2 className="size-8 animate-spin mx-auto text-primary" />
           <p className="text-xs text-muted-foreground">Loading your submitted applications...</p>
         </div>
@@ -275,16 +248,16 @@ export function MyApplicationsView() {
           }
         />
       ) : (
-        <div className="rounded-2xl border border-border bg-card shadow-xs overflow-hidden">
+        <div className="rounded-3xl border border-border/60 bg-card shadow-xs overflow-hidden">
           <Table>
-            <TableHeader className="bg-muted/40">
-              <TableRow>
-                <TableHead className="w-[320px]">Opportunity &amp; Company</TableHead>
-                <TableHead>Applied Date</TableHead>
-                <TableHead>Deadline</TableHead>
-                <TableHead>Submitted Resume</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+            <TableHeader className="bg-muted/30">
+              <TableRow className="border-b border-border/60">
+                <TableHead className="py-3.5 px-5 font-semibold text-xs text-muted-foreground">Opportunity &amp; Company</TableHead>
+                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Applied Date</TableHead>
+                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Deadline</TableHead>
+                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Submitted Resume</TableHead>
+                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Status</TableHead>
+                <TableHead className="py-3.5 px-5 text-right font-semibold text-xs text-muted-foreground">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -296,25 +269,25 @@ export function MyApplicationsView() {
                   app.status !== "REJECTED";
 
                 return (
-                  <TableRow key={app.id} className="hover:bg-muted/30">
-                    <TableCell>
-                      <div className="space-y-1">
+                  <TableRow key={app.id} className="hover:bg-muted/20 transition-colors border-b border-border/40 last:border-b-0">
+                    <TableCell className="py-4 px-5 align-middle">
+                      <div className="space-y-1.5">
                         <Link
                           href={`/opportunities/${app.opportunityId}`}
                           className="font-bold text-foreground hover:text-primary hover:underline text-sm leading-snug flex items-center gap-1.5"
                         >
                           <span>{app.opportunity.title}</span>
-                          <ExternalLink className="size-3 text-muted-foreground" />
+                          <ExternalLink className="size-3 text-muted-foreground shrink-0" />
                         </Link>
-                        <div className="text-xs text-muted-foreground flex items-center gap-2">
+                        <div className="text-xs text-muted-foreground flex flex-wrap items-center gap-2">
                           <span className="font-semibold text-foreground/80 flex items-center gap-1">
-                            <Building2 className="size-3 text-muted-foreground" />
+                            <Building2 className="size-3 text-muted-foreground shrink-0" />
                             {app.opportunity.companyName}
                           </span>
-                          <span>•</span>
+                          <span className="text-border">•</span>
                           <span className="font-mono text-[11px]">{app.opportunity.type}</span>
                           {app.method === "EXTERNAL" && (
-                            <Badge variant="outline" className="text-[10px] py-0 px-1 font-mono">
+                            <Badge variant="outline" className="text-[10px] py-0 px-1.5 font-mono rounded-full">
                               External Portal
                             </Badge>
                           )}
@@ -322,31 +295,31 @@ export function MyApplicationsView() {
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-xs text-muted-foreground">
+                    <TableCell className="py-4 px-4 align-middle text-xs text-muted-foreground whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="size-3.5 text-muted-foreground" />
                         <span>{new Date(app.submittedAt).toLocaleDateString()}</span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-xs text-muted-foreground">
+                    <TableCell className="py-4 px-4 align-middle text-xs text-muted-foreground whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
                         <Clock className="size-3.5 text-muted-foreground" />
                         <span>{new Date(app.opportunity.deadline).toLocaleDateString()}</span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-xs">
+                    <TableCell className="py-4 px-4 align-middle text-xs">
                       {app.resume ? (
                         <a
                           href={`/api/resumes/${app.resume.id}/download`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-primary hover:underline font-medium text-xs bg-primary/5 hover:bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-primary hover:underline font-medium text-xs bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 transition-colors"
                         >
                           <FileText className="size-3.5" />
-                          <span className="max-w-[120px] truncate">{app.resume.fileName}</span>
-                          <Download className="size-3 text-primary/70" />
+                          <span className="max-w-[140px] truncate">{app.resume.fileName}</span>
+                          <Download className="size-3 text-primary/70 shrink-0" />
                         </a>
                       ) : (
                         <span className="text-muted-foreground text-xs italic">
@@ -355,9 +328,9 @@ export function MyApplicationsView() {
                       )}
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="py-4 px-4 align-middle">
                       <div className="space-y-1">
-                        <ApplicationStatusBadge status={app.status as any} />
+                        <ApplicationStatusBadge status={app.status as any} className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold" />
                         {latestHistory?.note && (
                           <p className="text-[10px] text-muted-foreground line-clamp-1 max-w-[180px]">
                             {latestHistory.note}
@@ -366,13 +339,13 @@ export function MyApplicationsView() {
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-right">
+                    <TableCell className="py-4 px-5 align-middle text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedApp(app)}
-                          className="h-8 px-2.5 text-xs gap-1 text-foreground/80 hover:text-foreground"
+                          className="h-8 px-3 text-xs gap-1.5 text-foreground/80 hover:text-foreground rounded-full hover:bg-muted/60"
                         >
                           <Eye className="size-3.5" />
                           <span>Details</span>
@@ -386,7 +359,7 @@ export function MyApplicationsView() {
                               setAppToWithdraw(app);
                               setWithdrawReason("");
                             }}
-                            className="h-8 px-2.5 text-xs gap-1 text-destructive hover:text-destructive hover:bg-destructive/10"
+                            className="h-8 px-3 text-xs gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
                           >
                             <XCircle className="size-3.5" />
                             <span>Withdraw</span>

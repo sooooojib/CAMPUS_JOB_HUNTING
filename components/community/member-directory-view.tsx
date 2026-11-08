@@ -79,20 +79,20 @@ export function MemberDirectoryView() {
       {/* Search Header Controls */}
       <div className="space-y-3">
         <div className="relative w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            placeholder="Search directory by name..."
-            className="pl-10 pr-10 bg-card h-10 text-xs sm:text-sm"
+            placeholder="Search directory by name, department, or keyword..."
+            className="pl-11 pr-11 bg-card h-12 text-xs sm:text-sm rounded-2xl border-border/60 shadow-xs focus:ring-2 focus:ring-primary/20"
           />
           {search && (
             <button
               onClick={handleResetFilters}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               aria-label="Clear search"
             >
               <X className="size-4" />
@@ -107,14 +107,14 @@ export function MemberDirectoryView() {
           </div>
           {hasActiveFilters && (
             <div className="flex items-center gap-2">
-              <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+              <span className="text-[11px] bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-medium">
                 Search Active
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleResetFilters}
-                className="h-6 px-1.5 text-xs text-muted-foreground hover:text-foreground"
+                className="h-7 px-2.5 text-xs text-muted-foreground hover:text-foreground rounded-full"
               >
                 Clear
               </Button>
@@ -167,7 +167,7 @@ export function MemberDirectoryView() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {members.map((member) => {
             const isVerified = member.verificationStatus === "VERIFIED";
             const initials = member.name
@@ -182,24 +182,24 @@ export function MemberDirectoryView() {
             return (
               <Card
                 key={member.id}
-                className="rounded-xl border border-border/80 bg-card p-5 transition-all hover:border-primary/40 hover:shadow-md flex flex-col justify-between"
+                className="rounded-3xl border border-border/60 bg-card p-6 transition-all hover:border-primary/40 hover:shadow-lg flex flex-col justify-between"
               >
                 <CardContent className="p-0 space-y-4">
                   {/* Member Header */}
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-12 border-2 border-background shadow-xs shrink-0">
+                    <div className="flex items-start gap-3.5 min-w-0 flex-1">
+                      <Avatar className="size-12 border-2 border-background shadow-xs shrink-0 rounded-2xl">
                         <AvatarImage src={member.image || undefined} alt={member.name} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
+                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm rounded-2xl">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
 
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <Link
                             href={`/profile/${member.id}`}
-                            className="text-base font-bold text-foreground hover:text-primary transition-colors line-clamp-1"
+                            className="text-base font-bold text-foreground hover:text-primary transition-colors leading-snug break-words"
                           >
                             {member.name}
                           </Link>
@@ -209,22 +209,24 @@ export function MemberDirectoryView() {
                             </span>
                           )}
                         </div>
-                        <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider mt-0.5">
+                        <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider mt-1 rounded-full px-2.5 py-0.5">
                           {(member.membershipType || "MEMBER").replace("_", " ")}
                         </Badge>
                       </div>
                     </div>
 
-                    <ConnectionButton
-                      userId={member.id}
-                      initialState={(member.connectionStatus as ConnectionState) || "NONE"}
-                      connectionId={member.connectionId}
-                      size="xs"
-                      onStateChange={() => {
-                        // Refresh directory state seamlessly
-                        fetchMembers();
-                      }}
-                    />
+                    <div className="shrink-0 pt-0.5">
+                      <ConnectionButton
+                        userId={member.id}
+                        initialState={(member.connectionStatus as ConnectionState) || "NONE"}
+                        connectionId={member.connectionId}
+                        size="xs"
+                        className="rounded-full px-3 py-1 font-semibold"
+                        onStateChange={() => {
+                          fetchMembers();
+                        }}
+                      />
+                    </div>
                   </div>
 
                   {/* Headline & Bio */}
@@ -262,11 +264,11 @@ export function MemberDirectoryView() {
 
                   {/* Skills tags */}
                   {member.skills && member.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1 pt-1">
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {member.skills.slice(0, 3).map((s, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] bg-muted px-2 py-0.5 rounded-md text-foreground/80 font-medium"
+                          className="text-[10px] bg-muted/60 px-2.5 py-0.5 rounded-full text-foreground/80 font-medium border border-border/40"
                         >
                           {s}
                         </span>
@@ -283,12 +285,11 @@ export function MemberDirectoryView() {
                   <div className="pt-2 border-t border-border/50 flex items-center justify-between gap-2">
                     <Link
                       href={`/profile/${member.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2.5 rounded-full hover:bg-primary/5 transition-colors"
                     >
                       <span>View Profile</span>
                       <ExternalLink className="size-3" />
                     </Link>
-
                   </div>
                 </CardContent>
               </Card>

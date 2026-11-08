@@ -66,7 +66,7 @@
   --border: oklch(0.90 0.01 250); /* #E2E8F0 */
   --input: oklch(0.90 0.01 250);
   --ring: oklch(0.45 0.15 255);
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 
   --sidebar: oklch(0.99 0 0);
   --sidebar-foreground: oklch(0.18 0.02 260);

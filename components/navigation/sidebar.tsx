@@ -196,7 +196,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
           onClick={onNavigate}
           className="flex items-center gap-2.5 font-bold tracking-tight text-sidebar-foreground"
         >
-          <div className="flex size-9 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground shadow-xs">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-xs">
             <GraduationCap className="size-5" />
           </div>
           <div className="flex flex-col">
@@ -228,7 +228,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                   href={item.href}
                   onClick={onNavigate}
                   className={cn(
-                    "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                    "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
                     isActive
                       ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
                       : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -247,7 +247,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                   {item.badge && (
                     <Badge
                       variant={item.badgeVariant || "outline"}
-                      className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono"
+                      className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono rounded-full"
                     >
                       {item.badge}
                     </Badge>
@@ -269,7 +269,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                 href="/admin"
                 onClick={onNavigate}
                 className={cn(
-                  "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                  "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
                   pathname.startsWith("/admin")
                     ? "bg-destructive/10 text-destructive shadow-2xs font-bold"
                     : "text-sidebar-foreground/80 hover:bg-destructive/10 hover:text-destructive"
@@ -279,7 +279,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
                   <ShieldAlert className="size-4 shrink-0 text-destructive" />
                   <span>Admin Command</span>
                 </div>
-                <Badge variant="destructive" className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono">
+                <Badge variant="destructive" className="h-4 px-1.5 text-[9px] uppercase tracking-wider font-mono rounded-full">
                   Staff
                 </Badge>
               </Link>
@@ -297,7 +297,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               href="/settings"
               onClick={onNavigate}
               className={cn(
-                "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
                 pathname.startsWith("/settings") || pathname === "/profile"
                   ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -318,7 +318,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               href="/onboarding"
               onClick={onNavigate}
               className={cn(
-                "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                "flex items-center justify-between rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
                 pathname.startsWith("/onboarding")
                   ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -339,7 +339,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               type="button"
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="flex items-center justify-between w-full rounded-lg px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors cursor-pointer disabled:opacity-50"
+              className="flex items-center justify-between w-full rounded-xl px-3.5 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors cursor-pointer disabled:opacity-50"
             >
               <div className="flex items-center gap-2.5">
                 {isSigningOut ? (
@@ -359,7 +359,7 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
         <Link
           href="/profile/me"
           onClick={onNavigate}
-          className="flex items-center justify-between rounded-lg p-2 text-xs transition-colors hover:bg-sidebar-accent"
+          className="flex items-center justify-between rounded-2xl p-2 text-xs transition-colors hover:bg-sidebar-accent"
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs border border-primary/20">

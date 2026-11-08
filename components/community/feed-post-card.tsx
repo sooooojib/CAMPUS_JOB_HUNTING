@@ -244,7 +244,7 @@ export function FeedPostCard({
   return (
     <Card
       className={cn(
-        "rounded-xl border border-border/80 bg-card p-4 sm:p-5 transition-all hover:border-primary/40 hover:shadow-xs",
+        "rounded-3xl border border-border/60 bg-card p-5 sm:p-6 transition-all hover:border-primary/40 hover:shadow-md",
         isPinned && "border-primary/40 bg-primary/5/30",
         className
       )}
@@ -252,7 +252,7 @@ export function FeedPostCard({
       <CardContent className="p-0">
         {/* Pinned banner */}
         {isPinned && (
-          <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-primary">
+          <div className="mb-3.5 flex items-center gap-1.5 text-xs font-semibold text-primary">
             <Pin className="size-3.5 rotate-45" />
             <span>Pinned University Announcement</span>
           </div>
@@ -260,35 +260,35 @@ export function FeedPostCard({
 
         {/* Post Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <Link href={`/profile/${authorId}`} className="shrink-0">
-              <Avatar className="size-10 border border-border">
+              <Avatar className="size-11 border-2 border-background shadow-xs rounded-2xl">
                 <AvatarImage src={authorAvatar || undefined} alt={authorName} />
-                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs rounded-2xl">
                   {initials}
                 </AvatarFallback>
               </Avatar>
             </Link>
 
             <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <Link
                   href={`/profile/${authorId}`}
-                  className="text-sm font-bold text-foreground hover:text-primary transition-colors"
+                  className="text-sm sm:text-base font-bold text-foreground hover:text-primary transition-colors"
                 >
                   {authorName}
                 </Link>
-                <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider py-0 px-1">
+                <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider py-0 px-2 rounded-full">
                   {(authorMembership || "MEMBER").replace("_", " ")}
                 </Badge>
                 {authorVerificationStatus === "VERIFIED" && (
-                  <Badge variant="secondary" className="text-[9px] py-0 px-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <Badge variant="secondary" className="text-[10px] py-0 px-2 text-emerald-600 dark:text-emerald-400 font-medium rounded-full">
                     Verified
                   </Badge>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-muted-foreground flex-wrap">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap mt-0.5">
                 {authorDepartment && <span>{authorDepartment}</span>}
                 {authorDepartment && <span>•</span>}
                 <span>{formatDate(createdAt)}</span>
@@ -296,8 +296,8 @@ export function FeedPostCard({
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <Badge variant={typeMeta.badgeVariant} className="text-[11px] gap-1">
+          <div className="flex items-center gap-1.5">
+            <Badge variant={typeMeta.badgeVariant} className="text-[11px] gap-1 rounded-full px-2.5 py-0.5">
               <TypeIcon className="size-3" />
               <span>{typeMeta.label}</span>
             </Badge>
@@ -389,7 +389,7 @@ export function FeedPostCard({
               <Badge
                 key={tag}
                 variant="outline"
-                className="text-[10px] py-0 px-1.5 font-mono text-muted-foreground hover:text-foreground"
+                className="text-[11px] py-0.5 px-2.5 font-mono text-muted-foreground hover:text-foreground rounded-full border-border/60 bg-muted/40"
               >
                 #{tag}
               </Badge>
@@ -401,17 +401,17 @@ export function FeedPostCard({
         {attachedOpportunity && (
           <Link
             href={`/opportunities/${attachedOpportunity.id}`}
-            className="mt-3.5 flex items-center justify-between rounded-lg border border-border bg-muted/40 p-2.5 text-xs transition-colors hover:bg-muted"
+            className="mt-4 flex items-center justify-between rounded-2xl border border-border/60 bg-muted/30 p-3 text-xs transition-colors hover:bg-muted/60"
           >
-            <div className="flex items-center gap-2.5">
-              <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <div className="flex items-center gap-3">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs">
                 <Briefcase className="size-4" />
               </div>
               <div>
-                <span className="font-semibold text-foreground">
+                <span className="font-bold text-foreground text-sm">
                   {attachedOpportunity.title}
                 </span>
-                <span className="text-muted-foreground ml-1.5 font-normal">
+                <span className="text-muted-foreground ml-2 font-normal">
                   at {attachedOpportunity.companyName}
                 </span>
               </div>
@@ -430,12 +430,12 @@ export function FeedPostCard({
           />
 
           {/* Comment, Bookmark, Share */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <Button
               variant={showComments ? "secondary" : "ghost"}
               size="xs"
               onClick={() => setShowComments(!showComments)}
-              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground rounded-full px-3 py-1"
             >
               <MessageSquare className="size-3.5" />
               <span>{commentsCount}</span>
@@ -449,7 +449,7 @@ export function FeedPostCard({
               disabled={isTogglingBookmark}
               aria-label={isBookmarked ? "Remove bookmark" : "Save post"}
               className={cn(
-                "text-muted-foreground hover:text-foreground",
+                "text-muted-foreground hover:text-foreground rounded-full size-8",
                 isBookmarked && "text-amber-500 fill-amber-500"
               )}
             >
@@ -461,7 +461,7 @@ export function FeedPostCard({
               size="xs"
               onClick={handleShare}
               aria-label="Share post"
-              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+              className="gap-1.5 text-xs text-muted-foreground hover:text-foreground rounded-full px-3 py-1"
             >
               <Share2 className="size-3.5" />
               <span className="hidden sm:inline">Share</span>

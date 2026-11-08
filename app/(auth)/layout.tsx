@@ -53,7 +53,7 @@ export default function AuthLayout({
 
         {/* Footer info line */}
         <footer className="relative z-20 text-center text-[11px] text-muted-foreground/75 pt-1 shrink-0">
-          <span>Verified University Network • Encrypted Institutional Authentication</span>
+          <span>Jagannath University Career Community • Secure Institutional Gateway</span>
         </footer>
       </div>
     </div>

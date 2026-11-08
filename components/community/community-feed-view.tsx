@@ -144,22 +144,22 @@ export function CommunityFeedView({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               placeholder="Search community discussions, advice, topics, or #tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-card text-xs"
+              className="pl-10 pr-4 bg-card text-xs sm:text-sm rounded-2xl h-11 border-border/60 shadow-xs focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           {/* Refresh button */}
           <Button
             variant="outline"
-            size="xs"
+            size="sm"
             onClick={() => fetchFeed(false)}
             disabled={isLoading || isRefreshing}
-            className="gap-1.5 self-end sm:self-auto"
+            className="gap-1.5 self-end sm:self-auto rounded-full h-11 px-4 border-border/60 text-xs font-semibold shadow-xs"
           >
             <RefreshCw className={cn("size-3.5", isRefreshing && "animate-spin")} />
             <span>Refresh</span>
@@ -167,7 +167,7 @@ export function CommunityFeedView({
         </div>
 
         {/* Category Tabs Scrollbar */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {FEED_TABS.map(({ key, label, icon: Icon }) => {
             const isActive = activeTab === key;
             return (
@@ -179,10 +179,10 @@ export function CommunityFeedView({
                   setPage(1);
                 }}
                 className={cn(
-                  "flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all shrink-0",
+                  "flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-all shrink-0 cursor-pointer",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                    : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-xs"
+                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -194,7 +194,7 @@ export function CommunityFeedView({
       </div>
 
       {/* Posts List */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {isLoading ? (
           // Loading Skeletons
           <div className="space-y-4">
