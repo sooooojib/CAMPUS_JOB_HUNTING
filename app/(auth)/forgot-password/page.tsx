@@ -3,18 +3,7 @@
 import * as React from "react";
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { Mail, ArrowLeft, ArrowRight, KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Mail, ArrowLeft, Loader2, CheckCircle2, AlertCircle, KeyRound } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 function ForgotPasswordForm() {
@@ -50,7 +39,6 @@ function ForgotPasswordForm() {
       setIsLoading(false);
     } catch (err: any) {
       console.error("Forgot password error:", err);
-      // For security, still show generic confirmation or network error
       setErrorMessage("An unexpected network error occurred. Please try again.");
       setIsLoading(false);
     }
@@ -58,141 +46,125 @@ function ForgotPasswordForm() {
 
   if (isSubmitted) {
     return (
-      <Card className="border-border shadow-lg">
-        <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-1">
-            <CheckCircle2 className="size-6" />
-          </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">
-            Check your inbox
-          </CardTitle>
-          <CardDescription className="max-w-xs mx-auto">
-            If an account exists for <span className="font-semibold text-foreground">{email}</span>, we have dispatched a cryptographic reset link valid for 30 minutes.
-          </CardDescription>
-        </CardHeader>
+      <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 text-center space-y-4">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 className="size-6" />
+        </div>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Check your inbox
+        </h2>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          If an account exists for <span className="font-semibold text-foreground">{email}</span>, a cryptographic reset link has been dispatched (valid 30 minutes).
+        </p>
 
-        <CardContent className="space-y-4 pt-2">
-          <div className="rounded-xl border border-border/80 bg-muted/40 p-4 text-xs text-muted-foreground leading-relaxed">
-            <p className="font-medium text-foreground mb-1">Did not receive the message?</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Check your university spam or quarantine filters.</li>
-              <li>Verify that you registered with this exact institutional address.</li>
-              <li>In local development, inspect your terminal console for the direct token link.</li>
-            </ul>
-          </div>
+        <div className="rounded-2xl border border-border/80 bg-muted/40 p-4 text-xs text-muted-foreground leading-relaxed text-left">
+          <p className="font-semibold text-foreground mb-1">Did not receive it?</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Check spam or institutional quarantine filters.</li>
+            <li>Verify you registered with this university address.</li>
+            <li>In local testing, inspect your terminal console for the direct link.</li>
+          </ul>
+        </div>
 
-          <Button
-            variant="outline"
-            onClick={() => {
-              setIsSubmitted(false);
-              setEmail("");
-            }}
-            className="w-full text-xs"
-          >
-            Send to a different address
-          </Button>
-        </CardContent>
+        <button
+          type="button"
+          onClick={() => {
+            setIsSubmitted(false);
+            setEmail("");
+          }}
+          className="w-full h-11 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-foreground font-medium text-xs hover:bg-slate-50 transition-colors cursor-pointer"
+        >
+          Send to a different address
+        </button>
 
-        <CardFooter className="flex flex-col space-y-3 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground">
+        <div className="pt-2 text-center text-xs">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#EB5E28] hover:underline"
           >
             <ArrowLeft className="size-3.5" />
-            <span>Return to member sign in</span>
+            <span>Return to Login</span>
           </Link>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="border-border shadow-lg">
-      <CardHeader className="space-y-1 text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-2">
-          <KeyRound className="size-6" />
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 transition-all">
+      <div className="space-y-1 mb-5 text-left">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
+          <span>Lets</span>
+          <br />
+          <span>Reset Password</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-muted-foreground pt-1">
+          Enter your registered institutional email to receive a recovery link
+        </p>
+      </div>
+
+      {errorMessage && (
+        <div className="mb-4 flex items-start gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in-50">
+          <AlertCircle className="size-4 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">{errorMessage}</div>
         </div>
-        <CardTitle className="text-2xl font-bold tracking-tight">
-          Reset your password
-        </CardTitle>
-        <CardDescription>
-          Enter the university or verified email address associated with your account
-        </CardDescription>
-      </CardHeader>
+      )}
 
-      <CardContent>
-        {errorMessage && (
-          <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
-            <AlertCircle className="size-4 shrink-0 mt-0.5" />
-            <div className="leading-relaxed">{errorMessage}</div>
+      <form onSubmit={handleSubmit} className="space-y-3.5">
+        <div className="relative">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
+            <Mail className="size-4" />
           </div>
-        )}
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Your University Email"
+            required
+            disabled={isLoading}
+            autoComplete="email"
+            className="w-full h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+          />
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Registered Email</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="student@university.edu"
-                className="pl-9"
-                required
-                disabled={isLoading}
-                autoComplete="email"
-              />
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              We will send a one-time cryptographic reset token valid for 30 minutes.
-            </p>
-          </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full h-12 rounded-2xl bg-[#EB5E28] hover:bg-[#D84E1B] text-white font-semibold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 cursor-pointer mt-2"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              <span>Sending Recovery Link...</span>
+            </>
+          ) : (
+            <span>Send Recovery Email</span>
+          )}
+        </button>
+      </form>
 
-          <Button type="submit" disabled={isLoading} className="w-full gap-2 mt-2">
-            {isLoading ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                <span>Sending Recovery Link...</span>
-              </>
-            ) : (
-              <>
-                <span>Send Recovery Email</span>
-                <ArrowRight className="size-4" />
-              </>
-            )}
-          </Button>
-        </form>
-      </CardContent>
-
-      <CardFooter className="flex flex-col space-y-3 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground">
+      <div className="text-center text-xs text-muted-foreground pt-5">
+        Remembered your password?{" "}
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+          className="font-semibold text-foreground hover:text-[#EB5E28] transition-colors underline underline-offset-4"
         >
-          <ArrowLeft className="size-3.5" />
-          <span>Return to member sign in</span>
+          Return to Login
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
 
 function ForgotPasswordSkeleton() {
   return (
-    <Card className="border-border shadow-lg animate-pulse">
-      <CardHeader className="space-y-2 text-center">
-        <div className="size-12 bg-muted mx-auto rounded-2xl" />
-        <div className="h-6 w-44 bg-muted mx-auto rounded" />
-        <div className="h-4 w-60 bg-muted mx-auto rounded" />
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="h-10 bg-muted rounded" />
-        <div className="h-10 bg-muted rounded mt-2" />
-      </CardContent>
-    </Card>
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 animate-pulse">
+      <div className="h-8 w-44 bg-muted rounded-xl mb-2" />
+      <div className="h-4 w-60 bg-muted rounded-lg mb-6" />
+      <div className="h-12 bg-muted rounded-2xl mb-4" />
+      <div className="h-12 bg-muted rounded-2xl" />
+    </div>
   );
 }
 

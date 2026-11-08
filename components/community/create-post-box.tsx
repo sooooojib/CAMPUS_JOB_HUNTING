@@ -40,25 +40,25 @@ const POST_TYPE_OPTIONS: {
   icon: React.ElementType;
   badgeClass: string;
 }[] = [
-  {
-    type: "GENERAL_DISCUSSION",
-    label: "Discussion & Questions",
-    icon: MessageSquare,
-    badgeClass: "hover:bg-muted",
-  },
-  {
-    type: "REFERRAL_REQUEST",
-    label: "Referral",
-    icon: Award,
-    badgeClass: "hover:bg-amber-500/10 hover:text-amber-600",
-  },
-  {
-    type: "ACHIEVEMENT",
-    label: "Achievement",
-    icon: Sparkles,
-    badgeClass: "hover:bg-rose-500/10 hover:text-rose-600",
-  },
-];
+    {
+      type: "GENERAL_DISCUSSION",
+      label: "Discussion & Questions",
+      icon: MessageSquare,
+      badgeClass: "hover:bg-muted",
+    },
+    {
+      type: "REFERRAL_REQUEST",
+      label: "Referral",
+      icon: Award,
+      badgeClass: "hover:bg-amber-500/10 hover:text-amber-600",
+    },
+    {
+      type: "ACHIEVEMENT",
+      label: "Achievement",
+      icon: Sparkles,
+      badgeClass: "hover:bg-rose-500/10 hover:text-rose-600",
+    },
+  ];
 
 export function CreatePostBox({
   currentUser = { name: "Member" },
@@ -136,11 +136,11 @@ export function CreatePostBox({
 
   const initials = currentUser.name
     ? currentUser.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase()
     : "U";
 
   return (

@@ -5,18 +5,6 @@ import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Mail, CheckCircle2, AlertCircle, ArrowRight, Loader2, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
 
 function VerifyEmailContent() {
   const router = useRouter();
@@ -31,7 +19,6 @@ function VerifyEmailContent() {
   const [resendSuccess, setResendSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // If a token is in the query params, attempt automated verification
   useEffect(() => {
     if (!token) return;
 
@@ -85,7 +72,7 @@ function VerifyEmailContent() {
       const response = await fetch("/api/auth/send-verification-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim().toLowerCase(), callbackURL: "/dashboard" }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), callbackURL: "/feed" }),
       });
 
       if (response.ok) {
@@ -102,159 +89,137 @@ function VerifyEmailContent() {
     }
   };
 
-  // State 1: In progress verification
   if (isVerifying) {
     return (
-      <Card className="border-border shadow-lg text-center p-6 space-y-4">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+      <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 text-center space-y-4">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#EB5E28]/10 text-[#EB5E28]">
           <Loader2 className="size-6 animate-spin" />
         </div>
-        <CardTitle className="text-xl font-bold">Verifying email address</CardTitle>
-        <CardDescription>
+        <h2 className="text-xl font-bold text-foreground">Verifying email address</h2>
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Validating your cryptographic institutional token against university records...
-        </CardDescription>
-      </Card>
+        </p>
+      </div>
     );
   }
 
-  // State 2: Verification Successful
   if (isVerified) {
     return (
-      <Card className="border-border shadow-lg">
-        <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-1">
-            <CheckCircle2 className="size-6" />
-          </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">
-            Email Verified Successfully
-          </CardTitle>
-          <CardDescription>
-            Your university identity is verified. You now have full access to campus opportunities, career tools, and the alumni network.
-          </CardDescription>
-        </CardHeader>
+      <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 text-center space-y-4">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 className="size-6" />
+        </div>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          Email Verified Successfully
+        </h2>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          Your university identity is verified. You now have full access to campus opportunities, career tools, and the alumni network.
+        </p>
 
-        <CardContent className="pt-2">
-          <Button
-            onClick={() => router.push("/dashboard")}
-            className="w-full gap-2"
-          >
-            <span>Proceed to Dashboard</span>
-            <ArrowRight className="size-4" />
-          </Button>
-        </CardContent>
-      </Card>
+        <button
+          onClick={() => router.push("/feed")}
+          className="w-full h-12 rounded-2xl bg-[#EB5E28] hover:bg-[#D84E1B] text-white font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>Proceed to Community Feed</span>
+          <ArrowRight className="size-4" />
+        </button>
+      </div>
     );
   }
 
-  // State 3: Waiting for verification (e.g. after registration or if token expired)
   return (
-    <Card className="border-border shadow-lg">
-      <CardHeader className="space-y-1 text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-2">
-          <Mail className="size-6" />
-        </div>
-        <CardTitle className="text-2xl font-bold tracking-tight">
-          Verify your email address
-        </CardTitle>
-        <CardDescription>
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 transition-all">
+      <div className="space-y-1 mb-5 text-left">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
+          <span>Verify</span>
+          <br />
+          <span>Your Email</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-muted-foreground pt-1">
           {emailParam ? (
             <>
               We sent a verification link to{" "}
               <span className="font-semibold text-foreground">{emailParam}</span>.
             </>
           ) : (
-            "Confirm your university email to activate member features."
+            "Confirm your university email to activate verified member access."
           )}
-        </CardDescription>
-      </CardHeader>
+        </p>
+      </div>
 
-      <CardContent className="space-y-4">
-        {errorMessage && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
-            <AlertCircle className="size-4 shrink-0 mt-0.5" />
-            <div className="leading-relaxed">{errorMessage}</div>
-          </div>
-        )}
-
-        {resendSuccess && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400">
-            <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
-            <div className="leading-relaxed">
-              A fresh verification email has been dispatched. Please check your inbox.
-            </div>
-          </div>
-        )}
-
-        <div className="rounded-xl border border-border/80 bg-muted/40 p-4 text-xs text-muted-foreground leading-relaxed">
-          <p className="font-medium text-foreground mb-1">Notice for local development:</p>
-          <p>
-            Email verification links and tokens are automatically recorded in the development server log. Check your server terminal to click the generated link directly.
-          </p>
+      {errorMessage && (
+        <div className="mb-4 flex items-start gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in-50">
+          <AlertCircle className="size-4 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">{errorMessage}</div>
         </div>
+      )}
 
-        <form onSubmit={handleResend} className="space-y-3 pt-1">
-          <div className="space-y-1.5">
-            <Label htmlFor="resendEmail">University Email</Label>
-            <Input
-              id="resendEmail"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="student@university.edu"
-              required
-              disabled={isResending}
-            />
+      {resendSuccess && (
+        <div className="mb-4 flex items-start gap-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400 animate-in fade-in-50">
+          <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            A fresh verification email has been dispatched. Please check your inbox.
           </div>
+        </div>
+      )}
 
-          <Button
-            type="submit"
-            variant="outline"
+      <form onSubmit={handleResend} className="space-y-3.5">
+        <div className="relative">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
+            <Mail className="size-4" />
+          </div>
+          <input
+            id="resendEmail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Your University Email"
+            required
             disabled={isResending}
-            className="w-full gap-2 text-xs"
-          >
-            {isResending ? (
-              <>
-                <Loader2 className="size-3.5 animate-spin" />
-                <span>Dispatching Email...</span>
-              </>
-            ) : (
-              <>
-                <RefreshCw className="size-3.5" />
-                <span>Resend Verification Link</span>
-              </>
-            )}
-          </Button>
-        </form>
-      </CardContent>
-
-      <CardFooter className="flex flex-col space-y-3 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground">
-        <div>
-          Ready to sign in?{" "}
-          <Link
-            href="/login"
-            className="font-semibold text-primary hover:underline"
-          >
-            Return to login
-          </Link>
+            className="w-full h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+          />
         </div>
-      </CardFooter>
-    </Card>
+
+        <button
+          type="submit"
+          disabled={isResending}
+          className="w-full h-11 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-foreground font-medium text-xs hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+        >
+          {isResending ? (
+            <>
+              <Loader2 className="size-3.5 animate-spin" />
+              <span>Dispatching Email...</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="size-3.5" />
+              <span>Resend Verification Link</span>
+            </>
+          )}
+        </button>
+      </form>
+
+      <div className="text-center text-xs text-muted-foreground pt-5">
+        Ready to sign in?{" "}
+        <Link
+          href="/login"
+          className="font-semibold text-foreground hover:text-[#EB5E28] transition-colors underline underline-offset-4"
+        >
+          Return to Login
+        </Link>
+      </div>
+    </div>
   );
 }
 
 function VerifyEmailSkeleton() {
   return (
-    <Card className="border-border shadow-lg animate-pulse">
-      <CardHeader className="space-y-2 text-center">
-        <div className="size-12 bg-muted mx-auto rounded-2xl" />
-        <div className="h-6 w-44 bg-muted mx-auto rounded" />
-        <div className="h-4 w-60 bg-muted mx-auto rounded" />
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="h-10 bg-muted rounded" />
-        <div className="h-10 bg-muted rounded mt-2" />
-      </CardContent>
-    </Card>
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 animate-pulse">
+      <div className="h-8 w-44 bg-muted rounded-xl mb-2" />
+      <div className="h-4 w-60 bg-muted rounded-lg mb-6" />
+      <div className="h-12 bg-muted rounded-2xl mb-4" />
+      <div className="h-11 bg-muted rounded-2xl" />
+    </div>
   );
 }
 

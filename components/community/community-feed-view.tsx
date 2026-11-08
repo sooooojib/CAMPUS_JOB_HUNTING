@@ -222,15 +222,15 @@ export function CommunityFeedView({
               activeTab === "BOOKMARKED"
                 ? "No saved posts yet"
                 : debouncedSearch
-                ? "No matching posts found"
-                : "No posts in this channel yet"
+                  ? "No matching posts found"
+                  : "No posts in this channel yet"
             }
             description={
               activeTab === "BOOKMARKED"
                 ? "Bookmark discussions, career advice, and referral leads to reference them anytime."
                 : debouncedSearch
-                ? `No posts matched your search for "${debouncedSearch}". Try a different keyword or topic tag.`
-                : "Be the first to share career insights, ask questions, or announce campus opportunities."
+                  ? `No posts matched your search for "${debouncedSearch}". Try a different keyword or topic tag.`
+                  : "Be the first to share career insights, ask questions, or announce campus opportunities."
             }
           />
         ) : (
