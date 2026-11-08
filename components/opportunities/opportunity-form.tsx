@@ -95,7 +95,7 @@ export function OpportunityForm({
     existingOpportunity?.targetDepartments || []
   );
   const [openToAll, setOpenToAll] = React.useState<boolean>(
-    existingOpportunity ? existingOpportunity.openToAllDepartments : true
+    existingOpportunity?.openToAllDepartments ?? true
   );
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submittedStatus, setSubmittedStatus] = React.useState<string | null>(null);
@@ -126,10 +126,7 @@ export function OpportunityForm({
       minAcademicYear: existingOpportunity?.minAcademicYear || "",
       requiredSkills: existingOpportunity?.requiredSkills || [],
       targetDepartments: existingOpportunity?.targetDepartments || [],
-      openToAllDepartments:
-        existingOpportunity !== undefined
-          ? existingOpportunity.openToAllDepartments
-          : true,
+      openToAllDepartments: existingOpportunity?.openToAllDepartments ?? true,
       salaryOrStipend: existingOpportunity?.salaryOrStipend || "",
       location: existingOpportunity?.location || "Dhaka, Bangladesh",
       workplaceType: existingOpportunity?.workplaceType || "ON_SITE",

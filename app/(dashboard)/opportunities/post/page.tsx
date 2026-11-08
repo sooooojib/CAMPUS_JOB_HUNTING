@@ -44,10 +44,15 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
   }
 
   const userCanPost = canPostOpportunity(user);
-  let managedCompanies: any[] = [];
+  let managedCompanies: Array<{ id: string; name: string; logo?: string | null; location?: string | null }> = [];
   try {
     const memberships = await getUserCompanies(user.id);
-    managedCompanies = memberships.map((m) => m.company);
+    managedCompanies = memberships.map((m) => ({
+      id: m.company.id,
+      name: m.company.name,
+      logo: m.company.logo,
+      location: m.company.location,
+    }));
   } catch (err) {
     console.error("Could not fetch user companies:", err);
   }
