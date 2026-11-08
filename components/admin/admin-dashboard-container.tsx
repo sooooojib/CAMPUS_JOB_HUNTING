@@ -15,8 +15,6 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { AdminOverviewView } from "@/components/admin/admin-overview-view";
-import { AdminMembersTable } from "@/components/admin/admin-members-table";
-import { AdminOpportunityTable } from "@/components/admin/admin-opportunity-table";
 import { VerificationTable } from "@/components/admin/verification-table";
 import { AdminReportsTable } from "@/components/admin/admin-reports-table";
 import { AdminCompaniesTable } from "@/components/admin/admin-companies-table";
@@ -46,12 +44,6 @@ export function AdminDashboardContainer({
             <TabsTrigger value="overview" className="text-xs gap-1.5 py-1.5 px-3">
               <LayoutDashboard className="size-3.5" />
               <span>Overview</span>
-            </TabsTrigger>
-
-            <TabsTrigger value="members" className="text-xs gap-1.5 py-1.5 px-3">
-              <Users className="size-3.5" />
-              <span>Members</span>
-              <span className="text-[10px] text-muted-foreground ml-0.5">({stats.totalMembers})</span>
             </TabsTrigger>
 
             <TabsTrigger value="verifications" className="text-xs gap-1.5 py-1.5 px-3">
@@ -97,12 +89,7 @@ export function AdminDashboardContainer({
           <AdminOverviewView stats={stats} onNavigateTab={setActiveTab} />
         </TabsContent>
 
-        {/* Tab 2: Members */}
-        <TabsContent value="members" className="space-y-4">
-          <AdminMembersTable currentAdminId={currentAdminId} />
-        </TabsContent>
-
-        {/* Tab 4: Verifications */}
+        {/* Tab 2: Verifications */}
         <TabsContent value="verifications" className="space-y-4">
           <VerificationTable initialRequests={initialPendingRequests} />
         </TabsContent>

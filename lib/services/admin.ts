@@ -276,6 +276,112 @@ export async function adminToggleUserSuspension(
 }
 
 /**
+ * Permanently deletes a member account with full audit trail.
+ */
+export async function adminDeleteUser(
+  adminUserId: string,
+  targetUserId: string,
+  reason?: string,
+  clientIp?: string
+) {
+  if (adminUserId === targetUserId) {
+    throw new Error("FORBIDDEN: Administrators cannot delete their own account.");
+  }
+
+  const target = await prisma.user.findUnique({
+    where: { id: targetUserId },
+  });
+
+  if (!target) {
+    throw new Error("Target user account not found.");
+  }
+
+  await prisma.user.delete({
+    where: { id: targetUserId },
+  });
+
+  await logAdminAction({
+    adminId: adminUserId,
+    action: "ACCOUNT_SUSPENDED",
+    targetType: "USER",
+    targetId: targetUserId,
+    targetLabel: target.name,
+    reason: reason || "Account deleted by administrator.",
+    ipAddress: clientIp,
+    details: {
+      actionType: "USER_DELETED",
+      deletedUserEmail: target.email,
+      membershipType: target.membershipType,
+    },
+  });
+
+  return { success: true, id: targetUserId };
+}
+
+/**
+ * Updates a member's institutional verification status directly with audit logging.
+ */
+export async function adminUpdateUserVerification(
+  adminUserId: string,
+  targetUserId: string,
+  input: { status: "VERIFIED" | "PENDING" | "REJECTED" | "SUSPENDED"; reason?: string },
+  clientIp?: string
+) {
+  const target = await prisma.user.findUnique({
+    where: { id: targetUserId },
+  });
+
+  if (!target) {
+    throw new Error("Target user account not found.");
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: targetUserId },
+    data: {
+      verificationStatus: input.status,
+    },
+  });
+
+  const auditAction =
+    input.status === "VERIFIED"
+      ? "MEMBER_VERIFIED"
+      : input.status === "REJECTED"
+      ? "MEMBER_REJECTED"
+      : "ACCOUNT_SUSPENDED";
+
+  await logAdminAction({
+    adminId: adminUserId,
+    action: auditAction,
+    targetType: "USER",
+    targetId: targetUserId,
+    targetLabel: target.name,
+    reason: input.reason || `Verification status updated to ${input.status}`,
+    ipAddress: clientIp,
+    details: {
+      previousVerificationStatus: target.verificationStatus,
+      newVerificationStatus: input.status,
+      userEmail: target.email,
+    },
+  });
+
+  createNotification({
+    recipientId: targetUserId,
+    type: "SYSTEM_ANNOUNCEMENT",
+    title:
+      input.status === "VERIFIED"
+        ? "University Membership Verified"
+        : "Verification Status Updated",
+    message:
+      input.status === "VERIFIED"
+        ? "Your university membership verification has been approved by campus administrators."
+        : `Your verification status has been set to ${input.status}.${input.reason ? ` Note: ${input.reason}` : ""}`,
+    relatedEntityType: "SYSTEM",
+  }).catch(() => {});
+
+  return { success: true, user: updated };
+}
+
+/**
  * Retrieves opportunities for administrative review and management with filters.
  */
 export async function getAdminOpportunitiesList(options: {

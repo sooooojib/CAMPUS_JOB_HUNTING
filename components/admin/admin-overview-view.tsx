@@ -32,10 +32,8 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
   return (
     <div className="space-y-6">
       {/* Actionable Alerts Bar if there are pending items */}
-      {(stats.pendingVerifications > 0 ||
-        stats.pendingOpportunities > 0 ||
-        stats.pendingReports > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {(stats.pendingVerifications > 0 || stats.pendingReports > 0) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {stats.pendingVerifications > 0 && (
             <div className="p-4 rounded-xl border border-amber-200 bg-amber-50/60 dark:border-amber-900/60 dark:bg-amber-950/30 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -57,35 +55,6 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
                   variant="outline"
                   onClick={() => onNavigateTab("verifications")}
                   className="border-amber-300 text-amber-900 hover:bg-amber-100 dark:border-amber-800 dark:text-amber-200 h-8 text-xs gap-1"
-                >
-                  Review
-                  <ArrowRight className="size-3" />
-                </Button>
-              )}
-            </div>
-          )}
-
-          {stats.pendingOpportunities > 0 && (
-            <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/60 dark:border-blue-900/60 dark:bg-blue-950/30 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
-                  <Briefcase className="size-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-blue-950 dark:text-blue-100">
-                    {stats.pendingOpportunities} Opportunity Review{stats.pendingOpportunities > 1 ? "s" : ""}
-                  </div>
-                  <div className="text-xs text-blue-700 dark:text-blue-400">
-                    Awaiting moderation approval
-                  </div>
-                </div>
-              </div>
-              {onNavigateTab && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onNavigateTab("opportunities")}
-                  className="border-blue-300 text-blue-900 hover:bg-blue-100 dark:border-blue-800 dark:text-blue-200 h-8 text-xs gap-1"
                 >
                   Review
                   <ArrowRight className="size-3" />
@@ -169,7 +138,7 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
           </div>
           <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
             <span>Total posted: {stats.totalOpportunities}</span>
-            <span>Approved: {stats.approvedOpportunities}</span>
+            <span className="font-medium text-foreground">Live: {stats.approvedOpportunities}</span>
           </div>
         </div>
 

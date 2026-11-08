@@ -54,7 +54,7 @@ export default async function AdminPage() {
   return (
     <AdminTemplate
       title="Governance &amp; Moderation Center"
-      subtitle="University career services staff command center. Govern institutional membership, evaluate opportunities, moderate community discussions, and inspect immutable audit trails."
+      subtitle="University career services staff command center. Moderate community discussions, review institutional credential claims, govern partner companies, and inspect immutable audit trails."
     >
       <AdminDashboardContainer
         stats={stats}

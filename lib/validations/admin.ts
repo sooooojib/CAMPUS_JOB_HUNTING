@@ -30,6 +30,15 @@ export const adminSuspendUserSchema = z.object({
     .max(500, "Reason cannot exceed 500 characters"),
 });
 
+export const adminVerifyUserSchema = z.object({
+  status: z.enum(["VERIFIED", "PENDING", "REJECTED", "SUSPENDED"]),
+  reason: z.string().trim().max(500).optional(),
+});
+
+export const adminDeleteUserSchema = z.object({
+  reason: z.string().trim().max(500).optional(),
+});
+
 export const adminOpportunityQuerySchema = z.object({
   status: z
     .enum(["ALL", "DRAFT", "PENDING", "APPROVED", "REJECTED", "EXPIRED", "CLOSED"])
