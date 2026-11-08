@@ -314,6 +314,27 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               </div>
             </Link>
 
+            <Link
+              href="/onboarding"
+              onClick={onNavigate}
+              className={cn(
+                "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
+                pathname.startsWith("/onboarding")
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-2xs font-bold"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              )}
+            >
+              <div className="flex items-center gap-2.5">
+                <GraduationCap
+                  className={cn(
+                    "size-4 shrink-0",
+                    pathname.startsWith("/onboarding") ? "text-primary" : "text-muted-foreground"
+                  )}
+                />
+                <span>Academic Verification</span>
+              </div>
+            </Link>
+
             <button
               type="button"
               onClick={handleSignOut}

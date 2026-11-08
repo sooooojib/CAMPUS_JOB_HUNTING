@@ -55,6 +55,10 @@ export function AcademicRecordsCard({
     }
   }, []);
 
+  React.useEffect(() => {
+    refreshRecords();
+  }, [refreshRecords]);
+
   const handleDeleteRecord = async (id: string, semesterName: string) => {
     if (!confirm(`Are you sure you want to remove the record for ${semesterName}?`)) {
       return;
@@ -90,7 +94,7 @@ export function AcademicRecordsCard({
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
             <GraduationCap className="size-4 text-primary" />
-            <span>2. Academic &amp; CGPA Information</span>
+            <span>Academic &amp; CGPA Information</span>
           </h3>
           <p className="text-xs text-muted-foreground mt-0.5">
             Log your semester grades and credit hours to maintain your official university cumulative CGPA.

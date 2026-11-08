@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { FormTemplate } from "@/components/templates/form-template";
 import { SettingsProfileForm } from "@/components/settings/settings-profile-form";
-import { AcademicRecordsCard } from "@/components/settings/academic-records-card";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +15,7 @@ import {
 
 export const metadata = {
   title: "Profile",
-  description: "Manage your personal identity, academic records, and university profile.",
+  description: "Manage your personal identity, bio, and university profile.",
 };
 
 export default async function SettingsPage() {
@@ -33,9 +32,6 @@ export default async function SettingsPage() {
     where: { id: session.user.id },
     include: {
       profile: true,
-      academicRecords: {
-        orderBy: { createdAt: "desc" },
-      },
     },
   });
 
@@ -49,7 +45,7 @@ export default async function SettingsPage() {
     <FormTemplate
       maxWidth="xl"
       title="Profile"
-      subtitle={`Manage your personal identity (${membershipLabel}), academic CGPA records, and university profile.`}
+      subtitle={`Manage your personal identity (${membershipLabel}), bio, and university profile.`}
       breadcrumbs={
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
@@ -81,21 +77,6 @@ export default async function SettingsPage() {
             linkedinUrl: user.profile?.linkedinUrl,
             githubUrl: user.profile?.githubUrl,
           }}
-        />
-
-        {/* Academic & CGPA Information Section */}
-        <AcademicRecordsCard
-          initialRecords={user.academicRecords.map((r) => ({
-            id: r.id,
-            semester: r.semester,
-            gpa: r.gpa,
-            credits: r.credits,
-            academicYear: r.academicYear,
-            notes: r.notes,
-            isVerified: r.isVerified,
-          }))}
-          initialCgpa={user.profile?.currentCgpa}
-          membershipType={user.membershipType}
         />
       </div>
     </FormTemplate>
