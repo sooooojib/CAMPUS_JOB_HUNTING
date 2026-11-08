@@ -16,9 +16,17 @@ function useMounted() {
   );
 }
 
+// Feature flag: set to true to re-enable theme switching in future versions
+const ENABLE_THEME_SWITCHER = false;
+
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
+
+  // In this version of the platform, theme switching is hidden and light mode is enforced.
+  if (!ENABLE_THEME_SWITCHER) {
+    return null;
+  }
 
   if (!mounted) {
     return (
