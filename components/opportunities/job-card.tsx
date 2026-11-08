@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants, Button } from "@/components/ui/button";
-import { EmployerBadge } from "./employer-badge";
 import { DeadlineIndicator } from "./deadline-indicator";
 import { MatchScoreIndicator } from "./match-score-indicator";
 import { OpportunityClassification, OpportunityType } from "@/types";
@@ -92,7 +91,6 @@ export function JobCard({
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
-                <EmployerBadge classification={classification} />
                 <Badge variant="outline" className="text-[11px] font-normal uppercase rounded-full px-2 py-0.5">
                   {type.replace("_", " ")}
                 </Badge>
@@ -203,11 +201,6 @@ export function JobCard({
         )}
 
         <div className="flex items-center gap-2">
-          {poster && (
-            <span className="hidden sm:inline text-[11px] text-muted-foreground truncate max-w-[120px]">
-              By {poster.name}
-            </span>
-          )}
           <Link
             href={`/opportunities/${id}`}
             className={cn(

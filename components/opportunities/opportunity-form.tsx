@@ -130,7 +130,7 @@ export function OpportunityForm({
       salaryOrStipend: existingOpportunity?.salaryOrStipend || "",
       location: existingOpportunity?.location || "Dhaka, Bangladesh",
       workplaceType: existingOpportunity?.workplaceType || "ON_SITE",
-      applicationMethod: existingOpportunity?.applicationMethod || "INTERNAL",
+      applicationMethod: "EXTERNAL",
       externalUrl: existingOpportunity?.externalUrl || "",
       contactEmail: existingOpportunity?.contactEmail || "",
       deadline: defaultDeadline,
@@ -741,44 +741,25 @@ export function OpportunityForm({
           <div className="space-y-4">
             <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-bold border-b border-border/50 pb-2 flex items-center gap-2">
               <ExternalLink className="size-4 text-primary" />
-              <span>4. Application Routing &amp; Contact</span>
+              <span>4. Job Website Link &amp; Contact</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="applicationMethod">Application Handling Mode *</Label>
-                <Select
-                  value={watchedValues.applicationMethod}
-                  onValueChange={(val: any) => setValue("applicationMethod", val)}
-                >
-                  <SelectTrigger id="applicationMethod" className="bg-background">
-                    <SelectValue placeholder="Select application method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="INTERNAL">
-                      Direct Institutional Application (Campus Dossier)
-                    </SelectItem>
-                    <SelectItem value="EXTERNAL">
-                      External Corporate Portal (Link Redirect)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="externalUrl">Job Application Website URL *</Label>
+                <Input
+                  id="externalUrl"
+                  {...register("externalUrl")}
+                  placeholder="https://company.com/careers/apply/..."
+                  className="bg-background text-xs"
+                />
+                {errors.externalUrl && (
+                  <p className="text-xs text-destructive">{errors.externalUrl.message}</p>
+                )}
+                <p className="text-[11px] text-muted-foreground">
+                  Official career page, job portal, or application link for this opening.
+                </p>
               </div>
-
-              {watchedValues.applicationMethod === "EXTERNAL" && (
-                <div className="space-y-1.5">
-                  <Label htmlFor="externalUrl">External Application URL *</Label>
-                  <Input
-                    id="externalUrl"
-                    {...register("externalUrl")}
-                    placeholder="https://company.com/careers/apply/..."
-                    className="bg-background text-xs"
-                  />
-                  {errors.externalUrl && (
-                    <p className="text-xs text-destructive">{errors.externalUrl.message}</p>
-                  )}
-                </div>
-              )}
 
               <div className="space-y-1.5">
                 <Label htmlFor="contactEmail">Inquiry Contact Email</Label>
@@ -792,6 +773,9 @@ export function OpportunityForm({
                 {errors.contactEmail && (
                   <p className="text-xs text-destructive">{errors.contactEmail.message}</p>
                 )}
+                <p className="text-[11px] text-muted-foreground">
+                  Optional email for students seeking alumni referral or clarification.
+                </p>
               </div>
             </div>
           </div>

@@ -2,11 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bookmark, Share2, Edit3, ExternalLink, Send, Users, Check } from "lucide-react";
+import { Bookmark, Edit3, ExternalLink, Users } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { ApplyModal } from "@/components/applications/apply-modal";
 import { ExternalApplyDialog } from "@/components/applications/external-apply-dialog";
 
 export function OpportunityDetailActions({
@@ -86,22 +85,12 @@ export function OpportunityDetailActions({
         onClick={toggleBookmark}
         disabled={loading}
         className={cn(
-          "gap-1.5 text-xs transition-colors",
+          "gap-1.5 text-xs transition-colors rounded-full",
           bookmarked ? "text-primary border-primary/50 bg-primary/5" : ""
         )}
       >
         <Bookmark className={cn("size-3.5", bookmarked && "fill-primary text-primary")} />
         <span>{bookmarked ? "Bookmarked" : "Bookmark"}</span>
-      </Button>
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={shareOpportunity}
-        className="gap-1.5 text-xs"
-      >
-        <Share2 className="size-3.5" />
-        <span>Share</span>
       </Button>
     </div>
   );
@@ -120,69 +109,48 @@ export function OpportunityApplyButton({
   opportunityId: string;
   opportunityTitle: string;
   companyName: string;
-  applicationMethod: "INTERNAL" | "EXTERNAL";
+  applicationMethod?: "INTERNAL" | "EXTERNAL";
   externalUrl?: string | null;
   deadline: Date;
   isExpired: boolean;
   minCgpa?: number | null;
 }) {
-  const [internalModalOpen, setInternalModalOpen] = useState(false);
   const [externalModalOpen, setExternalModalOpen] = useState(false);
 
   if (isExpired) {
     return (
-      <Button disabled className="w-full text-xs font-semibold">
+      <Button disabled className="w-full text-xs font-semibold rounded-full">
         Application Deadline Passed
       </Button>
     );
   }
 
-  if (applicationMethod === "EXTERNAL") {
-    return (
-      <>
-        <Button
-          onClick={() => setExternalModalOpen(true)}
-          className="w-full gap-2 font-semibold shadow-xs"
-          size="default"
-        >
-          <span>Apply on Company Portal</span>
-          <ExternalLink className="size-4" />
-        </Button>
-
-        {externalModalOpen && (
-          <ExternalApplyDialog
-            isOpen={externalModalOpen}
-            onClose={() => setExternalModalOpen(false)}
-            opportunityId={opportunityId}
-            opportunityTitle={opportunityTitle}
-            companyName={companyName}
-            externalUrl={externalUrl || "#"}
-          />
-        )}
-      </>
-    );
-  }
+  const targetUrl =
+    externalUrl && externalUrl.trim().length > 0
+      ? externalUrl
+      : `https://www.google.com/search?q=${encodeURIComponent(
+          `${companyName} ${opportunityTitle} careers application`
+        )}`;
 
   return (
     <>
       <Button
-        onClick={() => setInternalModalOpen(true)}
-        className="w-full font-semibold gap-2 shadow-xs"
+        onClick={() => setExternalModalOpen(true)}
+        className="w-full gap-2 font-semibold shadow-xs rounded-full"
         size="default"
       >
-        <Send className="size-4" />
-        <span>Apply Now</span>
+        <span>Apply on Official Website</span>
+        <ExternalLink className="size-4" />
       </Button>
 
-      {internalModalOpen && (
-        <ApplyModal
-          isOpen={internalModalOpen}
-          onClose={() => setInternalModalOpen(false)}
+      {externalModalOpen && (
+        <ExternalApplyDialog
+          isOpen={externalModalOpen}
+          onClose={() => setExternalModalOpen(false)}
           opportunityId={opportunityId}
           opportunityTitle={opportunityTitle}
           companyName={companyName}
-          deadline={deadline}
-          minCgpa={minCgpa}
+          externalUrl={targetUrl}
         />
       )}
     </>

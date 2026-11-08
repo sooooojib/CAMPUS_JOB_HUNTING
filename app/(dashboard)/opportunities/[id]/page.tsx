@@ -24,7 +24,6 @@ import {
   isOpportunityBookmarked,
 } from "@/lib/services/opportunity";
 import { DetailsTemplate } from "@/components/templates/details-template";
-import { EmployerBadge } from "@/components/opportunities/employer-badge";
 import { DeadlineIndicator } from "@/components/opportunities/deadline-indicator";
 import {
   OpportunityDetailActions,
@@ -170,7 +169,6 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
 
             <div className="space-y-2 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <EmployerBadge classification={opportunity.sourceType} />
                 <Badge variant="outline" className="text-xs uppercase font-medium">
                   {(opportunity.type || "").replace("_", " ")}
                 </Badge>
@@ -249,14 +247,6 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
                     }).format(new Date(opportunity.deadline))}
                   </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-border/40">
-                  <span className="text-muted-foreground">Application Format:</span>
-                  <span className="font-semibold text-foreground">
-                    {opportunity.applicationMethod === "EXTERNAL"
-                      ? "Company Recruitment Portal"
-                      : "Direct Institutional Dossier"}
-                  </span>
-                </div>
                 {opportunity.contactEmail && (
                   <div className="flex justify-between py-1 border-b border-border/40">
                     <span className="text-muted-foreground">Contact Inquiries:</span>
@@ -285,79 +275,30 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
             <CardHeader className="pb-3 border-b border-border/50">
               <CardTitle className="text-xs font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                 <ShieldCheck className="size-4 text-primary" />
-                <span>Verification &amp; Provenance</span>
+                <span>Provenance</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3 text-xs">
-              {opportunity.sourceType === "OFFICIAL_EMPLOYER" ? (
-                <div className="space-y-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold border border-blue-500/20 text-[11px]">
-                    <CheckCircle2 className="size-3 text-blue-500" />
-                    <span>Official Employer Partnership</span>
-                  </span>
-                  <p className="text-muted-foreground leading-relaxed">
-                    This posting is officially accredited. The submitting representative has verified corporate credentials through Jagannath University Career Services.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20 text-[11px]">
-                    <Share2 className="size-3 text-amber-500" />
-                    <span>Community / Alumni Shared Lead</span>
-                  </span>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Shared by a verified university member for institutional referral. The poster is sharing an authentic career lead and may not officially represent the employer.
-                  </p>
-                </div>
-              )}
-
-              {/* Submitting Member Badge */}
-              <div className="pt-2 border-t border-border/40 flex items-center gap-2.5">
-                <div className="flex size-7 items-center justify-center rounded-full bg-muted font-bold text-xs text-foreground">
-                  {opportunity.poster.name.slice(0, 1)}
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs">
+                  {opportunity.poster.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div className="text-left flex-1 min-w-0">
-                  <div className="font-semibold text-foreground truncate">
+                  <Link
+                    href={`/profile/${opportunity.poster.id}`}
+                    className="font-bold text-foreground hover:text-primary transition-colors truncate block"
+                  >
                     {opportunity.poster.name}
-                  </div>
-                  <div className="text-[10px] font-mono text-muted-foreground">
-                    {(opportunity.poster?.membershipType || "MEMBER").replace("_", " ")}
+                  </Link>
+                  <div className="text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
+                    <span className="text-primary font-medium">Alumni Contributor</span>
+                    <span>•</span>
+                    <span className="truncate">ID: {opportunity.poster.id.slice(0, 8)}</span>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-
-          {/* Related Opportunities */}
-          {related.length > 0 && (
-            <Card className="rounded-2xl border border-border/70 bg-card shadow-2xs">
-              <CardHeader className="pb-2 border-b border-border/50">
-                <CardTitle className="text-xs font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                  <Sparkles className="size-3.5 text-amber-500" />
-                  <span>Related Openings</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-3 divide-y divide-border/40 space-y-3">
-                {related.map((rel) => (
-                  <div key={rel.id} className="pt-2 first:pt-0">
-                    <Link
-                      href={`/opportunities/${rel.id}`}
-                      className="group block space-y-1"
-                    >
-                      <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                        {rel.title}
-                      </h4>
-                      <p className="text-[11px] text-muted-foreground flex items-center gap-2">
-                        <span>{rel.companyName}</span>
-                        <span>•</span>
-                        <span>{rel.location}</span>
-                      </p>
-                    </Link>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
         </div>
       }
     >
