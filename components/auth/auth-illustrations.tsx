@@ -3,413 +3,400 @@
 import * as React from "react";
 
 /**
- * Animated Academic & Student Identity Vector Illustration (Left Side)
- * Modern duotone isometric graduation cap, pulsing merit ripples, floating diploma,
- * and verified student credential badge with smooth CSS floating motion.
+ * Editorial Campus Scholar Illustration (Left Side)
+ * Handcrafted minimalist line art: A student with a laptop, stack of university books,
+ * graduation cap, and subtle idea rays. Pure artwork with zero SVG text to ensure
+ * crisp, flawless rendering across all devices and resolutions.
  */
 export function CampusCareerIllustrationLeft({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none select-none ${className}`}>
       <svg
-        viewBox="0 0 320 280"
+        viewBox="0 0 260 260"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto"
+        className="w-full h-auto drop-shadow-xs"
         aria-hidden="true"
       >
         <defs>
-          {/* Blue Gradients matching UniCareer Theme */}
-          <linearGradient id="leftGradNavy" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1E40AF" />
-            <stop offset="50%" stopColor="#2563EB" />
-            <stop offset="100%" stopColor="#3B82F6" />
-          </linearGradient>
-
-          <linearGradient id="leftGradCyan" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#2563EB" />
-            <stop offset="100%" stopColor="#60A5FA" />
-          </linearGradient>
-
-          <linearGradient id="leftGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F59E0B" />
-            <stop offset="100%" stopColor="#D97706" />
-          </linearGradient>
-
-          <linearGradient id="leftAura" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-          </linearGradient>
-
-          <filter id="leftGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-
-          {/* Embedded Smooth Animation Keyframes */}
           <style>{`
-            @keyframes capFloat {
-              0%, 100% { transform: translateY(0px) rotate(0deg); }
-              50% { transform: translateY(-8px) rotate(-1.5deg); }
-            }
-            @keyframes badgeFloat {
+            @keyframes softFloatLeft {
               0%, 100% { transform: translateY(0px); }
               50% { transform: translateY(-6px); }
             }
-            @keyframes rippleWave {
-              0% { r: 18px; opacity: 0.7; }
-              100% { r: 65px; opacity: 0; }
-            }
-            @keyframes tasselSway {
-              0%, 100% { transform: rotate(0deg); }
-              50% { transform: rotate(4deg); }
-            }
-            @keyframes beaconPulse {
-              0%, 100% { opacity: 0.4; transform: scale(0.95); }
+            @keyframes sparkTwinkle {
+              0%, 100% { opacity: 0.35; transform: scale(0.9); }
               50% { opacity: 1; transform: scale(1.1); }
             }
-            .animate-cap {
-              animation: capFloat 4.8s ease-in-out infinite;
-              transform-origin: 140px 140px;
-            }
-            .animate-badge-left {
-              animation: badgeFloat 4.2s ease-in-out infinite 0.6s;
-            }
-            .animate-ripple-1 {
-              animation: rippleWave 3.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-            }
-            .animate-ripple-2 {
-              animation: rippleWave 3.2s cubic-bezier(0, 0.2, 0.8, 1) infinite 1.6s;
-            }
-            .animate-tassel {
-              animation: tasselSway 2.4s ease-in-out infinite;
-              transform-origin: 140px 115px;
-            }
-            .animate-beacon {
-              animation: beaconPulse 2s ease-in-out infinite;
+            .animate-editorial-left {
+              animation: softFloatLeft 4.5s ease-in-out infinite;
               transform-origin: center;
+            }
+            .animate-spark {
+              animation: sparkTwinkle 2.5s ease-in-out infinite;
+              transform-origin: 105px 42px;
             }
           `}</style>
         </defs>
 
-        {/* Ambient Soft Blue Radial Aura */}
-        <circle cx="140" cy="140" r="110" fill="url(#leftAura)" />
+        <g className="animate-editorial-left">
+          {/* Background Soft Aura Circle */}
+          <circle cx="120" cy="135" r="95" fill="#2563EB" fillOpacity="0.06" />
 
-        {/* Pulsing Concentric Ripple Rings */}
-        <circle cx="140" cy="130" r="20" fill="none" stroke="#3B82F6" strokeWidth="1.5" className="animate-ripple-1" />
-        <circle cx="140" cy="130" r="20" fill="none" stroke="#60A5FA" strokeWidth="1.2" className="animate-ripple-2" />
-
-        {/* Floating Academic Cap & Books Group */}
-        <g className="animate-cap">
-          {/* Base Book 1 */}
-          <rect x="90" y="172" width="100" height="15" rx="3" fill="#FAF9F5" stroke="#2563EB" strokeWidth="2" />
-          <line x1="96" y1="179" x2="184" y2="179" stroke="#93C5FD" strokeWidth="2" strokeLinecap="round" />
-
-          {/* Base Book 2 */}
-          <rect x="100" y="157" width="80" height="15" rx="3" fill="url(#leftGradNavy)" stroke="#1D4ED8" strokeWidth="2" />
-          <line x1="106" y1="164" x2="174" y2="164" stroke="#FAF9F5" strokeWidth="1.5" strokeOpacity="0.8" strokeLinecap="round" />
-
-          {/* Graduation Cap Base Skullcap */}
-          <path
-            d="M115 125C115 137 126 146 140 146C154 146 165 137 165 125V120H115V125Z"
-            fill="url(#leftGradNavy)"
-            stroke="#1E3A8A"
-            strokeWidth="1.5"
-          />
-
-          {/* 3D Mortarboard Rhombus Top */}
-          <path
-            d="M140 92L192 114L140 136L88 114L140 92Z"
-            fill="url(#leftGradNavy)"
-            stroke="#60A5FA"
-            strokeWidth="2.5"
-            strokeLinejoin="round"
-          />
-
-          {/* Inner Highlight for Depth */}
-          <path
-            d="M140 96L184 114L140 132L96 114L140 96Z"
-            fill="url(#leftGradCyan)"
-            fillOpacity="0.25"
-          />
-
-          {/* Cap Center Button */}
-          <ellipse cx="140" cy="114" rx="4" ry="2.5" fill="url(#leftGradGold)" />
-
-          {/* Gold Tassel with Idle Sway */}
-          <g className="animate-tassel">
-            <path
-              d="M140 114C154 118 165 128 168 142"
-              stroke="url(#leftGradGold)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-            {/* Tassel Fringe */}
-            <rect x="164" y="142" width="8" height="13" rx="2" fill="url(#leftGradGold)" />
-          </g>
-        </g>
-
-        {/* Floating Verified Student Credential Badge */}
-        <g className="animate-badge-left">
-          {/* Glassmorphic Badge Container */}
+          {/* Pedestal Seating Block */}
           <rect
-            x="24"
-            y="70"
-            width="132"
-            height="38"
-            rx="19"
-            fill="#FFFFFF"
-            className="dark:fill-slate-900"
-            stroke="#3B82F6"
-            strokeWidth="1.5"
-            filter="url(#leftGlow)"
+            x="70"
+            y="135"
+            width="65"
+            height="85"
+            rx="4"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-400"
+            strokeWidth="2"
           />
-          {/* University Blue Shield Icon */}
-          <circle cx="43" cy="89" r="10" fill="#2563EB" />
+          {/* Subtle interior block line */}
+          <line
+            x1="70"
+            y1="150"
+            x2="135"
+            y2="150"
+            stroke="#1E293B"
+            className="dark:stroke-slate-500"
+            strokeWidth="1.5"
+            strokeDasharray="3 3"
+          />
+
+          {/* Student Character: Trousers & Legs */}
           <path
-            d="M40 89L42.5 91.5L46.5 86.5"
-            stroke="#FFFFFF"
+            d="M86 122C86 132 80 148 68 162C64 167 68 174 74 174C83 174 93 158 98 147L117 184C119 188 124 190 128 189C133 188 135 183 133 178L112 132"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-200"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
 
-          {/* Badge Label */}
-          <text
-            x="60"
-            y="87"
-            fontFamily="system-ui, sans-serif"
-            fontSize="10"
-            fontWeight="700"
+          {/* Minimalist Shoes */}
+          <path
+            d="M70 172C70 172 63 176 60 181C58 185 62 188 66 188C72 188 78 182 78 178L74 174"
             fill="#1E293B"
-            className="dark:fill-white"
-          >
-            Verified Student
-          </text>
-          <text
-            x="60"
-            y="98"
-            fontFamily="system-ui, sans-serif"
-            fontSize="8"
-            fontWeight="500"
-            fill="#64748B"
-            className="dark:fill-slate-400"
-          >
-            Campus Network
-          </text>
+            stroke="#1E293B"
+            className="dark:fill-slate-300 dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M129 187C129 187 127 192 125 196C123 199 127 202 131 202C136 202 142 195 141 190L135 186"
+            fill="#1E293B"
+            stroke="#1E293B"
+            className="dark:fill-slate-300 dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
 
-          {/* Live Active Green Pulse Dot */}
-          <circle cx="144" cy="89" r="3.5" fill="#10B981" />
-          <circle cx="144" cy="89" r="6" fill="none" stroke="#10B981" strokeWidth="1" className="animate-beacon" />
+          {/* Torso & Navy Patterned Shirt */}
+          <path
+            d="M87 96C87 96 76 106 76 122C76 130 84 134 94 134C102 134 111 128 111 119C111 110 105 98 99 94"
+            fill="#1E293B"
+            stroke="#1E293B"
+            className="dark:fill-slate-800 dark:stroke-slate-200"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          {/* Subtle University Blue Accent on Collar */}
+          <circle cx="86" cy="110" r="1.5" fill="#3B82F6" />
+          <circle cx="94" cy="116" r="1.5" fill="#3B82F6" />
+          <circle cx="102" cy="110" r="1.5" fill="#3B82F6" />
+
+          {/* Arms holding laptop */}
+          <path
+            d="M97 106L110 118L126 114"
+            stroke="#FAF9F5"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M97 106L110 118L126 114"
+            stroke="#1E293B"
+            className="dark:stroke-slate-200"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Royal Blue Laptop */}
+          <path
+            d="M114 118L130 122"
+            stroke="#2563EB"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M130 122L137 102"
+            stroke="#2563EB"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+
+          {/* Head & Face profile */}
+          <path
+            d="M97 94L99 85"
+            stroke="#1E293B"
+            className="dark:stroke-slate-200"
+            strokeWidth="2"
+          />
+          <path
+            d="M97 85C97 85 103 85 105 83C107 81 108 75 103 71C97 67 91 71 91 77C91 83 97 85 97 85Z"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-200"
+            strokeWidth="2"
+          />
+
+          {/* Hair bun */}
+          <path
+            d="M92 74C88 73 84 77 82 82C80 87 82 91 85 93C88 95 92 93 93 90C94 85 94 79 92 74Z"
+            fill="#1E293B"
+            className="dark:fill-slate-300"
+          />
+          <circle cx="80" cy="80" r="4.5" fill="#1E293B" className="dark:fill-slate-300" />
+
+          {/* Idea Sparks / Rays */}
+          <g className="animate-spark">
+            <line x1="102" y1="52" x2="98" y2="44" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
+            <line x1="112" y1="48" x2="112" y2="38" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
+            <line x1="122" y1="52" x2="128" y2="44" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
+          </g>
+
+          {/* Stack of University Books beside student */}
+          <rect
+            x="148"
+            y="170"
+            width="55"
+            height="14"
+            rx="2"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+          <rect
+            x="152"
+            y="156"
+            width="48"
+            height="14"
+            rx="2"
+            fill="#2563EB"
+            fillOpacity="0.15"
+            stroke="#2563EB"
+            strokeWidth="1.5"
+          />
+          <rect
+            x="155"
+            y="142"
+            width="42"
+            height="14"
+            rx="2"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+
+          {/* Graduation Cap resting on top book */}
+          <path
+            d="M176 122L202 131L176 140L150 131L176 122Z"
+            fill="#2563EB"
+            stroke="#1E293B"
+            className="dark:stroke-slate-200"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M164 136C164 142 170 146 176 146C182 146 188 142 188 136"
+            stroke="#1E293B"
+            className="dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+          {/* Gold Tassel */}
+          <path
+            d="M176 131C180 133 184 139 184 144"
+            stroke="#F59E0B"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <circle cx="184" cy="145" r="1.5" fill="#F59E0B" />
+
+          {/* Clean Stepping Base Line */}
+          <line
+            x1="30"
+            y1="220"
+            x2="230"
+            y2="220"
+            stroke="#1E293B"
+            className="dark:stroke-slate-500"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </g>
-
-        {/* Constellation Network Nodes */}
-        <circle cx="50" cy="180" r="3.5" fill="#3B82F6" />
-        <circle cx="75" cy="210" r="4.5" fill="#2563EB" />
-        <line x1="50" y1="180" x2="75" y2="210" stroke="#93C5FD" strokeWidth="1.5" strokeDasharray="3 3" />
-        <line x1="75" y1="210" x2="110" y2="225" stroke="#93C5FD" strokeWidth="1.5" strokeDasharray="3 3" />
-        <circle cx="110" cy="225" r="3" fill="#60A5FA" />
       </svg>
     </div>
   );
 }
 
 /**
- * Animated Career Growth & Alumni Referral Vector Illustration (Right Side)
- * Modern duotone gradient growth columns, flowing animated trajectory curve,
- * glowing peak beacon, and floating alumni referral badge.
+ * Editorial Career Milestone & Growth Illustration (Right Side)
+ * Handcrafted minimalist architectural pedestals, ascending career pathway with
+ * compass star, portfolio briefcase, and constellation networking nodes.
+ * Completely free of SVG text to ensure timeless, non-AI editorial elegance.
  */
 export function CampusCareerIllustrationRight({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none select-none ${className}`}>
       <svg
-        viewBox="0 0 320 280"
+        viewBox="0 0 260 260"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto"
+        className="w-full h-auto drop-shadow-xs"
         aria-hidden="true"
       >
         <defs>
-          {/* Blue Gradients */}
-          <linearGradient id="rightGradBlue1" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stopColor="#93C5FD" />
-            <stop offset="100%" stopColor="#60A5FA" />
-          </linearGradient>
-
-          <linearGradient id="rightGradBlue2" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="100%" stopColor="#2563EB" />
-          </linearGradient>
-
-          <linearGradient id="rightGradBlue3" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stopColor="#2563EB" />
-            <stop offset="50%" stopColor="#1D4ED8" />
-            <stop offset="100%" stopColor="#1E40AF" />
-          </linearGradient>
-
-          <linearGradient id="rightAura" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
-          </linearGradient>
-
-          <filter id="rightGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-
-          {/* Embedded Animation Keyframes */}
           <style>{`
-            @keyframes rightFloat {
+            @keyframes softFloatRight {
               0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(7px); }
+              50% { transform: translateY(6px); }
             }
-            @keyframes flowTrajectory {
-              0% { stroke-dashoffset: 48; }
-              100% { stroke-dashoffset: 0; }
+            @keyframes starGlow {
+              0%, 100% { transform: scale(1); opacity: 0.8; }
+              50% { transform: scale(1.25); opacity: 1; }
             }
-            @keyframes pulseSummit {
-              0%, 100% { transform: scale(1); opacity: 0.6; }
-              50% { transform: scale(1.35); opacity: 1; }
+            .animate-editorial-right {
+              animation: softFloatRight 4.8s ease-in-out infinite 0.4s;
+              transform-origin: center;
             }
-            @keyframes columnBreath {
-              0%, 100% { transform: scaleY(1); }
-              50% { transform: scaleY(1.02); }
-            }
-            .animate-badge-right {
-              animation: rightFloat 4.6s ease-in-out infinite 0.3s;
-            }
-            .animate-trajectory {
-              stroke-dasharray: 8 4;
-              animation: flowTrajectory 1.8s linear infinite;
-            }
-            .animate-summit {
-              animation: pulseSummit 2.2s ease-in-out infinite;
-              transform-origin: 215px 70px;
-            }
-            .animate-column {
-              transform-origin: bottom;
-              animation: columnBreath 4s ease-in-out infinite;
+            .animate-compass-star {
+              animation: starGlow 2.8s ease-in-out infinite;
+              transform-origin: 165px 65px;
             }
           `}</style>
         </defs>
 
-        {/* Ambient Radial Aura */}
-        <circle cx="180" cy="140" r="110" fill="url(#rightAura)" />
+        <g className="animate-editorial-right">
+          {/* Background Soft Aura Circle */}
+          <circle cx="140" cy="135" r="95" fill="#2563EB" fillOpacity="0.06" />
 
-        {/* Modern Rounded Growth Pedestals (Sleek Duotone Bars) */}
-        <g className="animate-column">
-          {/* Pillar 1: Enrolled / Early Internship */}
+          {/* Minimalist Milestone Architectural Blocks */}
+          {/* Shorter Pedestal (Internship / Foundation) */}
           <rect
-            x="95"
-            y="155"
-            width="34"
-            height="55"
-            rx="8"
-            fill="url(#rightGradBlue1)"
-            stroke="#60A5FA"
-            strokeWidth="1.5"
+            x="55"
+            y="145"
+            width="42"
+            height="75"
+            rx="4"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-300"
+            strokeWidth="2"
           />
-          {/* Pillar 1 Top Cap Highlight */}
-          <rect x="99" y="157" width="26" height="3" rx="1.5" fill="#FFFFFF" fillOpacity="0.6" />
 
-          {/* Pillar 2: Verified Mentorship & Projects */}
+          {/* Mid Pedestal (Mentorship & Applied Projects) */}
           <rect
-            x="145"
-            y="115"
-            width="34"
-            height="95"
-            rx="8"
-            fill="url(#rightGradBlue2)"
-            stroke="#3B82F6"
-            strokeWidth="1.5"
+            x="105"
+            y="110"
+            width="45"
+            height="110"
+            rx="4"
+            fill="#2563EB"
+            fillOpacity="0.12"
+            stroke="#2563EB"
+            strokeWidth="2"
           />
-          {/* Pillar 2 Top Cap Highlight */}
-          <rect x="149" y="117" width="26" height="3" rx="1.5" fill="#FFFFFF" fillOpacity="0.7" />
-
-          {/* Pillar 3: Alumni Placement / High-Trust Career Hire */}
-          <rect
-            x="195"
-            y="75"
-            width="36"
-            height="135"
-            rx="8"
-            fill="url(#rightGradBlue3)"
-            stroke="#1D4ED8"
-            strokeWidth="1.5"
-          />
-          {/* Pillar 3 Top Cap Highlight */}
-          <rect x="199" y="77" width="28" height="3.5" rx="1.5" fill="#60A5FA" />
-        </g>
-
-        {/* Animated Ascending Career Trajectory Line */}
-        <path
-          d="M60 185C95 165 140 120 215 70"
-          stroke="#2563EB"
-          strokeWidth="3"
-          strokeLinecap="round"
-          className="animate-trajectory"
-        />
-
-        {/* Summit Beacon with Animated Radiant Pulse */}
-        <g className="animate-summit">
-          <circle cx="215" cy="70" r="9" fill="#3B82F6" fillOpacity="0.3" />
-          <circle cx="215" cy="70" r="5" fill="#2563EB" />
-          <circle cx="215" cy="70" r="2" fill="#FFFFFF" />
-        </g>
-
-        {/* Floating Alumni Referral Card Badge */}
-        <g className="animate-badge-right">
-          {/* Glassmorphic Badge Container */}
-          <rect
-            x="150"
-            y="30"
-            width="142"
-            height="38"
-            rx="19"
-            fill="#FFFFFF"
-            className="dark:fill-slate-900"
+          {/* Subtle internal grid accent */}
+          <line
+            x1="112"
+            y1="125"
+            x2="143"
+            y2="125"
             stroke="#2563EB"
             strokeWidth="1.5"
-            filter="url(#rightGlow)"
+            strokeDasharray="3 3"
           />
 
-          {/* Royal Blue Briefcase Icon Circle */}
-          <circle cx="169" cy="49" r="10" fill="#2563EB" />
+          {/* Tallest Pedestal (Alumni Career Milestone) */}
+          <rect
+            x="158"
+            y="75"
+            width="46"
+            height="145"
+            rx="4"
+            fill="#FAD980"
+            stroke="#1E293B"
+            className="dark:stroke-slate-300"
+            strokeWidth="2"
+          />
+
+          {/* Ascending Career Pathway Line */}
           <path
-            d="M165 47H173M164 48H174V53H164V48ZM167 47V45C167 44.5 167.5 44 168 44H170C170.5 44 171 44.5 171 45V47"
-            stroke="#FFFFFF"
-            strokeWidth="1.2"
+            d="M35 185C65 170 100 130 162 70"
+            stroke="#2563EB"
+            strokeWidth="2.5"
             strokeLinecap="round"
           />
 
-          {/* Badge Text */}
-          <text
-            x="186"
-            y="47"
-            fontFamily="system-ui, sans-serif"
-            fontSize="10"
-            fontWeight="700"
-            fill="#1E293B"
-            className="dark:fill-white"
-          >
-            Alumni Referral
-          </text>
-          <text
-            x="186"
-            y="58"
-            fontFamily="system-ui, sans-serif"
-            fontSize="8"
-            fontWeight="600"
-            fill="#2563EB"
-          >
-            98% High Match
-          </text>
-        </g>
+          {/* Summit Career Star / Compass Node */}
+          <g className="animate-compass-star">
+            {/* Compass 4-point star */}
+            <path
+              d="M165 52L168 62L178 65L168 68L165 78L162 68L152 65L162 62L165 52Z"
+              fill="#2563EB"
+            />
+            <circle cx="165" cy="65" r="3" fill="#FFFFFF" />
+          </g>
 
-        {/* Constellation Network Nodes on the Right */}
-        <circle cx="255" cy="140" r="4" fill="#3B82F6" />
-        <circle cx="280" cy="180" r="3.5" fill="#2563EB" />
-        <line x1="215" y1="70" x2="255" y2="140" stroke="#93C5FD" strokeWidth="1.5" strokeDasharray="3 3" />
-        <line x1="255" y1="140" x2="280" y2="180" stroke="#93C5FD" strokeWidth="1.5" strokeDasharray="3 3" />
+          {/* Minimalist Professional Briefcase */}
+          <rect
+            x="32"
+            y="180"
+            width="40"
+            height="28"
+            rx="3"
+            fill="#FAF9F5"
+            stroke="#1E293B"
+            className="dark:fill-slate-900 dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+          {/* Briefcase Handle */}
+          <path
+            d="M46 180V175C46 173.5 47.5 172 49 172H55C56.5 172 58 173.5 58 175V180"
+            stroke="#1E293B"
+            className="dark:stroke-slate-200"
+            strokeWidth="1.5"
+          />
+          {/* Briefcase Center Latch */}
+          <rect x="50" y="190" width="4" height="4" rx="1" fill="#2563EB" />
+          <line x1="32" y1="192" x2="72" y2="192" stroke="#1E293B" className="dark:stroke-slate-400" strokeWidth="1" strokeDasharray="2 2" />
+
+          {/* Constellation Networking Nodes */}
+          <circle cx="95" cy="55" r="3" fill="#2563EB" />
+          <circle cx="125" cy="40" r="3.5" fill="#3B82F6" />
+          <circle cx="215" cy="85" r="3" fill="#2563EB" />
+          <line x1="95" y1="55" x2="125" y2="40" stroke="#93C5FD" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="125" y1="40" x2="165" y2="65" stroke="#93C5FD" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="165" y1="65" x2="215" y2="85" stroke="#93C5FD" strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* Clean Stepping Base Line */}
+          <line
+            x1="25"
+            y1="220"
+            x2="225"
+            y2="220"
+            stroke="#1E293B"
+            className="dark:stroke-slate-500"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </g>
       </svg>
     </div>
   );
