@@ -630,6 +630,28 @@ export interface AdminAnalyticsData {
     interviewRate: number;
     partnerCompanies: number;
   };
+  skillMatrix?: {
+    skill: string;
+    demanded: number;
+    supplied: number;
+    gap: number;
+  }[];
+  topHiringPartners?: {
+    id: string;
+    name: string;
+    logo: string | null;
+    location: string;
+    isVerified: boolean;
+    totalPostings: number;
+    activePostings: number;
+    totalApps: number;
+  }[];
+  compensationBenchmarks?: {
+    internshipMedian: string;
+    fullTimeMedian: string;
+    internshipTiers: { label: string; count: number; percentage: number }[];
+    fullTimeTiers: { label: string; count: number; percentage: number }[];
+  };
   memberActivityDetails?: {
     id: string;
     name: string;

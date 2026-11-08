@@ -17,7 +17,6 @@ import {
 } from "recharts";
 import {
   TrendingUp,
-  BarChart3,
   GraduationCap,
   Briefcase,
   Users,
@@ -25,10 +24,14 @@ import {
   Loader2,
   RefreshCw,
   Layers,
-  ArrowUpRight,
   Activity,
   CheckCircle2,
   Compass,
+  Code2,
+  Banknote,
+  Trophy,
+  AlertCircle,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -100,6 +103,43 @@ function DepartmentTooltip({ active, payload, label }: any) {
           <div className="pt-1 border-t border-border/40 flex items-center justify-between text-muted-foreground text-[11px]">
             <span>Engagement Density:</span>
             <span className="font-bold text-foreground">{ratio} apps/student</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
+// Custom glassmorphic tooltip for skill matrix
+function SkillTooltip({ active, payload, label }: any) {
+  if (active && payload && payload.length) {
+    const demanded = payload.find((p: any) => p.dataKey === "demanded")?.value || 0;
+    const supplied = payload.find((p: any) => p.dataKey === "supplied")?.value || 0;
+    const gap = demanded - supplied;
+
+    return (
+      <div className="rounded-xl border border-border/80 bg-card/95 backdrop-blur-md p-3 shadow-xl text-xs space-y-1.5 min-w-[190px]">
+        <p className="font-semibold text-foreground border-b border-border/60 pb-1 flex items-center justify-between">
+          <span>{label}</span>
+          <span
+            className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+              gap > 0
+                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold"
+                : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium"
+            }`}
+          >
+            {gap > 0 ? `+${gap} Deficit` : `${Math.abs(gap)} Surplus`}
+          </span>
+        </p>
+        <div className="space-y-1 font-mono text-[11px]">
+          <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
+            <span>Market Demand:</span>
+            <span className="font-bold">{demanded} jobs</span>
+          </div>
+          <div className="flex items-center justify-between text-indigo-600 dark:text-indigo-400">
+            <span>Student Competency:</span>
+            <span className="font-bold">{supplied} students</span>
           </div>
         </div>
       </div>
@@ -192,7 +232,7 @@ export function AdminAnalyticsView() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Top Header & Refresh Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -301,9 +341,9 @@ export function AdminAnalyticsView() {
         </div>
       </div>
 
-      {/* 2. Grid of Core High-Value Visualizations */}
+      {/* 2. ZONE 1: Recruitment Velocity & Application Lifecycle Funnel */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Visualization 1: Recruitment Velocity & Application Momentum */}
+        {/* Metric C: Recruitment Velocity & Application Momentum */}
         <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -412,7 +452,7 @@ export function AdminAnalyticsView() {
           </div>
         </div>
 
-        {/* Visualization 2: Student Placement & Application Lifecycle Funnel */}
+        {/* Metric A: Student Placement & Application Lifecycle Funnel */}
         <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -481,8 +521,11 @@ export function AdminAnalyticsView() {
             </span>
           </div>
         </div>
+      </div>
 
-        {/* Visualization 3: Campus Department Engagement & Application Density */}
+      {/* 3. ZONE 2: Academic & Curriculum Intelligence */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Metric D: Campus Department Engagement & Application Density */}
         <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -522,7 +565,7 @@ export function AdminAnalyticsView() {
                     dataKey="department"
                     type="category"
                     tick={{ fontSize: 11 }}
-                    width={90}
+                    width={95}
                     tickLine={false}
                     axisLine={false}
                   />
@@ -559,154 +602,387 @@ export function AdminAnalyticsView() {
           </div>
         </div>
 
-        {/* Visualization 4: Employment Modality & Opportunity Type Dynamics */}
+        {/* Metric B: Market Skill Demand vs Student Supply (Curriculum Gap Matrix) */}
         <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Compass className="size-4 text-purple-600" />
+              <Code2 className="size-4 text-amber-500" />
               <div>
                 <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">
-                  Opportunity Modality &amp; Roles
+                  Market Skill Demand vs. Student Supply
                 </h4>
                 <p className="text-[11px] text-muted-foreground">
-                  Contract type and workplace configuration distributions
+                  Job requirements vs verified student profile competencies
+                </p>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-[10px] font-mono text-amber-600 dark:text-amber-400">
+              Curriculum Gap Analysis
+            </Badge>
+          </div>
+
+          <div className="h-64 w-full">
+            {!data.skillMatrix || data.skillMatrix.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                No skill telemetry recorded yet.
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data.skillMatrix}
+                  layout="vertical"
+                  margin={{ top: 5, right: 25, left: 15, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} opacity={0.15} />
+                  <XAxis
+                    type="number"
+                    allowDecimals={false}
+                    tick={{ fontSize: 11 }}
+                    tickLine={false}
+                    axisLine={{ stroke: "var(--border)", opacity: 0.5 }}
+                  />
+                  <YAxis
+                    dataKey="skill"
+                    type="category"
+                    tick={{ fontSize: 11 }}
+                    width={90}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip content={<SkillTooltip />} />
+                  <Bar
+                    dataKey="demanded"
+                    name="Employer Demand (Jobs)"
+                    fill="#F59E0B"
+                    radius={[0, 6, 6, 0]}
+                    barSize={10}
+                  />
+                  <Bar
+                    dataKey="supplied"
+                    name="Student Supply (Profiles)"
+                    fill="#3B82F6"
+                    radius={[0, 6, 6, 0]}
+                    barSize={10}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+
+          {/* Skill Matrix Legend */}
+          <div className="flex items-center justify-center gap-6 pt-1 text-xs border-t border-border/40">
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-amber-500" />
+              <span className="text-muted-foreground">Employer Demand (Openings)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-blue-500" />
+              <span className="text-muted-foreground">Student Supply (Profiles)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. ZONE 3: Corporate Recruitment & Compensation Intelligence */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Metric E: Top Hiring Partners & Corporate Recruiter Leaderboard */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Trophy className="size-4 text-emerald-600" />
+              <div>
+                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Top Hiring Partners &amp; Campus Recruiters
+                </h4>
+                <p className="text-[11px] text-muted-foreground">
+                  Corporate partners ranked by active vacancies and applicant interest
                 </p>
               </div>
             </div>
             <Badge variant="outline" className="text-[10px] font-mono">
-              {kpi.totalPostings} Positions
+              Leaderboard
             </Badge>
           </div>
 
-          <div className="grid grid-cols-2 h-64 gap-2">
-            {/* Donut 1: Opportunity Types */}
-            <div className="flex flex-col items-center justify-between">
-              <span className="text-[11px] font-medium text-muted-foreground">
-                Role Classification
-              </span>
-              <div className="h-44 w-full relative flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.opportunityTypes}
-                      dataKey="count"
-                      nameKey="type"
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={44}
-                      outerRadius={66}
-                      paddingAngle={3}
-                      cornerRadius={4}
-                    >
-                      {data.opportunityTypes.map((entry, index) => (
-                        <Cell
-                          key={`role-${index}`}
-                          fill={ROLE_COLORS[index % ROLE_COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "var(--card)",
-                        borderColor: "var(--border)",
-                        borderRadius: "0.75rem",
-                        fontSize: "11px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                {/* Center text inside donut */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-base font-black font-mono text-foreground">
-                    {totalRoles}
-                  </span>
-                  <span className="text-[9px] text-muted-foreground uppercase">Roles</span>
-                </div>
+          <div className="h-64 flex flex-col justify-between py-1">
+            {!data.topHiringPartners || data.topHiringPartners.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                No active hiring partners recorded.
               </div>
-
-              {/* Mini Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] text-muted-foreground">
-                {data.opportunityTypes.slice(0, 3).map((t, idx) => (
-                  <div key={t.type} className="flex items-center gap-1">
-                    <span
-                      className="size-1.5 rounded-full"
-                      style={{ backgroundColor: ROLE_COLORS[idx % ROLE_COLORS.length] }}
-                    />
-                    <span>{t.type}</span>
+            ) : (
+              data.topHiringPartners.map((partner, idx) => (
+                <div
+                  key={partner.id}
+                  className="flex items-center justify-between p-2 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors border border-border/50 text-xs"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="size-6 rounded-full bg-primary/10 text-primary font-bold font-mono text-[11px] flex items-center justify-center shrink-0">
+                      #{idx + 1}
+                    </span>
+                    <div>
+                      <p className="font-semibold text-foreground truncate max-w-[190px]">
+                        {partner.name}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">{partner.location}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Donut 2: Workplace Modality */}
-            <div className="flex flex-col items-center justify-between">
-              <span className="text-[11px] font-medium text-muted-foreground">
-                Workplace Modality
-              </span>
-              <div className="h-44 w-full relative flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.workplaceDistribution || []}
-                      dataKey="count"
-                      nameKey="workplace"
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={44}
-                      outerRadius={66}
-                      paddingAngle={3}
-                      cornerRadius={4}
-                    >
-                      {(data.workplaceDistribution || []).map((entry, index) => (
-                        <Cell
-                          key={`wp-${index}`}
-                          fill={WORKPLACE_COLORS[index % WORKPLACE_COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "var(--card)",
-                        borderColor: "var(--border)",
-                        borderRadius: "0.75rem",
-                        fontSize: "11px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                {/* Center text inside donut */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-base font-black font-mono text-foreground">
-                    {totalWorkplace}
-                  </span>
-                  <span className="text-[9px] text-muted-foreground uppercase">Modes</span>
-                </div>
-              </div>
-
-              {/* Mini Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] text-muted-foreground">
-                {(data.workplaceDistribution || []).map((w, idx) => (
-                  <div key={w.workplace} className="flex items-center gap-1">
-                    <span
-                      className="size-1.5 rounded-full"
-                      style={{ backgroundColor: WORKPLACE_COLORS[idx % WORKPLACE_COLORS.length] }}
-                    />
-                    <span>
-                      {w.workplace} ({w.percentage}%)
+                  <div className="flex items-center gap-2 font-mono">
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">
+                      {partner.activePostings} active
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[10px]">
+                      {partner.totalApps} applicants
                     </span>
                   </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground">
+            <span>Corporate partnership velocity</span>
+            <span className="font-mono font-medium text-foreground">
+              {kpi.partnerCompanies} Verified Partner Organizations
+            </span>
+          </div>
+        </div>
+
+        {/* Metric F: Compensation & Stipend Benchmark Intelligence */}
+        <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Banknote className="size-4 text-emerald-600" />
+              <div>
+                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Compensation &amp; Stipend Benchmarks
+                </h4>
+                <p className="text-[11px] text-muted-foreground">
+                  Industry salary brackets and student internship stipend tiers
+                </p>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+              Market Intelligence
+            </Badge>
+          </div>
+
+          <div className="h-64 flex flex-col justify-around py-1 space-y-3">
+            {/* 1. Internship Tier Callout */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-muted/30 border border-border/50">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-foreground flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-blue-500" />
+                  <span>Internship Monthly Stipends</span>
+                </span>
+                <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
+                  Median: {data.compensationBenchmarks?.internshipMedian || "BDT 30,000 / mo"}
+                </span>
+              </div>
+              <div className="flex gap-1.5 pt-1">
+                {(data.compensationBenchmarks?.internshipTiers || []).map((tier, idx) => (
+                  <div key={idx} className="flex-1 space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                      <span>{tier.label}</span>
+                      <span className="font-mono">{tier.percentage}%</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 rounded-full"
+                        style={{ width: `${Math.max(tier.percentage, 4)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 2. Full-Time Tier Callout */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-muted/30 border border-border/50">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-foreground flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-emerald-500" />
+                  <span>Graduate Full-Time Salaries</span>
+                </span>
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  Median: {data.compensationBenchmarks?.fullTimeMedian || "BDT 50,000 / mo"}
+                </span>
+              </div>
+              <div className="flex gap-1.5 pt-1">
+                {(data.compensationBenchmarks?.fullTimeTiers || []).map((tier, idx) => (
+                  <div key={idx} className="flex-1 space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                      <span>{tier.label}</span>
+                      <span className="font-mono">{tier.percentage}%</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 rounded-full"
+                        style={{ width: `${Math.max(tier.percentage, 4)}%` }}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Sourcing note */}
           <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground">
-            <span>Corporate verified vs community shared</span>
+            <span>Verified compensation offerings</span>
             <span className="font-mono font-medium text-foreground">
-              {data.sourcingDistribution?.[0]?.percentage || 70}% Official Employer
+              Institutional Baseline Benchmarks
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* 5. ZONE 4: Opportunity Modality & Role Dynamics */}
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Compass className="size-4 text-purple-600" />
+            <div>
+              <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                Opportunity Modality &amp; Role Classification
+              </h4>
+              <p className="text-[11px] text-muted-foreground">
+                Distribution of contract types and workplace configurations
+              </p>
+            </div>
+          </div>
+          <Badge variant="outline" className="text-[10px] font-mono">
+            {kpi.totalPostings} Positions
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 h-64 gap-6">
+          {/* Donut 1: Opportunity Types */}
+          <div className="flex flex-col items-center justify-between">
+            <span className="text-[11px] font-medium text-muted-foreground">
+              Role Classification
+            </span>
+            <div className="h-44 w-full relative flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data.opportunityTypes}
+                    dataKey="count"
+                    nameKey="type"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={46}
+                    outerRadius={68}
+                    paddingAngle={3}
+                    cornerRadius={4}
+                  >
+                    {data.opportunityTypes.map((entry, index) => (
+                      <Cell
+                        key={`role-${index}`}
+                        fill={ROLE_COLORS[index % ROLE_COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "var(--card)",
+                      borderColor: "var(--border)",
+                      borderRadius: "0.75rem",
+                      fontSize: "11px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Center text inside donut */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-base font-black font-mono text-foreground">
+                  {totalRoles}
+                </span>
+                <span className="text-[9px] text-muted-foreground uppercase">Roles</span>
+              </div>
+            </div>
+
+            {/* Mini Legend */}
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+              {data.opportunityTypes.map((t, idx) => (
+                <div key={t.type} className="flex items-center gap-1">
+                  <span
+                    className="size-1.5 rounded-full"
+                    style={{ backgroundColor: ROLE_COLORS[idx % ROLE_COLORS.length] }}
+                  />
+                  <span>{t.type}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Donut 2: Workplace Modality */}
+          <div className="flex flex-col items-center justify-between">
+            <span className="text-[11px] font-medium text-muted-foreground">
+              Workplace Modality
+            </span>
+            <div className="h-44 w-full relative flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data.workplaceDistribution || []}
+                    dataKey="count"
+                    nameKey="workplace"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={46}
+                    outerRadius={68}
+                    paddingAngle={3}
+                    cornerRadius={4}
+                  >
+                    {(data.workplaceDistribution || []).map((entry, index) => (
+                      <Cell
+                        key={`wp-${index}`}
+                        fill={WORKPLACE_COLORS[index % WORKPLACE_COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "var(--card)",
+                      borderColor: "var(--border)",
+                      borderRadius: "0.75rem",
+                      fontSize: "11px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Center text inside donut */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-base font-black font-mono text-foreground">
+                  {totalWorkplace}
+                </span>
+                <span className="text-[9px] text-muted-foreground uppercase">Modes</span>
+              </div>
+            </div>
+
+            {/* Mini Legend */}
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+              {(data.workplaceDistribution || []).map((w, idx) => (
+                <div key={w.workplace} className="flex items-center gap-1">
+                  <span
+                    className="size-1.5 rounded-full"
+                    style={{ backgroundColor: WORKPLACE_COLORS[idx % WORKPLACE_COLORS.length] }}
+                  />
+                  <span>
+                    {w.workplace} ({w.percentage}%)
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Sourcing note */}
+        <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground">
+          <span>Corporate verified vs community shared</span>
+          <span className="font-mono font-medium text-foreground">
+            {data.sourcingDistribution?.[0]?.percentage || 70}% Official Employer
+          </span>
         </div>
       </div>
     </div>

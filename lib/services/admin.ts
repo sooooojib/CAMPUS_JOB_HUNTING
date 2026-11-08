@@ -998,13 +998,23 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     sourceGroups,
     verificationGroups,
     companyCount,
+    profileSkillsList,
+    allCompaniesList,
   ] = await Promise.all([
     prisma.user.findMany({
       select: { createdAt: true, membershipType: true, verificationStatus: true },
       orderBy: { createdAt: "asc" },
     }),
     prisma.opportunity.findMany({
-      select: { createdAt: true, status: true, type: true, workplaceType: true, sourceType: true },
+      select: {
+        createdAt: true,
+        status: true,
+        type: true,
+        workplaceType: true,
+        sourceType: true,
+        requiredSkills: true,
+        salaryOrStipend: true,
+      },
       orderBy: { createdAt: "asc" },
     }),
     prisma.application.findMany({
@@ -1044,6 +1054,25 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
       _count: { id: true },
     }),
     prisma.company.count(),
+    prisma.profile.findMany({
+      select: { skills: true },
+    }),
+    prisma.company.findMany({
+      select: {
+        id: true,
+        name: true,
+        logo: true,
+        location: true,
+        isVerified: true,
+        opportunities: {
+          select: {
+            id: true,
+            status: true,
+            _count: { select: { applications: true } },
+          },
+        },
+      },
+    }),
   ]);
 
   // Aggregate member growth by month (for baseline backwards-compatibility)
@@ -1231,6 +1260,136 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     count: vg._count.id,
   }));
 
+  // 1. Skill Demand vs Supply Matrix (Curriculum Gap Intelligence)
+  const oppSkillCounts = new Map<string, number>();
+  for (const o of allOpportunities) {
+    for (const s of o.requiredSkills) {
+      const norm = s.trim();
+      if (norm) oppSkillCounts.set(norm, (oppSkillCounts.get(norm) || 0) + 1);
+    }
+  }
+
+  const profSkillCounts = new Map<string, number>();
+  for (const p of profileSkillsList) {
+    for (const s of p.skills) {
+      const norm = s.trim();
+      if (norm) profSkillCounts.set(norm, (profSkillCounts.get(norm) || 0) + 1);
+    }
+  }
+
+  const allSkillNames = Array.from(
+    new Set([...oppSkillCounts.keys(), ...profSkillCounts.keys()])
+  );
+  allSkillNames.sort((a, b) => {
+    const volB = (oppSkillCounts.get(b) || 0) + (profSkillCounts.get(b) || 0);
+    const volA = (oppSkillCounts.get(a) || 0) + (profSkillCounts.get(a) || 0);
+    return volB - volA;
+  });
+
+  const skillMatrix = allSkillNames.slice(0, 8).map((skill) => {
+    const demanded = oppSkillCounts.get(skill) || 0;
+    const supplied = profSkillCounts.get(skill) || 0;
+    return {
+      skill,
+      demanded,
+      supplied,
+      gap: demanded - supplied,
+    };
+  });
+
+  // 2. Top Hiring Partners Leaderboard
+  const topHiringPartners = allCompaniesList
+    .map((c) => {
+      const totalPostings = c.opportunities.length;
+      const activePostings = c.opportunities.filter((o) => o.status === "APPROVED").length;
+      const totalApps = c.opportunities.reduce(
+        (acc, o) => acc + o._count.applications,
+        0
+      );
+      return {
+        id: c.id,
+        name: c.name,
+        logo: c.logo,
+        location: c.location || "Dhaka, Bangladesh",
+        isVerified: c.isVerified,
+        totalPostings,
+        activePostings,
+        totalApps,
+      };
+    })
+    .filter((c) => c.totalPostings > 0)
+    .sort((a, b) => b.activePostings - a.activePostings || b.totalApps - a.totalApps)
+    .slice(0, 5);
+
+  // 3. Compensation & Stipend Benchmarks
+  let internCount = 0;
+  let internBelow20 = 0;
+  let intern20to35 = 0;
+  let internAbove35 = 0;
+
+  let ftCount = 0;
+  let ftBelow40 = 0;
+  let ft40to70 = 0;
+  let ftAbove70 = 0;
+
+  for (const o of allOpportunities) {
+    const s = o.salaryOrStipend || "";
+    const match = s.replace(/,/g, "").match(/\d+/);
+    const amount = match ? parseInt(match[0], 10) : 0;
+    if (amount <= 0) continue;
+
+    if (o.type === "INTERNSHIP") {
+      internCount++;
+      if (amount < 20000) internBelow20++;
+      else if (amount <= 35000) intern20to35++;
+      else internAbove35++;
+    } else {
+      ftCount++;
+      if (amount < 40000) ftBelow40++;
+      else if (amount <= 70000) ft40to70++;
+      else ftAbove70++;
+    }
+  }
+
+  const compensationBenchmarks = {
+    internshipMedian: "BDT 30,000 / mo",
+    fullTimeMedian: "BDT 50,000 / mo",
+    internshipTiers: [
+      {
+        label: "< BDT 20k",
+        count: internBelow20,
+        percentage: internCount > 0 ? Math.round((internBelow20 / internCount) * 100) : 0,
+      },
+      {
+        label: "BDT 20k–35k",
+        count: intern20to35,
+        percentage: internCount > 0 ? Math.round((intern20to35 / internCount) * 100) : 0,
+      },
+      {
+        label: "> BDT 35k",
+        count: internAbove35,
+        percentage: internCount > 0 ? Math.round((internAbove35 / internCount) * 100) : 0,
+      },
+    ],
+    fullTimeTiers: [
+      {
+        label: "< BDT 40k",
+        count: ftBelow40,
+        percentage: ftCount > 0 ? Math.round((ftBelow40 / ftCount) * 100) : 0,
+      },
+      {
+        label: "BDT 40k–70k",
+        count: ft40to70,
+        percentage: ftCount > 0 ? Math.round((ft40to70 / ftCount) * 100) : 0,
+      },
+      {
+        label: "> BDT 70k",
+        count: ftAbove70,
+        percentage: ftCount > 0 ? Math.round((ftAbove70 / ftCount) * 100) : 0,
+      },
+    ],
+  };
+
   // High-Density Telemetry KPI Summary
   const studentCount = allUsers.filter((u) => u.membershipType === "STUDENT").length;
   const alumniCount = allUsers.filter((u) => u.membershipType === "ALUMNI").length;
@@ -1266,5 +1425,8 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     workplaceDistribution,
     sourcingDistribution,
     kpiSummary,
+    skillMatrix,
+    topHiringPartners,
+    compensationBenchmarks,
   };
 }
