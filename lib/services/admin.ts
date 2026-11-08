@@ -994,18 +994,32 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     allApplications,
     departmentGroups,
     oppTypeGroups,
+    workplaceGroups,
+    sourceGroups,
     verificationGroups,
+    companyCount,
   ] = await Promise.all([
     prisma.user.findMany({
-      select: { createdAt: true },
+      select: { createdAt: true, membershipType: true, verificationStatus: true },
       orderBy: { createdAt: "asc" },
     }),
     prisma.opportunity.findMany({
-      select: { createdAt: true, status: true, type: true },
+      select: { createdAt: true, status: true, type: true, workplaceType: true, sourceType: true },
       orderBy: { createdAt: "asc" },
     }),
     prisma.application.findMany({
-      select: { submittedAt: true, applicantId: true },
+      select: {
+        id: true,
+        submittedAt: true,
+        status: true,
+        applicant: {
+          select: {
+            profile: {
+              select: { department: true },
+            },
+          },
+        },
+      },
       orderBy: { submittedAt: "asc" },
     }),
     prisma.profile.groupBy({
@@ -1017,13 +1031,22 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
       by: ["type"],
       _count: { id: true },
     }),
+    prisma.opportunity.groupBy({
+      by: ["workplaceType"],
+      _count: { id: true },
+    }),
+    prisma.opportunity.groupBy({
+      by: ["sourceType"],
+      _count: { id: true },
+    }),
     prisma.membershipRequest.groupBy({
       by: ["status"],
       _count: { id: true },
     }),
+    prisma.company.count(),
   ]);
 
-  // Aggregate member growth by month
+  // Aggregate member growth by month (for baseline backwards-compatibility)
   const memberGrowthMap = new Map<string, number>();
   for (const u of allUsers) {
     const key = u.createdAt.toISOString().substring(0, 7); // YYYY-MM
@@ -1060,72 +1083,188 @@ export async function getAdminAnalyticsData(): Promise<AdminAnalyticsData> {
     count,
   }));
 
-  // Aggregate department participation
-  const departmentParticipation = departmentGroups.map((dg) => ({
-    department: dg.department || "Unknown",
-    members: dg._count.userId,
-    applications: Math.round(dg._count.userId * 1.5), // Approximate historical activity
-  }));
+  // High-Resolution Daily Recruitment Velocity Timeline (No orphan dots!)
+  const dailyVelocityMap = new Map<
+    string,
+    { date: string; formattedDate: string; postings: number; applications: number; members: number }
+  >();
 
-  // Opportunity types distribution
+  for (const o of allOpportunities) {
+    const dStr = o.createdAt.toISOString().substring(0, 10);
+    if (!dailyVelocityMap.has(dStr)) {
+      const dObj = new Date(o.createdAt);
+      const formattedDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(dObj);
+      dailyVelocityMap.set(dStr, { date: dStr, formattedDate, postings: 0, applications: 0, members: 0 });
+    }
+    dailyVelocityMap.get(dStr)!.postings++;
+  }
+
+  for (const a of allApplications) {
+    const dStr = a.submittedAt.toISOString().substring(0, 10);
+    if (!dailyVelocityMap.has(dStr)) {
+      const dObj = new Date(a.submittedAt);
+      const formattedDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(dObj);
+      dailyVelocityMap.set(dStr, { date: dStr, formattedDate, postings: 0, applications: 0, members: 0 });
+    }
+    dailyVelocityMap.get(dStr)!.applications++;
+  }
+
+  for (const u of allUsers) {
+    const dStr = u.createdAt.toISOString().substring(0, 10);
+    if (!dailyVelocityMap.has(dStr)) {
+      const dObj = new Date(u.createdAt);
+      const formattedDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(dObj);
+      dailyVelocityMap.set(dStr, { date: dStr, formattedDate, postings: 0, applications: 0, members: 0 });
+    }
+    dailyVelocityMap.get(dStr)!.members++;
+  }
+
+  const recruitmentVelocity = Array.from(dailyVelocityMap.values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
+  );
+
+  // Compute 100% Genuine Department Applications (Zero synthetic multipliers!)
+  const realDeptAppCounts = new Map<string, number>();
+  for (const a of allApplications) {
+    const dept = a.applicant?.profile?.department || "Other / Unassigned";
+    realDeptAppCounts.set(dept, (realDeptAppCounts.get(dept) || 0) + 1);
+  }
+
+  const departmentParticipation = departmentGroups.map((dg) => {
+    const deptName = dg.department || "Unknown";
+    return {
+      department: deptName,
+      members: dg._count.userId,
+      applications: realDeptAppCounts.get(deptName) || 0,
+    };
+  });
+
+  // Sort department by member volume descending
+  departmentParticipation.sort((a, b) => b.members - a.members);
+
+  // Opportunity Types distribution with clean titles
+  const oppTypeFormatMap: Record<string, string> = {
+    FULL_TIME: "Full-Time",
+    INTERNSHIP: "Internship",
+    PART_TIME: "Part-Time",
+    CONTRACT: "Contract",
+    OTHER: "Other",
+  };
   const opportunityTypes = oppTypeGroups.map((ot) => ({
-    type: ot.type.replace("_", " "),
+    type: oppTypeFormatMap[ot.type] || ot.type.replace("_", " "),
     count: ot._count.id,
   }));
 
-  // Verification breakdown
+  // Workplace Modality Distribution
+  const workplaceFormatMap: Record<string, string> = {
+    ON_SITE: "On-Site",
+    REMOTE: "Remote",
+    HYBRID: "Hybrid",
+  };
+  const totalOppCount = allOpportunities.length || 1;
+  const workplaceDistribution = workplaceGroups.map((wg) => ({
+    workplace: workplaceFormatMap[wg.workplaceType] || wg.workplaceType,
+    count: wg._count.id,
+    percentage: Math.round((wg._count.id / totalOppCount) * 100),
+  }));
+
+  // Opportunity Sourcing Distribution
+  const sourcingFormatMap: Record<string, string> = {
+    OFFICIAL_EMPLOYER: "Official Employer",
+    COMMUNITY_SHARED: "Community Shared",
+  };
+  const sourcingDistribution = sourceGroups.map((sg) => ({
+    source: sourcingFormatMap[sg.sourceType] || sg.sourceType,
+    count: sg._count.id,
+    percentage: Math.round((sg._count.id / totalOppCount) * 100),
+  }));
+
+  // Student Placement Lifecycle Funnel
+  const totalAppsCount = allApplications.length;
+  const underReviewCount = allApplications.filter((a) =>
+    ["UNDER_REVIEW", "SHORTLISTED", "INTERVIEW", "SELECTED"].includes(a.status)
+  ).length;
+  const shortlistedCount = allApplications.filter((a) =>
+    ["SHORTLISTED", "INTERVIEW", "SELECTED"].includes(a.status)
+  ).length;
+  const interviewCount = allApplications.filter((a) =>
+    ["INTERVIEW", "SELECTED"].includes(a.status)
+  ).length;
+  const selectedCount = allApplications.filter((a) => a.status === "SELECTED").length;
+
+  const placementFunnel = [
+    {
+      stage: "SUBMITTED",
+      label: "Applications Submitted",
+      count: totalAppsCount,
+      percentage: totalAppsCount > 0 ? 100 : 0,
+    },
+    {
+      stage: "UNDER_REVIEW",
+      label: "Under Institutional Review",
+      count: underReviewCount,
+      percentage: totalAppsCount > 0 ? Math.round((underReviewCount / totalAppsCount) * 100) : 0,
+    },
+    {
+      stage: "SHORTLISTED",
+      label: "Shortlisted Candidates",
+      count: shortlistedCount,
+      percentage: totalAppsCount > 0 ? Math.round((shortlistedCount / totalAppsCount) * 100) : 0,
+    },
+    {
+      stage: "INTERVIEW",
+      label: "Interviews Scheduled",
+      count: interviewCount,
+      percentage: totalAppsCount > 0 ? Math.round((interviewCount / totalAppsCount) * 100) : 0,
+    },
+    {
+      stage: "SELECTED",
+      label: "Final Offers Extended",
+      count: selectedCount,
+      percentage: totalAppsCount > 0 ? Math.round((selectedCount / totalAppsCount) * 100) : 0,
+    },
+  ];
+
+  // Verification breakdown (kept for test compatibility)
   const verificationBreakdown = verificationGroups.map((vg) => ({
     status: vg.status,
     count: vg._count.id,
   }));
 
-  // Detailed member activity metrics ("সবার Details")
-  const memberActivityUsers = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      membershipType: true,
-      verificationStatus: true,
-      accountStatus: true,
-      createdAt: true,
-      _count: {
-        select: {
-          applications: true,
-          postedOpportunities: true,
-          posts: true,
-          comments: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  // High-Density Telemetry KPI Summary
+  const studentCount = allUsers.filter((u) => u.membershipType === "STUDENT").length;
+  const alumniCount = allUsers.filter((u) => u.membershipType === "ALUMNI").length;
+  const adminCount = allUsers.filter((u) => u.membershipType === "ADMIN").length;
+  const activePostings = allOpportunities.filter((o) => o.status === "APPROVED").length;
 
-  const memberActivityDetails = memberActivityUsers.map((u) => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    membershipType: u.membershipType,
-    verificationStatus: u.verificationStatus,
-    accountStatus: u.accountStatus,
-    createdAt: u.createdAt.toISOString(),
-    applicationsCount: u._count.applications,
-    opportunitiesCount: u._count.postedOpportunities,
-    postsCount: u._count.posts,
-    commentsCount: u._count.comments,
-  }));
+  const kpiSummary = {
+    totalMembers: allUsers.length,
+    studentCount,
+    alumniCount,
+    adminCount,
+    activePostings,
+    totalPostings: allOpportunities.length,
+    totalApplications: totalAppsCount,
+    interviewCount: shortlistedCount,
+    interviewRate: totalAppsCount > 0 ? Math.round((shortlistedCount / totalAppsCount) * 100) : 0,
+    partnerCompanies: companyCount,
+  };
 
   return {
     memberGrowth: memberGrowth.length > 0 ? memberGrowth : [{ period: "Current", count: allUsers.length }],
     opportunityActivity:
       opportunityActivity.length > 0
         ? opportunityActivity
-        : [{ period: "Current", created: allOpportunities.length, approved: allOpportunities.filter((o) => o.status === "APPROVED").length }],
+        : [{ period: "Current", created: allOpportunities.length, approved: activePostings }],
     applicationActivity:
       applicationActivity.length > 0 ? applicationActivity : [{ period: "Current", count: allApplications.length }],
     departmentParticipation,
     opportunityTypes,
     verificationBreakdown,
-    memberActivityDetails,
+    recruitmentVelocity,
+    placementFunnel,
+    workplaceDistribution,
+    sourcingDistribution,
+    kpiSummary,
   };
 }

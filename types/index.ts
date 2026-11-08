@@ -595,6 +595,41 @@ export interface AdminAnalyticsData {
   departmentParticipation: { department: string; members: number; applications: number }[];
   opportunityTypes: { type: string; count: number }[];
   verificationBreakdown: { status: string; count: number }[];
+  recruitmentVelocity?: {
+    date: string;
+    formattedDate: string;
+    postings: number;
+    applications: number;
+    members: number;
+  }[];
+  placementFunnel?: {
+    stage: string;
+    label: string;
+    count: number;
+    percentage: number;
+  }[];
+  workplaceDistribution?: {
+    workplace: string;
+    count: number;
+    percentage: number;
+  }[];
+  sourcingDistribution?: {
+    source: string;
+    count: number;
+    percentage: number;
+  }[];
+  kpiSummary?: {
+    totalMembers: number;
+    studentCount: number;
+    alumniCount: number;
+    adminCount: number;
+    activePostings: number;
+    totalPostings: number;
+    totalApplications: number;
+    interviewCount: number;
+    interviewRate: number;
+    partnerCompanies: number;
+  };
   memberActivityDetails?: {
     id: string;
     name: string;
