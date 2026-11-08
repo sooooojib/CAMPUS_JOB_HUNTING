@@ -19,8 +19,8 @@ import {
 import { Loader2 } from "lucide-react";
 
 export const metadata = {
-  title: "Publish Career Opportunity",
-  description: "Submit a verified internship, full-time job, or research position to the university community.",
+  title: "Share Opportunity | UniCareer",
+  description: "Share verified internships and career openings directly with Jagannath University students and alumni.",
 };
 
 interface PageProps {
@@ -77,11 +77,11 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
   return (
     <FormTemplate
       maxWidth="xl"
-      title={editId ? "Edit Career Opportunity" : "Publish Career Opportunity"}
+      title={editId ? "Edit Career Opportunity" : "Share a Career Opportunity"}
       subtitle={
         editId
-          ? "Update details and resubmit for institutional verification."
-          : "All submissions undergo institutional review by University Career Services before appearing in public member feeds."
+          ? "Update the role details and resubmit for student access."
+          : "Share verified internships and career openings directly with Jagannath University students and alumni."
       }
       breadcrumbs={
         <Breadcrumb className="mb-4">

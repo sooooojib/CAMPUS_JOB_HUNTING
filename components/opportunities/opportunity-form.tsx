@@ -20,8 +20,10 @@ import {
   ExternalLink,
   ArrowRight,
   Info,
+  Send,
 } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import {
   createOpportunitySchema,
   CreateOpportunityInput,
@@ -114,14 +116,11 @@ export function OpportunityForm({
     defaultValues: {
       title: existingOpportunity?.title || "",
       description: existingOpportunity?.description || "",
-      companyId: existingOpportunity?.companyId || (managedCompanies[0]?.id ?? undefined),
-      companyName:
-        existingOpportunity?.companyName || managedCompanies[0]?.name || "",
+      companyId: existingOpportunity?.companyId || undefined,
+      companyName: existingOpportunity?.companyName || "",
       companyLogo: existingOpportunity?.companyLogo || "",
       type: existingOpportunity?.type || "FULL_TIME",
-      sourceType:
-        existingOpportunity?.sourceType ||
-        (managedCompanies.length > 0 ? "OFFICIAL_EMPLOYER" : "COMMUNITY_SHARED"),
+      sourceType: existingOpportunity?.sourceType || "COMMUNITY_SHARED",
       minCgpa: existingOpportunity?.minCgpa ?? null,
       minAcademicYear: existingOpportunity?.minAcademicYear || "",
       requiredSkills: existingOpportunity?.requiredSkills || [],
@@ -343,37 +342,36 @@ export function OpportunityForm({
 
   return (
     <div className="space-y-6">
-      {/* Tab Switcher: Edit Form vs Live Preview */}
-      <div className="flex items-center justify-between pb-3 border-b border-border/60">
-        <div className="flex items-center gap-2">
-          <Button
+      {/* Tab Switcher: Edit Opening vs Live Preview */}
+      <div className="flex items-center justify-between pb-2 border-b border-border/50">
+        <div className="inline-flex items-center p-1 bg-muted/60 rounded-full border border-border/40">
+          <button
             type="button"
-            variant={activeTab === "form" ? "secondary" : "ghost"}
-            size="sm"
             onClick={() => setActiveTab("form")}
-            className="gap-1.5 text-xs font-semibold"
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-full transition-all",
+              activeTab === "form"
+                ? "bg-background text-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground"
+            )}
           >
             <Edit3 className="size-3.5" />
-            <span>Edit Information</span>
-          </Button>
-
-          <Button
+            <span>Edit Opening</span>
+          </button>
+          <button
             type="button"
-            variant={activeTab === "preview" ? "secondary" : "ghost"}
-            size="sm"
             onClick={() => setActiveTab("preview")}
-            className="gap-1.5 text-xs font-semibold"
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-full transition-all",
+              activeTab === "preview"
+                ? "bg-background text-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground"
+            )}
           >
             <Eye className="size-3.5" />
-            <span>Interactive Live Preview</span>
-          </Button>
+            <span>Live Card Preview</span>
+          </button>
         </div>
-
-        <span className="text-[11px] font-mono text-muted-foreground hidden sm:inline">
-          {watchedValues.sourceType === "OFFICIAL_EMPLOYER"
-            ? "Official Employer Mode"
-            : "Community Shared Mode"}
-        </span>
       </div>
 
       {activeTab === "preview" ? (
@@ -381,11 +379,11 @@ export function OpportunityForm({
         /* LIVE PREVIEW MODE                                        */
         /* ========================================================= */
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs text-primary flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="size-4" />
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs text-primary flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Sparkles className="size-4 shrink-0" />
               <span>
-                <strong>Live Preview:</strong> This is how your opportunity card and details will appear to members in the catalog.
+                <strong>Live Card Preview:</strong> This is how your opportunity card will appear to members in the directory.
               </span>
             </div>
             <Button
@@ -393,8 +391,9 @@ export function OpportunityForm({
               variant="outline"
               size="xs"
               onClick={() => setActiveTab("form")}
+              className="rounded-full shrink-0"
             >
-              Back to Editing
+              Back to Edit
             </Button>
           </div>
 
@@ -402,12 +401,12 @@ export function OpportunityForm({
             <JobCard
               id="preview-id"
               title={watchedValues.title || "Untitled Opportunity Position"}
-              companyName={watchedValues.companyName || "Company Name"}
+              companyName={watchedValues.companyName || "Hiring Organization"}
               companyLogo={watchedValues.companyLogo}
-              location={watchedValues.location || "Location"}
+              location={watchedValues.location || "Dhaka, Bangladesh"}
               workplaceType={watchedValues.workplaceType || "ON_SITE"}
               type={watchedValues.type || "FULL_TIME"}
-              classification={watchedValues.sourceType || "OFFICIAL_EMPLOYER"}
+              classification={watchedValues.sourceType || "COMMUNITY_SHARED"}
               salaryRange={watchedValues.salaryOrStipend || undefined}
               deadline={watchedValues.deadline}
               skills={skills}
@@ -419,124 +418,71 @@ export function OpportunityForm({
         </div>
       ) : (
         /* ========================================================= */
-        /* EDIT FORM MODE                                           */
+        /* EDIT FORM MODE (HUMAN-FRIENDLY & EASY)                   */
         /* ========================================================= */
-        <form className="space-y-8">
-          {/* Section 1: Classification & Origin */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-bold border-b border-border/50 pb-2 flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" />
-              <span>1. Opportunity Provenance &amp; Authority</span>
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="sourceType">Posting Authority Mode *</Label>
-                <Select
-                  value={watchedValues.sourceType}
-                  onValueChange={(val: any) => handleSourceTypeChange(val)}
-                >
-                  <SelectTrigger id="sourceType" className="bg-background">
-                    <SelectValue placeholder="Select posting authority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="OFFICIAL_EMPLOYER">
-                      Official Employer Listing (Authorized Representative)
-                    </SelectItem>
-                    <SelectItem value="COMMUNITY_SHARED">
-                      Community Shared Lead (Alumni / Student Referral)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-[11px] text-muted-foreground">
-                  {watchedValues.sourceType === "OFFICIAL_EMPLOYER"
-                    ? "Official postings represent your registered corporate entity directly."
-                    : "Community shared leads display a referral intermediary disclaimer."}
+        <form className="space-y-6">
+          {/* Card 1: Role & Company Details */}
+          <div className="rounded-3xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs space-y-5">
+            <div className="flex items-center gap-3 pb-3 border-b border-border/50">
+              <div className="size-9 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <Building2 className="size-4.5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Role &amp; Company Details</h3>
+                <p className="text-xs text-muted-foreground">
+                  Basic information about the role, organization, and responsibilities.
                 </p>
               </div>
-
-              {/* Company Selection or Text Input */}
-              {watchedValues.sourceType === "OFFICIAL_EMPLOYER" ? (
-                <div className="space-y-1.5">
-                  <Label htmlFor="companyId">Represented Corporate Entity *</Label>
-                  {managedCompanies.length > 0 ? (
-                    <Select
-                      value={watchedValues.companyId}
-                      onValueChange={(val) => {
-                        if (val) handleCompanySelect(val);
-                      }}
-                    >
-                      <SelectTrigger id="companyId" className="bg-background">
-                        <SelectValue placeholder="Select company entity" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {managedCompanies.map((c) => (
-                          <SelectItem key={c.id} value={c.id}>
-                            {c.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <div className="text-xs text-amber-600 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
-                      You do not currently manage an institutional company entity. Please switch to &quot;Community Shared Lead&quot; or create a company profile first.
-                    </div>
-                  )}
-                  {errors.companyId && (
-                    <p className="text-xs text-destructive">{errors.companyId.message}</p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-1.5">
-                  <Label htmlFor="companyName">Target Employer / Organization *</Label>
-                  <Input
-                    id="companyName"
-                    {...register("companyName")}
-                    placeholder="e.g. BRAC Bank, Google, Unilever"
-                    className="bg-background"
-                  />
-                  {errors.companyName && (
-                    <p className="text-xs text-destructive">{errors.companyName.message}</p>
-                  )}
-                </div>
-              )}
             </div>
-          </div>
 
-          {/* Section 2: Position Specifications */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-bold border-b border-border/50 pb-2 flex items-center gap-2">
-              <Building2 className="size-4 text-primary" />
-              <span>2. Position Specifications</span>
-            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5 sm:col-span-1">
+                <Label htmlFor="companyName" className="text-xs font-semibold">
+                  Company or Organization *
+                </Label>
+                <Input
+                  id="companyName"
+                  {...register("companyName")}
+                  placeholder="e.g. Google, BRAC Bank, Pathao, Unilever"
+                  className="rounded-xl bg-background text-xs"
+                />
+                {errors.companyName && (
+                  <p className="text-xs text-destructive">{errors.companyName.message}</p>
+                )}
+              </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="title">Opportunity Title *</Label>
-              <Input
-                id="title"
-                {...register("title")}
-                placeholder="e.g. Distributed Systems Software Intern (Fall 2026)"
-                className="bg-background text-sm font-semibold"
-              />
-              {errors.title && (
-                <p className="text-xs text-destructive">{errors.title.message}</p>
-              )}
+              <div className="space-y-1.5 sm:col-span-1">
+                <Label htmlFor="title" className="text-xs font-semibold">
+                  Job or Internship Title *
+                </Label>
+                <Input
+                  id="title"
+                  {...register("title")}
+                  placeholder="e.g. Software Engineering Intern, Junior Product Designer"
+                  className="rounded-xl bg-background text-xs font-semibold"
+                />
+                {errors.title && (
+                  <p className="text-xs text-destructive">{errors.title.message}</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="type">Opportunity Type *</Label>
+                <Label htmlFor="type" className="text-xs font-semibold">
+                  Employment Type *
+                </Label>
                 <Select
                   value={watchedValues.type}
                   onValueChange={(val: any) => setValue("type", val)}
                 >
-                  <SelectTrigger id="type" className="bg-background">
+                  <SelectTrigger id="type" className="rounded-xl bg-background text-xs">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     <SelectItem value="INTERNSHIP">Internship</SelectItem>
                     <SelectItem value="FULL_TIME">Full-Time Career</SelectItem>
-                    <SelectItem value="PART_TIME">Part-Time Student Role</SelectItem>
+                    <SelectItem value="PART_TIME">Part-Time Role</SelectItem>
                     <SelectItem value="CONTRACT">Contract / Fellowship</SelectItem>
                     <SelectItem value="OTHER">Other Opportunity</SelectItem>
                   </SelectContent>
@@ -544,15 +490,17 @@ export function OpportunityForm({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="workplaceType">Workplace Mode *</Label>
+                <Label htmlFor="workplaceType" className="text-xs font-semibold">
+                  Workplace Setting *
+                </Label>
                 <Select
                   value={watchedValues.workplaceType}
                   onValueChange={(val: any) => setValue("workplaceType", val)}
                 >
-                  <SelectTrigger id="workplaceType" className="bg-background">
+                  <SelectTrigger id="workplaceType" className="rounded-xl bg-background text-xs">
                     <SelectValue placeholder="Select workplace" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     <SelectItem value="ON_SITE">On-Site</SelectItem>
                     <SelectItem value="REMOTE">Remote</SelectItem>
                     <SelectItem value="HYBRID">Hybrid</SelectItem>
@@ -561,12 +509,14 @@ export function OpportunityForm({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="location">Work Location *</Label>
+                <Label htmlFor="location" className="text-xs font-semibold">
+                  Work Location *
+                </Label>
                 <Input
                   id="location"
                   {...register("location")}
                   placeholder="e.g. Gulshan, Dhaka or Remote"
-                  className="bg-background"
+                  className="rounded-xl bg-background text-xs"
                 />
                 {errors.location && (
                   <p className="text-xs text-destructive">{errors.location.message}</p>
@@ -576,22 +526,26 @@ export function OpportunityForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="salaryOrStipend">Salary / Monthly Stipend</Label>
+                <Label htmlFor="salaryOrStipend" className="text-xs font-semibold">
+                  Salary / Monthly Stipend (Optional)
+                </Label>
                 <Input
                   id="salaryOrStipend"
                   {...register("salaryOrStipend")}
-                  placeholder="e.g. BDT 35,000 / month or $55/hr"
-                  className="bg-background"
+                  placeholder="e.g. BDT 35,000 / month, Competitive, or Unpaid"
+                  className="rounded-xl bg-background text-xs"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="deadline">Application Cutoff Deadline *</Label>
+                <Label htmlFor="deadline" className="text-xs font-semibold">
+                  Application Deadline *
+                </Label>
                 <Input
                   id="deadline"
                   type="datetime-local"
                   {...register("deadline")}
-                  className="bg-background font-mono text-xs"
+                  className="rounded-xl bg-background font-mono text-xs"
                 />
                 {errors.deadline && (
                   <p className="text-xs text-destructive">{errors.deadline.message}</p>
@@ -600,13 +554,15 @@ export function OpportunityForm({
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="description">Detailed Description &amp; Responsibilities *</Label>
+              <Label htmlFor="description" className="text-xs font-semibold">
+                Role Description &amp; Responsibilities *
+              </Label>
               <Textarea
                 id="description"
-                rows={6}
+                rows={5}
                 {...register("description")}
-                placeholder="Provide a comprehensive description of the role, daily responsibilities, qualifications, and learning outcomes (minimum 20 characters)..."
-                className="bg-background leading-relaxed text-xs sm:text-sm"
+                placeholder="Share key responsibilities, team environment, qualifications, and learning outcomes for candidates..."
+                className="rounded-xl bg-background leading-relaxed text-xs sm:text-sm"
               />
               {errors.description && (
                 <p className="text-xs text-destructive">{errors.description.message}</p>
@@ -614,23 +570,31 @@ export function OpportunityForm({
             </div>
           </div>
 
-          {/* Section 3: Academic Eligibility & Skills */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-bold border-b border-border/50 pb-2 flex items-center gap-2">
-              <Layers className="size-4 text-primary" />
-              <span>3. Target Disciplines &amp; Skills</span>
-            </h3>
+          {/* Card 2: Candidate Preferences & Skills */}
+          <div className="rounded-3xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs space-y-5">
+            <div className="flex items-center gap-3 pb-3 border-b border-border/50">
+              <div className="size-9 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold">
+                <Layers className="size-4.5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Candidate Preferences &amp; Skills</h3>
+                <p className="text-xs text-muted-foreground">
+                  Specify academic background, minimum CGPA, and key skills you're looking for.
+                </p>
+              </div>
+            </div>
 
             {/* Department Targeting */}
-            <div className="space-y-3 bg-muted/30 p-4 rounded-2xl border border-border/60">
-              <div className="flex items-center space-x-2">
+            <div className="space-y-3 bg-muted/30 p-4 rounded-2xl border border-border/50">
+              <div className="flex items-center space-x-2.5">
                 <Checkbox
                   id="openToAll"
                   checked={openToAll}
                   onCheckedChange={(c) => handleOpenToAllToggle(!!c)}
+                  className="rounded-md"
                 />
-                <Label htmlFor="openToAll" className="text-xs font-bold cursor-pointer">
-                  Open to All Academic Departments &amp; Faculties
+                <Label htmlFor="openToAll" className="text-xs font-bold cursor-pointer text-foreground">
+                  Open to students from all academic departments &amp; faculties
                 </Label>
               </div>
 
@@ -646,13 +610,13 @@ export function OpportunityForm({
                         <div
                           key={dept}
                           onClick={() => toggleDepartment(dept)}
-                          className={`flex items-center space-x-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
+                          className={`flex items-center space-x-2 p-2 rounded-xl border text-xs cursor-pointer transition-colors ${
                             isChecked
                               ? "border-primary bg-primary/10 text-primary font-semibold"
                               : "border-border/60 hover:bg-muted"
                           }`}
                         >
-                          <Checkbox checked={isChecked} />
+                          <Checkbox checked={isChecked} className="rounded-md" />
                           <span className="truncate">{dept}</span>
                         </div>
                       );
@@ -665,7 +629,9 @@ export function OpportunityForm({
             {/* CGPA & Academic Standing */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="minCgpa">Minimum CGPA Cutoff (0.00 – 4.00 scale)</Label>
+                <Label htmlFor="minCgpa" className="text-xs font-semibold">
+                  Minimum CGPA (Optional)
+                </Label>
                 <Input
                   id="minCgpa"
                   type="number"
@@ -673,8 +639,8 @@ export function OpportunityForm({
                   min="0"
                   max="4"
                   {...register("minCgpa", { valueAsNumber: true })}
-                  placeholder="e.g. 3.25 (Leave empty if no cutoff)"
-                  className="bg-background font-mono text-xs"
+                  placeholder="e.g. 3.25 (leave blank if no cutoff)"
+                  className="rounded-xl bg-background font-mono text-xs"
                 />
                 {errors.minCgpa && (
                   <p className="text-xs text-destructive">{errors.minCgpa.message}</p>
@@ -682,19 +648,23 @@ export function OpportunityForm({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="minAcademicYear">Eligible Academic Standing</Label>
+                <Label htmlFor="minAcademicYear" className="text-xs font-semibold">
+                  Target Academic Standing (Optional)
+                </Label>
                 <Input
                   id="minAcademicYear"
                   {...register("minAcademicYear")}
-                  placeholder="e.g. 3rd Year, Graduating Senior, Alumni"
-                  className="bg-background text-xs"
+                  placeholder="e.g. 3rd Year, Graduating Senior, or Recent Alumni"
+                  className="rounded-xl bg-background text-xs"
                 />
               </div>
             </div>
 
             {/* Required Skills Tag Selector */}
             <div className="space-y-2">
-              <Label htmlFor="skillInput">Required Skills &amp; Competencies</Label>
+              <Label htmlFor="skillInput" className="text-xs font-semibold">
+                Key Skills &amp; Competencies
+              </Label>
               <div className="flex gap-2">
                 <Input
                   id="skillInput"
@@ -706,10 +676,16 @@ export function OpportunityForm({
                       addSkill();
                     }
                   }}
-                  placeholder="Type a skill and press Enter (e.g. Go, Java, Docker, Figma)..."
-                  className="bg-background text-xs"
+                  placeholder="Type a skill and press Enter (e.g. React, Python, Figma, SQL)..."
+                  className="rounded-xl bg-background text-xs"
                 />
-                <Button type="button" variant="outline" size="sm" onClick={addSkill}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addSkill}
+                  className="rounded-xl shrink-0"
+                >
                   <Plus className="size-4 mr-1" />
                   <span>Add</span>
                 </Button>
@@ -720,13 +696,13 @@ export function OpportunityForm({
                   {skills.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-xs font-medium"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium border border-border/50"
                     >
                       <span>{skill}</span>
                       <button
                         type="button"
                         onClick={() => removeSkill(skill)}
-                        className="text-muted-foreground hover:text-destructive"
+                        className="text-muted-foreground hover:text-destructive transition-colors ml-0.5"
                       >
                         <X className="size-3" />
                       </button>
@@ -737,56 +713,68 @@ export function OpportunityForm({
             </div>
           </div>
 
-          {/* Section 4: Application Routing */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-bold border-b border-border/50 pb-2 flex items-center gap-2">
-              <ExternalLink className="size-4 text-primary" />
-              <span>4. Job Website Link &amp; Contact</span>
-            </h3>
+          {/* Card 3: Application Link & Inquiries */}
+          <div className="rounded-3xl border border-border/70 bg-card p-6 sm:p-7 shadow-xs space-y-5">
+            <div className="flex items-center gap-3 pb-3 border-b border-border/50">
+              <div className="size-9 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
+                <ExternalLink className="size-4.5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Application Link &amp; Contact</h3>
+                <p className="text-xs text-muted-foreground">
+                  Where candidates should apply and an optional contact for questions.
+                </p>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="externalUrl">Job Application Website URL *</Label>
+                <Label htmlFor="externalUrl" className="text-xs font-semibold">
+                  Job Application Website URL *
+                </Label>
                 <Input
                   id="externalUrl"
                   {...register("externalUrl")}
                   placeholder="https://company.com/careers/apply/..."
-                  className="bg-background text-xs"
+                  className="rounded-xl bg-background text-xs"
                 />
                 {errors.externalUrl && (
                   <p className="text-xs text-destructive">{errors.externalUrl.message}</p>
                 )}
                 <p className="text-[11px] text-muted-foreground">
-                  Official career page, job portal, or application link for this opening.
+                  Direct careers portal link for students to submit their application.
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="contactEmail">Inquiry Contact Email</Label>
+                <Label htmlFor="contactEmail" className="text-xs font-semibold">
+                  Alumni Referral or Inquiry Email (Optional)
+                </Label>
                 <Input
                   id="contactEmail"
                   type="email"
                   {...register("contactEmail")}
-                  placeholder="recruiter@company.com"
-                  className="bg-background text-xs"
+                  placeholder="alumni@company.com"
+                  className="rounded-xl bg-background text-xs"
                 />
                 {errors.contactEmail && (
                   <p className="text-xs text-destructive">{errors.contactEmail.message}</p>
                 )}
                 <p className="text-[11px] text-muted-foreground">
-                  Optional email for students seeking alumni referral or clarification.
+                  Optional email if you're open to candidate inquiries or referrals.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-6 border-t border-border/60">
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
               disabled={isSubmitting}
               onClick={handleSubmit((data: CreateOpportunityInput) => onSubmit(data, false))}
+              className="rounded-full px-5 w-full sm:w-auto"
             >
               Save as Draft
             </Button>
@@ -795,10 +783,10 @@ export function OpportunityForm({
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit((data: CreateOpportunityInput) => onSubmit(data, true))}
-              className="gap-2"
+              className="rounded-full px-6 gap-2 w-full sm:w-auto font-semibold shadow-xs"
             >
-              <ShieldCheck className="size-4" />
-              <span>{isSubmitting ? "Submitting..." : "Submit for Institutional Verification"}</span>
+              <Send className="size-4" />
+              <span>{isSubmitting ? "Submitting..." : "Submit Opportunity"}</span>
             </Button>
           </div>
         </form>
