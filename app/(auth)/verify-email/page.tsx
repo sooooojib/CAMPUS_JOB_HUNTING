@@ -92,7 +92,7 @@ function VerifyEmailContent() {
   if (isVerifying) {
     return (
       <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 text-center space-y-4">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#EB5E28]/10 text-[#EB5E28]">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <Loader2 className="size-6 animate-spin" />
         </div>
         <h2 className="text-xl font-bold text-foreground">Verifying email address</h2>
@@ -118,7 +118,7 @@ function VerifyEmailContent() {
 
         <button
           onClick={() => router.push("/feed")}
-          className="w-full h-12 rounded-2xl bg-[#EB5E28] hover:bg-[#D84E1B] text-white font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>Proceed to Community Feed</span>
           <ArrowRight className="size-4" />
@@ -176,7 +176,7 @@ function VerifyEmailContent() {
             placeholder="Your University Email"
             required
             disabled={isResending}
-            className="w-full h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+            className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
         </div>
 
@@ -199,11 +199,11 @@ function VerifyEmailContent() {
         </button>
       </form>
 
-      <div className="text-center text-xs text-muted-foreground pt-5">
+      <div className="text-center text-xs text-muted-foreground pt-4">
         Ready to sign in?{" "}
         <Link
           href="/login"
-          className="font-semibold text-foreground hover:text-[#EB5E28] transition-colors underline underline-offset-4"
+          className="font-semibold text-foreground hover:text-primary transition-colors underline underline-offset-4"
         >
           Return to Login
         </Link>

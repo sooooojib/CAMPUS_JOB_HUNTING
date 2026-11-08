@@ -3,187 +3,144 @@
 import * as React from "react";
 
 /**
- * Minimalist editorial line-art illustration of a student on a pedestal with laptop
- * Faithfully styled after the reference design:
- * Warm yellow accent block, black line contours, laptop, and idea sparks.
+ * Campus & Academic Heritage Vector Illustration (Bottom-Left)
+ * Features university campus columns, a graduation cap, academic books, and stepping stones.
  */
-export function AuthStudentIllustration({ className = "" }: { className?: string }) {
+export function CampusCareerIllustrationLeft({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none select-none ${className}`}>
       <svg
-        viewBox="0 0 280 280"
+        viewBox="0 0 280 260"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto drop-shadow-xs"
         aria-hidden="true"
       >
-        {/* Background outline block with diagonal arrow */}
-        <rect
-          x="30"
-          y="150"
-          width="70"
-          height="70"
-          fill="none"
+        {/* University Classical Portico / Pillars */}
+        {/* Pediment triangle */}
+        <path
+          d="M30 90L95 55L160 90H30Z"
+          fill="currentColor"
+          className="text-primary/10 dark:text-primary/20"
           stroke="currentColor"
           strokeWidth="2"
-          className="text-foreground/80 dark:text-foreground/60"
         />
-        <path
-          d="M48 190L82 156M82 156H64M82 156V174"
+        {/* Architrave beam */}
+        <rect
+          x="26"
+          y="90"
+          width="138"
+          height="10"
+          rx="2"
+          fill="currentColor"
+          className="text-primary/15 dark:text-primary/25"
           stroke="currentColor"
           strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-foreground/80 dark:text-foreground/60"
         />
 
-        {/* Yellow main seating pedestal block */}
+        {/* 3 Classical Columns */}
+        {/* Column 1 */}
+        <rect x="36" y="100" width="16" height="85" fill="none" stroke="currentColor" strokeWidth="2" />
+        <line x1="44" y1="104" x2="44" y2="181" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        {/* Column 2 */}
+        <rect x="87" y="100" width="16" height="85" fill="none" stroke="currentColor" strokeWidth="2" />
+        <line x1="95" y1="104" x2="95" y2="181" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        {/* Column 3 */}
+        <rect x="138" y="100" width="16" height="85" fill="none" stroke="currentColor" strokeWidth="2" />
+        <line x1="146" y1="104" x2="146" y2="181" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+
+        {/* Column Base Foundation */}
         <rect
-          x="85"
-          y="140"
-          width="62"
-          height="80"
-          fill="#FAD980"
+          x="20"
+          y="185"
+          width="150"
+          height="14"
+          rx="2"
+          fill="currentColor"
+          className="text-primary/15 dark:text-primary/25"
           stroke="currentColor"
-          strokeWidth="2.5"
-          className="text-foreground"
+          strokeWidth="2"
         />
 
-        {/* Character legs & trousers */}
-        <path
-          d="M102 125C102 135 95 150 82 165C78 170 82 178 88 178C98 178 108 162 114 150L135 188C137 192 142 195 147 194C152 193 154 188 152 183L130 135"
+        {/* Stack of Academic Books in Front */}
+        {/* Book 1 (bottom) */}
+        <rect
+          x="145"
+          y="172"
+          width="60"
+          height="14"
+          rx="2"
           fill="#FAF9F5"
           stroke="currentColor"
           strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
           className="text-foreground"
         />
-
-        {/* Shoes */}
-        <path
-          d="M84 176C84 176 75 180 72 186C70 190 74 194 79 194C85 194 92 188 92 184L88 178"
-          fill="#1E293B"
+        {/* Book 2 (middle) */}
+        <rect
+          x="150"
+          y="158"
+          width="52"
+          height="14"
+          rx="2"
+          fill="currentColor"
+          className="text-primary/25 text-primary"
           stroke="currentColor"
           strokeWidth="2"
         />
-        <path
-          d="M148 192C148 192 146 198 143 203C141 206 145 209 149 209C155 209 161 201 160 196L154 191"
-          fill="#1E293B"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-
-        {/* Torso & patterned shirt */}
-        <path
-          d="M102 98C102 98 90 108 90 125C90 133 98 138 108 138C116 138 126 132 126 122C126 112 120 100 114 96"
-          fill="#1E1E24"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        {/* Subtle shirt pattern dots / strokes */}
-        <circle cx="98" cy="112" r="1.5" fill="#FAF9F5" />
-        <circle cx="106" cy="118" r="1.5" fill="#FAF9F5" />
-        <circle cx="114" cy="112" r="1.5" fill="#FAF9F5" />
-        <circle cx="102" cy="126" r="1.5" fill="#FAF9F5" />
-        <circle cx="112" cy="128" r="1.5" fill="#FAF9F5" />
-
-        {/* Arms holding laptop */}
-        <path
-          d="M112 108L126 120L144 116"
-          stroke="#FAF9F5"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M112 108L126 120L144 116"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-foreground"
-        />
-
-        {/* Orange Laptop */}
-        <path
-          d="M130 120L148 124"
-          stroke="#EB5E28"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M148 124L156 102"
-          stroke="#EB5E28"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-
-        {/* Neck & Head */}
-        <path
-          d="M112 95L114 86"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="text-foreground"
-        />
-        {/* Face profile facing right */}
-        <path
-          d="M112 86C112 86 118 86 120 84C122 82 123 76 118 72C112 68 106 72 106 78C106 84 112 86 112 86Z"
+        {/* Book 3 (top) */}
+        <rect
+          x="154"
+          y="144"
+          width="46"
+          height="14"
+          rx="2"
           fill="#FAF9F5"
           stroke="currentColor"
           strokeWidth="2"
           className="text-foreground"
         />
 
-        {/* Hair and bun */}
+        {/* Graduation Cap (Mortarboard) resting on books */}
         <path
-          d="M106 75C102 74 98 78 96 83C94 88 96 92 99 94C102 96 106 94 107 91C108 86 108 80 106 75Z"
-          fill="#1E1E24"
+          d="M177 122L208 132L177 142L146 132L177 122Z"
+          fill="currentColor"
+          className="text-primary"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinejoin="round"
         />
         <path
-          d="M96 80C92 78 88 80 87 84C86 88 88 91 92 91C95 91 97 88 96 80Z"
-          fill="#1E1E24"
+          d="M162 137V146C162 150 169 153 177 153C185 153 192 150 192 146V137"
+          fill="currentColor"
+          className="text-primary/80"
+          stroke="currentColor"
+          strokeWidth="2"
         />
+        {/* Tassel */}
+        <path
+          d="M177 132C182 135 186 142 186 148"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          className="text-amber-500"
+        />
+        <circle cx="186" cy="149" r="2" fill="#F59E0B" />
 
-        {/* Idea / sketch rays above head */}
-        <line
-          x1="102"
-          y1="56"
-          x2="96"
-          y2="46"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="text-foreground"
-        />
-        <line
-          x1="116"
-          y1="52"
-          x2="116"
-          y2="40"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="text-foreground"
-        />
-        <line
-          x1="128"
-          y1="58"
-          x2="136"
-          y2="48"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="text-foreground"
-        />
+        {/* Knowledge & Ideas Sparks */}
+        <line x1="177" y1="108" x2="177" y2="100" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-primary" />
+        <line x1="162" y1="112" x2="156" y2="106" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-primary" />
+        <line x1="192" y1="112" x2="198" y2="106" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-primary" />
+
+        {/* Stepping Stones / Path towards career hub */}
+        <ellipse cx="225" cy="192" rx="16" ry="6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" className="text-muted-foreground" />
+        <ellipse cx="255" cy="186" rx="14" ry="5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" className="text-muted-foreground" />
 
         {/* Base ground line */}
         <line
           x1="10"
-          y1="220"
-          x2="270"
-          y2="220"
+          y1="199"
+          x2="275"
+          y2="199"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
@@ -195,63 +152,117 @@ export function AuthStudentIllustration({ className = "" }: { className?: string
 }
 
 /**
- * Geometric architectural pedestals with warm yellow and crisp contour lines
- * Matches the bottom-right corner of the reference design.
+ * Career Growth & Professional Networking Vector Illustration (Bottom-Right)
+ * Features an upward career trajectory bar graph, professional briefcase, and verified networking nodes.
  */
-export function AuthPedestalIllustration({ className = "" }: { className?: string }) {
+export function CampusCareerIllustrationRight({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none select-none ${className}`}>
       <svg
-        viewBox="0 0 240 240"
+        viewBox="0 0 280 260"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto drop-shadow-xs"
         aria-hidden="true"
       >
-        {/* Soft background organic cloud/contour outline */}
-        <path
-          d="M60 120C50 110 50 90 65 80C80 70 105 75 115 85C125 70 150 70 160 85C170 100 160 120 150 130"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeDasharray="4 4"
-          className="text-foreground/30 dark:text-foreground/20"
-        />
-
-        {/* Shorter white pedestal block */}
+        {/* Career Growth Progression Bar Pedestals */}
+        {/* Bar 1 (Internship/Student tier) */}
         <rect
-          x="40"
-          y="110"
-          width="55"
-          height="110"
+          x="65"
+          y="145"
+          width="36"
+          height="54"
+          rx="2"
           fill="#FAF9F5"
           stroke="currentColor"
-          strokeWidth="2.5"
+          strokeWidth="2"
           className="text-foreground"
         />
 
-        {/* Taller warm golden yellow pedestal block */}
+        {/* Bar 2 (Graduation / Entry Level) */}
         <rect
-          x="95"
-          y="70"
-          width="60"
-          height="150"
-          fill="#FAD980"
+          x="115"
+          y="110"
+          width="36"
+          height="89"
+          rx="2"
+          fill="currentColor"
+          className="text-primary/20"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+
+        {/* Bar 3 (Alumni Leadership / Full Time) */}
+        <rect
+          x="165"
+          y="75"
+          width="38"
+          height="124"
+          rx="2"
+          fill="currentColor"
+          className="text-primary"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+
+        {/* Upward Career Trajectory Arrow Curve */}
+        <path
+          d="M50 160C85 140 120 100 185 55"
           stroke="currentColor"
           strokeWidth="2.5"
+          strokeLinecap="round"
+          className="text-primary"
+        />
+        {/* Arrow head */}
+        <path
+          d="M172 52L188 53L187 69"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-primary"
+        />
+
+        {/* Professional Briefcase beside graph */}
+        <rect
+          x="215"
+          y="148"
+          width="50"
+          height="36"
+          rx="4"
+          fill="#FAF9F5"
+          stroke="currentColor"
+          strokeWidth="2"
           className="text-foreground"
         />
+        {/* Briefcase handle */}
+        <path
+          d="M232 148V142C232 140 234 138 236 138H244C246 138 248 140 248 142V148"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        {/* Briefcase center latch */}
+        <rect x="237" y="160" width="6" height="5" rx="1" fill="currentColor" className="text-primary" />
+        <line x1="215" y1="162" x2="265" y2="162" stroke="currentColor" strokeWidth="1.5" />
+
+        {/* Network Connections & Mentorship Constellation Nodes */}
+        <circle cx="95" cy="65" r="4" fill="currentColor" className="text-primary" />
+        <circle cx="140" cy="45" r="5" fill="currentColor" className="text-primary" />
+        <circle cx="230" cy="85" r="4" fill="currentColor" className="text-primary" />
+        <line x1="95" y1="65" x2="140" y2="45" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" className="text-primary/60" />
+        <line x1="140" y1="45" x2="185" y2="55" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" className="text-primary/60" />
+        <line x1="185" y1="55" x2="230" y2="85" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" className="text-primary/60" />
 
         {/* Base ground line */}
         <line
-          x1="0"
-          y1="220"
-          x2="240"
-          y2="220"
+          x1="10"
+          y1="199"
+          x2="275"
+          y2="199"
           stroke="currentColor"
-          strokeWidth="2.5"
+          strokeWidth="2"
           strokeLinecap="round"
-          className="text-foreground"
+          className="text-foreground/70"
         />
       </svg>
     </div>

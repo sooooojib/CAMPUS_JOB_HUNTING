@@ -4,10 +4,8 @@ import * as React from "react";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { User, Mail, Lock, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, Briefcase } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { GoogleIcon } from "@/components/auth/google-icon";
-import { toast } from "sonner";
 
 function RegisterForm() {
   const router = useRouter();
@@ -89,62 +87,60 @@ function RegisterForm() {
     }
   };
 
-  const handleGoogleSignUp = () => {
-    toast.info("Connecting to Google Institutional Workspace identity provider...");
-  };
-
   return (
-    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 transition-all">
-      {/* Title block matching reference image */}
-      <div className="space-y-1 mb-5 text-left">
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-7 md:p-8 shadow-xl border border-black/5 dark:border-white/10 transition-all">
+      {/* Title block matching reference layout */}
+      <div className="space-y-0.5 mb-4 text-left">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
           <span>Lets</span>
           <br />
           <span>Start Learning</span>
         </h1>
-        <p className="text-xs sm:text-sm text-muted-foreground pt-1">
+        <p className="text-xs sm:text-sm text-muted-foreground pt-0.5">
           Please login or sign up to continue
         </p>
       </div>
 
-      {/* Role Selector Pill */}
-      <div className="mb-4">
+      {/* Role Selector Pill - Clean SVG Icons (No Emojis) */}
+      <div className="mb-3.5">
         <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#F4F3F1] dark:bg-slate-800/80 rounded-2xl border border-transparent">
           <button
             type="button"
             onClick={() => setMembershipType("STUDENT")}
-            className={`py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+            className={`py-1.5 px-2 text-xs font-semibold rounded-xl transition-all cursor-pointer inline-flex items-center justify-center gap-1.5 ${
               membershipType === "STUDENT"
-                ? "bg-white dark:bg-slate-900 text-[#EB5E28] shadow-xs"
+                ? "bg-white dark:bg-slate-900 text-primary shadow-xs"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            🎓 Current Student
+            <GraduationCap className="size-3.5 text-primary" />
+            <span>Current Student</span>
           </button>
           <button
             type="button"
             onClick={() => setMembershipType("ALUMNI")}
-            className={`py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+            className={`py-1.5 px-2 text-xs font-semibold rounded-xl transition-all cursor-pointer inline-flex items-center justify-center gap-1.5 ${
               membershipType === "ALUMNI"
-                ? "bg-white dark:bg-slate-900 text-[#EB5E28] shadow-xs"
+                ? "bg-white dark:bg-slate-900 text-primary shadow-xs"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            💼 Alumnus / Alumna
+            <Briefcase className="size-3.5 text-primary" />
+            <span>Alumnus / Alumna</span>
           </button>
         </div>
       </div>
 
       {/* Error alert */}
       {errorMessage && (
-        <div className="mb-4 flex items-start gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in-50">
+        <div className="mb-3 flex items-start gap-2 rounded-2xl border border-destructive/30 bg-destructive/10 p-2.5 text-xs text-destructive animate-in fade-in-50">
           <AlertCircle className="size-4 shrink-0 mt-0.5" />
           <div className="leading-relaxed">{errorMessage}</div>
         </div>
       )}
 
       {/* Form inputs */}
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-2.5">
         {/* Full Name */}
         <div className="relative">
           <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
@@ -159,7 +155,7 @@ function RegisterForm() {
             required
             disabled={isLoading}
             autoComplete="name"
-            className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+            className="w-full h-10 sm:h-11 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
         </div>
 
@@ -177,12 +173,12 @@ function RegisterForm() {
             required
             disabled={isLoading}
             autoComplete="email"
-            className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+            className="w-full h-10 sm:h-11 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
         </div>
 
-        {/* Passwords in 2 columns on small screens, or stacked */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        {/* Passwords in 2 columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div className="relative">
             <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
               <Lock className="size-4" />
@@ -196,13 +192,13 @@ function RegisterForm() {
               required
               disabled={isLoading}
               autoComplete="new-password"
-              className="w-full h-11 sm:h-12 pl-11 pr-9 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+              className="w-full h-10 sm:h-11 pl-11 pr-8 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
             </button>
@@ -221,20 +217,20 @@ function RegisterForm() {
               required
               disabled={isLoading}
               autoComplete="new-password"
-              className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+              className="w-full h-10 sm:h-11 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
             />
           </div>
         </div>
 
         {/* Honor code agreement */}
-        <div className="flex items-start gap-2 pt-1 px-1">
+        <div className="flex items-start gap-2 pt-0.5 px-1">
           <input
             type="checkbox"
             id="agreeTerms"
             checked={agreeTerms}
             onChange={(e) => setAgreeTerms(e.target.checked)}
             disabled={isLoading}
-            className="mt-0.5 rounded-md border-border text-[#EB5E28] focus:ring-[#EB5E28] size-3.5 cursor-pointer"
+            className="mt-0.5 rounded-md border-border text-primary focus:ring-primary size-3.5 cursor-pointer"
           />
           <label
             htmlFor="agreeTerms"
@@ -244,11 +240,11 @@ function RegisterForm() {
           </label>
         </div>
 
-        {/* Primary CTA: Orange Sign Up */}
+        {/* Primary CTA: Matches Site Primary Theme */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-2xl bg-[#EB5E28] hover:bg-[#D84E1B] text-white font-semibold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 cursor-pointer mt-2"
+          className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 cursor-pointer mt-1"
         >
           {isLoading ? (
             <>
@@ -259,25 +255,14 @@ function RegisterForm() {
             <span>Sign Up</span>
           )}
         </button>
-
-        {/* Secondary Google Button */}
-        <button
-          type="button"
-          onClick={handleGoogleSignUp}
-          disabled={isLoading}
-          className="w-full h-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-foreground font-medium text-sm transition-all flex items-center justify-center gap-2.5 shadow-2xs hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
-        >
-          <GoogleIcon className="size-4" />
-          <span>Google</span>
-        </button>
       </form>
 
       {/* Switch to Login link */}
-      <div className="text-center text-xs text-muted-foreground pt-5">
+      <div className="text-center text-xs text-muted-foreground pt-3.5">
         Already Have An Account?{" "}
         <Link
           href="/login"
-          className="font-semibold text-foreground hover:text-[#EB5E28] transition-colors underline underline-offset-4"
+          className="font-semibold text-foreground hover:text-primary transition-colors underline underline-offset-4"
         >
           Login
         </Link>
@@ -288,15 +273,15 @@ function RegisterForm() {
 
 function RegisterFormSkeleton() {
   return (
-    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-black/5 dark:border-white/10 animate-pulse">
-      <div className="h-8 w-44 bg-muted rounded-xl mb-2" />
-      <div className="h-4 w-60 bg-muted rounded-lg mb-5" />
-      <div className="h-10 bg-muted rounded-2xl mb-4" />
-      <div className="space-y-3">
-        <div className="h-11 bg-muted rounded-2xl" />
-        <div className="h-11 bg-muted rounded-2xl" />
-        <div className="h-11 bg-muted rounded-2xl" />
-        <div className="h-12 bg-muted rounded-2xl mt-4" />
+    <div className="w-full max-w-sm sm:max-w-md bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-7 md:p-8 shadow-xl border border-black/5 dark:border-white/10 animate-pulse">
+      <div className="h-7 w-40 bg-muted rounded-xl mb-2" />
+      <div className="h-4 w-56 bg-muted rounded-lg mb-4" />
+      <div className="h-9 bg-muted rounded-2xl mb-3" />
+      <div className="space-y-2.5">
+        <div className="h-10 bg-muted rounded-2xl" />
+        <div className="h-10 bg-muted rounded-2xl" />
+        <div className="h-10 bg-muted rounded-2xl" />
+        <div className="h-11 bg-muted rounded-2xl mt-2" />
       </div>
     </div>
   );

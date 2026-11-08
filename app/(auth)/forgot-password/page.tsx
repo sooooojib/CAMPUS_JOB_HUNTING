@@ -80,7 +80,7 @@ function ForgotPasswordForm() {
         <div className="pt-2 text-center text-xs">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 font-semibold text-[#EB5E28] hover:underline"
+            className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
           >
             <ArrowLeft className="size-3.5" />
             <span>Return to Login</span>
@@ -124,14 +124,14 @@ function ForgotPasswordForm() {
             required
             disabled={isLoading}
             autoComplete="email"
-            className="w-full h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-[#EB5E28] focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
+            className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-2xl bg-[#EB5E28] hover:bg-[#D84E1B] text-white font-semibold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 cursor-pointer mt-2"
+          className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 cursor-pointer mt-2"
         >
           {isLoading ? (
             <>
@@ -144,11 +144,11 @@ function ForgotPasswordForm() {
         </button>
       </form>
 
-      <div className="text-center text-xs text-muted-foreground pt-5">
+      <div className="text-center text-xs text-muted-foreground pt-4">
         Remembered your password?{" "}
         <Link
           href="/login"
-          className="font-semibold text-foreground hover:text-[#EB5E28] transition-colors underline underline-offset-4"
+          className="font-semibold text-foreground hover:text-primary transition-colors underline underline-offset-4"
         >
           Return to Login
         </Link>
