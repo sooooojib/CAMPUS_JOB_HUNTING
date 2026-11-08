@@ -11,7 +11,6 @@ import {
   Send,
   Sparkles,
   Users,
-  Filter,
   X,
   ExternalLink,
 } from "lucide-react";
@@ -20,13 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ConnectionButton, ConnectionState } from "@/components/community/connection-button";
 import { MemberDirectoryItem, MembershipType } from "@/types";
 
@@ -35,12 +27,8 @@ export function MemberDirectoryView() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Filters state
+  // Search by name state
   const [search, setSearch] = React.useState("");
-  const [membershipType, setMembershipType] = React.useState<string>("ALL");
-  const [department, setDepartment] = React.useState("");
-  const [company, setCompany] = React.useState("");
-  const [skill, setSkill] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
   const [totalCount, setTotalCount] = React.useState(0);
@@ -52,10 +40,6 @@ export function MemberDirectoryView() {
     try {
       const params = new URLSearchParams();
       if (search.trim()) params.set("q", search.trim());
-      if (membershipType !== "ALL") params.set("membershipType", membershipType);
-      if (department.trim()) params.set("department", department.trim());
-      if (company.trim()) params.set("company", company.trim());
-      if (skill.trim()) params.set("skill", skill.trim());
       params.set("page", String(page));
       params.set("pageSize", "12");
 
@@ -74,7 +58,7 @@ export function MemberDirectoryView() {
     } finally {
       setLoading(false);
     }
-  }, [search, membershipType, department, company, skill, page]);
+  }, [search, page]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -85,107 +69,35 @@ export function MemberDirectoryView() {
 
   const handleResetFilters = () => {
     setSearch("");
-    setMembershipType("ALL");
-    setDepartment("");
-    setCompany("");
-    setSkill("");
     setPage(1);
   };
 
-  const hasActiveFilters =
-    Boolean(search) ||
-    membershipType !== "ALL" ||
-    Boolean(department) ||
-    Boolean(company) ||
-    Boolean(skill);
+  const hasActiveFilters = Boolean(search.trim());
 
   return (
     <div className="space-y-6">
-      {/* Search & Filter Header Controls */}
+      {/* Search Header Controls */}
       <div className="space-y-3">
-        <div className="flex flex-col md:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Search directory by name, headline, bio, or role..."
-              className="pl-10 bg-card h-10 text-xs sm:text-sm"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Select
-              value={membershipType}
-              onValueChange={(val) => {
-                if (val) setMembershipType(val);
-                setPage(1);
-              }}
+        <div className="relative w-full">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            placeholder="Search directory by name..."
+            className="pl-10 pr-10 bg-card h-10 text-xs sm:text-sm"
+          />
+          {search && (
+            <button
+              onClick={handleResetFilters}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Clear search"
             >
-              <SelectTrigger className="w-[180px] bg-card h-10 text-xs">
-                <SelectValue placeholder="All Affiliations" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">All Roles</SelectItem>
-                <SelectItem value="STUDENT">Students</SelectItem>
-                <SelectItem value="ALUMNI">Alumni</SelectItem>
-                <SelectItem value="ADMIN">Admins</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Input
-              value={department}
-              onChange={(e) => {
-                setDepartment(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Dept (e.g. CSE)"
-              className="w-[130px] bg-card h-10 text-xs"
-            />
-
-            <Input
-              value={company}
-              onChange={(e) => {
-                setCompany(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Company"
-              className="w-[130px] bg-card h-10 text-xs"
-            />
-
-            <Input
-              value={skill}
-              onChange={(e) => {
-                setSkill(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Skill (e.g. Python)"
-              className="w-[140px] bg-card h-10 text-xs"
-            />
-
-            {hasActiveFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleResetFilters}
-                className="h-10 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <X className="size-3.5 mr-1" />
-                <span>Reset</span>
-              </Button>
-            )}
-          </div>
+              <X className="size-4" />
+            </button>
+          )}
         </div>
 
         {/* Directory Stats Bar */}
@@ -194,9 +106,19 @@ export function MemberDirectoryView() {
             <span className="font-semibold text-foreground">{totalCount}</span> verified university members found
           </div>
           {hasActiveFilters && (
-            <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-              Filters Active
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+                Search Active
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleResetFilters}
+                className="h-6 px-1.5 text-xs text-muted-foreground hover:text-foreground"
+              >
+                Clear
+              </Button>
+            </div>
           )}
         </div>
       </div>

@@ -391,14 +391,7 @@ export async function searchMemberDirectory(
 
   if (q) {
     andFilters.push({
-      OR: [
-        { name: { contains: q, mode: "insensitive" } },
-        { profile: { headline: { contains: q, mode: "insensitive" } } },
-        { profile: { bio: { contains: q, mode: "insensitive" } } },
-        { profile: { company: { contains: q, mode: "insensitive" } } },
-        { profile: { designation: { contains: q, mode: "insensitive" } } },
-        { profile: { department: { contains: q, mode: "insensitive" } } },
-      ],
+      name: { contains: q, mode: "insensitive" },
     });
   }
 

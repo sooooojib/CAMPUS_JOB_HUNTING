@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Menu, ShieldCheck } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Menu, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NotificationsPopover } from "./notifications-popover";
@@ -23,8 +22,8 @@ interface AppHeaderProps {
 export function AppHeader({ onToggleSidebar, user }: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/80 bg-background/80 px-4 backdrop-blur-md sm:px-6">
-      {/* Left: Mobile hamburger & Search bar */}
-      <div className="flex items-center gap-3 flex-1 max-w-md">
+      {/* Left: Mobile hamburger */}
+      <div className="flex items-center gap-3">
         {onToggleSidebar && (
           <Button
             variant="ghost"
@@ -36,17 +35,6 @@ export function AppHeader({ onToggleSidebar, user }: AppHeaderProps) {
             <Menu className="size-5" />
           </Button>
         )}
-
-        <div className="relative w-full max-w-sm hidden sm:block">
-          <Search className="absolute left-3 top-2.5 size-4 text-muted-foreground pointer-events-none" />
-          <Input
-            placeholder="Search opportunities, members, skills..."
-            className="h-9 pl-9 pr-12 text-xs bg-muted/40 border-border/60 focus-visible:bg-background"
-          />
-          <kbd className="absolute right-2.5 top-2.5 hidden h-4 select-none items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground sm:flex">
-            ⌘K
-          </kbd>
-        </div>
       </div>
 
       {/* Right: Network status badge, notifications, theme, user menu */}
