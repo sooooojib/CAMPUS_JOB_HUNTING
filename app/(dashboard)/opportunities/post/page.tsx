@@ -43,7 +43,12 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
     redirect("/login");
   }
 
-  const userCanPost = canPostOpportunity(user);
+  // Students cannot post opportunities; strictly redirect to opportunities browser
+  if (user.membershipType === "STUDENT" || !canPostOpportunity(user)) {
+    redirect("/opportunities");
+  }
+
+  const userCanPost = true;
   let managedCompanies: Array<{ id: string; name: string; logo?: string | null; location?: string | null }> = [];
   try {
     const memberships = await getUserCompanies(user.id);

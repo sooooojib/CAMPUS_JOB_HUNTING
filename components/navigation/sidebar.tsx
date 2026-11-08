@@ -127,8 +127,8 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       },
     ];
 
-    // For Admin, Alumni, or authorized posters: show Manage Postings
-    if (isAdmin || isAlumni || currentUser.canPostOpportunities) {
+    // Strictly for Admin and Alumni: show Manage Postings (students cannot post)
+    if (!isStudent && (isAdmin || isAlumni)) {
       items.push({
         title: "Manage Postings",
         href: "/opportunities/my",

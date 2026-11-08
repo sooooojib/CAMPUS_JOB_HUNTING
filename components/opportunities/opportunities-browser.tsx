@@ -76,7 +76,11 @@ const DEPARTMENTS = [
   "Microbiology",
 ];
 
-export function OpportunitiesBrowser() {
+interface OpportunitiesBrowserProps {
+  canPost?: boolean;
+}
+
+export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserProps) {
   const [opportunities, setOpportunities] = React.useState<OpportunityItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -245,22 +249,24 @@ export function OpportunitiesBrowser() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <Link
-            href="/opportunities/my"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            <span>My Postings</span>
-          </Link>
+        {canPost && (
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/opportunities/my"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <span>My Postings</span>
+            </Link>
 
-          <Link
-            href="/opportunities/post"
-            className={buttonVariants({ variant: "default", size: "sm" })}
-          >
-            <Plus className="size-4 mr-1.5" />
-            <span>Post Opportunity</span>
-          </Link>
-        </div>
+            <Link
+              href="/opportunities/post"
+              className={buttonVariants({ variant: "default", size: "sm" })}
+            >
+              <Plus className="size-4 mr-1.5" />
+              <span>Post Opportunity</span>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Primary Discovery Tabs: All vs Bookmarked */}
@@ -569,7 +575,7 @@ export function OpportunitiesBrowser() {
               <Button onClick={resetFilters} variant="outline" size="sm">
                 Clear all filters
               </Button>
-            ) : (
+            ) : canPost ? (
               <Link
                 href="/opportunities/post"
                 className={buttonVariants({ variant: "default", size: "sm" })}
@@ -577,7 +583,7 @@ export function OpportunitiesBrowser() {
                 <Plus className="size-4 mr-1.5" />
                 <span>Post the First Opportunity</span>
               </Link>
-            )
+            ) : null
           }
         />
       ) : (

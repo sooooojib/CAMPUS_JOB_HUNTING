@@ -59,13 +59,16 @@ export function canPostOpportunity(user?: UserPermissionContext | null): boolean
   // Must be verified by the institution
   if (!isVerifiedMember(user)) return false;
 
-  // If explicit permission flag is set
+  // If explicit permission flag is set (e.g. authorized ambassador)
   if (user.canPostOpportunities === true) return true;
 
   // Verified Alumni can post opportunities/job leads
   if (user.membershipType === "ALUMNI") {
     return true;
   }
+
+  // By default, students cannot post opportunities
+  return false;
 
   return false;
 }

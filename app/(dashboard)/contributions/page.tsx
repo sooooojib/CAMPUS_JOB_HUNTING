@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { Plus, MessageSquare, Award, Briefcase } from "lucide-react";
 import { DashboardTemplate } from "@/components/templates/dashboard-template";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -22,19 +25,41 @@ const SAMPLE_POSTED_OPPORTUNITIES = [
   },
 ];
 
-export default function ContributionsPage() {
+export default async function ContributionsPage() {
+  const reqHeaders = await headers();
+  const session = await auth.api.getSession({ headers: reqHeaders });
+
+  let canPost = false;
+  if (session?.user?.id) {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { membershipType: true, systemRole: true },
+    });
+    canPost = user?.systemRole === "ADMIN" || user?.membershipType === "ALUMNI";
+  }
+
   return (
     <DashboardTemplate
       title="My Contributions"
       subtitle="Track your community footprint, shared job leads, sponsored referrals, and discussions."
       actions={
-        <Link
-          href="/opportunities/post"
-          className={buttonVariants({ variant: "default", size: "sm" })}
-        >
-          <Plus className="size-4 mr-1.5" />
-          <span>Share Opportunity</span>
-        </Link>
+        canPost ? (
+          <Link
+            href="/opportunities/post"
+            className={buttonVariants({ variant: "default", size: "sm" })}
+          >
+            <Plus className="size-4 mr-1.5" />
+            <span>Share Opportunity</span>
+          </Link>
+        ) : (
+          <Link
+            href="/feed"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <MessageSquare className="size-4 mr-1.5" />
+            <span>Join Community Discussion</span>
+          </Link>
+        )
       }
       metrics={
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

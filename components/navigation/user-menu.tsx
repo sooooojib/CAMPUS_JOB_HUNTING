@@ -51,7 +51,7 @@ export function UserMenu({
   };
 
   const isAdmin = currentUser.systemRole === "ADMIN";
-  const isEmployer = currentUser.membershipType === "EMPLOYER" || currentUser.membershipType === "EXTERNAL_CONNECTION";
+  const isPoster = currentUser.systemRole === "ADMIN" || currentUser.membershipType === "ALUMNI";
 
   const initials = currentUser.name
     .split(" ")
@@ -139,7 +139,7 @@ export function UserMenu({
             </DropdownMenuItem>
           )}
 
-          {isEmployer ? (
+          {isPoster ? (
             <DropdownMenuItem className="p-0">
               <Link href="/opportunities/my" className="flex items-center w-full px-2 py-1.5 gap-2 text-xs">
                 <FileText className="size-3.5 text-muted-foreground" />
