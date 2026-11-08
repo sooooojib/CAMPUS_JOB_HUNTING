@@ -142,9 +142,6 @@ export function MyOpportunitiesView() {
   const TABS = [
     { key: "ALL", label: "All Postings", count: counts.ALL },
     { key: "APPROVED", label: "Active", count: counts.APPROVED },
-    { key: "PENDING", label: "In Review", count: counts.PENDING },
-    { key: "DRAFT", label: "Drafts", count: counts.DRAFT },
-    { key: "REJECTED", label: "Revision Needed", count: counts.REJECTED },
     { key: "CLOSED", label: "Closed", count: counts.CLOSED },
     { key: "EXPIRED", label: "Expired", count: counts.EXPIRED },
   ];
@@ -260,12 +257,6 @@ export function MyOpportunitiesView() {
                       <Badge variant="outline" className="text-xs font-normal">
                         {opp.type.replace("_", " ")}
                       </Badge>
-
-                      <span className="text-xs text-muted-foreground font-mono">
-                        {opp.sourceType === "OFFICIAL_EMPLOYER"
-                          ? "Official Employer"
-                          : "Community Shared"}
-                      </span>
                     </div>
 
                     <h3 className="text-lg font-bold text-foreground">
@@ -299,17 +290,6 @@ export function MyOpportunitiesView() {
 
                   {/* Actions Bar */}
                   <div className="flex flex-wrap items-center gap-2 shrink-0">
-                    {/* Manage Applicants for Official Employer posts */}
-                    {opp.sourceType === "OFFICIAL_EMPLOYER" && (isApproved || isClosed) && (
-                      <Link
-                        href={`/opportunities/${opp.id}/applicants`}
-                        className={buttonVariants({ variant: "default", size: "sm" })}
-                      >
-                        <Users className="size-3.5 mr-1" />
-                        <span>Applicants</span>
-                      </Link>
-                    )}
-
                     {/* View Live */}
                     {(isApproved || isClosed || isExpired) && (
                       <Link

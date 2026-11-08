@@ -145,26 +145,26 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
       icon: Users,
     });
 
-    // Applications: Students and Alumni
-    items.push({
-      title: "My Applications",
-      href: "/applications",
-      icon: FileText,
-    });
+    // Applications, Career Calendar, and Contributions: for Students & Alumni only (not for Admin)
+    if (!isAdmin) {
+      items.push({
+        title: "My Applications",
+        href: "/applications",
+        icon: FileText,
+      });
 
-    // Career Calendar (for everyone)
-    items.push({
-      title: "Career Calendar",
-      href: "/calendar",
-      icon: Calendar,
-    });
+      items.push({
+        title: "Career Calendar",
+        href: "/calendar",
+        icon: Calendar,
+      });
 
-    // My Contributions (Discussions, Posts)
-    items.push({
-      title: "My Contributions",
-      href: "/contributions",
-      icon: Share2,
-    });
+      items.push({
+        title: "My Contributions",
+        href: "/contributions",
+        icon: Share2,
+      });
+    }
 
     return items;
   }, [isAdmin, isStudent, isAlumni, currentUser.canPostOpportunities]);
@@ -336,30 +336,32 @@ export function AppSidebar({ className, onNavigate, user: propUser }: AppSidebar
               </div>
             </Link>
 
-            <Link
-              href="/onboarding"
-              onClick={onNavigate}
-              className={cn(
-                "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
-                pathname.startsWith("/onboarding")
-                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 font-bold"
-                  : "text-sidebar-foreground/75 hover:bg-muted/70 hover:text-sidebar-foreground hover:translate-x-0.5"
-              )}
-            >
-              <div className="flex items-center gap-2.5">
-                <div
-                  className={cn(
-                    "flex size-7 items-center justify-center rounded-xl transition-colors",
-                    pathname.startsWith("/onboarding")
-                      ? "bg-primary-foreground/20 text-primary-foreground"
-                      : "bg-muted/50 text-muted-foreground group-hover:bg-background group-hover:text-foreground"
-                  )}
-                >
-                  <GraduationCap className="size-3.5 shrink-0" />
+            {!isAdmin && (
+              <Link
+                href="/onboarding"
+                onClick={onNavigate}
+                className={cn(
+                  "group flex items-center justify-between rounded-2xl px-3 py-2 text-xs font-semibold transition-all duration-150",
+                  pathname.startsWith("/onboarding")
+                    ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 font-bold"
+                    : "text-sidebar-foreground/75 hover:bg-muted/70 hover:text-sidebar-foreground hover:translate-x-0.5"
+                )}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={cn(
+                      "flex size-7 items-center justify-center rounded-xl transition-colors",
+                      pathname.startsWith("/onboarding")
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-muted/50 text-muted-foreground group-hover:bg-background group-hover:text-foreground"
+                    )}
+                  >
+                    <GraduationCap className="size-3.5 shrink-0" />
+                  </div>
+                  <span>Academic Verification</span>
                 </div>
-                <span>Academic Verification</span>
-              </div>
-            </Link>
+              </Link>
+            )}
 
             <button
               type="button"
