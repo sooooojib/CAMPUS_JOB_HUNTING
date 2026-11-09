@@ -146,7 +146,7 @@ export function CommunityFeedView({
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
-              placeholder="Search community discussions, advice, topics, or #tags..."
+              placeholder="Search community discussions, advice, or career topics..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-4 bg-card text-xs sm:text-sm rounded-2xl h-11 border-border/60 shadow-xs focus:ring-2 focus:ring-primary/20"
@@ -229,7 +229,7 @@ export function CommunityFeedView({
               activeTab === "BOOKMARKED"
                 ? "Bookmark discussions, career advice, and referral leads to reference them anytime."
                 : debouncedSearch
-                  ? `No posts matched your search for "${debouncedSearch}". Try a different keyword or topic tag.`
+                  ? `No posts matched your search for "${debouncedSearch}". Try a different keyword or topic.`
                   : "Be the first to share career insights, ask questions, or announce campus opportunities."
             }
           />

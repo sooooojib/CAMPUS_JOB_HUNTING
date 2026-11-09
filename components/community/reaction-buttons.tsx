@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ThumbsUp, Lightbulb, Heart, PartyPopper } from "lucide-react";
+import { ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ReactionType } from "@/types";
@@ -50,9 +50,6 @@ export function ReactionButtons({
 
   const items: { type: ReactionType; icon: React.ElementType; label: string; activeColor: string }[] = [
     { type: "LIKE", icon: ThumbsUp, label: "Like", activeColor: "text-blue-600 dark:text-blue-400" },
-    { type: "INSIGHTFUL", icon: Lightbulb, label: "Insightful", activeColor: "text-amber-600 dark:text-amber-400" },
-    { type: "SUPPORT", icon: Heart, label: "Support", activeColor: "text-rose-600 dark:text-rose-400" },
-    { type: "CELEBRATE", icon: PartyPopper, label: "Celebrate", activeColor: "text-emerald-600 dark:text-emerald-400" },
   ];
 
   return (

@@ -390,6 +390,7 @@ export async function getUserApplications(userId: string, statusFilter?: string)
             workplaceType: true,
             deadline: true,
             status: true,
+            externalUrl: true,
           },
         },
         resume: {

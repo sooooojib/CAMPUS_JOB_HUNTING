@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Eye,
   XCircle,
+  Trash2,
   History,
   CheckCircle2,
   Loader2,
@@ -56,6 +57,7 @@ interface ApplicationItem {
     workplaceType: string;
     deadline: string;
     status: string;
+    externalUrl?: string | null;
   };
   resumeId?: string | null;
   resumeFileName?: string | null;
@@ -153,6 +155,32 @@ export function MyApplicationsView() {
       toast.error(err.message || "Could not withdraw application.");
     } finally {
       setWithdrawing(false);
+    }
+  };
+
+  const handleRemove = async (appId: string, companyName: string) => {
+    if (!confirm(`Are you sure you want to remove your application record for ${companyName}?`)) return;
+    try {
+      const res = await fetch(`/api/applications/${appId}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        // Fallback to withdraw API
+        const withdrawRes = await fetch(`/api/applications/${appId}/withdraw`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reason: "Removed from dashboard by member" }),
+        });
+        const withdrawJson = await withdrawRes.json();
+        if (!withdrawRes.ok || !withdrawJson.success) {
+          throw new Error(json.error || withdrawJson.error || "Failed to remove application.");
+        }
+      }
+      toast.success(`Application for ${companyName} removed.`);
+      fetchApplications(activeTab);
+    } catch (err: any) {
+      toast.error(err.message || "Could not remove application.");
     }
   };
 
@@ -255,30 +283,25 @@ export function MyApplicationsView() {
                 <TableHead className="py-3.5 px-5 font-semibold text-xs text-muted-foreground">Opportunity &amp; Company</TableHead>
                 <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Applied Date</TableHead>
                 <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Deadline</TableHead>
-                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Submitted Resume</TableHead>
-                <TableHead className="py-3.5 px-4 font-semibold text-xs text-muted-foreground">Status</TableHead>
                 <TableHead className="py-3.5 px-5 text-right font-semibold text-xs text-muted-foreground">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredApplications.map((app) => {
-                const latestHistory = app.statusHistory[0];
-                const canWithdraw =
-                  app.status !== "WITHDRAWN" &&
-                  app.status !== "SELECTED" &&
-                  app.status !== "REJECTED";
-
+                const targetUrl = app.opportunity.externalUrl || `/opportunities/${app.opportunityId}`;
                 return (
                   <TableRow key={app.id} className="hover:bg-muted/20 transition-colors border-b border-border/40 last:border-b-0">
                     <TableCell className="py-4 px-5 align-middle">
                       <div className="space-y-1.5">
-                        <Link
-                          href={`/opportunities/${app.opportunityId}`}
-                          className="font-bold text-foreground hover:text-primary hover:underline text-sm leading-snug flex items-center gap-1.5"
+                        <a
+                          href={targetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-foreground hover:text-primary hover:underline text-sm leading-snug inline-flex items-center gap-1.5"
                         >
                           <span>{app.opportunity.title}</span>
                           <ExternalLink className="size-3 text-muted-foreground shrink-0" />
-                        </Link>
+                        </a>
                         <div className="text-xs text-muted-foreground flex flex-wrap items-center gap-2">
                           <span className="font-semibold text-foreground/80 flex items-center gap-1">
                             <Building2 className="size-3 text-muted-foreground shrink-0" />
@@ -286,7 +309,7 @@ export function MyApplicationsView() {
                           </span>
                           <span className="text-border">•</span>
                           <span className="font-mono text-[11px]">{app.opportunity.type}</span>
-                          {app.method === "EXTERNAL" && (
+                          {Boolean(app.opportunity.externalUrl || app.method === "EXTERNAL") && (
                             <Badge variant="outline" className="text-[10px] py-0 px-1.5 font-mono rounded-full">
                               External Portal
                             </Badge>
@@ -309,63 +332,16 @@ export function MyApplicationsView() {
                       </div>
                     </TableCell>
 
-                    <TableCell className="py-4 px-4 align-middle text-xs">
-                      {app.resume ? (
-                        <a
-                          href={`/api/resumes/${app.resume.id}/download`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-primary hover:underline font-medium text-xs bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 transition-colors"
-                        >
-                          <FileText className="size-3.5" />
-                          <span className="max-w-[140px] truncate">{app.resume.fileName}</span>
-                          <Download className="size-3 text-primary/70 shrink-0" />
-                        </a>
-                      ) : (
-                        <span className="text-muted-foreground text-xs italic">
-                          {app.method === "EXTERNAL" ? "Submitted via External Portal" : "None"}
-                        </span>
-                      )}
-                    </TableCell>
-
-                    <TableCell className="py-4 px-4 align-middle">
-                      <div className="space-y-1">
-                        <ApplicationStatusBadge status={app.status as any} className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold" />
-                        {latestHistory?.note && (
-                          <p className="text-[10px] text-muted-foreground line-clamp-1 max-w-[180px]">
-                            {latestHistory.note}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-
                     <TableCell className="py-4 px-5 align-middle text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedApp(app)}
-                          className="h-8 px-3 text-xs gap-1.5 text-foreground/80 hover:text-foreground rounded-full hover:bg-muted/60"
-                        >
-                          <Eye className="size-3.5" />
-                          <span>Details</span>
-                        </Button>
-
-                        {canWithdraw && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setAppToWithdraw(app);
-                              setWithdrawReason("");
-                            }}
-                            className="h-8 px-3 text-xs gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
-                          >
-                            <XCircle className="size-3.5" />
-                            <span>Withdraw</span>
-                          </Button>
-                        )}
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemove(app.id, app.opportunity.companyName)}
+                        className="h-8 px-3 text-xs gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
+                      >
+                        <Trash2 className="size-3.5" />
+                        <span>Remove</span>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

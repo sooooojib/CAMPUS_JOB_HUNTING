@@ -881,16 +881,17 @@ async function main() {
 
       await prisma.postReaction.upsert({
         where: {
-          postId_userId: {
+          postId_userId_type: {
             postId,
             userId: reactorId,
+            type: "LIKE",
           },
         },
-        update: { reactionType: "LIKE" },
+        update: {},
         create: {
           postId,
           userId: reactorId,
-          reactionType: "LIKE",
+          type: "LIKE",
         },
       }).catch(() => {});
     }
@@ -910,3 +911,4 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+

@@ -371,21 +371,6 @@ export function FeedPostCard({
           </div>
         )}
 
-        {/* Tags */}
-        {tags && tags.length > 0 && (
-          <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            {tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="outline"
-                className="text-[11px] py-0.5 px-2.5 font-mono text-muted-foreground hover:text-foreground rounded-full border-border/60 bg-muted/40"
-              >
-                #{tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-
         {/* Attached Opportunity Card */}
         {attachedOpportunity && (
           <Link

@@ -70,6 +70,7 @@ export default async function SettingsPage() {
             headline: user.profile?.headline,
             bio: user.profile?.bio,
             department: user.profile?.department,
+            studentId: user.profile?.studentId,
             company: user.profile?.company,
             designation: user.profile?.designation,
             graduationYear: user.profile?.graduationYear,

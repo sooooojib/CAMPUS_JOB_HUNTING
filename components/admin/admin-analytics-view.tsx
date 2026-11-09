@@ -259,7 +259,7 @@ export function AdminAnalyticsView() {
       </div>
 
       {/* 1. High-Density Institutional KPI Ribbon */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Metric 1: Talent Pool */}
         <div className="p-4 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
@@ -300,27 +300,7 @@ export function AdminAnalyticsView() {
           </div>
         </div>
 
-        {/* Metric 3: Application Conversion */}
-        <div className="p-4 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-              Conversion Rate
-            </span>
-            <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <TrendingUp className="size-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-black font-mono tracking-tight text-foreground">
-              {kpi.interviewRate}%
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              {kpi.interviewCount} shortlisted / interviewed
-            </p>
-          </div>
-        </div>
-
-        {/* Metric 4: Corporate Partners */}
+        {/* Metric 3: Corporate Partners */}
         <div className="p-4 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">

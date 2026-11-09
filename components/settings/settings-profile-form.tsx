@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Save, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Save, CheckCircle2, AlertCircle, Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +16,7 @@ interface SettingsProfileFormProps {
     headline?: string | null;
     bio?: string | null;
     department?: string | null;
+    studentId?: string | null;
     company?: string | null;
     designation?: string | null;
     graduationYear?: number | null;
@@ -29,7 +30,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
   const [name, setName] = React.useState(user.name);
   const [headline, setHeadline] = React.useState(user.headline || "");
   const [bio, setBio] = React.useState(user.bio || "");
-  const [department, setDepartment] = React.useState(user.department || "");
+  const department = user.department || "";
   const [company, setCompany] = React.useState(user.company || "");
   const [designation, setDesignation] = React.useState(user.designation || "");
   const [showEmail, setShowEmail] = React.useState(user.showEmail ?? false);
@@ -59,7 +60,6 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
           name,
           headline: headline.trim() || undefined,
           bio: bio.trim() || undefined,
-          department: department.trim() || undefined,
           company: company.trim() || undefined,
           designation: designation.trim() || undefined,
           showEmail,
@@ -155,13 +155,43 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {!isEmployer && (
             <div className="space-y-1.5">
-              <Label htmlFor="department">Academic Department</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="department">Academic Department</Label>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-muted-foreground bg-muted/80 px-2 py-0.5 rounded-md">
+                  <Lock className="size-2.5 text-muted-foreground" />
+                  <span>Locked</span>
+                </span>
+              </div>
               <Input
                 id="department"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                placeholder="e.g. Computer Science & Engineering"
+                value={department || "Computer Science & Engineering"}
+                disabled
+                className="bg-muted/50 cursor-not-allowed font-medium text-foreground/80"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Locked from university registration records.
+              </p>
+            </div>
+          )}
+
+          {Boolean(user.studentId) && (
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="studentId">University ID / Student ID</Label>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-muted-foreground bg-muted/80 px-2 py-0.5 rounded-md">
+                  <Lock className="size-2.5 text-muted-foreground" />
+                  <span>Locked</span>
+                </span>
+              </div>
+              <Input
+                id="studentId"
+                value={user.studentId || ""}
+                disabled
+                className="bg-muted/50 cursor-not-allowed font-mono text-foreground/80"
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Locked from official university verification records.
+              </p>
             </div>
           )}
 

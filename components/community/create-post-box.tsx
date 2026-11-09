@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
   Send,
-  Tag,
   Briefcase,
   HelpCircle,
   Sparkles,
@@ -12,7 +11,6 @@ import {
   AlertCircle,
   Loader2,
   X,
-  Plus,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -68,29 +66,8 @@ export function CreatePostBox({
   const [content, setContent] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [postType, setPostType] = React.useState<PostType>("GENERAL_DISCUSSION");
-  const [tagInput, setTagInput] = React.useState("");
-  const [tags, setTags] = React.useState<string[]>([]);
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  function handleAddTag() {
-    const trimmed = tagInput.trim().replace(/^#/, "");
-    if (!trimmed) return;
-    if (tags.includes(trimmed)) {
-      setTagInput("");
-      return;
-    }
-    if (tags.length >= 5) {
-      toast.error("Maximum 5 tags allowed");
-      return;
-    }
-    setTags((prev) => [...prev, trimmed]);
-    setTagInput("");
-  }
-
-  function handleRemoveTag(tagToRemove: string) {
-    setTags((prev) => prev.filter((t) => t !== tagToRemove));
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,7 +85,7 @@ export function CreatePostBox({
           title: title.trim() || undefined,
           content: content.trim(),
           postType,
-          tags,
+          tags: [],
         }),
       });
 
@@ -120,8 +97,6 @@ export function CreatePostBox({
       toast.success("Post published to community feed!");
       setContent("");
       setTitle("");
-      setTags([]);
-      setTagInput("");
       setIsExpanded(false);
 
       if (onPostCreated) {
@@ -212,60 +187,6 @@ export function CreatePostBox({
                 </div>
               </div>
 
-              {/* Tags Input */}
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-1">
-                    <Tag className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
-                    <Input
-                      placeholder="Add tag (e.g. 'Stripe', 'FullStack', 'Internship') and press Add..."
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleAddTag();
-                        }
-                      }}
-                      className="pl-7 h-7 text-xs bg-background"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="xs"
-                    onClick={handleAddTag}
-                    disabled={!tagInput.trim() || tags.length >= 5}
-                    className="h-7 px-2"
-                  >
-                    <Plus className="size-3 mr-1" />
-                    Add Tag
-                  </Button>
-                </div>
-
-                {/* Tag Pills */}
-                {tags.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                    {tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="text-[10px] pl-2 pr-1 py-0.5 gap-1 font-mono"
-                      >
-                        <span>#{tag}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveTag(tag)}
-                          className="hover:text-destructive transition-colors"
-                        >
-                          <X className="size-2.5" />
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-
               {/* Footer Controls */}
               <div className="flex items-center justify-between pt-1">
                 <span className="text-[11px] text-muted-foreground">
@@ -281,7 +202,6 @@ export function CreatePostBox({
                       setIsExpanded(false);
                       setContent("");
                       setTitle("");
-                      setTags([]);
                     }}
                     disabled={isSubmitting}
                   >

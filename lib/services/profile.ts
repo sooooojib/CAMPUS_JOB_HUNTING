@@ -164,7 +164,10 @@ export async function getPublicProfile(
  * Updates an existing member profile.
  */
 export async function upsertProfile(userId: string, data: UpdateProfileInput) {
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { profile: true },
+  });
   if (!user) throw new Error("USER_NOT_FOUND");
 
   if (data.name || data.image !== undefined) {
@@ -180,8 +183,9 @@ export async function upsertProfile(userId: string, data: UpdateProfileInput) {
   const profileData: any = {
     ...(data.headline !== undefined ? { headline: data.headline } : {}),
     ...(data.bio !== undefined ? { bio: data.bio } : {}),
-    ...(data.department !== undefined ? { department: data.department } : {}),
-    ...(data.studentId !== undefined ? { studentId: data.studentId } : {}),
+    // Department & studentId are locked from university registration records once set
+    ...(data.department !== undefined ? (user.profile?.department ? {} : { department: data.department }) : {}),
+    ...(data.studentId !== undefined ? (user.profile?.studentId ? {} : { studentId: data.studentId }) : {}),
     ...(data.academicYear !== undefined ? { academicYear: data.academicYear } : {}),
     ...(data.graduationYear !== undefined ? { graduationYear: data.graduationYear } : {}),
     ...(data.degree !== undefined ? { degree: data.degree } : {}),
