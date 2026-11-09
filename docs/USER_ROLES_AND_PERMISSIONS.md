@@ -52,8 +52,9 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
 | Platform Capability | Unauthenticated | Registered (Unverified Email) | Email Verified (`MEMBER`) | Verified `STUDENT` | Verified `ALUMNI` / `STAFF` | Verified `EMPLOYER` | Platform `ADMIN` |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **View Marketing & Info Pages** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Register / Sign In / Password Reset** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Access Dashboard & Protected Shell** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Register / Request Password Reset** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Sign In with Credentials** | ❌ | ❌ (Verification Link Required) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Access Dashboard & Protected Shell** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Submit Verification Dossier (/onboarding)** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Resubmit Rejected Verification** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Edit Profile Info & Privacy Controls** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -67,6 +68,7 @@ UniCareer Community uses a **Single Unified Account Architecture**. Users posses
 | **Browse Community Feed & Posts** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | **Access Student Tools (CGPA, Gaps)** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ✅ (Audit) |
 | **Approve / Reject Member Verifications** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Verify / Revoke Student CGPA** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Access Admin Center (`/admin`)** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ---

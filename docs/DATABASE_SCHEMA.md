@@ -1,12 +1,12 @@
 # UniCareer Community — Database Schema Specification
 
-> **Architectural Status**: Stage 14 (Final Testing, Security, Responsiveness, and Optimization) Complete  
+> **Architectural Status**: Stage 14 Complete & Production Verified (Live on Vercel)  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `ProfileSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification` (All 27 Models Verified)
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `MemberSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CareerCalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification` (All 30 Prisma Models Verified)
 
 ---
 
-## 1. Active Stage 6 Entity Relationships
+## 1. Active Entity Relationship Model
 
 ```mermaid
 erDiagram
@@ -51,6 +51,8 @@ erDiagram
         string academicYear
         int graduationYear
         string degree
+        float currentCgpa
+        boolean isCgpaVerified
         string company
         string designation
         string[] skills
@@ -175,6 +177,58 @@ erDiagram
 | `verifiedBy` | `VARCHAR(30)` | `NULLABLE` | Admin user ID who validated credentials |
 | `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Account creation timestamp |
 | `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modified timestamp |
+
+### `profiles` (Stage 5 Implemented)
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique profile identifier |
+| `userId` | `VARCHAR(30)` | `NOT NULL`, `UNIQUE`, `FK` | References `users(id)` ON DELETE CASCADE |
+| `headline` | `VARCHAR(150)` | `NULLABLE` | Professional headline |
+| `bio` | `TEXT` | `NULLABLE` | Personal biography and career summary |
+| `department` | `VARCHAR(100)` | `NULLABLE` | Academic department affiliation |
+| `studentId` | `VARCHAR(50)` | `NULLABLE`, `PRIVATE` | Student institutional ID (Visible only to self & Admin) |
+| `academicYear` | `VARCHAR(50)` | `NULLABLE` | Year standing (e.g. 3rd Year) |
+| `graduationYear` | `INTEGER` | `NULLABLE` | Expected or actual graduation year |
+| `degree` | `VARCHAR(100)` | `NULLABLE` | Academic degree (B.Sc., M.Sc., MBA) |
+| `currentCgpa` | `DOUBLE PRECISION` | `NULLABLE` | Cached cumulative CGPA calculated from academic records |
+| `is_cgpa_verified` | `BOOLEAN` | `DEFAULT false` | Verified by Platform Admin |
+| `company` | `VARCHAR(100)` | `NULLABLE` | Current employer name |
+| `designation` | `VARCHAR(100)` | `NULLABLE` | Current job designation or role |
+| `skills` | `TEXT[]` | `DEFAULT '{}'` | Array of technical and professional skills |
+| `interests` | `TEXT[]` | `DEFAULT '{}'` | Array of career and research interests |
+| `projects` | `JSONB` | `NULLABLE` | Structured array of project objects |
+| `experience` | `JSONB` | `NULLABLE` | Structured array of work experience objects |
+| `linkedinUrl` | `TEXT` | `NULLABLE` | LinkedIn profile URL |
+| `githubUrl` | `TEXT` | `NULLABLE` | GitHub profile URL |
+| `websiteUrl` | `TEXT` | `NULLABLE` | Portfolio or personal website URL |
+| `phone` | `VARCHAR(30)` | `NULLABLE`, `PRIVATE` | Private phone number (Visible only to self & Admin) |
+| `showEmail` | `BOOLEAN` | `DEFAULT false` | Whether to display email on public directory |
+| `isOnboarded` | `BOOLEAN` | `DEFAULT false` | Completed onboarding credentials flow |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Record creation timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
+
+### `membership_requests` (Stage 5 Implemented)
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique request identifier |
+| `userId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Submitting member referencing `users(id)` |
+| `membershipType` | `MembershipType` | `NOT NULL` | Requested membership type claim |
+| `status` | `VerificationRequestStatus` | `DEFAULT PENDING` | `PENDING`, `APPROVED`, `REJECTED` |
+| `institutionalId` | `VARCHAR(50)` | `NULLABLE`, `PRIVATE` | Claimed university ID / Roll |
+| `department` | `VARCHAR(100)` | `NULLABLE` | Academic department claim |
+| `academicYear` | `VARCHAR(50)` | `NULLABLE` | Academic standing claim |
+| `graduationYear` | `INTEGER` | `NULLABLE` | Claimed graduation year |
+| `organization` | `VARCHAR(100)` | `NULLABLE` | Employer organization claim |
+| `designation` | `VARCHAR(100)` | `NULLABLE` | Professional title claim |
+| `workEmail` | `VARCHAR(255)` | `NULLABLE` | Institutional / corporate email claim |
+| `connectionNote` | `TEXT` | `NULLABLE` | Statement of institutional affiliation |
+| `proofDetails` | `TEXT` | `NULLABLE`, `PRIVATE` | Text evidence or claim justification |
+| `proofDocumentUrl`| `TEXT` | `NULLABLE`, `PRIVATE` | Uploaded document URL for verification |
+| `reviewerId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Admin user who reviewed request |
+| `rejectionReason` | `TEXT` | `NULLABLE` | Mandatory feedback when rejected |
+| `reviewedAt` | `TIMESTAMPTZ` | `NULLABLE` | Timestamp of administrative review |
+| `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Submission timestamp |
+| `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
 
 ### `companies`
 | Column | Type | Constraints | Description |

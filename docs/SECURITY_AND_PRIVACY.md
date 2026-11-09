@@ -17,6 +17,10 @@
 4. **Two-Layer Route Enforcement**:
    - **Layer 1 (Network Edge / Proxy)**: `proxy.ts` rejects unauthenticated requests to protected paths (`/dashboard`, `/opportunities`, `/community`, etc.) with a 307 redirect preserving the target `callbackUrl`.
    - **Layer 2 (Server Component Runtime)**: `app/(dashboard)/layout.tsx` validates session authenticity against PostgreSQL on the server and blocks `SUSPENDED` or `DEACTIVATED` accounts.
+5. **Mandatory Pre-Authentication Email Verification Gate**:
+   - Better Auth is configured with `emailAndPassword.requireEmailVerification: true` and `autoSignIn: false`.
+   - Unverified accounts (`emailVerified: false`) are strictly prohibited from creating sessions or signing in.
+   - Any login attempt with unverified credentials triggers an immediate server-side HTTP 403 `EMAIL_NOT_VERIFIED` rejection, guaranteeing that no member can access platform features without clicking the cryptographic verification link dispatched to their university inbox.
 
 ---
 

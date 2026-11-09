@@ -22,11 +22,14 @@
 - **Current Behavior**: Rate limits are enforced in-memory per Node process. In multi-instance serverless deployments with hundreds of concurrent lambda containers, counters are local to each container instance.
 - **Mitigation / Next Step**: For ultra-high concurrency distributed multi-region fleets, connect the sliding-window limiter to a shared Redis / Upstash cluster via `@upstash/ratelimit`. The current implementation provides strong protection against single-origin bursts and automated scrapers.
 
-### B. Dev Mode Email Output
-- **Current Behavior**: In non-production environments (`NODE_ENV !== "production"`), emails (verification links, password reset tokens, application alerts, status updates) are rendered to formatted stdout boxes.
-- **Production Migration**: To deliver real SMTP emails in production, configure an enterprise email provider (Resend, SendGrid, Amazon SES) in `lib/email/sender.ts`. The template and notification engine is already decoupled and ready for SMTP integration.
+### B. Live SMTP Email Delivery & Resolution of Sandbox Limits
+- **Resolved**: Live email delivery is fully active via Gmail SMTP and Nodemailer (`lib/email.ts`). The limitation of Resend's free tier (which only delivered to the account owner) has been resolved by configuring direct Gmail SMTP with Google App Passwords, enabling global delivery of verification and password recovery links to any inbox.
+- **In-Memory Store Retention**: The in-memory store (`devEmailStore`) is retained alongside SMTP to allow unit test suites (`tests/unit/auth.test.ts`, `tests/unit/notifications-and-calendar.test.ts`) to validate cryptographic tokens without triggering external network calls.
 
-### C. Large File Upload Boundary
+### C. Redirect Loop Prevention on Expired Sessions (Resolved)
+- **Resolved**: In earlier stages, stale browser session cookies combined with database session revocation could trigger a redirect loop between protected layouts and `/login`. This was resolved in `proxy.ts` and `app/(dashboard)/layout.tsx` by issuing an explicit `?signout=true` redirect that immediately clears all session cookies from the browser response.
+
+### D. Large File Upload Boundary
 - **Current Behavior**: Resume uploads are capped at 5 MB with strict magic-bytes inspection (`%PDF-`, `PK\x03\x04`). Files larger than 5 MB are rejected with HTTP 400.
 - **Rationale**: 5 MB is more than adequate for 2–4 page PDF/DOCX resumes while protecting the server against denial-of-service via large binary uploads.
 

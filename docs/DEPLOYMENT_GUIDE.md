@@ -63,8 +63,13 @@ Create production environment variables in your deployment dashboard (e.g., Verc
 | `DATABASE_URL` | Pooled connection string for runtime queries | `postgresql://user:pass@ep-xxx-pooler.neon.tech/neondb?sslmode=require` |
 | `DIRECT_URL` | Direct connection string for Prisma migrations | `postgresql://user:pass@ep-xxx.neon.tech/neondb?sslmode=require` |
 | `BETTER_AUTH_SECRET` | 32+ byte cryptographic secret for token signing | Generate via `openssl rand -hex 32` |
-| `BETTER_AUTH_URL` | Production canonical base URL | `https://unicareer.university.edu` |
-| `NEXT_PUBLIC_APP_URL` | Frontend public domain URL | `https://unicareer.university.edu` |
+| `BETTER_AUTH_URL` | Production canonical base URL | `https://jnujobhunting.vercel.app` |
+| `NEXT_PUBLIC_APP_URL` | Frontend public domain URL | `https://jnujobhunting.vercel.app` |
+| `SMTP_HOST` | Gmail SMTP Host | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP Port | `587` |
+| `SMTP_USER` | Gmail Address | `sooooooooojib@gmail.com` |
+| `SMTP_PASS` | 16-character Google App Password | `ahgiungxrzcxlndg` |
+| `EMAIL_FROM` | Sender Name & Address | `"\"UniCareer Community\" <sooooooooojib@gmail.com>"` |
 | `CRON_SECRET` | Bearer token to authorize scheduled reminder crons | Generate via `openssl rand -hex 24` |
 | `NODE_ENV` | Environment identifier | `production` |
 

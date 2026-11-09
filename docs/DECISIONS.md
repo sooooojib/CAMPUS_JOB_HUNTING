@@ -52,3 +52,39 @@
 - **Context**: Calling `setState` inside `useEffect` on mount triggers React compiler warnings (`react-hooks/set-state-in-effect`) and causes unnecessary cascading re-renders.
 - **Decision**: Use `useSyncExternalStore` in client-only components (such as `ThemeToggle`) to evaluate mounted state on the client without invoking `useEffect` state synchronization.
 - **Consequence**: Zero cascading renders, full React 19 compiler compliance, and flicker-free client hydration.
+
+---
+
+## ADR-007: Mandatory Verification-First Authentication Gate
+
+- **Status**: Accepted
+- **Context**: Previously, newly registered users could potentially sign in before confirming their email. In a high-trust campus community, unverified emails introduce spam risk and identity spoofing.
+- **Decision**: Configure Better Auth with `requireEmailVerification: true` and `autoSignIn: false`. Intercept `EMAIL_NOT_VERIFIED` HTTP 403 errors on the login form and prompt the user to verify their inbox before session creation.
+- **Consequence**: Unverified members are strictly locked out of login until the cryptographic email link is clicked, guaranteeing 100% verified identities.
+
+---
+
+## ADR-008: Gmail SMTP & Nodemailer for Universal Transactional Delivery
+
+- **Status**: Accepted
+- **Context**: Third-party email API sandbox domains (such as Resend's free tier) restrict outbound delivery exclusively to the account owner's email address. Testing external student Gmail or university addresses resulted in HTTP 403 delivery blocks.
+- **Decision**: Wire `nodemailer` with Gmail SMTP and a 16-character Google App Password (`lib/email.ts`), keeping `devEmailStore` active for unit testing.
+- **Consequence**: Real transactional verification and password reset emails are delivered to any valid inbox globally without requiring a purchased custom domain.
+
+---
+
+## ADR-009: Academic CGPA Verification Decoupling
+
+- **Status**: Accepted
+- **Context**: Academic performance (CGPA) directly determines job and internship eligibility, but university registrar credentials and institutional identity are reviewed separately from transcripts.
+- **Decision**: Add `isCgpaVerified` to the `Profile` model with dedicated admin toggle endpoint (`POST /api/admin/members/[id]/verify-cg`) and directory filter options (`CG_VERIFIED`, `CG_PENDING`).
+- **Consequence**: Enables administrators to review and verify student GPAs independently of general membership claims.
+
+---
+
+## ADR-010: De-AI-ified Institutional Design & Grounded Identity
+
+- **Status**: Accepted
+- **Context**: Generic AI templates often rely on floating capsule pills with pulsing radar dots (`animate-ping`). This looks synthetic and detracts from an authoritative university portal aesthetic.
+- **Decision**: Remove floating bubble pills and pulsing animations. Replace with grounded institutional typography, university crest anchors (`Jagannath University / Campus Career Community`), and crisp micro-tags (`rounded-md` / `rounded-lg`).
+- **Consequence**: The application presents an authentic, professional, human-crafted institutional appearance.

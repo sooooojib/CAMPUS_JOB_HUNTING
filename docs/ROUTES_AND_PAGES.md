@@ -1,6 +1,6 @@
 # UniCareer Community — Routes & Pages Inventory
 
-> **Stage 10 Status**: Searchable Member Directory (`/community`), Member Profiles (`/profile/[id]`), Direct Connection Engine, and Dedicated Referrals Hub (`/referrals`) fully implemented and verified against PostgreSQL.
+> **Platform Status**: All 14 Stages Complete, Production Verified, and Deployed on Vercel (`https://jnujobhunting.vercel.app`).
 
 ## 1. Route Map & Implementation Status
 
@@ -8,9 +8,11 @@
 | Route | Component / Purpose | Layout Group | Implementation Status |
 | :--- | :--- | :--- | :--- |
 | `/` | Landing / Marketing Homepage (No Private Data Leaks) | `app/(public)/layout.tsx` | **Implemented** |
-| `/login` | Member Login with redirect support | `app/(auth)/layout.tsx` | **Implemented** |
+| `/login` | Member Login with verification-first enforcement | `app/(auth)/layout.tsx` | **Implemented** |
 | `/register` | Member Registration & Role Selection | `app/(auth)/layout.tsx` | **Implemented** |
 | `/forgot-password` | Password Reset Request | `app/(auth)/layout.tsx` | **Implemented** |
+| `/reset-password` | Single-Use Cryptographic Password Reset | `app/(auth)/layout.tsx` | **Implemented** |
+| `/verify-email` | Cryptographic Token Redemption & Resend Gateway | `app/(auth)/layout.tsx` | **Implemented** |
 
 ### 1.2 Authenticated Member Routes (Protected Application Shell)
 All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:

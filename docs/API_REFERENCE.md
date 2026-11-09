@@ -24,7 +24,8 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - `POST /api/auth/sign-in/email`
   - Authenticates an existing user.
   - **Body**: `{ email, password, rememberMe, callbackURL }`
-  - **Behavior**: Validates scrypt hash, verifies account status is not `SUSPENDED`, creates session cookie `better-auth.session_token`.
+  - **Verification-First Enforcement**: If `user.emailVerified === false`, authentication is strictly rejected with HTTP 403 `EMAIL_NOT_VERIFIED` and zero session is issued.
+  - **Behavior**: Validates scrypt hash, verifies email verification status, verifies account status is not `SUSPENDED`, creates session cookie `better-auth.session_token`.
   - **Output**: `{ user: User, session: Session }`
 
 - `POST /api/auth/sign-out`
@@ -832,10 +833,38 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 ### 9.2 Member Governance & Suspension
 
 #### `GET /api/admin/members`
-- **Description**: Retrieves searchable, filterable roster of all platform members including verification claims and account status.
+- **Description**: Retrieves searchable, filterable roster of all platform members including verification claims, current CGPA, CG verification status, and account status.
 - **Access**: Platform `ADMIN` only.
-- **Query Params**: `q?: string`, `membershipType?: string`, `verificationStatus?: string`, `accountStatus?: string`, `page?: number`, `pageSize?: number`.
+- **Query Params**:
+  - `q?: string` — Keyword search across name, email, department, student ID.
+  - `membershipType?: "ALL" | "STUDENT" | "ALUMNI" | "ADMIN"`
+  - `verificationStatus?: "ALL" | "PENDING" | "VERIFIED" | "REJECTED" | "SUSPENDED" | "CG_VERIFIED" | "CG_PENDING"`
+  - `accountStatus?: "ALL" | "ACTIVE" | "PENDING_VERIFICATION" | "SUSPENDED" | "DEACTIVATED"`
+  - `page?: number`, `pageSize?: number`
 - **Output**: `{ "success": true, "data": AdminMemberItem[], "totalCount": number, "pagination": {...} }`
+
+#### `POST /api/admin/members/[id]/verify-cg`
+- **Description**: Formally verifies or revokes a student's academic CGPA claim in their university profile. Dispatches audit event and notification to student.
+- **Access**: Platform `ADMIN` only.
+- **Body**:
+  ```json
+  {
+    "isVerified": true
+  }
+  ```
+- **Output**:
+  ```json
+  {
+    "success": true,
+    "message": "Student CGPA verification status updated successfully.",
+    "data": {
+      "id": "profile_123",
+      "userId": "usr_456",
+      "currentCgpa": 3.85,
+      "isCgpaVerified": true
+    }
+  }
+  ```
 
 #### `POST /api/admin/members/[id]/suspend`
 - **Description**: Suspends or restores a member account. Self-suspension is blocked. Records audit log and dispatches notification.

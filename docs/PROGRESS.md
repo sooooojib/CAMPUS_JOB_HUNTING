@@ -248,12 +248,22 @@ flowchart TD
   - **Comprehensive Production Documentation**: Created `docs/FINAL_PROJECT_REVIEW.md`, `docs/DEPLOYMENT_GUIDE.md`, `docs/ENVIRONMENT_SETUP.md`, `docs/KNOWN_ISSUES.md`, `docs/FINAL_TEST_REPORT.md`, and `docs/stages/STAGE-14.md`.
   - **Production Readiness Verdict**: Full production readiness confirmed. All requirements from `AGENTS.md` and `docs/PRODUCT_REQUIREMENTS.md` verified without fake data or mocked endpoints.
 
+### Post-Stage 14: Live Transactional Delivery, Verification-First Gate & UI De-AI-ification
+- **Status**: **COMPLETE** (2026-11-09)
+- **Prerequisites**: Stage 14.
+- **Core Deliverables Delivered**:
+  - **Live Gmail SMTP Integration (`lib/email.ts`)**: Installed `nodemailer` and configured outbound transactional email via Gmail SMTP (`sooooooooojib@gmail.com`) using a Google App Password. Dispatches live verification links, password resets, and notifications to any arbitrary inbox globally.
+  - **Mandatory Pre-Authentication Verification Gate (`lib/auth.ts`, `app/(auth)/login/page.tsx`)**: Enabled `requireEmailVerification: true` and `autoSignIn: false` in Better Auth. Enforces that newly registered users cannot log in until they click the cryptographic link sent to their email inbox. Attempts to sign in unverified are strictly blocked on the server with HTTP 403 `EMAIL_NOT_VERIFIED`.
+  - **Academic CGPA Verification & Directory Filtering (`prisma/schema.prisma`, `lib/services/admin.ts`, `lib/validations/admin.ts`)**: Added `isCgpaVerified` field to the `Profile` model with dedicated admin verification endpoint (`POST /api/admin/members/[id]/verify-cg`). Added `CG_VERIFIED` ("CG Verified") and `CG_PENDING` ("CG Pending") filters to the Member Directory and Admin Governance consoles.
+  - **Permanent Redirect Loop Resolution (`proxy.ts`, `app/(dashboard)/layout.tsx`)**: Solved Chrome `ERR_TOO_MANY_REDIRECTS` on expired or revoked sessions by emitting explicit `?signout=true` cookie-clearing directives from protected layouts.
+  - **De-AI-ified Institutional Identity (`components/navigation/header.tsx`, `components/community/member-directory-view.tsx`)**: Replaced generic AI-looking floating capsule pills and flashing green radar animations (`animate-ping`) with an authentic, grounded institutional header breadcrumb (`Jagannath University / Campus Career Community`) and clean, modern micro-tags (`rounded-md` / `rounded-lg`).
+
 ---
 
 ## 3. Project Completion Status
 
 | Stage | Domain Area | Status | Test Coverage |
-| :--- | :--- | :---: | :---: |
+| :--- | :--- | :--- | :---: |
 | **Stage 0** | Inspection & Living Docs | **COMPLETE** | Architectural Contracts |
 | **Stage 1** | Foundation & Architecture | **COMPLETE** | 5/5 Passing |
 | **Stage 2** | UI/UX Design System | **COMPLETE** | 2/2 Passing |
@@ -269,4 +279,5 @@ flowchart TD
 | **Stage 12** | Notifications & Career Calendar | **COMPLETE** | 12/12 Passing |
 | **Stage 13** | Admin Dashboard & Moderation | **COMPLETE** | 13/13 Passing |
 | **Stage 14** | Final Testing, Security & Optimization | **COMPLETE** | 23/23 Passing |
+| **Post-14** | Live Email, CGPA Gate & UI De-AI-ification | **COMPLETE** | 29/29 Passing |
 | **TOTAL** | **Entire UniCareer Community Platform** | **100% COMPLETE** | **193/193 Passing** |

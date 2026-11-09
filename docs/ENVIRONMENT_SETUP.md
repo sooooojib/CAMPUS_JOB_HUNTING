@@ -11,8 +11,14 @@
 | `DATABASE_URL` | All | Pooled connection string for Prisma ORM | `postgresql://user:pass@host/db?sslmode=require&pgbouncer=true` |
 | `DIRECT_URL` | Staging/Prod | Unpooled connection string for Prisma migrations | `postgresql://user:pass@host/db?sslmode=require` |
 | `BETTER_AUTH_SECRET` | All | Cryptographic key for session token signing and encryption | Min 32 characters (`openssl rand -hex 32`) |
-| `BETTER_AUTH_URL` | All | Base URL for authentication callbacks | `http://localhost:3000` (Dev) / `https://domain.edu` (Prod) |
-| `NEXT_PUBLIC_APP_URL` | All | Public domain URL exposed to client components | `http://localhost:3000` (Dev) / `https://domain.edu` (Prod) |
+| `BETTER_AUTH_URL` | All | Base URL for authentication callbacks | `http://localhost:3000` (Dev) / `https://jnujobhunting.vercel.app` (Prod) |
+| `NEXT_PUBLIC_APP_URL` | All | Public domain URL exposed to client components | `http://localhost:3000` (Dev) / `https://jnujobhunting.vercel.app` (Prod) |
+| `SMTP_HOST` | All | Outbound SMTP server hostname | `smtp.gmail.com` |
+| `SMTP_PORT` | All | Outbound SMTP server port | `587` (TLS) or `465` (SSL) |
+| `SMTP_USER` | All | Sender Gmail address | e.g. `sooooooooojib@gmail.com` |
+| `SMTP_PASS` | All | 16-character Google App Password | e.g. `ahgiungxrzcxlndg` |
+| `EMAIL_FROM` | All | Branded sender header string | `"\"UniCareer Community\" <sender@gmail.com>"` |
+| `RESEND_API_KEY` | Optional | Secondary / fallback email delivery key | `re_...` |
 | `CRON_SECRET` | All | Secret header protecting scheduled cron task endpoints | Min 24 characters (`openssl rand -hex 24`) |
 | `NODE_ENV` | All | Node execution environment | `development` / `production` / `test` |
 | `AWS_ACCESS_KEY_ID` | Optional | S3-compatible storage credential for private files | String |
