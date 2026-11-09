@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Database 3NF Optimization & Redundant Table Removal] - 2026-11-09
+
+### Removed
+- **Redundant Junction Tables (`member_skills`, `opportunity_skills`)**:
+  - Physically dropped `member_skills` and `opportunity_skills` tables from the live Neon PostgreSQL database.
+  - Eliminated dual-source-of-truth anomalies by standardizing skill management on `Profile.skills` (synced with the global `Skill` entity catalog via `lib/services/skill.ts`) and `Opportunity.requiredSkills`.
+  - Removed obsolete relation fields from `Profile`, `Opportunity`, and `Skill` models in `prisma/schema.prisma`.
+  - Dropped non-atomic arrays and transitive attributes from prior models to strictly adhere to Third Normal Form (3NF).
+
+### Changed
+- **Skill Service (`lib/services/skill.ts`)**:
+  - Refactored `addSkillToProfile`, `removeSkillFromProfile`, and `getMemberSkills` to operate cleanly on `Profile.skills` and the global `Skill` catalog without intermediate junction tables.
+- **Unit & Integration Tests**:
+  - Updated `tests/unit/smart-matching-and-career-tools.test.ts` to remove deprecated table cleanups.
+  - Verified 100% test pass rate across 16 test files (193 tests passed).
+  - Verified successful production build across all 48 routes with zero type errors.
+
+---
+
 ## [University ID & Department Signup with Locked Verification Dossier] - 2026-11-09
 
 ### Added

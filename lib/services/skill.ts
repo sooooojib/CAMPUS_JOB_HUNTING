@@ -128,34 +128,6 @@ export async function addSkillToProfile(userId: string, input: AddMemberSkillInp
   const profileId = user.profile.id;
   const skill = await getOrCreateSkill(input.skillName, input.category || "OTHER");
 
-  // Check if already associated
-  const existing = await prisma.memberSkill.findUnique({
-    where: {
-      profileId_skillId: {
-        profileId,
-        skillId: skill.id,
-      },
-    },
-  });
-
-  if (existing) {
-    // Update level if different
-    return prisma.memberSkill.update({
-      where: { id: existing.id },
-      data: { level: input.level as SkillLevel },
-      include: { skill: true },
-    });
-  }
-
-  const created = await prisma.memberSkill.create({
-    data: {
-      profileId,
-      skillId: skill.id,
-      level: input.level as SkillLevel,
-    },
-    include: { skill: true },
-  });
-
   // Keep Profile.skills string array in sync
   const currentSkills = user.profile.skills || [];
   if (!currentSkills.some((s) => s.toLowerCase() === skill.name.toLowerCase())) {
@@ -167,13 +139,18 @@ export async function addSkillToProfile(userId: string, input: AddMemberSkillInp
     });
   }
 
-  return created;
+  return {
+    id: skill.id,
+    skillId: skill.id,
+    level: input.level || "INTERMEDIATE",
+    skill,
+  };
 }
 
 /**
  * Removes a skill from a member profile and synchronizes string array.
  */
-export async function removeSkillFromProfile(userId: string, skillIdOrMemberSkillId: string) {
+export async function removeSkillFromProfile(userId: string, skillIdOrName: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { profile: true },
@@ -184,27 +161,16 @@ export async function removeSkillFromProfile(userId: string, skillIdOrMemberSkil
   }
 
   const profileId = user.profile.id;
+  const currentSkills = user.profile.skills || [];
 
-  // Find member skill by id or skillId
-  const memberSkill = await prisma.memberSkill.findFirst({
-    where: {
-      profileId,
-      OR: [{ id: skillIdOrMemberSkillId }, { skillId: skillIdOrMemberSkillId }],
-    },
-    include: { skill: true },
-  });
+  const skill = await prisma.skill.findUnique({
+    where: { id: skillIdOrName },
+  }).catch(() => null);
 
-  if (!memberSkill) {
-    throw new Error("Skill association not found on your profile.");
-  }
+  const targetName = skill ? skill.name : skillIdOrName;
 
-  await prisma.memberSkill.delete({
-    where: { id: memberSkill.id },
-  });
-
-  // Synchronize Profile.skills array
-  const updatedSkills = (user.profile.skills || []).filter(
-    (s) => s.toLowerCase() !== memberSkill.skill.name.toLowerCase()
+  const updatedSkills = currentSkills.filter(
+    (s) => s.toLowerCase() !== targetName.toLowerCase()
   );
 
   await prisma.profile.update({
@@ -221,28 +187,29 @@ export async function removeSkillFromProfile(userId: string, skillIdOrMemberSkil
 export async function getMemberSkills(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    include: {
-      profile: {
-        include: {
-          memberSkills: {
-            include: { skill: true },
-            orderBy: { skill: { name: "asc" } },
-          },
-        },
-      },
-    },
+    include: { profile: true },
   });
 
   if (!user || !user.profile) {
     return [];
   }
 
-  return user.profile.memberSkills.map((ms) => ({
-    id: ms.id,
-    skillId: ms.skill.id,
-    name: ms.skill.name,
-    category: ms.skill.category as any,
-    level: ms.level as any,
+  const skillNames = user.profile.skills || [];
+  if (skillNames.length === 0) return [];
+
+  const matchedSkills = await prisma.skill.findMany({
+    where: {
+      name: { in: skillNames, mode: "insensitive" },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return matchedSkills.map((s) => ({
+    id: s.id,
+    skillId: s.id,
+    name: s.name,
+    category: s.category as any,
+    level: "INTERMEDIATE" as any,
   }));
 }
 

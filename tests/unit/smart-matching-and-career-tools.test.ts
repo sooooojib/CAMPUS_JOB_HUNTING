@@ -126,18 +126,12 @@ describe("Stage 11: Smart Matching and Student Career Tools", () => {
     // Cleanup created test records
     try {
       if (createdOpportunityIds.length > 0) {
-        await prisma.opportunitySkill.deleteMany({
-          where: { opportunityId: { in: createdOpportunityIds } },
-        });
         await prisma.opportunity.deleteMany({
           where: { id: { in: createdOpportunityIds } },
         });
       }
 
       if (createdUserIds.length > 0) {
-        await prisma.memberSkill.deleteMany({
-          where: { profile: { userId: { in: createdUserIds } } },
-        });
         await prisma.academicRecord.deleteMany({
           where: { userId: { in: createdUserIds } },
         });

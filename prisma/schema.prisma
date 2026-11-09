@@ -296,7 +296,6 @@ model Opportunity {
   comments              OpportunityComment[]
   referencingPosts      Post[]                @relation("OpportunityPosts")
   referralRequests      ReferralRequest[]     @relation("ReferralOpportunities")
-  opportunitySkills     OpportunitySkill[]
 
   @@index([status, deadline])
   @@index([companyId])
@@ -405,7 +404,6 @@ model Profile {
   // Structured Information
   skills         String[]  @default([])
   interests      String[]  @default([])
-  memberSkills   MemberSkill[]
   projects       Json?     // Array of { id, title, description, link, techStack }
   experience     Json?     // Array of { id, company, role, period, description }
 
@@ -719,42 +717,8 @@ model Skill {
   createdAt         DateTime           @default(now()) @map("created_at")
   updatedAt         DateTime           @updatedAt @map("updated_at")
 
-  memberSkills      MemberSkill[]
-  opportunitySkills OpportunitySkill[]
-
   @@index([category])
   @@map("skills")
-}
-
-model MemberSkill {
-  id        String     @id @default(cuid())
-  profileId String     @map("profile_id")
-  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  skillId   String     @map("skill_id")
-  skill     Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  level     SkillLevel @default(INTERMEDIATE)
-  createdAt DateTime   @default(now()) @map("created_at")
-
-  @@unique([profileId, skillId])
-  @@index([profileId])
-  @@index([skillId])
-  @@map("member_skills")
-}
-
-model OpportunitySkill {
-  id            String      @id @default(cuid())
-  opportunityId String      @map("opportunity_id")
-  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
-  skillId       String      @map("skill_id")
-  skill         Skill       @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  isMandatory   Boolean     @default(true) @map("is_mandatory")
-  minLevel      SkillLevel? @map("min_level")
-  createdAt     DateTime    @default(now()) @map("created_at")
-
-  @@unique([opportunityId, skillId])
-  @@index([opportunityId])
-  @@index([skillId])
-  @@map("opportunity_skills")
 }
 
 model AcademicRecord {

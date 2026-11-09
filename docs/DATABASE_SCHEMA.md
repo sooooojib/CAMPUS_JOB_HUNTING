@@ -2,7 +2,7 @@
 
 > **Architectural Status**: Stage 14 Complete & Production Verified (Live on Vercel)  
 > **Database Engine**: PostgreSQL 16 on Neon via Prisma ORM 7.10.1 & `@prisma/adapter-pg`  
-> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `MemberSkill`, `OpportunitySkill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CareerCalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification` (All 30 Prisma Models Verified)
+> **Models In Production**: `User`, `Profile`, `MembershipRequest`, `Company`, `CompanyMember`, `Department`, `Opportunity`, `OpportunityBookmark`, `Resume`, `Application`, `ApplicationStatusHistory`, `Post`, `Comment`, `PostReaction`, `PostBookmark`, `ContentReport`, `Connection`, `ReferralRequest`, `Skill`, `AcademicRecord`, `Notification`, `NotificationPreference`, `CareerCalendarEvent`, `DeadlineReminderLog`, `AdminAuditLog`, `Session`, `Account`, `Verification`, `ManualApplication`, `OpportunityComment` (All 30 Prisma Models Verified, Strict 3NF Compliant)
 
 ---
 
@@ -502,10 +502,6 @@ erDiagram
 | `referral_requests` | `referral_requests_requester_id_idx` | `requesterId` | User outgoing referrals dashboard |
 | `referral_requests` | `referral_requests_recipient_id_idx` | `recipientId` | User incoming referrals inbox |
 | `referral_requests` | `referral_requests_status_idx` | `status` | Status filtering |
-| `member_skills` | `member_skills_profile_id_idx` | `profileId` | Member skills lookup |
-| `member_skills` | `member_skills_skill_id_idx` | `skillId` | Skill directory lookup |
-| `opportunity_skills` | `opportunity_skills_opportunity_id_idx` | `opportunityId` | Opportunity required skills lookup |
-| `opportunity_skills` | `opportunity_skills_skill_id_idx` | `skillId` | Matching index |
 | `academic_records` | `academic_records_user_id_idx` | `userId` | Student transcript history lookup |
 | `academic_records` | `academic_records_user_id_semester_key` | `userId, semester` | Unique semester record constraint |
 
@@ -555,27 +551,8 @@ enum SkillLevel {
 | `createdAt` | DateTime | Default: `now()` | Skill record creation timestamp |
 | `updatedAt` | DateTime | Updated at | Modification timestamp |
 
-#### `member_skills` Table
-| Column | Type | Constraints | Description |
-|---|---|---|---|
-| `id` | String | PK, cuid() | Unique relationship record identifier |
-| `profileId` | String | FK -> `profiles(id)`, Cascade | Associated student/member profile |
-| `skillId` | String | FK -> `skills(id)`, Cascade | Associated skill record |
-| `level` | SkillLevel | Default: `INTERMEDIATE` | Self-assessed proficiency level |
-| `isVerified` | Boolean | Default: `false` | Endorsed or course-validated indicator |
-| `createdAt` | DateTime | Default: `now()` | Association timestamp |
-| `updatedAt` | DateTime | Updated at | Modification timestamp |
-| Unique | `@@unique([profileId, skillId])` | Prevents duplicate profile-skill bindings |
-
-#### `opportunity_skills` Table
-| Column | Type | Constraints | Description |
-|---|---|---|---|
-| `id` | String | PK, cuid() | Unique record identifier |
-| `opportunityId` | String | FK -> `Opportunity(id)`, Cascade | Target opportunity |
-| `skillId` | String | FK -> `skills(id)`, Cascade | Required competency |
-| `isRequired` | Boolean | Default: `true` | Must-have vs nice-to-have |
-| `minLevel` | SkillLevel | Default: `BEGINNER` | Minimum required proficiency |
-| Unique | `@@unique([opportunityId, skillId])` | Prevents duplicate skill requirements |
+> **3NF Schema Note on Redundant Tables Elimination**:  
+> In accordance with strict 3NF normalization rules (no redundant junction tables or partial/transitive dependencies), `member_skills` and `opportunity_skills` were pruned. Member skills are stored directly in `Profile.skills` (synced to the global `Skill` catalog via `lib/services/skill.ts`) and required skills are stored on `Opportunity.requiredSkills`. This keeps queries fast, avoids dual-source-of-truth anomalies, and strictly honors the academic constraint.
 
 #### `academic_records` Table
 | Column | Type | Constraints | Description |
