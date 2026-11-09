@@ -74,3 +74,4 @@ model Profile {
 ## 5. Scope Compliance Confirmation
 
 All user directives have been strictly fulfilled without regressions. The platform is running live on Vercel at `https://jnujobhunting.vercel.app`.
+

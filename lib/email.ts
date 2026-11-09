@@ -56,24 +56,31 @@ export const devEmailStore = new DevEmailStore();
 /**
  * Returns a configured Nodemailer transporter if SMTP credentials are present in env.
  */
-function getSmtpTransporter() {
+function createSmtpTransporter(port = 465, secure = true) {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
   if (!user || !pass) return null;
 
   const host = process.env.SMTP_HOST || "smtp.gmail.com";
-  const port = parseInt(process.env.SMTP_PORT || "587", 10);
 
   return nodemailer.createTransport({
     host,
     port,
-    secure: port === 465,
+    secure,
     auth: {
       user,
       pass,
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
+}
+
+function getSmtpTransporter() {
+  const configuredPort = parseInt(process.env.SMTP_PORT || "465", 10);
+  return createSmtpTransporter(configuredPort, configuredPort === 465);
 }
 
 export interface SendVerificationEmailParams {
@@ -127,45 +134,78 @@ export async function sendVerificationEmail({
   }
 
   // 1. Primary: SMTP Transporter (e.g. Gmail SMTP)
-  const transporter = getSmtpTransporter();
-  if (transporter) {
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (!user || !pass) {
+    console.warn(
+      "[SMTP Warning] SMTP_USER or SMTP_PASS is missing in environment variables. If running on Vercel, please add them in Project Settings -> Environment Variables."
+    );
+  } else {
+    const configuredPort = parseInt(process.env.SMTP_PORT || "465", 10);
+    const htmlContent = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
+        <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+          <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
+          <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
+        </div>
+        <h2 style="color: #0f172a; font-size: 18px; font-weight: 700; margin: 0 0 12px;">Confirm your university email address</h2>
+        <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Hello <strong>${name}</strong>,<br/>
+          Welcome to UniCareer Community. Please click the button below to verify your email address and activate your account.
+        </p>
+        <div style="margin: 28px 0; text-align: center;">
+          <a href="${verificationUrl}" style="background-color: #2563eb; color: #ffffff; padding: 13px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">
+            Verify Email Address
+          </a>
+        </div>
+        <p style="color: #64748b; font-size: 12px; line-height: 1.6; margin: 24px 0 0;">
+          If the button above does not work, copy and paste this verification URL directly into your browser:<br/>
+          <a href="${verificationUrl}" style="color: #2563eb; word-break: break-all;">${verificationUrl}</a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
+        <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+          If you did not register for an account on UniCareer Community, you can safely disregard this email.
+        </p>
+      </div>
+    `;
+
     try {
-      const from = process.env.EMAIL_FROM || `"UniCareer Community" <${process.env.SMTP_USER}>`;
-      const info = await transporter.sendMail({
-        from,
-        to,
-        subject: "Verify your UniCareer Community account",
-        html: `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
-            <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
-              <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
-              <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
-            </div>
-            <h2 style="color: #0f172a; font-size: 18px; font-weight: 700; margin: 0 0 12px;">Confirm your university email address</h2>
-            <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
-              Hello <strong>${name}</strong>,<br/>
-              Welcome to UniCareer Community. Please click the button below to verify your email address and activate your account.
-            </p>
-            <div style="margin: 28px 0; text-align: center;">
-              <a href="${verificationUrl}" style="background-color: #2563eb; color: #ffffff; padding: 13px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">
-                Verify Email Address
-              </a>
-            </div>
-            <p style="color: #64748b; font-size: 12px; line-height: 1.6; margin: 24px 0 0;">
-              If the button above does not work, copy and paste this verification URL directly into your browser:<br/>
-              <a href="${verificationUrl}" style="color: #2563eb; word-break: break-all;">${verificationUrl}</a>
-            </p>
-            <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
-            <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
-              If you did not register for an account on UniCareer Community, you can safely disregard this email.
-            </p>
-          </div>
-        `,
-      });
-      console.log(`[SMTP Dispatch] Verification email successfully delivered to ${to} (Message ID: ${info.messageId})`);
-      return { success: true, devUrl: verificationUrl };
+      const transporter = createSmtpTransporter(configuredPort, configuredPort === 465);
+      if (transporter) {
+        const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+        const info = await transporter.sendMail({
+          from,
+          to,
+          subject: "Verify your UniCareer Community account",
+          html: htmlContent,
+        });
+        console.log(`[SMTP Dispatch] Verification email successfully delivered to ${to} (Message ID: ${info.messageId})`);
+        return { success: true, devUrl: verificationUrl };
+      }
     } catch (smtpErr: any) {
-      console.error("[SMTP Error] Failed delivering verification email via SMTP:", smtpErr.message);
+      console.error(`[SMTP Error] Delivery failed on port ${configuredPort}:`, smtpErr.message);
+
+      // If configured port was 587 and it failed, fallback to 465 direct SSL
+      if (configuredPort !== 465) {
+        try {
+          console.log("[SMTP Retry] Attempting fallback on direct SSL port 465...");
+          const fallbackTransporter = createSmtpTransporter(465, true);
+          if (fallbackTransporter) {
+            const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+            const info = await fallbackTransporter.sendMail({
+              from,
+              to,
+              subject: "Verify your UniCareer Community account",
+              html: htmlContent,
+            });
+            console.log(`[SMTP Dispatch] Verification email successfully delivered to ${to} via fallback port 465 (Message ID: ${info.messageId})`);
+            return { success: true, devUrl: verificationUrl };
+          }
+        } catch (retryErr: any) {
+          console.error("[SMTP Retry Error] Fallback port 465 also failed:", retryErr.message);
+        }
+      }
     }
   }
 
@@ -252,45 +292,72 @@ export async function sendPasswordResetEmail({
   }
 
   // 1. Primary: SMTP Transporter (e.g. Gmail SMTP)
-  const transporter = getSmtpTransporter();
-  if (transporter) {
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (user && pass) {
+    const configuredPort = parseInt(process.env.SMTP_PORT || "465", 10);
+    const htmlContent = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
+        <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+          <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
+          <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
+        </div>
+        <h2 style="color: #0f172a; font-size: 18px; font-weight: 700; margin: 0 0 12px;">Reset Your Password</h2>
+        <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Hello <strong>${name}</strong>,<br/>
+          We received a request to reset your password. Click the button below to choose a new password. This link is valid for 30 minutes.
+        </p>
+        <div style="margin: 28px 0; text-align: center;">
+          <a href="${resetUrl}" style="background-color: #2563eb; color: #ffffff; padding: 13px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block;">
+            Reset Password
+          </a>
+        </div>
+        <p style="color: #64748b; font-size: 12px; line-height: 1.6; margin: 24px 0 0;">
+          If the button above does not work, copy and paste this reset URL into your browser:<br/>
+          <a href="${resetUrl}" style="color: #2563eb; word-break: break-all;">${resetUrl}</a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
+        <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+          If you didn't request a password reset, you can safely ignore this email.
+        </p>
+      </div>
+    `;
+
     try {
-      const from = process.env.EMAIL_FROM || `"UniCareer Community" <${process.env.SMTP_USER}>`;
-      const info = await transporter.sendMail({
-        from,
-        to,
-        subject: "Reset your UniCareer Community password",
-        html: `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
-            <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
-              <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
-              <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
-            </div>
-            <h2 style="color: #0f172a; font-size: 18px; font-weight: 700; margin: 0 0 12px;">Reset Your Password</h2>
-            <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
-              Hello <strong>${name}</strong>,<br/>
-              We received a request to reset your password. Click the button below to choose a new password. This link is valid for 30 minutes.
-            </p>
-            <div style="margin: 28px 0; text-align: center;">
-              <a href="${resetUrl}" style="background-color: #2563eb; color: #ffffff; padding: 13px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block;">
-                Reset Password
-              </a>
-            </div>
-            <p style="color: #64748b; font-size: 12px; line-height: 1.6; margin: 24px 0 0;">
-              If the button above does not work, copy and paste this reset URL into your browser:<br/>
-              <a href="${resetUrl}" style="color: #2563eb; word-break: break-all;">${resetUrl}</a>
-            </p>
-            <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
-            <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
-              If you didn't request a password reset, you can safely ignore this email.
-            </p>
-          </div>
-        `,
-      });
-      console.log(`[SMTP Dispatch] Password reset email delivered to ${to} (Message ID: ${info.messageId})`);
-      return { success: true, devUrl: resetUrl };
+      const transporter = createSmtpTransporter(configuredPort, configuredPort === 465);
+      if (transporter) {
+        const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+        const info = await transporter.sendMail({
+          from,
+          to,
+          subject: "Reset your UniCareer Community password",
+          html: htmlContent,
+        });
+        console.log(`[SMTP Dispatch] Password reset email delivered to ${to} (Message ID: ${info.messageId})`);
+        return { success: true, devUrl: resetUrl };
+      }
     } catch (err: any) {
-      console.error("[SMTP Error] Failed to send password reset via SMTP:", err.message);
+      console.error(`[SMTP Error] Failed sending reset on port ${configuredPort}:`, err.message);
+
+      if (configuredPort !== 465) {
+        try {
+          const fallbackTransporter = createSmtpTransporter(465, true);
+          if (fallbackTransporter) {
+            const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+            const info = await fallbackTransporter.sendMail({
+              from,
+              to,
+              subject: "Reset your UniCareer Community password",
+              html: htmlContent,
+            });
+            console.log(`[SMTP Dispatch] Password reset email delivered to ${to} via port 465 (Message ID: ${info.messageId})`);
+            return { success: true, devUrl: resetUrl };
+          }
+        } catch (retryErr: any) {
+          console.error("[SMTP Retry Error] Password reset fallback on port 465 failed:", retryErr.message);
+        }
+      }
     }
   }
 

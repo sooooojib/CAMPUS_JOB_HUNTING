@@ -58,6 +58,27 @@ export async function getPendingVerificationRequests(adminUserId: string) {
   const adminUser = await prisma.user.findUnique({ where: { id: adminUserId } });
   assertAdmin(adminUser);
 
+  // Auto-sync any email-verified pending users who do not yet have a membership request
+  const unlinkedPendingUsers = await prisma.user.findMany({
+    where: {
+      emailVerified: true,
+      verificationStatus: "PENDING",
+      membershipRequests: { none: {} },
+    },
+    take: 20,
+  });
+
+  for (const pendingUser of unlinkedPendingUsers) {
+    await prisma.membershipRequest.create({
+      data: {
+        userId: pendingUser.id,
+        membershipType: pendingUser.membershipType || "STUDENT",
+        status: "PENDING",
+        connectionNote: "Account email verified. Auto-enrolled into Admin Approval Queue.",
+      },
+    }).catch(() => {});
+  }
+
   const pendingRequests = await prisma.membershipRequest.findMany({
     where: { status: "PENDING" },
     include: {

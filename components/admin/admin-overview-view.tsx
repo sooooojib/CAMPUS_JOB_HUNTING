@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   Users,
   ShieldCheck,
+  ShieldAlert,
   Briefcase,
   FileCheck,
   AlertTriangle,
@@ -31,6 +32,36 @@ export function AdminOverviewView({ stats, onNavigateTab }: AdminOverviewViewPro
 
   return (
     <div className="space-y-6">
+      {/* Actionable Alerts Bar if there are pending verification requests */}
+      {stats.pendingVerifications > 0 && (
+        <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/60 dark:border-amber-900/60 dark:bg-amber-950/30 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200">
+              <ShieldAlert className="size-4" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-amber-950 dark:text-amber-100">
+                {stats.pendingVerifications} Verification Request{stats.pendingVerifications > 1 ? "s" : ""}
+              </div>
+              <div className="text-xs text-amber-700 dark:text-amber-400">
+                Registered members awaiting institutional identity review and approval
+              </div>
+            </div>
+          </div>
+          {onNavigateTab && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onNavigateTab("verifications")}
+              className="border-amber-300 text-amber-900 hover:bg-amber-100 dark:border-amber-800 dark:text-amber-200 h-8 text-xs gap-1 rounded-full cursor-pointer"
+            >
+              Review Requests
+              <ArrowRight className="size-3" />
+            </Button>
+          )}
+        </div>
+      )}
+
       {/* Actionable Alerts Bar if there are pending reports */}
       {stats.pendingReports > 0 && (
         <div className="p-4 rounded-2xl border border-red-200 bg-red-50/60 dark:border-red-900/60 dark:bg-red-950/30 flex items-center justify-between">

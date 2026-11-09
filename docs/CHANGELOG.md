@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Auth Pipeline & Admin Verification Queue Integration] - 2026-11-09
+
+### Added
+- **Better Auth Verification Lifecycle Hook (`lib/auth.ts`)**:
+  - Implemented `afterEmailVerification` callback in Better Auth configuration.
+  - Automatically transitions verified user accounts into the `MembershipRequest` queue with status `PENDING` upon clicking the verification link in their inbox.
+  - Auto-syncs any email-verified pending users in `getPendingVerificationRequests` so no verified user is omitted from administrative review.
+- **Admin Approval Panel Integration (`app/(dashboard)/admin/page.tsx`, `components/admin/admin-dashboard-container.tsx`)**:
+  - Mounted the **Verification Requests** tab in the Governance Center (`/admin`) with real-time pending request badges.
+  - Mounted the **Members Directory** governance tab with `AdminMembersTable`.
+  - Added pending verification alert banners with one-click navigation to review requests.
+- **Multi-Port SMTP Dispatch with Automatic SSL Retry (`lib/email.ts`)**:
+  - Configured Gmail SMTP with port 465 direct SSL and fallback from port 587.
+  - Configured connection, greeting, and socket timeouts (10-15s) for serverless execution.
+  - Added explicit environment variable diagnostic warnings.
+
+### Changed
+- **Renamed Auth Input Placeholders**:
+  - Renamed input placeholder from `"Your University Email"` to `"Email"` across all authentication screens (`/register`, `/login`, `/verify-email`, `/forgot-password`).
+- **Post-Verification Messaging**:
+  - Updated `/verify-email` success screen to clarify that identity is confirmed and submitted to the Admin Approval Panel.
+
+---
+
 ## [Live Email Dispatch & Member Network Enhancements] - 2026-11-09
 
 ### Added

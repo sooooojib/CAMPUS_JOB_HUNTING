@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isPlatformAdmin } from "@/lib/permissions";
 import { getAdminDashboardStats } from "@/lib/services/admin";
+import { getPendingVerificationRequests } from "@/lib/services/verification";
 import { AdminTemplate } from "@/components/templates/admin-template";
 import { AdminDashboardContainer } from "@/components/admin/admin-dashboard-container";
 
@@ -44,7 +45,10 @@ export default async function AdminPage() {
   }
 
   // Fetch real database records (Zero fabricated statistics)
-  const stats = await getAdminDashboardStats();
+  const [stats, pendingRequests] = await Promise.all([
+    getAdminDashboardStats(),
+    getPendingVerificationRequests(session.user.id),
+  ]);
 
   return (
     <AdminTemplate
@@ -53,6 +57,7 @@ export default async function AdminPage() {
     >
       <AdminDashboardContainer
         stats={stats}
+        initialPendingRequests={pendingRequests}
         currentAdminId={session.user.id}
       />
     </AdminTemplate>

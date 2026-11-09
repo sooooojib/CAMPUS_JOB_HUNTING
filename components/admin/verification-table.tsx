@@ -61,16 +61,22 @@ export interface PendingVerificationRequestItem {
 }
 
 interface VerificationTableProps {
-  initialRequests: PendingVerificationRequestItem[];
+  initialRequests?: PendingVerificationRequestItem[];
 }
 
-export function VerificationTable({ initialRequests }: VerificationTableProps) {
+export function VerificationTable({ initialRequests = [] }: VerificationTableProps) {
   const [requests, setRequests] = React.useState<PendingVerificationRequestItem[]>(initialRequests);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
   const [rejectModalItem, setRejectModalItem] = React.useState<PendingVerificationRequestItem | null>(null);
   const [rejectionReason, setRejectionReason] = React.useState("");
   const [rejectError, setRejectError] = React.useState<string | null>(null);
   const router = useRouter();
+
+  React.useEffect(() => {
+    if (initialRequests) {
+      setRequests(initialRequests);
+    }
+  }, [initialRequests]);
 
   const handleApprove = async (req: PendingVerificationRequestItem) => {
     setLoadingId(req.id);

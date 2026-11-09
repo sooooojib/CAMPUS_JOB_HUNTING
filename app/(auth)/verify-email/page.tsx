@@ -139,24 +139,24 @@ function VerifyEmailContent() {
           Email Verified Successfully
         </h2>
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-          Your university identity is verified. You now have full access to campus opportunities, career tools, and the alumni network.
+          Your email address has been confirmed and your profile has been submitted to the University Administrator for verification approval. You can sign in to view your account status.
         </p>
 
         <div className="pt-2 space-y-2.5">
-          <button
-            onClick={() => router.push("/feed")}
-            className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Proceed to Community Feed</span>
-            <ArrowRight className="size-4" />
-          </button>
-          
           <Link
             href="/login"
-            className="w-full h-10 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-foreground transition-all flex items-center justify-center"
+            className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
-            Sign In to Account
+            <span>Sign In to Your Account</span>
+            <ArrowRight className="size-4" />
           </Link>
+          
+          <button
+            onClick={() => router.push("/feed")}
+            className="w-full h-10 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-foreground transition-all flex items-center justify-center cursor-pointer"
+          >
+            <span>Proceed to Community Feed</span>
+          </button>
         </div>
       </div>
     );
@@ -208,7 +208,7 @@ function VerifyEmailContent() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your University Email"
+            placeholder="Email"
             required
             disabled={isResending}
             className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"

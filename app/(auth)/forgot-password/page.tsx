@@ -120,7 +120,7 @@ function ForgotPasswordForm() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your University Email"
+            placeholder="Email"
             required
             disabled={isLoading}
             autoComplete="email"

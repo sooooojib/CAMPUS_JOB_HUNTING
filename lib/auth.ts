@@ -84,14 +84,61 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendOnSignIn: true, // Automatically dispatches verification link if an unverified user tries to sign in
     sendVerificationEmail: async ({ user, url, token }) => {
+      let verificationUrl = url;
+      try {
+        const parsed = new URL(url);
+        if (!parsed.searchParams.get("callbackURL")) {
+          parsed.searchParams.set("callbackURL", "/verify-email?verified=true");
+          verificationUrl = parsed.toString();
+        }
+      } catch {
+        // Fallback to raw url if URL parse fails
+      }
+
       await sendVerificationEmail({
         to: user.email,
         name: user.name,
-        verificationUrl: url,
+        verificationUrl,
         token,
       });
     },
     autoSignInAfterVerification: true,
+    afterEmailVerification: async (user: any) => {
+      try {
+        if (!user?.id) return;
+
+        // 1. Keep user verification status as PENDING awaiting administrator review
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { verificationStatus: "PENDING" },
+        });
+
+        // 2. Ensure a formal MembershipRequest is active in the Admin Approval queue
+        const existingReq = await prisma.membershipRequest.findFirst({
+          where: { userId: user.id },
+        });
+
+        if (!existingReq) {
+          await prisma.membershipRequest.create({
+            data: {
+              userId: user.id,
+              membershipType: user.membershipType || "STUDENT",
+              status: "PENDING",
+              connectionNote: "Account email verified. Submitted to Admin Approval Panel for institutional review.",
+            },
+          });
+        } else if (existingReq.status !== "APPROVED") {
+          await prisma.membershipRequest.update({
+            where: { id: existingReq.id },
+            data: { status: "PENDING" },
+          });
+        }
+
+        console.log(`[Better Auth Hook] User ${user.email} email verified. Queued into Admin Approval Panel.`);
+      } catch (hookErr: any) {
+        console.error("[Better Auth Hook] Failed syncing user to admin queue:", hookErr?.message || hookErr);
+      }
+    },
   },
   user: {
     additionalFields: {
