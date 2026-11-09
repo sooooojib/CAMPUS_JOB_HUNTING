@@ -180,7 +180,6 @@ export async function submitInternalApplication(
         opportunityId,
         applicantId: userId,
         resumeId: resumeId || null,
-        resumeFileName: resumeSnapshotName,
         coverLetter: coverLetter?.trim() || null,
         method: "INTERNAL",
         status: "SUBMITTED",

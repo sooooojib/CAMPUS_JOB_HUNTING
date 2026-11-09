@@ -60,7 +60,6 @@ interface ApplicationItem {
     externalUrl?: string | null;
   };
   resumeId?: string | null;
-  resumeFileName?: string | null;
   resume?: {
     id: string;
     fileName: string;

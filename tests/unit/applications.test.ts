@@ -291,7 +291,7 @@ describe("Stage 8: Applications & Applicant Management Test Suite", () => {
       expect(app.applicantId).toBe(applicantStudent.id);
       expect(app.opportunityId).toBe(officialOpportunity.id);
       expect(app.status).toBe("SUBMITTED");
-      expect(app.resumeFileName).toBe("Candidate_CV_2026.pdf");
+      expect(app.resumeId).toBe(studentResume.id);
 
       // Verify status history audit entry was created
       const history = await prisma.applicationStatusHistory.findMany({

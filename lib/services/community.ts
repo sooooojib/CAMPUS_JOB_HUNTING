@@ -105,7 +105,6 @@ export async function createCommunityPost(
       postType: input.postType,
       visibility: input.visibility,
       attachedOpportunityId: input.attachedOpportunityId || null,
-      tags: input.tags || [],
       status: "ACTIVE",
     },
     include: {
@@ -144,7 +143,7 @@ export async function createCommunityPost(
     postType: post.postType as PostType,
     visibility: post.visibility,
     isPinned: post.isPinned,
-    tags: post.tags,
+    tags: [],
     viewsCount: post.viewsCount,
     likesCount: 0,
     commentsCount: 0,
@@ -224,16 +223,11 @@ export async function getCommunityFeed(
     where.authorId = filters.authorId;
   }
 
-  if (filters.tag) {
-    where.tags = { has: filters.tag };
-  }
-
   if (filters.search) {
     const term = filters.search.trim();
     where.OR = [
       { title: { contains: term, mode: "insensitive" } },
       { content: { contains: term, mode: "insensitive" } },
-      { tags: { has: term } },
     ];
   }
 
@@ -319,7 +313,7 @@ export async function getCommunityFeed(
       postType: post.postType as PostType,
       visibility: post.visibility,
       isPinned: post.isPinned,
-      tags: post.tags,
+      tags: [],
       viewsCount: post.viewsCount,
       likesCount: post.reactions.length,
       commentsCount: post._count.comments,
@@ -445,7 +439,7 @@ export async function getCommunityPostById(
     postType: post.postType as PostType,
     visibility: post.visibility,
     isPinned: post.isPinned,
-    tags: post.tags,
+    tags: [],
     viewsCount: post.viewsCount,
     likesCount: post.reactions.length,
     commentsCount: post._count.comments,
@@ -509,7 +503,6 @@ export async function updateCommunityPost(
       title: input.title !== undefined ? input.title : undefined,
       content: input.content || undefined,
       postType: input.postType || undefined,
-      tags: input.tags || undefined,
     },
   });
 

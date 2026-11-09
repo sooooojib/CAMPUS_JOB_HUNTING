@@ -248,7 +248,6 @@ export function CommunityFeedView({
               title={post.title}
               content={post.content}
               postType={post.postType}
-              tags={post.tags}
               createdAt={post.createdAt}
               isPinned={post.isPinned}
               attachedOpportunity={post.attachedOpportunity}

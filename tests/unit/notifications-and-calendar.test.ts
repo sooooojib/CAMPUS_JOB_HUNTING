@@ -403,7 +403,6 @@ describe("Stage 12: Notifications and Calendar System", () => {
           applicantId: user.id,
           method: "INTERNAL",
           status: "UNDER_REVIEW",
-          resumeFileName: "judy_resume.pdf",
         },
       });
 
@@ -459,7 +458,6 @@ describe("Stage 12: Notifications and Calendar System", () => {
           applicantId: applicant.id,
           method: "INTERNAL",
           status: "UNDER_REVIEW",
-          resumeFileName: "mallory_resume.pdf",
         },
       });
 

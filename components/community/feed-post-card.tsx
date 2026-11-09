@@ -49,7 +49,6 @@ export interface FeedPostCardProps {
   title?: string | null;
   content: string;
   postType: PostType | string;
-  tags?: string[];
   createdAt: string | Date;
   isPinned?: boolean;
   attachedOpportunity?: {
@@ -92,7 +91,6 @@ export function FeedPostCard({
   title,
   content,
   postType,
-  tags = [],
   createdAt,
   isPinned = false,
   attachedOpportunity,

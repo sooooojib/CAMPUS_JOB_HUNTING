@@ -317,8 +317,7 @@ erDiagram
 | `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique application dossier identifier |
 | `opportunityId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Target opportunity referencing `opportunities(id)` ON DELETE CASCADE |
 | `applicantId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Candidate referencing `users(id)` ON DELETE CASCADE |
-| `resumeId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Attached resume referencing `resumes(id)` ON DELETE SET NULL |
-| `resumeFileName` | `VARCHAR(100)` | `NULLABLE` | Snapshot of resume filename at time of submission |
+| `resumeId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Attached resume referencing `resumes(id)` ON DELETE SET NULL (Strict 3NF: fileName is obtained via relation) |
 | `coverLetter` | `TEXT` | `NULLABLE` | Optional candidate introduction (max 5000 chars) |
 | `method` | `ApplicationMethod` | `DEFAULT INTERNAL` | `INTERNAL` vs `EXTERNAL` |
 | `status` | `ApplicationStatus` | `DEFAULT SUBMITTED` | `SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN` |
@@ -379,7 +378,6 @@ erDiagram
 | `status` | `ModerationStatus` | `DEFAULT ACTIVE` | `ACTIVE`, `PENDING_REVIEW`, `FLAGGED`, `REMOVED` |
 | `isPinned` | `BOOLEAN` | `DEFAULT false` | Pinned announcement flag |
 | `attachedOpportunityId` | `VARCHAR(30)` | `NULLABLE`, `FK` | Opportunity reference referencing `opportunities(id)` ON DELETE SET NULL |
-| `tags` | `TEXT[]` | `DEFAULT []` | Topic hashtags (up to 5 tags) |
 | `viewsCount` | `INTEGER` | `DEFAULT 0` | View analytics |
 | `likesCount` | `INTEGER` | `DEFAULT 0` | Total reaction count |
 | `commentsCount` | `INTEGER` | `DEFAULT 0` | Total comment & reply count |

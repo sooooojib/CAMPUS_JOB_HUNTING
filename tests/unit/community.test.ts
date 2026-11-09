@@ -136,7 +136,7 @@ describe("Stage 9: Community Feed, Discussions & Moderation Test Suite", () => {
       expect(testPost.title).toBe("Distributed Systems Study Group");
       expect(testPost.postType).toBe("GENERAL_DISCUSSION");
       expect(testPost.author.name).toBe(authorUser.name);
-      expect(testPost.tags).toContain("DistributedSystems");
+      expect(testPost.content).toContain("consensus algorithms");
       expect(testPost.isAuthor).toBe(true);
     });
 

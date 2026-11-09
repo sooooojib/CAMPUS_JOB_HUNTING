@@ -839,7 +839,6 @@ async function main() {
           title: postData.title,
           content: postData.content,
           postType: postData.postType,
-          tags: postData.tags,
           likesCount: postData.comments.length * 4 + 7,
           commentsCount: postData.comments.length,
           viewsCount: postData.comments.length * 35 + 120,

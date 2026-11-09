@@ -346,7 +346,6 @@ model Application {
   applicant          User                     @relation("UserApplications", fields: [applicantId], references: [id], onDelete: Cascade)
   resumeId           String?                  @map("resume_id")
   resume             Resume?                  @relation(fields: [resumeId], references: [id], onDelete: SetNull)
-  resumeFileName     String?                  @map("resume_file_name")
   coverLetter        String?                  @map("cover_letter") @db.Text
   method             ApplicationMethod        @default(INTERNAL)
   status             ApplicationStatus        @default(SUBMITTED)
@@ -567,7 +566,6 @@ model Post {
   isPinned              Boolean           @default(false) @map("is_pinned")
   attachedOpportunityId String?           @map("attached_opportunity_id")
   attachedOpportunity   Opportunity?      @relation("OpportunityPosts", fields: [attachedOpportunityId], references: [id], onDelete: SetNull)
-  tags                  String[]          @default([])
   viewsCount            Int               @default(0) @map("views_count")
   likesCount            Int               @default(0) @map("likes_count")
   commentsCount         Int               @default(0) @map("comments_count")
