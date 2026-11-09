@@ -507,6 +507,8 @@ export interface AdminMemberItem {
   department?: string | null;
   studentId?: string | null;
   headline?: string | null;
+  currentCgpa?: number | null;
+  isCgpaVerified?: boolean;
   createdAt: string;
   verifiedAt?: string | null;
   verifiedBy?: string | null;

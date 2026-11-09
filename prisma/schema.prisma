@@ -397,6 +397,7 @@ model Profile {
   graduationYear Int?
   degree         String?
   currentCgpa    Float?
+  isCgpaVerified Boolean   @default(false) @map("is_cgpa_verified")
 
   // Professional Information
   company        String?

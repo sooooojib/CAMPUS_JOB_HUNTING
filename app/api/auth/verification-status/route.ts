@@ -25,17 +25,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Check if an external email delivery provider is connected
-    const hasLiveEmailProvider = Boolean(
-      process.env.RESEND_API_KEY ||
-      (process.env.SMTP_HOST && process.env.SMTP_USER)
-    );
-
-    // Retrieve saved verification URL if available
-    const verificationRecord = await prisma.verification.findUnique({
-      where: { id: `verify_${email}` },
-    });
-
     return NextResponse.json({
       success: true,
       user: {
@@ -45,9 +34,6 @@ export async function GET(req: NextRequest) {
         emailVerified: user.emailVerified,
         verificationStatus: user.verificationStatus,
       },
-      hasLiveEmailProvider,
-      allowInstantVerify: !hasLiveEmailProvider || !user.emailVerified,
-      directVerificationUrl: verificationRecord?.value || null,
     });
   } catch (error: any) {
     console.error("[Verification Status] Error checking verification status:", error);

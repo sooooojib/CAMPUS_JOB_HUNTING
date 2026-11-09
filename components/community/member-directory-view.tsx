@@ -206,6 +206,28 @@ export function MemberDirectoryView({
     }
   };
 
+  // Admin Action: Verify / Revoke CGPA
+  const handleToggleCgpa = async (memberId: string, isVerified: boolean, memberName: string) => {
+    try {
+      const res = await fetch(`/api/admin/members/${memberId}/verify-cg`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isVerified,
+          reason: isVerified ? "Academic CGPA validated by administrator." : "CGPA verification revoked.",
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.message || "Failed to update CG verification.");
+      }
+      toast.success(isVerified ? `CGPA verified for ${memberName}` : `CGPA verification revoked for ${memberName}`);
+      await fetchMembers();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update CG verification.");
+    }
+  };
+
   // Admin Action: Suspend / Restore Account
   const handleOpenSuspendModal = (member: any, action: "SUSPEND" | "RESTORE") => {
     setSuspendModalMember(member);
@@ -403,6 +425,8 @@ export function MemberDirectoryView({
                     <SelectItem value="ALL">All Verification Statuses</SelectItem>
                     <SelectItem value="VERIFIED">Verified</SelectItem>
                     <SelectItem value="PENDING">Pending Review</SelectItem>
+                    <SelectItem value="CG_VERIFIED">CG Verified</SelectItem>
+                    <SelectItem value="CG_PENDING">CG Pending</SelectItem>
                     <SelectItem value="REJECTED">Rejected</SelectItem>
                     <SelectItem value="SUSPENDED">Suspended</SelectItem>
                   </SelectContent>
@@ -622,6 +646,36 @@ export function MemberDirectoryView({
                         </div>
                       )}
 
+                      {/* CGPA Item with Verification Badge */}
+                      {typeof member.currentCgpa === "number" && (
+                        <div className="flex items-center justify-between gap-1.5 text-[11px] font-mono pt-0.5">
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <span>CGPA:</span>
+                            <span className="font-bold text-foreground font-mono">{member.currentCgpa.toFixed(2)}</span>
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className={`text-[9px] font-semibold rounded-full px-2 py-0 gap-0.5 ${
+                              member.isCgpaVerified
+                                ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
+                                : "border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/10"
+                            }`}
+                          >
+                            {member.isCgpaVerified ? (
+                              <>
+                                <CheckCircle2 className="size-2.5 text-emerald-600 dark:text-emerald-400" />
+                                <span>CG Verified</span>
+                              </>
+                            ) : (
+                              <>
+                                <Clock className="size-2.5 text-amber-600 dark:text-amber-400" />
+                                <span>CG Pending</span>
+                              </>
+                            )}
+                          </Badge>
+                        </div>
+                      )}
+
                       {(member.company || member.designation) && (
                         <div className="flex items-center gap-1.5 truncate">
                           <Building2 className="size-3.5 text-primary shrink-0" />
@@ -687,6 +741,32 @@ export function MemberDirectoryView({
                           <CheckCircle2 className="size-3.5" />
                           <span>Verify</span>
                         </Button>
+                      )}
+
+                      {/* CGPA Verification Action */}
+                      {typeof member.currentCgpa === "number" && (
+                        member.isCgpaVerified ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleToggleCgpa(member.id, false, member.name)}
+                            className="h-8 px-2.5 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full border-amber-500/30 font-medium"
+                            title="Revoke CG verification"
+                          >
+                            Revoke CG
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleToggleCgpa(member.id, true, member.name)}
+                            className="h-8 px-2.5 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 rounded-full border-emerald-500/30 font-medium gap-1"
+                            title="Verify student CGPA"
+                          >
+                            <CheckCircle2 className="size-3" />
+                            <span>Verify CG</span>
+                          </Button>
+                        )
                       )}
 
                       {/* Suspend / Restore (blocked for current admin self) */}

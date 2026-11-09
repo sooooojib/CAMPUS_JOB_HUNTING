@@ -121,8 +121,24 @@ export async function getAdminMembersList(options: {
     andFilters.push({ membershipType });
   }
 
-  if (verificationStatus) {
-    andFilters.push({ verificationStatus });
+  if (verificationStatus && verificationStatus !== "ALL") {
+    if (verificationStatus === "CG_VERIFIED") {
+      andFilters.push({
+        profile: {
+          isCgpaVerified: true,
+          currentCgpa: { not: null },
+        },
+      });
+    } else if (verificationStatus === "CG_PENDING") {
+      andFilters.push({
+        profile: {
+          isCgpaVerified: false,
+          currentCgpa: { not: null },
+        },
+      });
+    } else {
+      andFilters.push({ verificationStatus });
+    }
   }
 
   if (accountStatus) {
@@ -141,6 +157,8 @@ export async function getAdminMembersList(options: {
             department: true,
             studentId: true,
             headline: true,
+            currentCgpa: true,
+            isCgpaVerified: true,
           },
         },
         membershipRequests: {
@@ -179,6 +197,8 @@ export async function getAdminMembersList(options: {
       department: u.profile?.department || null,
       studentId: u.profile?.studentId || null,
       headline: u.profile?.headline || null,
+      currentCgpa: u.profile?.currentCgpa ?? null,
+      isCgpaVerified: u.profile?.isCgpaVerified ?? false,
       createdAt: u.createdAt.toISOString(),
       verifiedAt: u.verifiedAt ? u.verifiedAt.toISOString() : null,
       verifiedBy: u.verifiedBy || null,
@@ -379,6 +399,69 @@ export async function adminUpdateUserVerification(
   }).catch(() => {});
 
   return { success: true, user: updated };
+}
+
+/**
+ * Verifies or revokes a student's academic CGPA records with administrative audit logging.
+ */
+export async function adminVerifyUserCgpa(
+  adminUserId: string,
+  targetUserId: string,
+  isVerified: boolean,
+  reason?: string,
+  clientIp?: string
+) {
+  const target = await prisma.user.findUnique({
+    where: { id: targetUserId },
+    include: { profile: true },
+  });
+
+  if (!target) {
+    throw new Error("Target user account not found.");
+  }
+
+  // Update profile isCgpaVerified flag
+  if (target.profile) {
+    await prisma.profile.update({
+      where: { id: target.profile.id },
+      data: { isCgpaVerified: isVerified },
+    });
+  }
+
+  // Update all academic records for this student
+  await prisma.academicRecord.updateMany({
+    where: { userId: targetUserId },
+    data: { isVerified },
+  });
+
+  // Log admin action
+  await logAdminAction({
+    adminId: adminUserId,
+    action: isVerified ? "MEMBER_VERIFIED" : "MEMBER_REJECTED",
+    targetType: "USER",
+    targetId: targetUserId,
+    targetLabel: `${target.name} (CGPA)`,
+    reason: reason || (isVerified ? "Academic CGPA validated against campus records." : "Academic CGPA verification revoked."),
+    ipAddress: clientIp,
+    details: {
+      actionType: isVerified ? "CGPA_VERIFIED" : "CGPA_REVOKED",
+      userEmail: target.email,
+      currentCgpa: target.profile?.currentCgpa ?? null,
+    },
+  });
+
+  // Notify student
+  createNotification({
+    recipientId: targetUserId,
+    type: "SYSTEM_ANNOUNCEMENT",
+    title: isVerified ? "Academic CGPA Verified" : "Academic CGPA Status Updated",
+    message: isVerified
+      ? `Your academic CGPA (${target.profile?.currentCgpa?.toFixed(2) || "record"}) has been officially authenticated by campus administration.`
+      : `Your academic CGPA verification was updated by campus administration. Reason: ${reason || "Dossier revision required."}`,
+    relatedEntityType: "SYSTEM",
+  }).catch(() => {});
+
+  return { success: true, isCgpaVerified: isVerified };
 }
 
 /**

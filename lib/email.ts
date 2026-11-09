@@ -117,7 +117,7 @@ export async function sendVerificationEmail({
     return { success: true, devUrl: verificationUrl };
   }
 
-  // Production provider integration (e.g. Resend, Postmark, AWS SES)
+  // If RESEND_API_KEY is configured, dispatch real email via Resend
   if (process.env.RESEND_API_KEY) {
     try {
       const res = await fetch("https://api.resend.com/emails", {
@@ -127,23 +127,49 @@ export async function sendVerificationEmail({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: process.env.EMAIL_FROM || "UniCareer <noreply@unicareer.edu>",
+          from: process.env.EMAIL_FROM || "UniCareer <onboarding@resend.dev>",
           to,
           subject: "Verify your UniCareer Community account",
-          html: `<p>Hello ${name},</p><p>Please verify your university email by clicking <a href="${verificationUrl}">here</a>.</p>`,
+          html: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
+              <div style="margin-bottom: 20px;">
+                <h1 style="color: #1e3a8a; font-size: 22px; font-weight: 800; margin: 0;">UniCareer<span style="color: #2563eb;">.</span></h1>
+                <p style="color: #64748b; font-size: 12px; margin: 4px 0 0;">Jagannath University Career Community</p>
+              </div>
+              <h2 style="color: #0f172a; font-size: 18px; margin: 0 0 12px;">Confirm your university email address</h2>
+              <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+                Hello <strong>${name}</strong>,<br/>
+                Please click the button below to verify your email address and activate your campus career community account.
+              </p>
+              <div style="margin: 28px 0; text-align: center;">
+                <a href="${verificationUrl}" style="background-color: #2563eb; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block;">
+                  Verify Email Address
+                </a>
+              </div>
+              <p style="color: #64748b; font-size: 12px; line-height: 1.5; margin: 24px 0 0;">
+                If the button above does not work, copy and paste this URL into your browser:<br/>
+                <a href="${verificationUrl}" style="color: #2563eb; word-break: break-all;">${verificationUrl}</a>
+              </p>
+              <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 24px 0;" />
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">
+                If you did not create an account on UniCareer Community, you can safely ignore this email.
+              </p>
+            </div>
+          `,
         }),
       });
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        console.error("[Email Error] Failed to send verification email via provider:", errData);
-        return { success: false, error: "EMAIL_DELIVERY_FAILED" };
+        console.error("[Email Error] Failed to send verification email via Resend:", errData);
+        return { success: false, error: errData.message || "EMAIL_DELIVERY_FAILED" };
       }
 
+      console.log(`[Email Dispatch] Verification email dispatched to ${to} via Resend.`);
       return { success: true };
     } catch (err: any) {
       console.error("[Email Error] Network failure delivering verification email:", err.message);
-      return { success: false, error: "EMAIL_PROVIDER_UNREACHABLE" };
+      return { success: false, error: err.message || "EMAIL_PROVIDER_UNREACHABLE" };
     }
   }
 

@@ -52,7 +52,6 @@ export function OnboardingCredentialsForm({
     workEmail: "",
     headline: defaultValues?.headline || "",
     bio: defaultValues?.bio || "",
-    skills: defaultValues?.skills?.join(", ") || "TypeScript, Python, React, PostgreSQL",
     proofDetails: "Enrolled student at Department of CSE. Validated via campus registrar roll.",
   });
 
@@ -66,7 +65,6 @@ export function OnboardingCredentialsForm({
     designation: defaultValues?.designation || "Software Engineer II",
     headline: defaultValues?.headline || "Software Engineer II at bKash | JnU CSE '22",
     bio: defaultValues?.bio || "",
-    skills: defaultValues?.skills?.join(", ") || "Go, Kubernetes, Cloud Architecture",
     proofDetails: "Class of 2022. Final year thesis advised by Department Chair.",
   });
 
@@ -81,11 +79,6 @@ export function OnboardingCredentialsForm({
       };
 
       if (predeterminedRole === "STUDENT") {
-        const skills = studentForm.skills
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-
         payload.studentData = {
           studentId: studentForm.studentId.trim(),
           department: studentForm.department.trim(),
@@ -95,15 +88,10 @@ export function OnboardingCredentialsForm({
           workEmail: studentForm.workEmail.trim() || undefined,
           headline: studentForm.headline.trim() || undefined,
           bio: studentForm.bio.trim() || undefined,
-          skills,
+          skills: [],
           proofDetails: studentForm.proofDetails.trim() || undefined,
         };
       } else {
-        const skills = alumniForm.skills
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-
         payload.alumniData = {
           studentId: alumniForm.studentId.trim() || undefined,
           department: alumniForm.department.trim(),
@@ -113,7 +101,7 @@ export function OnboardingCredentialsForm({
           designation: alumniForm.designation.trim() || undefined,
           headline: alumniForm.headline.trim() || undefined,
           bio: alumniForm.bio.trim() || undefined,
-          skills,
+          skills: [],
           proofDetails: alumniForm.proofDetails.trim(),
         };
       }
@@ -262,19 +250,6 @@ export function OnboardingCredentialsForm({
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="skills" className="text-xs font-semibold">
-                  Core Technical / Professional Skills
-                </Label>
-                <Input
-                  id="skills"
-                  value={studentForm.skills}
-                  onChange={(e) => setStudentForm({ ...studentForm, skills: e.target.value })}
-                  placeholder="TypeScript, Python, React, PostgreSQL"
-                  className="text-xs"
-                />
-              </div>
-
-              <div className="space-y-1.5">
                 <Label htmlFor="proofDetails" className="text-xs font-semibold">
                   Enrollment Reference / Proof Details
                 </Label>
@@ -365,19 +340,6 @@ export function OnboardingCredentialsForm({
                   value={alumniForm.designation}
                   onChange={(e) => setAlumniForm({ ...alumniForm, designation: e.target.value })}
                   placeholder="Senior Software Engineer"
-                  className="text-xs"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="alumniSkills" className="text-xs font-semibold">
-                  Core Technical / Professional Skills
-                </Label>
-                <Input
-                  id="alumniSkills"
-                  value={alumniForm.skills}
-                  onChange={(e) => setAlumniForm({ ...alumniForm, skills: e.target.value })}
-                  placeholder="Go, Kubernetes, Cloud Architecture"
                   className="text-xs"
                 />
               </div>

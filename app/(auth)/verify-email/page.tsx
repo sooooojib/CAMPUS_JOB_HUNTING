@@ -4,7 +4,7 @@ import * as React from "react";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Mail, CheckCircle2, AlertCircle, ArrowRight, Loader2, RefreshCw, Zap } from "lucide-react";
+import { Mail, CheckCircle2, AlertCircle, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 
 function VerifyEmailContent() {
   const router = useRouter();
@@ -16,11 +16,8 @@ function VerifyEmailContent() {
   const [isVerifying, setIsVerifying] = useState(Boolean(token));
   const [isVerified, setIsVerified] = useState(false);
   const [isResending, setIsResending] = useState(false);
-  const [isActivating, setIsActivating] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [allowInstantVerify, setAllowInstantVerify] = useState(true);
-  const [directUrl, setDirectUrl] = useState<string | null>(null);
 
   // 1. If token is present in the URL, verify it via Better Auth API
   useEffect(() => {
@@ -61,7 +58,7 @@ function VerifyEmailContent() {
     };
   }, [token]);
 
-  // 2. Check current verification status for the email
+  // 2. Check if the email is already verified
   useEffect(() => {
     if (!email.trim() || !email.includes("@")) return;
 
@@ -71,16 +68,8 @@ function VerifyEmailContent() {
         const res = await fetch(`/api/auth/verification-status?email=${encodeURIComponent(email.trim().toLowerCase())}`);
         if (res.ok) {
           const data = await res.json();
-          if (isMounted) {
-            if (data.user?.emailVerified) {
-              setIsVerified(true);
-            }
-            if (data.allowInstantVerify !== undefined) {
-              setAllowInstantVerify(data.allowInstantVerify);
-            }
-            if (data.directVerificationUrl) {
-              setDirectUrl(data.directVerificationUrl);
-            }
+          if (isMounted && data.user?.emailVerified) {
+            setIsVerified(true);
           }
         }
       } catch (err) {
@@ -114,14 +103,6 @@ function VerifyEmailContent() {
 
       if (response.ok) {
         setResendSuccess(true);
-        // Refresh verification status to fetch direct link if available
-        const statusRes = await fetch(`/api/auth/verification-status?email=${encodeURIComponent(email.trim().toLowerCase())}`);
-        if (statusRes.ok) {
-          const statusData = await statusRes.json();
-          if (statusData.directVerificationUrl) {
-            setDirectUrl(statusData.directVerificationUrl);
-          }
-        }
       } else {
         const data = await response.json().catch(() => ({}));
         setErrorMessage(data.message || "Unable to resend verification email at this moment.");
@@ -131,36 +112,6 @@ function VerifyEmailContent() {
       setErrorMessage("Network error while requesting verification email.");
     } finally {
       setIsResending(false);
-    }
-  };
-
-  const handleInstantVerify = async () => {
-    if (!email.trim() || !email.includes("@")) {
-      setErrorMessage("Please enter your account email to verify.");
-      return;
-    }
-
-    setIsActivating(true);
-    setErrorMessage(null);
-
-    try {
-      const response = await fetch("/api/auth/instant-verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim().toLowerCase() }),
-      });
-
-      if (response.ok) {
-        setIsVerified(true);
-      } else {
-        const data = await response.json().catch(() => ({}));
-        setErrorMessage(data.error || "Failed to activate account. Please check your email.");
-      }
-    } catch (err: any) {
-      console.error("Instant verify error:", err);
-      setErrorMessage("Network error while activating account.");
-    } finally {
-      setIsActivating(false);
     }
   };
 
@@ -242,12 +193,12 @@ function VerifyEmailContent() {
         <div className="mb-4 flex items-start gap-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400 animate-in fade-in-50">
           <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            A fresh verification request was registered. You can also activate immediately using the button below.
+            A fresh verification email has been dispatched. Please check your inbox and click the link to activate your account.
           </div>
         </div>
       )}
 
-      <form onSubmit={handleResend} className="space-y-3">
+      <form onSubmit={handleResend} className="space-y-3.5">
         <div className="relative">
           <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
             <Mail className="size-4" />
@@ -259,43 +210,21 @@ function VerifyEmailContent() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Your University Email"
             required
-            disabled={isResending || isActivating}
+            disabled={isResending}
             className="w-full h-11 sm:h-12 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
         </div>
 
-        {/* Instant Verification Button */}
-        {allowInstantVerify && (
-          <button
-            type="button"
-            onClick={handleInstantVerify}
-            disabled={isActivating || isResending}
-            className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-          >
-            {isActivating ? (
-              <>
-                <Loader2 className="size-3.5 animate-spin" />
-                <span>Activating Account...</span>
-              </>
-            ) : (
-              <>
-                <Zap className="size-3.5 fill-current" />
-                <span>Instant Verify & Activate Account</span>
-              </>
-            )}
-          </button>
-        )}
-
         {/* Resend Link Button */}
         <button
           type="submit"
-          disabled={isResending || isActivating}
-          className="w-full h-10 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-foreground font-medium text-xs hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+          disabled={isResending}
+          className="w-full h-11 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-foreground font-medium text-xs hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
         >
           {isResending ? (
             <>
               <Loader2 className="size-3.5 animate-spin" />
-              <span>Dispatching Link...</span>
+              <span>Dispatching Link to Inbox...</span>
             </>
           ) : (
             <>
@@ -304,17 +233,6 @@ function VerifyEmailContent() {
             </>
           )}
         </button>
-
-        {directUrl && (
-          <div className="pt-1 text-center">
-            <a
-              href={directUrl}
-              className="text-[11px] text-primary hover:underline font-medium inline-flex items-center gap-1"
-            >
-              Direct Link: Click here to verify via token
-            </a>
-          </div>
-        )}
       </form>
 
       <div className="text-center text-xs text-muted-foreground pt-4">
