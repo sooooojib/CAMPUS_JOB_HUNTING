@@ -385,7 +385,7 @@ export function CampusCareerIllustrationRight({ className = "" }: { className?: 
             }
             .anim-beacon {
               animation: beaconPulse 2.8s ease-in-out infinite;
-              transform-origin: 202px 58px;
+              transform-origin: 202px 48px;
             }
           `}</style>
         </defs>
@@ -516,7 +516,7 @@ export function CampusCareerIllustrationRight({ className = "" }: { className?: 
 
           {/* 3. DYNAMIC SOLID ASCENDING CAREER TRAJECTORY */}
           <path
-            d="M48 205 C78 184 120 138 202 58"
+            d="M48 205 C78 184 120 138 202 54"
             stroke="url(#pathGradient)"
             strokeWidth="3.25"
             strokeLinecap="round"
@@ -529,35 +529,20 @@ export function CampusCareerIllustrationRight({ className = "" }: { className?: 
           <circle cx="146" cy="110" r="4.5" fill="#FAF9F5" stroke="#2563EB" strokeWidth="2" />
           <circle cx="146" cy="110" r="1.5" fill="#2563EB" />
 
-          <circle cx="202" cy="58" r="5" fill="#FAF9F5" stroke="#10B981" strokeWidth="2" />
-          <circle cx="202" cy="58" r="2" fill="#10B981" />
+          <circle cx="202" cy="54" r="5" fill="#FAF9F5" stroke="#2563EB" strokeWidth="2" />
+          <circle cx="202" cy="54" r="2" fill="#2563EB" />
 
-          {/* 4. PINNACLE SUMMIT STAR (The Career Compass) */}
+          {/* 4. PINNACLE SUMMIT STAR (Hovering cleanly above Pillar 3 — zero bumps or overlaps) */}
           <g className="anim-beacon">
             <polygon
-              points="202,40 206,53 219,58 206,63 202,76 198,63 185,58 198,53"
+              points="202,34 206,44 216,48 206,52 202,62 198,52 188,48 198,44"
               fill="#2563EB"
               stroke="#1D4ED8"
               strokeWidth="0.75"
             />
-            {/* Center diamond core */}
-            <circle cx="202" cy="58" r="2.5" fill="#FFFFFF" />
+            {/* Center core */}
+            <circle cx="202" cy="48" r="2.5" fill="#FFFFFF" />
           </g>
-
-          {/* 5. MINIMALIST SOLID OVERHEAD GUIDANCE ARC (NO dashes) */}
-          <path
-            d="M80 72 C115 34 165 32 225 72"
-            stroke="#93C5FD"
-            strokeOpacity="0.45"
-            strokeWidth="1.25"
-            strokeLinecap="round"
-            fill="none"
-          />
-          {/* Subtle celestial guide nodes */}
-          <circle cx="80" cy="72" r="2.5" fill="#3B82F6" />
-          <circle cx="130" cy="42" r="3" fill="#2563EB" />
-          <circle cx="170" cy="43" r="3" fill="#3B82F6" />
-          <circle cx="225" cy="72" r="2.5" fill="#10B981" />
         </g>
       </svg>
     </div>
