@@ -9,6 +9,7 @@ import {
   AlertCircle,
   GraduationCap,
   Award,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -171,15 +172,24 @@ export function OnboardingCredentialsForm({
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="studentId" className="text-xs font-semibold">
-                    University Student ID *
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="studentId" className="text-xs font-semibold">
+                      University Student ID *
+                    </Label>
+                    {Boolean(defaultValues?.studentId) && (
+                      <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground font-medium bg-muted/70 px-2 py-0.5 rounded-md">
+                        <Lock className="size-2.5 text-muted-foreground" />
+                        <span>Locked from Registration</span>
+                      </span>
+                    )}
+                  </div>
                   <Input
                     id="studentId"
                     value={studentForm.studentId}
                     onChange={(e) => setStudentForm({ ...studentForm, studentId: e.target.value })}
                     placeholder="e.g. STU-2023-8819 or 2021-CSE-045"
-                    className="text-xs font-mono"
+                    className="text-xs font-mono disabled:opacity-80 disabled:bg-muted/50 cursor-not-allowed"
+                    disabled={Boolean(defaultValues?.studentId)}
                     required
                   />
                   <p className="text-[10px] text-muted-foreground">
@@ -187,15 +197,24 @@ export function OnboardingCredentialsForm({
                   </p>
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="department" className="text-xs font-semibold">
-                    Department / Faculty *
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="department" className="text-xs font-semibold">
+                      Department / Faculty *
+                    </Label>
+                    {Boolean(defaultValues?.department) && (
+                      <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground font-medium bg-muted/70 px-2 py-0.5 rounded-md">
+                        <Lock className="size-2.5 text-muted-foreground" />
+                        <span>Locked from Registration</span>
+                      </span>
+                    )}
+                  </div>
                   <Input
                     id="department"
                     value={studentForm.department}
                     onChange={(e) => setStudentForm({ ...studentForm, department: e.target.value })}
                     placeholder="Computer Science & Engineering"
-                    className="text-xs"
+                    className="text-xs disabled:opacity-80 disabled:bg-muted/50 cursor-not-allowed"
+                    disabled={Boolean(defaultValues?.department)}
                     required
                   />
                 </div>
@@ -270,15 +289,24 @@ export function OnboardingCredentialsForm({
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="alumniDept" className="text-xs font-semibold">
-                    Graduation Department *
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="alumniDept" className="text-xs font-semibold">
+                      Graduation Department *
+                    </Label>
+                    {Boolean(defaultValues?.department) && (
+                      <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground font-medium bg-muted/70 px-2 py-0.5 rounded-md">
+                        <Lock className="size-2.5 text-muted-foreground" />
+                        <span>Locked from Registration</span>
+                      </span>
+                    )}
+                  </div>
                   <Input
                     id="alumniDept"
                     value={alumniForm.department}
                     onChange={(e) => setAlumniForm({ ...alumniForm, department: e.target.value })}
                     placeholder="Computer Science & Engineering"
-                    className="text-xs"
+                    className="text-xs disabled:opacity-80 disabled:bg-muted/50 cursor-not-allowed"
+                    disabled={Boolean(defaultValues?.department)}
                     required
                   />
                 </div>

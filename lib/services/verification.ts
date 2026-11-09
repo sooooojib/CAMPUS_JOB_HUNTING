@@ -69,11 +69,17 @@ export async function getPendingVerificationRequests(adminUserId: string) {
   });
 
   for (const pendingUser of unlinkedPendingUsers) {
+    const profile = await prisma.profile.findUnique({
+      where: { userId: pendingUser.id },
+    });
+
     await prisma.membershipRequest.create({
       data: {
         userId: pendingUser.id,
         membershipType: pendingUser.membershipType || "STUDENT",
         status: "PENDING",
+        institutionalId: profile?.studentId || null,
+        department: profile?.department || null,
         connectionNote: "Account email verified. Auto-enrolled into Admin Approval Queue.",
       },
     }).catch(() => {});

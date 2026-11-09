@@ -4,8 +4,9 @@ import * as React from "react";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { User, Mail, Lock, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, Briefcase } from "lucide-react";
+import { User, Mail, Lock, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, Briefcase, IdCard, ChevronDown } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { UNIVERSITY_DEPARTMENTS } from "@/lib/constants/departments";
 
 function RegisterForm() {
   const router = useRouter();
@@ -15,6 +16,8 @@ function RegisterForm() {
   const [membershipType, setMembershipType] = useState<string>("STUDENT");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [department, setDepartment] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +36,16 @@ function RegisterForm() {
 
     if (!email.trim() || !email.includes("@")) {
       setErrorMessage("Please enter a valid university or institutional email address.");
+      return;
+    }
+
+    if (!studentId.trim()) {
+      setErrorMessage("Please enter your University ID / Student ID.");
+      return;
+    }
+
+    if (!department.trim()) {
+      setErrorMessage("Please select your academic department.");
       return;
     }
 
@@ -76,6 +89,22 @@ function RegisterForm() {
         }
         setIsLoading(false);
         return;
+      }
+
+      // Persist University ID and Department to Profile and Membership Verification Queue
+      try {
+        await fetch("/api/auth/register-details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            studentId: studentId.trim(),
+            department: department.trim(),
+            membershipType,
+          }),
+        });
+      } catch (saveErr) {
+        console.warn("[Register Warning] Failed to immediately persist registration details:", saveErr);
       }
 
       // Success -> Redirect to verification notification screen
@@ -175,6 +204,53 @@ function RegisterForm() {
             autoComplete="email"
             className="w-full h-10 sm:h-11 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all"
           />
+        </div>
+
+        {/* University ID / Student ID */}
+        <div className="relative">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
+            <IdCard className="size-4" />
+          </div>
+          <input
+            id="studentId"
+            type="text"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            placeholder="University ID / Student ID"
+            required
+            disabled={isLoading}
+            autoComplete="off"
+            className="w-full h-10 sm:h-11 pl-11 pr-4 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-sm text-foreground placeholder:text-muted-foreground/70 outline-hidden transition-all font-mono"
+          />
+        </div>
+
+        {/* Department Dropdown */}
+        <div className="relative">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground pointer-events-none">
+            <GraduationCap className="size-4" />
+          </div>
+          <select
+            id="department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            required
+            disabled={isLoading}
+            className={`w-full h-10 sm:h-11 pl-11 pr-9 rounded-2xl bg-[#F4F3F1] dark:bg-slate-800/80 border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-900 text-xs sm:text-sm outline-hidden transition-all cursor-pointer appearance-none ${
+              department ? "text-foreground font-medium" : "text-muted-foreground/70"
+            }`}
+          >
+            <option value="" disabled className="text-muted-foreground">
+              Select Department
+            </option>
+            {UNIVERSITY_DEPARTMENTS.map((dept) => (
+              <option key={dept} value={dept} className="bg-white dark:bg-slate-900 text-foreground">
+                {dept}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+            <ChevronDown className="size-4" />
+          </div>
         </div>
 
         {/* Passwords in 2 columns */}

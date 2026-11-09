@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Calendar,
   FileText,
+  IdCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -194,22 +195,25 @@ export function VerificationTable({ initialRequests = [] }: VerificationTablePro
                       {req.membershipType}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-xs text-muted-foreground space-y-0.5">
+                  <TableCell className="text-xs space-y-1">
+                    {req.institutionalId ? (
+                      <div className="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                        <IdCard className="size-3.5 shrink-0" />
+                        <span>ID: {req.institutionalId}</span>
+                      </div>
+                    ) : (
+                      <div className="text-[11px] text-muted-foreground italic">No ID specified</div>
+                    )}
                     {req.department && (
-                      <div className="flex items-center gap-1 text-foreground font-medium">
-                        <GraduationCap className="size-3 text-muted-foreground" />
+                      <div className="flex items-center gap-1 text-foreground font-medium pt-0.5">
+                        <GraduationCap className="size-3.5 text-muted-foreground shrink-0" />
                         <span>{req.department}</span>
                       </div>
                     )}
                     {req.organization && (
-                      <div className="flex items-center gap-1 text-foreground font-medium">
-                        <Building2 className="size-3 text-muted-foreground" />
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Building2 className="size-3 shrink-0" />
                         <span>{req.organization} ({req.designation || "Affiliate"})</span>
-                      </div>
-                    )}
-                    {req.institutionalId && (
-                      <div className="font-mono text-[11px] text-muted-foreground">
-                        ID: {req.institutionalId}
                       </div>
                     )}
                     {req.graduationYear && (

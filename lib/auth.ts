@@ -107,6 +107,11 @@ export const auth = betterAuth({
       try {
         if (!user?.id) return;
 
+        // Fetch user profile to preserve studentId and department
+        const profile = await prisma.profile.findUnique({
+          where: { userId: user.id },
+        });
+
         // 1. Keep user verification status as PENDING awaiting administrator review
         await prisma.user.update({
           where: { id: user.id },
@@ -124,17 +129,23 @@ export const auth = betterAuth({
               userId: user.id,
               membershipType: user.membershipType || "STUDENT",
               status: "PENDING",
+              institutionalId: profile?.studentId || null,
+              department: profile?.department || null,
               connectionNote: "Account email verified. Submitted to Admin Approval Panel for institutional review.",
             },
           });
         } else if (existingReq.status !== "APPROVED") {
           await prisma.membershipRequest.update({
             where: { id: existingReq.id },
-            data: { status: "PENDING" },
+            data: {
+              status: "PENDING",
+              institutionalId: existingReq.institutionalId || profile?.studentId || null,
+              department: existingReq.department || profile?.department || null,
+            },
           });
         }
 
-        console.log(`[Better Auth Hook] User ${user.email} email verified. Queued into Admin Approval Panel.`);
+        console.log(`[Better Auth Hook] User ${user.email} email verified. Queued into Admin Approval Panel with ID ${profile?.studentId || "N/A"}.`);
       } catch (hookErr: any) {
         console.error("[Better Auth Hook] Failed syncing user to admin queue:", hookErr?.message || hookErr);
       }

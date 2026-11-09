@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [University ID & Department Signup with Locked Verification Dossier] - 2026-11-09
+
+### Added
+- **Signup University ID & Department Collection (`app/(auth)/register/page.tsx`)**:
+  - Integrated required **University ID / Student ID** field with `<IdCard />` Lucide icon.
+  - Integrated official **Department Dropdown Menu** (`<select>`) loaded with all canonical university departments (CSE, SWE, EEE, Mathematics, Statistics, Physics, Chemistry, BBA, English, Law, Economics, Pharmacy, Microbiology).
+  - Strictly enforced Lucide icons (`<IdCard />`, `<GraduationCap />`, `<ChevronDown />`, `<Lock />`) with zero emojis.
+- **Dedicated Registration Persistence Endpoint (`app/api/auth/register-details/route.ts`)**:
+  - Securely binds the newly registered student ID and department to their `Profile` and enqueues their `MembershipRequest` with status `PENDING`.
+- **Locked Institutional Credentials in Onboarding (`components/onboarding/onboarding-credentials-form.tsx`)**:
+  - Automatically pre-populates University ID and Department from initial signup registration.
+  - Automatically locks both fields (`disabled`, with `<Lock />` badge) to prevent post-registration tampering.
+- **Prominent Admin Verification Display (`components/admin/verification-table.tsx`)**:
+  - Displays applicant's University ID with an `<IdCard />` badge and their Department with `<GraduationCap />` icon directly in the Admin Approval Panel.
+
+---
+
 ## [Auth Pipeline & Admin Verification Queue Integration] - 2026-11-09
 
 ### Added

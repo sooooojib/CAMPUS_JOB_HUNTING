@@ -248,8 +248,8 @@ export default async function OnboardingPage() {
             predeterminedRole={predeterminedRole}
             rejectionReason={isRejected ? latestRequest?.rejectionReason : null}
             defaultValues={{
-              studentId: user.profile?.studentId,
-              department: user.profile?.department,
+              studentId: user.profile?.studentId || latestRequest?.institutionalId || undefined,
+              department: user.profile?.department || latestRequest?.department || undefined,
               academicYear: user.profile?.academicYear,
               degree: user.profile?.degree,
               graduationYear: user.profile?.graduationYear,
