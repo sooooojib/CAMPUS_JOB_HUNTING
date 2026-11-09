@@ -24,7 +24,7 @@ function getBaseURL(): string {
 
 export const auth = betterAuth({
   baseURL: getBaseURL(),
-  secret: process.env.AUTH_SECRET || "dev-insecure-secret-key-32-chars-minimum-needed",
+  secret: process.env.AUTH_SECRET || process.env.BETTER_AUTH_SECRET || "dev-insecure-secret-key-32-chars-minimum-needed",
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
