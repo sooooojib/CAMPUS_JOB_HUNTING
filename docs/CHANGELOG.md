@@ -6,7 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Account Provisioning & Role Isolation Polish] - 2026-11-06
+## [Live Email Dispatch & Member Network Enhancements] - 2026-11-09
+
+### Added
+- **Gmail SMTP Integration (`lib/email.ts`)**:
+  - Wired `nodemailer` with Gmail SMTP (`sooooooooojib@gmail.com`) using a Google App Password.
+  - Enabled live transactional delivery for email verification links, password reset emails, and notification updates to any recipient without domain restrictions.
+  - Maintained `devEmailStore` recording for local inspection and unit test validation.
+- **Academic CGPA Verification & Admin Controls (`prisma/schema.prisma`, `lib/services/admin.ts`)**:
+  - Added `isCgpaVerified` field to the `Profile` database model.
+  - Implemented `adminVerifyUserCgpa` service and `/api/admin/members/[id]/verify-cg` endpoint.
+  - Enhanced Admin Member Network in `/community` with `CG_VERIFIED` ("CG Verified") and `CG_PENDING` ("CG Pending") filters, visual CG status badges, and one-click "Verify CG" / "Revoke CG" action buttons.
+
+### Changed & Fixed
+- **Strict Inbox-Based Verification**:
+  - Removed all instant verification shortcuts (`⚡ Instant Verify & Activate Account`) from `/verify-email`. Users must now verify their accounts exclusively by clicking the link dispatched to their email inbox.
+  - Decoupled skill inputs from the Academic Verification & University Credentials onboarding form (`components/onboarding/onboarding-credentials-form.tsx`), consolidating all skill management in the member profile view (`/profile/me`).
+  - Fixed infinite redirect loop in `proxy.ts` on expired sessions while supporting seamless `callbackUrl` redirection for authenticated users.
+
+---
+
+
 
 ### Added
 - **Global Account Activation & Credential Provisioning (`scripts/activate-all-accounts.ts`)**:
