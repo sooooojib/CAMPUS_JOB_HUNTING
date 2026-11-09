@@ -39,8 +39,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { humanizeTitle } from "@/lib/utils";
 import type { AdminOpportunityItem } from "@/types";
 
 export function AdminOpportunityTable() {
@@ -197,21 +205,25 @@ export function AdminOpportunityTable() {
           </div>
 
           <div className="flex items-center gap-2">
-            <select
-              value={typeFilter}
-              onChange={(e) => {
-                setTypeFilter(e.target.value);
+            <Select
+              value={typeFilter || "ALL"}
+              onValueChange={(val) => {
+                setTypeFilter(val === "ALL" ? "" : (val ?? ""));
                 setPage(1);
               }}
-              className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             >
-              <option value="">All Opportunity Types</option>
-              <option value="INTERNSHIP">Internship</option>
-              <option value="FULL_TIME">Full Time</option>
-              <option value="PART_TIME">Part Time</option>
-              <option value="CONTRACT">Contract</option>
-              <option value="OTHER">Other</option>
-            </select>
+              <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[170px]">
+                <SelectValue placeholder="All Opportunity Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">All Opportunity Types</SelectItem>
+                <SelectItem value="INTERNSHIP">Internship</SelectItem>
+                <SelectItem value="FULL_TIME">Full Time</SelectItem>
+                <SelectItem value="PART_TIME">Part Time</SelectItem>
+                <SelectItem value="CONTRACT">Contract</SelectItem>
+                <SelectItem value="OTHER">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
@@ -465,18 +477,28 @@ export function AdminOpportunityTable() {
       {actionItem && (
         <Dialog open={!!actionItem} onOpenChange={() => setActionItem(null)}>
           <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-base flex items-center gap-2">
+            <div className="flex flex-col items-start gap-1">
+              <div
+                className={`size-11 rounded-2xl flex items-center justify-center mb-2 transition-all ${
+                  actionType === "APPROVE"
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-8 ring-emerald-500/5"
+                    : actionType === "CLOSE"
+                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-8 ring-amber-500/5"
+                    : "bg-destructive/10 text-destructive ring-8 ring-destructive/5"
+                }`}
+              >
                 {actionType === "APPROVE" ? (
-                  <CheckCircle2 className="size-4 text-emerald-600" />
+                  <CheckCircle2 className="size-5.5 stroke-[2.2]" />
                 ) : actionType === "REJECT" ? (
-                  <XCircle className="size-4 text-destructive" />
+                  <XCircle className="size-5.5 stroke-[2.2]" />
                 ) : actionType === "DELETE" ? (
-                  <Trash2 className="size-4 text-destructive" />
+                  <Trash2 className="size-5.5 stroke-[2.2]" />
                 ) : (
-                  <Lock className="size-4 text-amber-600" />
+                  <Lock className="size-5.5 stroke-[2.2]" />
                 )}
-                <span>
+              </div>
+              <DialogHeader className="gap-1 text-left">
+                <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
                   {actionType === "APPROVE"
                     ? "Approve Opportunity"
                     : actionType === "REJECT"
@@ -484,18 +506,18 @@ export function AdminOpportunityTable() {
                     : actionType === "CLOSE"
                     ? "Close Opportunity Posting"
                     : "Delete Opportunity Listing"}
-                </span>
-              </DialogTitle>
-              <DialogDescription className="text-xs">
-                {actionType === "APPROVE"
-                  ? `Authorize "${actionItem.title}" to be visible across university job feeds.`
-                  : actionType === "REJECT"
-                  ? `Reject "${actionItem.title}". Mandatory feedback will be sent to the poster.`
-                  : actionType === "CLOSE"
-                  ? `Mark "${actionItem.title}" as closed so no new applications can be accepted.`
-                  : `Permanently delete "${actionItem.title}". This cannot be undone.`}
-              </DialogDescription>
-            </DialogHeader>
+                </DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {actionType === "APPROVE"
+                    ? `Publish "${humanizeTitle(actionItem.title)}" so it becomes visible to students across university job feeds.`
+                    : actionType === "REJECT"
+                    ? `Decline "${humanizeTitle(actionItem.title)}". The poster will receive your feedback to make adjustments.`
+                    : actionType === "CLOSE"
+                    ? `Close applications for "${humanizeTitle(actionItem.title)}". Candidates will no longer be able to apply.`
+                    : `Permanently delete "${humanizeTitle(actionItem.title)}". This action cannot be reversed.`}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
 
             <div className="space-y-3 py-2 text-xs">
               <div className="space-y-1">

@@ -43,6 +43,7 @@ import { EmptyState } from "@/components/feedback/empty-state";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { ManualApplicationsView } from "@/components/applications/manual-applications-view";
+import { humanizeTitle } from "@/lib/utils";
 
 interface ApplicationItem {
   id: string;
@@ -480,20 +481,24 @@ export function MyApplicationsView() {
       {/* Withdraw Confirmation Dialog */}
       <Dialog open={!!appToWithdraw} onOpenChange={(open) => !open && setAppToWithdraw(null)}>
         <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-destructive flex items-center gap-2">
-              <AlertCircle className="size-5" />
-              <span>Withdraw Application?</span>
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
-              Are you sure you want to withdraw your application for{" "}
-              <strong>{appToWithdraw?.opportunity.title}</strong> at{" "}
-              <strong>{appToWithdraw?.opportunity.companyName}</strong>?
-            </DialogDescription>
-          </DialogHeader>
+          <div className="flex flex-col items-start gap-1">
+            <div className="size-11 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center ring-8 ring-destructive/5 mb-2">
+              <AlertCircle className="size-5.5 stroke-[2.2]" />
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                Withdraw Application
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Are you sure you want to withdraw your application for{" "}
+                <strong className="text-foreground">{humanizeTitle(appToWithdraw?.opportunity.title)}</strong> at{" "}
+                <strong className="text-foreground">{humanizeTitle(appToWithdraw?.opportunity.companyName)}</strong>? The employer will be notified.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
-          <div className="space-y-2 py-2">
-            <label className="text-xs font-medium text-foreground">
+          <div className="space-y-1.5 py-2">
+            <label className="text-xs font-semibold text-foreground">
               Reason for withdrawal (Optional)
             </label>
             <Textarea
@@ -501,16 +506,17 @@ export function MyApplicationsView() {
               onChange={(e) => setWithdrawReason(e.target.value)}
               placeholder="e.g. Accepted another offer, schedule conflict, or no longer available..."
               rows={3}
-              className="text-xs"
+              className="text-xs rounded-xl"
             />
           </div>
 
-          <DialogFooter className="gap-2">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setAppToWithdraw(null)}
               disabled={withdrawing}
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -519,7 +525,7 @@ export function MyApplicationsView() {
               size="sm"
               onClick={handleWithdrawConfirm}
               disabled={withdrawing}
-              className="gap-1.5"
+              className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
             >
               {withdrawing && <Loader2 className="size-3.5 animate-spin" />}
               <span>Confirm Withdrawal</span>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Building2, MapPin, DollarSign, Bookmark } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, humanizeTitle } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants, Button } from "@/components/ui/button";
@@ -113,14 +113,14 @@ export function JobCard({
 
               <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
                 <Link href={`/opportunities/${id}`} className="focus:outline-none">
-                  {title}
+                  {humanizeTitle(title)}
                 </Link>
               </h3>
 
               <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                 <span className="font-semibold text-foreground flex items-center gap-1">
                   <Building2 className="size-3 text-muted-foreground" />
-                  {companyName}
+                  {humanizeTitle(companyName)}
                 </span>
                 <span className="text-border">•</span>
                 <span className="flex items-center gap-1">

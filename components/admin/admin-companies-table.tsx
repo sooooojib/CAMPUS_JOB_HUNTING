@@ -34,8 +34,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { humanizeTitle } from "@/lib/utils";
 import type { AdminCompanyItem } from "@/types";
 
 export function AdminCompaniesTable() {
@@ -140,31 +148,39 @@ export function AdminCompaniesTable() {
         </div>
 
         <div className="flex items-center gap-2">
-          <select
-            value={verifiedFilter}
-            onChange={(e) => {
-              setVerifiedFilter(e.target.value);
+          <Select
+            value={verifiedFilter || "ALL"}
+            onValueChange={(val) => {
+              setVerifiedFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Verification States</option>
-            <option value="true">Verified Organizations</option>
-            <option value="false">Unverified Organizations</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[170px]">
+              <SelectValue placeholder="All Verification States" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Verification States</SelectItem>
+              <SelectItem value="true">Verified Organizations</SelectItem>
+              <SelectItem value="false">Unverified Organizations</SelectItem>
+            </SelectContent>
+          </Select>
 
-          <select
-            value={suspendedFilter}
-            onChange={(e) => {
-              setSuspendedFilter(e.target.value);
+          <Select
+            value={suspendedFilter || "ALL"}
+            onValueChange={(val) => {
+              setSuspendedFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Account States</option>
-            <option value="false">Active Only</option>
-            <option value="true">Suspended Only</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[155px]">
+              <SelectValue placeholder="All Account States" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Account States</SelectItem>
+              <SelectItem value="false">Active Only</SelectItem>
+              <SelectItem value="true">Suspended Only</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -355,57 +371,74 @@ export function AdminCompaniesTable() {
       {actionCompany && (
         <Dialog open={!!actionCompany} onOpenChange={() => setActionCompany(null)}>
           <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-base flex items-center gap-2">
-                <Building2 className="size-4 text-primary" />
-                <span>
-                  {actionType === "VERIFY"
-                    ? "Verify Company Profile"
-                    : actionType === "UNVERIFY"
-                    ? "Revoke Company Verification"
+            <div className="flex flex-col items-start gap-1">
+              <div
+                className={`size-11 rounded-2xl flex items-center justify-center mb-2 transition-all ${
+                  actionType === "VERIFY" || actionType === "RESTORE"
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-8 ring-emerald-500/5"
                     : actionType === "SUSPEND"
-                    ? "Suspend Company Profile"
-                    : "Restore Company Profile"}
-                </span>
-              </DialogTitle>
-              <DialogDescription className="text-xs">
-                {actionType === "VERIFY"
-                  ? `Grant verified institutional status to "${actionCompany.name}".`
-                  : actionType === "UNVERIFY"
-                  ? `Remove verified status from "${actionCompany.name}".`
-                  : actionType === "SUSPEND"
-                  ? `Suspending "${actionCompany.name}" prevents members from posting opportunities associated with this organization.`
-                  : `Restore active posting permissions for "${actionCompany.name}".`}
-              </DialogDescription>
-            </DialogHeader>
+                    ? "bg-destructive/10 text-destructive ring-8 ring-destructive/5"
+                    : "bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-8 ring-amber-500/5"
+                }`}
+              >
+                {actionType === "VERIFY" || actionType === "RESTORE" ? (
+                  <ShieldCheck className="size-5.5 stroke-[2.2]" />
+                ) : actionType === "SUSPEND" ? (
+                  <ShieldAlert className="size-5.5 stroke-[2.2]" />
+                ) : (
+                  <AlertTriangle className="size-5.5 stroke-[2.2]" />
+                )}
+              </div>
+              <DialogHeader className="gap-1 text-left">
+                <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                  {actionType === "VERIFY"
+                    ? "Verify Employer Profile"
+                    : actionType === "UNVERIFY"
+                    ? "Revoke Employer Verification"
+                    : actionType === "SUSPEND"
+                    ? "Suspend Employer Profile"
+                    : "Restore Employer Profile"}
+                </DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {actionType === "VERIFY"
+                    ? `Grant official verified company status to "${humanizeTitle(actionCompany.name)}".`
+                    : actionType === "UNVERIFY"
+                    ? `Remove verified employer badge from "${humanizeTitle(actionCompany.name)}".`
+                    : actionType === "SUSPEND"
+                    ? `Suspending "${humanizeTitle(actionCompany.name)}" will pause all active job postings and recruiter actions.`
+                    : `Restore active job posting privileges for "${humanizeTitle(actionCompany.name)}".`}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
 
             <div className="space-y-3 py-2 text-xs">
-              <div className="space-y-1">
-                <Label htmlFor="companyReason" className="text-xs">
-                  Administrative Reason (Logged to Audit Trail)
+              <div className="space-y-1.5">
+                <Label htmlFor="companyReason" className="text-xs font-semibold text-foreground">
+                  Reason for Action (Required)
                 </Label>
                 <Textarea
                   id="companyReason"
-                  placeholder="Explain why this status transition is being authorized..."
+                  placeholder="Please describe the reason for this action (e.g. corporate domain verified, inactive presence)..."
                   value={actionReason}
                   onChange={(e) => setActionReason(e.target.value)}
-                  className="text-xs h-20"
+                  className="text-xs min-h-[90px] rounded-xl"
                 />
               </div>
 
               {actionError && (
-                <div className="p-2.5 rounded bg-destructive/10 border border-destructive/20 text-destructive text-xs">
+                <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs font-medium">
                   {actionError}
                 </div>
               )}
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="gap-2 sm:gap-0 pt-2">
               <Button
                 size="sm"
                 variant="outline"
                 disabled={submittingAction}
                 onClick={() => setActionCompany(null)}
+                className="rounded-xl text-xs font-medium px-4 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -414,9 +447,18 @@ export function AdminCompaniesTable() {
                 variant={actionType === "SUSPEND" ? "destructive" : "default"}
                 disabled={submittingAction}
                 onClick={handleExecuteAction}
+                className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
               >
-                {submittingAction && <Loader2 className="size-3.5 animate-spin mr-1.5" />}
-                Confirm Transition
+                {submittingAction && <Loader2 className="size-3.5 animate-spin" />}
+                <span>
+                  {actionType === "VERIFY"
+                    ? "Verify Company"
+                    : actionType === "UNVERIFY"
+                    ? "Revoke Verification"
+                    : actionType === "SUSPEND"
+                    ? "Suspend Company"
+                    : "Restore Company"}
+                </span>
               </Button>
             </DialogFooter>
           </DialogContent>

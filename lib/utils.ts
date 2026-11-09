@@ -20,3 +20,12 @@ export function formatCurrency(amount: number, currency: string = "USD"): string
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+/**
+ * Strips raw trailing timestamps or test run IDs (e.g. "1794216539127")
+ * so titles, usernames, and labels in modals and cards display clean, human text.
+ */
+export function humanizeTitle(text: string | null | undefined): string {
+  if (!text) return "";
+  return text.replace(/[\s_-]+\d{10,14}$/, "").trim();
+}

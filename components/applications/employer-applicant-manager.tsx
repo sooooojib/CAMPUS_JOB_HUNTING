@@ -40,9 +40,17 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { humanizeTitle } from "@/lib/utils";
 import { ApplicationStatus } from "@/lib/validations/application";
 
 interface ApplicantItem {
@@ -456,71 +464,78 @@ export function EmployerApplicantManager({
           <DialogContent className="max-w-md">
             <DialogHeader>
               <div className="flex items-center gap-2 mb-1">
-                <Badge variant="outline" className="text-xs font-mono">
-                  Recruiter Action
+                <Badge variant="outline" className="text-xs font-medium rounded-full px-2.5 py-0.5 bg-primary/10 text-primary border-primary/20">
+                  Hiring Workflow
                 </Badge>
                 <span className="text-xs text-muted-foreground">•</span>
-                <span className="text-xs font-semibold text-foreground">{targetApp.applicant.name}</span>
+                <span className="text-xs font-semibold text-foreground">{humanizeTitle(targetApp.applicant.name)}</span>
               </div>
-              <DialogTitle className="text-lg font-bold">Update Application Stage</DialogTitle>
-              <DialogDescription className="text-xs text-muted-foreground">
-                Transition candidate status and record permanent review notes for the candidate audit history.
+              <DialogTitle className="text-lg sm:text-xl font-bold tracking-tight">
+                Update Candidate Stage
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Move {humanizeTitle(targetApp.applicant.name)} to the next stage in your recruitment pipeline and provide optional notes.
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-2">
               <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Select New Stage</Label>
-                <select
+                <Label className="text-xs font-semibold text-foreground">Next Hiring Stage</Label>
+                <Select
                   value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value as ApplicationStatus)}
-                  className="w-full text-xs rounded-xl border border-border bg-card p-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  onValueChange={(val) => setSelectedStatus(val as ApplicationStatus)}
                 >
-                  {TRANSITION_STATUS_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger className="w-full h-10 text-xs rounded-xl bg-card border-border/80">
+                    <SelectValue placeholder="Select Stage" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TRANSITION_STATUS_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="transition-note" className="text-xs font-semibold">
-                  Transition Feedback Note{" "}
+                <Label htmlFor="transition-note" className="text-xs font-semibold text-foreground">
+                  Candidate Update Note{" "}
                   <span className="text-muted-foreground font-normal">(visible to candidate)</span>
                 </Label>
                 <Textarea
                   id="transition-note"
                   value={transitionNote}
                   onChange={(e) => setTransitionNote(e.target.value)}
-                  placeholder="e.g. Profile shortlisted for technical round with Lead Systems Architect on Nov 10..."
+                  placeholder="e.g. Shortlisted for technical interview round with the engineering team..."
                   rows={2}
-                  className="text-xs"
+                  className="text-xs rounded-xl"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="internal-notes" className="text-xs font-semibold">
-                  Private Internal Notes{" "}
-                  <span className="text-muted-foreground font-normal">(hiring team only)</span>
+                <Label htmlFor="internal-notes" className="text-xs font-semibold text-foreground">
+                  Internal Team Notes{" "}
+                  <span className="text-muted-foreground font-normal">(only visible to your hiring team)</span>
                 </Label>
                 <Textarea
                   id="internal-notes"
                   value={internalNotes}
                   onChange={(e) => setInternalNotes(e.target.value)}
-                  placeholder="e.g. Strong data structures score, follow up on thesis presentation..."
+                  placeholder="e.g. Good answers on system architecture, follow up on availability date..."
                   rows={2}
-                  className="text-xs"
+                  className="text-xs rounded-xl"
                 />
               </div>
             </div>
 
-            <DialogFooter className="gap-2">
+            <DialogFooter className="gap-2 sm:gap-0 pt-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setTargetApp(null)}
                 disabled={submittingStatus}
+                className="rounded-xl text-xs font-medium px-4 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -528,10 +543,10 @@ export function EmployerApplicantManager({
                 size="sm"
                 onClick={handleUpdateStatus}
                 disabled={submittingStatus}
-                className="gap-1.5"
+                className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
               >
                 {submittingStatus && <Loader2 className="size-3.5 animate-spin" />}
-                <span>Save Stage Update</span>
+                <span>Update Status</span>
               </Button>
             </DialogFooter>
           </DialogContent>

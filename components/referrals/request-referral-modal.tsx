@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -98,28 +99,32 @@ export function RequestReferralModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-bold flex items-center gap-2">
-            <Send className="size-5 text-primary" />
-            <span>Request Referral from {recipientName}</span>
-          </DialogTitle>
-          <DialogDescription className="text-xs text-muted-foreground">
-            Introduce yourself, mention the position, and provide context on why you would be a great fit.
-          </DialogDescription>
-        </DialogHeader>
+        <div className="flex flex-col items-start gap-1">
+          <div className="size-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center ring-8 ring-primary/5 mb-2">
+            <Send className="size-5.5 stroke-[2.2]" />
+          </div>
+          <DialogHeader className="gap-1 text-left">
+            <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+              Request Referral from {recipientName}
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              Introduce yourself, mention the position, and provide context on why you would be a great fit.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
-        {/* Regulatory & Institutional Disclaimer */}
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200">
-          <AlertCircle className="size-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-          <div className="space-y-1">
-            <p className="font-semibold">Institutional Networking Disclaimer</p>
-            <p className="text-[11px] leading-relaxed text-amber-800 dark:text-amber-300">
-              Referrals facilitate trusted professional recommendations within the university ecosystem. Submitting a referral request does not guarantee an interview or employment.
+        {/* Community Referral Etiquette */}
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 p-3.5 flex items-start gap-2.5 text-xs text-foreground/90">
+          <AlertCircle className="size-4 shrink-0 text-primary mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold text-foreground">Referral Etiquette</p>
+            <p className="text-[11px] leading-relaxed text-muted-foreground">
+              Keep your note polite and specific. Referrals are voluntary recommendations provided by alumni and peers to support your application.
             </p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+        <form onSubmit={handleSubmit} className="space-y-3.5 pt-2">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
               <Building2 className="size-3.5 text-primary" />
@@ -128,9 +133,9 @@ export function RequestReferralModal({
             <Input
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="e.g. Google, Microsoft, Pathao, Bkash"
+              placeholder="e.g. Google, Brain Station 23, ShopUp, bKash"
               required
-              className="text-xs"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
@@ -142,9 +147,9 @@ export function RequestReferralModal({
             <Input
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
-              placeholder="e.g. Software Engineer, Product Manager"
+              placeholder="e.g. Software Engineer, Product Management Intern"
               required
-              className="text-xs"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
@@ -156,10 +161,10 @@ export function RequestReferralModal({
             <Textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Hi, I am an enrolled CSE senior with extensive React and Node.js experience. I'm eager to apply for this opening and would appreciate your advice or internal referral..."
+              placeholder="Hi! I noticed an opening at your company that matches my software engineering background. I would love if you could review my portfolio and consider submitting an internal referral..."
               rows={4}
               required
-              className="text-xs leading-relaxed"
+              className="text-xs rounded-xl leading-relaxed"
             />
             <p className="text-[10px] text-muted-foreground text-right">
               {message.length} / 2000 characters
@@ -176,18 +181,18 @@ export function RequestReferralModal({
               onChange={(e) => setResumeUrl(e.target.value)}
               placeholder="https://drive.google.com/... or portfolio link"
               type="url"
-              className="text-xs"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => onOpenChange(false)}
               disabled={loading}
-              className="text-xs"
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -195,12 +200,12 @@ export function RequestReferralModal({
               type="submit"
               size="sm"
               disabled={loading}
-              className="gap-1.5 text-xs font-semibold"
+              className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
             >
               <Send className="size-3.5" />
               <span>{loading ? "Submitting..." : "Send Referral Request"}</span>
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

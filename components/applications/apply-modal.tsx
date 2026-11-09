@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ApplicationStatusBadge } from "@/components/opportunities/application-status-badge";
+import { humanizeTitle } from "@/lib/utils";
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -201,37 +202,37 @@ export function ApplyModal({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-2 mb-1">
-            <Badge variant="outline" className="text-xs font-mono uppercase">
-              Direct University Application
+            <Badge variant="outline" className="text-xs font-medium rounded-full px-2.5 py-0.5 bg-primary/10 text-primary border-primary/20">
+              Campus Direct Application
             </Badge>
             <span className="text-xs text-muted-foreground">•</span>
-            <span className="text-xs font-medium text-foreground/80">{companyName}</span>
+            <span className="text-xs font-semibold text-foreground/90">{companyName}</span>
           </div>
           <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">
-            {opportunityTitle}
+            {humanizeTitle(opportunityTitle)}
           </DialogTitle>
-          <DialogDescription className="text-xs sm:text-sm text-muted-foreground">
-            Submit your verified university credential package and resume directly to corporate recruiters.
+          <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            Submit your application and resume directly to the recruitment team at {companyName}.
           </DialogDescription>
         </DialogHeader>
 
         {loading ? (
           <div className="py-12 flex flex-col items-center justify-center space-y-3">
             <Loader2 className="size-8 animate-spin text-primary" />
-            <p className="text-xs text-muted-foreground">Checking institutional eligibility &amp; resume vault...</p>
+            <p className="text-xs text-muted-foreground">Checking your eligibility and resumes...</p>
           </div>
         ) : eligibility?.alreadyApplied ? (
           /* Already Applied State */
           <div className="py-6 space-y-4">
-            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-start gap-3">
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex items-start gap-3">
               <CheckCircle2 className="size-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
                   You have already applied for this opening
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Your application was registered on{" "}
-                  {new Date(eligibility.existingApplication?.submittedAt).toLocaleDateString()}. Duplicate applications are prevented at the database level.
+                  Your application was received on{" "}
+                  {new Date(eligibility.existingApplication?.submittedAt).toLocaleDateString()}. You can review review stages and progress anytime.
                 </p>
                 <div className="pt-2 flex items-center gap-2">
                   <span className="text-xs font-medium text-muted-foreground">Current Status:</span>
@@ -240,12 +241,12 @@ export function ApplyModal({
               </div>
             </div>
 
-            <DialogFooter className="pt-4 border-t border-border">
-              <Button variant="outline" onClick={onClose} size="sm">
+            <DialogFooter className="pt-4 border-t border-border/60">
+              <Button variant="outline" onClick={onClose} size="sm" className="rounded-xl text-xs font-medium px-4 cursor-pointer">
                 Close
               </Button>
               <Link href="/applications" className="inline-flex items-center">
-                <Button size="sm" className="gap-1.5">
+                <Button size="sm" className="gap-1.5 rounded-xl text-xs font-semibold px-4 cursor-pointer shadow-xs">
                   <span>Track in My Applications</span>
                   <ArrowRight className="size-3.5" />
                 </Button>
@@ -255,19 +256,19 @@ export function ApplyModal({
         ) : eligibility?.isDeadlinePassed ? (
           /* Deadline Passed State */
           <div className="py-6 space-y-4">
-            <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-4 flex items-start gap-3">
+            <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-4 flex items-start gap-3">
               <Clock className="size-5 text-destructive shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
                   Application Deadline Passed
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  The deadline for this opportunity was {new Date(deadline).toLocaleDateString()}. Per university career guidelines, applications cannot be submitted after the closing time.
+                  The deadline for this opportunity closed on {new Date(deadline).toLocaleDateString()}. Applications are no longer accepted for this opening.
                 </p>
               </div>
             </div>
-            <DialogFooter className="pt-4 border-t border-border">
-              <Button variant="outline" onClick={onClose} size="sm">
+            <DialogFooter className="pt-4 border-t border-border/60">
+              <Button variant="outline" onClick={onClose} size="sm" className="rounded-xl text-xs font-medium px-4 cursor-pointer">
                 Close
               </Button>
             </DialogFooter>
@@ -275,21 +276,21 @@ export function ApplyModal({
         ) : step === "success" ? (
           /* Success State */
           <div className="py-8 text-center space-y-4">
-            <div className="size-16 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
-              <Check className="size-8" />
+            <div className="size-16 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center ring-8 ring-emerald-500/5">
+              <Check className="size-8 stroke-[2.5]" />
             </div>
             <div className="space-y-1 max-w-md mx-auto">
-              <h3 className="text-xl font-bold text-foreground">Application Successfully Sent!</h3>
+              <h3 className="text-xl font-bold text-foreground">Application Sent!</h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Your dossier has been delivered to the hiring team at {companyName}. You can monitor status transitions and review updates in your applicant dashboard.
+                Your application and resume have been submitted to {companyName}. You can track interview progress and updates anytime in My Applications.
               </p>
             </div>
-            <DialogFooter className="pt-6 border-t border-border flex justify-center sm:justify-center gap-3">
-              <Button variant="outline" onClick={onClose} size="sm">
+            <DialogFooter className="pt-6 border-t border-border/60 flex justify-center sm:justify-center gap-3">
+              <Button variant="outline" onClick={onClose} size="sm" className="rounded-xl text-xs font-medium px-4 cursor-pointer">
                 Done
               </Button>
               <Link href="/applications">
-                <Button size="sm" className="gap-1.5">
+                <Button size="sm" className="gap-1.5 rounded-xl text-xs font-semibold px-4 cursor-pointer shadow-xs">
                   <span>View My Applications</span>
                   <ArrowRight className="size-3.5" />
                 </Button>

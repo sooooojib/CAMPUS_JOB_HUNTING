@@ -105,19 +105,26 @@ export function ResubmitVerificationModal({
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Institutional Verification Resubmission</DialogTitle>
-          <DialogDescription>
-            Provide updated credentials to substantiate your {(membershipType || "member").toLowerCase().replace("_", " ")} identity.
-          </DialogDescription>
-        </DialogHeader>
-
-        {previousRejectionReason && (
-          <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-xs space-y-1">
-            <span className="font-semibold">Reviewer Rejection Notice:</span>
-            <p>{previousRejectionReason}</p>
+          <div className="flex flex-col items-start gap-1">
+            <div className="size-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center ring-8 ring-primary/5 mb-2">
+              <ShieldAlert className="size-5.5 stroke-[2.2]" />
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                Update Verification Details
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Submit updated details to verify your {(membershipType || "member").toLowerCase().replace("_", " ")} account.
+              </DialogDescription>
+            </DialogHeader>
           </div>
-        )}
+
+          {previousRejectionReason && (
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-xs space-y-1">
+              <span className="font-semibold text-foreground">Reviewer Feedback:</span>
+              <p className="leading-relaxed">{previousRejectionReason}</p>
+            </div>
+          )}
 
         {error && (
           <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">

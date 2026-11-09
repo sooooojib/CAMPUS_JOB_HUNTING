@@ -36,8 +36,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { humanizeTitle } from "@/lib/utils";
 import type { AdminMemberItem, MembershipType, VerificationStatus, AccountStatus } from "@/types";
 
 interface AdminMembersTableProps {
@@ -182,49 +190,61 @@ export function AdminMembersTable({ currentAdminId }: AdminMembersTableProps) {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Membership Type Select */}
-          <select
-            value={membershipTypeFilter}
-            onChange={(e) => {
-              setMembershipTypeFilter(e.target.value);
+          <Select
+            value={membershipTypeFilter || "ALL"}
+            onValueChange={(val) => {
+              setMembershipTypeFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Membership Types</option>
-            <option value="STUDENT">Student</option>
-            <option value="ALUMNI">Alumni</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[170px]">
+              <SelectValue placeholder="All Membership Types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Membership Types</SelectItem>
+              <SelectItem value="STUDENT">Student</SelectItem>
+              <SelectItem value="ALUMNI">Alumni</SelectItem>
+              <SelectItem value="ADMIN">Admin</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Verification Status */}
-          <select
-            value={verificationFilter}
-            onChange={(e) => {
-              setVerificationFilter(e.target.value);
+          <Select
+            value={verificationFilter || "ALL"}
+            onValueChange={(val) => {
+              setVerificationFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Verification Statuses</option>
-            <option value="VERIFIED">Verified</option>
-            <option value="PENDING">Pending</option>
-            <option value="REJECTED">Rejected</option>
-            <option value="SUSPENDED">Suspended</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[175px]">
+              <SelectValue placeholder="All Verification Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Verification Statuses</SelectItem>
+              <SelectItem value="VERIFIED">Verified</SelectItem>
+              <SelectItem value="PENDING">Pending Review</SelectItem>
+              <SelectItem value="REJECTED">Rejected</SelectItem>
+              <SelectItem value="SUSPENDED">Suspended</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* Account Status */}
-          <select
-            value={accountStatusFilter}
-            onChange={(e) => {
-              setAccountStatusFilter(e.target.value);
+          <Select
+            value={accountStatusFilter || "ALL"}
+            onValueChange={(val) => {
+              setAccountStatusFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-9 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Account Statuses</option>
-            <option value="ACTIVE">Active</option>
-            <option value="SUSPENDED">Suspended</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[160px]">
+              <SelectValue placeholder="All Account Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Account Statuses</SelectItem>
+              <SelectItem value="ACTIVE">Active</SelectItem>
+              <SelectItem value="SUSPENDED">Suspended</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -460,51 +480,64 @@ export function AdminMembersTable({ currentAdminId }: AdminMembersTableProps) {
       {suspendModalMember && (
         <Dialog open={!!suspendModalMember} onOpenChange={() => setSuspendModalMember(null)}>
           <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-base flex items-center gap-2 text-destructive">
-                <AlertTriangle className="size-4" />
-                <span>
+            <div className="flex flex-col items-start gap-1">
+              <div
+                className={`size-11 rounded-2xl flex items-center justify-center mb-2 transition-all ${
+                  suspendAction === "SUSPEND"
+                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-8 ring-amber-500/5"
+                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-8 ring-emerald-500/5"
+                }`}
+              >
+                {suspendAction === "SUSPEND" ? (
+                  <AlertTriangle className="size-5.5 stroke-[2.2]" />
+                ) : (
+                  <UserCheck className="size-5.5 stroke-[2.2]" />
+                )}
+              </div>
+              <DialogHeader className="gap-1 text-left">
+                <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
                   {suspendAction === "SUSPEND" ? "Suspend Member Account" : "Restore Member Account"}
-                </span>
-              </DialogTitle>
-              <DialogDescription className="text-xs">
-                {suspendAction === "SUSPEND"
-                  ? `Suspending ${suspendModalMember.name} will immediately revoke their access to job applications, postings, and community discussion.`
-                  : `Restoring ${suspendModalMember.name} will reinstate their authorized membership capabilities.`}
-              </DialogDescription>
-            </DialogHeader>
+                </DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {suspendAction === "SUSPEND"
+                    ? `Suspending ${humanizeTitle(suspendModalMember.name)} will temporarily pause their posting, application, and messaging privileges.`
+                    : `Restoring ${humanizeTitle(suspendModalMember.name)} will reactivate their full account access.`}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
 
             <div className="space-y-3 py-2 text-xs">
-              <div className="space-y-1">
-                <Label htmlFor="suspendReason" className="text-xs">
-                  Mandatory Stated Reason (Recorded in Audit Trail)
+              <div className="space-y-1.5">
+                <Label htmlFor="suspendReason" className="text-xs font-semibold text-foreground">
+                  Reason for {suspendAction === "SUSPEND" ? "Suspension" : "Restoration"} (Required)
                 </Label>
                 <Textarea
                   id="suspendReason"
                   placeholder={
                     suspendAction === "SUSPEND"
-                      ? "Explain the compliance violation or policy breach (min 5 chars)..."
-                      : "Reason for restoring account privileges (min 5 chars)..."
+                      ? "Please describe why this account is being suspended (e.g. policy violation, inappropriate content, false credentials)..."
+                      : "Please state why account access is being restored..."
                   }
                   value={actionReason}
                   onChange={(e) => setActionReason(e.target.value)}
-                  className="text-xs h-24"
+                  className="text-xs min-h-[90px] rounded-xl"
                 />
               </div>
 
               {actionError && (
-                <div className="p-2.5 rounded bg-destructive/10 border border-destructive/20 text-destructive text-xs">
+                <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs font-medium">
                   {actionError}
                 </div>
               )}
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="gap-2 sm:gap-0 pt-2">
               <Button
                 size="sm"
                 variant="outline"
                 disabled={submittingAction}
                 onClick={() => setSuspendModalMember(null)}
+                className="rounded-xl text-xs font-medium px-4 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -513,9 +546,20 @@ export function AdminMembersTable({ currentAdminId }: AdminMembersTableProps) {
                 variant={suspendAction === "SUSPEND" ? "destructive" : "default"}
                 disabled={submittingAction}
                 onClick={handleConfirmSuspension}
+                className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
               >
-                {submittingAction && <Loader2 className="size-3.5 animate-spin mr-1.5" />}
-                {suspendAction === "SUSPEND" ? "Confirm Suspension" : "Confirm Restoration"}
+                {submittingAction && <Loader2 className="size-3.5 animate-spin" />}
+                {suspendAction === "SUSPEND" ? (
+                  <>
+                    <UserX className="size-3.5" />
+                    <span>Suspend Account</span>
+                  </>
+                ) : (
+                  <>
+                    <UserCheck className="size-3.5" />
+                    <span>Restore Account</span>
+                  </>
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>

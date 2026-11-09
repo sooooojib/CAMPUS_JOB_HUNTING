@@ -32,6 +32,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { AdminReportItem } from "@/types";
@@ -164,18 +171,22 @@ export function AdminReportsTable() {
           ))}
         </div>
 
-        <select
-          value={targetTypeFilter}
-          onChange={(e) => {
-            setTargetTypeFilter(e.target.value);
+        <Select
+          value={targetTypeFilter || "ALL"}
+          onValueChange={(val) => {
+            setTargetTypeFilter(val === "ALL" ? "" : (val ?? ""));
             setPage(1);
           }}
-          className="h-8 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
         >
-          <option value="">All Content Types</option>
-          <option value="POST">Posts Only</option>
-          <option value="COMMENT">Comments Only</option>
-        </select>
+          <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[160px]">
+            <SelectValue placeholder="All Content Types" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Content Types</SelectItem>
+            <SelectItem value="POST">Posts Only</SelectItem>
+            <SelectItem value="COMMENT">Comments Only</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Reports Table */}

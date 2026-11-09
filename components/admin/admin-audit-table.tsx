@@ -32,6 +32,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { AdminAuditLogItem, AdminAuditAction } from "@/types";
 
 export function AdminAuditTable() {
@@ -119,47 +126,55 @@ export function AdminAuditTable() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <select
-            value={actionFilter}
-            onChange={(e) => {
-              setActionFilter(e.target.value);
+          <Select
+            value={actionFilter || "ALL"}
+            onValueChange={(val) => {
+              setActionFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-8 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Administrative Actions</option>
-            <option value="MEMBER_VERIFIED">MEMBER_VERIFIED</option>
-            <option value="MEMBER_REJECTED">MEMBER_REJECTED</option>
-            <option value="ACCOUNT_SUSPENDED">ACCOUNT_SUSPENDED</option>
-            <option value="ACCOUNT_RESTORED">ACCOUNT_RESTORED</option>
-            <option value="OPPORTUNITY_APPROVED">OPPORTUNITY_APPROVED</option>
-            <option value="OPPORTUNITY_REJECTED">OPPORTUNITY_REJECTED</option>
-            <option value="OPPORTUNITY_CLOSED">OPPORTUNITY_CLOSED</option>
-            <option value="OPPORTUNITY_DELETED">OPPORTUNITY_DELETED</option>
-            <option value="CONTENT_REPORT_RESOLVED">CONTENT_REPORT_RESOLVED</option>
-            <option value="CONTENT_REPORT_DISMISSED">CONTENT_REPORT_DISMISSED</option>
-            <option value="POST_REMOVED">POST_REMOVED</option>
-            <option value="COMMENT_REMOVED">COMMENT_REMOVED</option>
-            <option value="COMPANY_VERIFIED">COMPANY_VERIFIED</option>
-            <option value="COMPANY_SUSPENDED">COMPANY_SUSPENDED</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[190px]">
+              <SelectValue placeholder="All Administrative Actions" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Administrative Actions</SelectItem>
+              <SelectItem value="MEMBER_VERIFIED">Member Verified</SelectItem>
+              <SelectItem value="MEMBER_REJECTED">Member Rejected</SelectItem>
+              <SelectItem value="ACCOUNT_SUSPENDED">Account Suspended</SelectItem>
+              <SelectItem value="ACCOUNT_RESTORED">Account Restored</SelectItem>
+              <SelectItem value="OPPORTUNITY_APPROVED">Opportunity Approved</SelectItem>
+              <SelectItem value="OPPORTUNITY_REJECTED">Opportunity Rejected</SelectItem>
+              <SelectItem value="OPPORTUNITY_CLOSED">Opportunity Closed</SelectItem>
+              <SelectItem value="OPPORTUNITY_DELETED">Opportunity Deleted</SelectItem>
+              <SelectItem value="CONTENT_REPORT_RESOLVED">Report Resolved</SelectItem>
+              <SelectItem value="CONTENT_REPORT_DISMISSED">Report Dismissed</SelectItem>
+              <SelectItem value="POST_REMOVED">Post Removed</SelectItem>
+              <SelectItem value="COMMENT_REMOVED">Comment Removed</SelectItem>
+              <SelectItem value="COMPANY_VERIFIED">Company Verified</SelectItem>
+              <SelectItem value="COMPANY_SUSPENDED">Company Suspended</SelectItem>
+            </SelectContent>
+          </Select>
 
-          <select
-            value={targetTypeFilter}
-            onChange={(e) => {
-              setTargetTypeFilter(e.target.value);
+          <Select
+            value={targetTypeFilter || "ALL"}
+            onValueChange={(val) => {
+              setTargetTypeFilter(val === "ALL" ? "" : (val ?? ""));
               setPage(1);
             }}
-            className="h-8 px-3 rounded-md border border-input bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           >
-            <option value="">All Target Types</option>
-            <option value="USER">User / Account</option>
-            <option value="OPPORTUNITY">Opportunity</option>
-            <option value="REPORT">Content Report</option>
-            <option value="POST">Post</option>
-            <option value="COMMENT">Comment</option>
-            <option value="COMPANY">Company</option>
-          </select>
+            <SelectTrigger className="h-9 text-xs rounded-xl bg-card border-border/80 min-w-[160px]">
+              <SelectValue placeholder="All Target Types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Target Types</SelectItem>
+              <SelectItem value="USER">User Account</SelectItem>
+              <SelectItem value="OPPORTUNITY">Opportunity</SelectItem>
+              <SelectItem value="REPORT">Content Report</SelectItem>
+              <SelectItem value="POST">Post</SelectItem>
+              <SelectItem value="COMMENT">Comment</SelectItem>
+              <SelectItem value="COMPANY">Company</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

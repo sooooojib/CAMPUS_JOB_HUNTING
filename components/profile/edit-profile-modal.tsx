@@ -143,12 +143,19 @@ export function EditProfileModal({ initialProfile }: EditProfileModalProps) {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Edit Member Profile</DialogTitle>
-          <DialogDescription>
-            Update your professional summary, academic background, and visibility preferences.
-          </DialogDescription>
-        </DialogHeader>
+          <div className="flex flex-col items-start gap-1">
+            <div className="size-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center ring-8 ring-primary/5 mb-2">
+              <Edit3 className="size-5.5 stroke-[2.2]" />
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                Edit Member Profile
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Update your professional bio, academic background, contact links, and privacy settings.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
         {error && (
           <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">

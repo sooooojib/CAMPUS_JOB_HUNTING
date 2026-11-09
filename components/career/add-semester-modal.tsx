@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -82,17 +83,21 @@ export function AddSemesterModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-base font-bold flex items-center gap-2">
-            <GraduationCap className="size-5 text-primary" />
-            <span>Add Semester Academic Record</span>
-          </DialogTitle>
-          <DialogDescription className="text-xs text-muted-foreground">
-            Log semester GPA and credit hours to automatically compute your official cumulative CGPA for opportunity matching.
-          </DialogDescription>
-        </DialogHeader>
+        <div className="flex flex-col items-start gap-1">
+          <div className="size-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center ring-8 ring-primary/5 mb-2">
+            <GraduationCap className="size-5.5 stroke-[2.2]" />
+          </div>
+          <DialogHeader className="gap-1 text-left">
+            <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+              Add Semester Academic Record
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              Track your semester results and credit hours. Your overall CGPA will update automatically.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+        <form onSubmit={handleSubmit} className="space-y-3.5 pt-2">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-foreground">
               Semester / Term Name
@@ -100,16 +105,16 @@ export function AddSemesterModal({
             <Input
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
-              placeholder="e.g. Fall 2024, Spring 2025, Semester 5"
+              placeholder="e.g. Spring 2025, Fall 2024, or 4th Semester"
               required
-              className="text-xs"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-foreground">
-                Semester GPA (0.00 - 4.00)
+                Semester GPA (0.00 – 4.00)
               </label>
               <Input
                 type="number"
@@ -120,7 +125,7 @@ export function AddSemesterModal({
                 onChange={(e) => setGpa(e.target.value)}
                 placeholder="3.85"
                 required
-                className="text-xs"
+                className="text-xs rounded-xl h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
 
@@ -135,9 +140,9 @@ export function AddSemesterModal({
                 max="30"
                 value={credits}
                 onChange={(e) => setCredits(e.target.value)}
-                placeholder="3.0 or 15.0"
+                placeholder="e.g. 15.0 or 3.0"
                 required
-                className="text-xs"
+                className="text-xs rounded-xl h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           </div>
@@ -149,38 +154,38 @@ export function AddSemesterModal({
             <Input
               value={academicYear}
               onChange={(e) => setAcademicYear(e.target.value)}
-              placeholder="e.g. 1st Year, 2nd Year, 3rd Year, Senior"
-              className="text-xs"
+              placeholder="e.g. 1st Year, 2nd Year, 3rd Year, Final Year"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-foreground">
-              Coursework / Honors Notes (Optional)
+              Coursework &amp; Honors (Optional)
             </label>
             <Input
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Dean's List, Algorithms, Operating Systems"
-              className="text-xs"
+              placeholder="e.g. Dean's Honor Roll, Algorithms, Operating Systems"
+              className="text-xs rounded-xl h-10"
             />
           </div>
 
-          <div className="rounded-lg bg-muted/60 p-3 flex items-start gap-2 text-xs text-muted-foreground border border-border">
+          <div className="rounded-2xl bg-muted/40 p-3.5 flex items-start gap-2.5 text-xs text-muted-foreground border border-border/70">
             <AlertCircle className="size-4 text-primary shrink-0 mt-0.5" />
             <p className="text-[11px] leading-relaxed">
-              Semester records remain strictly private. Cumulative CGPA is automatically updated using credit-weighted summation: Sum(GPA * Credits) / Sum(Credits).
+              Your academic records are private to your account. Your overall CGPA recalculates automatically based on credit-weighted term grades.
             </p>
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+          <DialogFooter className="pt-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => onOpenChange(false)}
               disabled={loading}
-              className="text-xs"
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -188,12 +193,12 @@ export function AddSemesterModal({
               type="submit"
               size="sm"
               disabled={loading}
-              className="gap-1.5 text-xs font-semibold"
+              className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
             >
-              <Plus className="size-3.5" />
+              <Plus className="size-4" />
               <span>{loading ? "Saving..." : "Save Record"}</span>
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

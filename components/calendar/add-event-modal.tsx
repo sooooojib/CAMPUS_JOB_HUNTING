@@ -14,6 +14,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { CalendarEventType } from "@/types";
 
 interface AddEventModalProps {
@@ -108,26 +115,30 @@ export function AddEventModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              <CalendarIcon className="size-4 text-primary" />
-              <span>Add Career Reminder</span>
-            </DialogTitle>
-            <DialogDescription className="text-xs">
-              Schedule an interview prep session, application milestone, or follow-up note.
-            </DialogDescription>
-          </DialogHeader>
+          <div className="flex flex-col items-start gap-1">
+            <div className="size-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center ring-8 ring-primary/5 mb-2">
+              <CalendarIcon className="size-5.5 stroke-[2.2]" />
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                Add Career Reminder
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Schedule an upcoming interview, track an application milestone, or set a personal reminder.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
           {error && (
-            <div className="mt-3 p-2.5 rounded-lg bg-destructive/10 text-destructive text-xs font-medium">
+            <div className="mt-3 p-3 rounded-xl bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">
               {error}
             </div>
           )}
 
-          <div className="space-y-4 py-4">
+          <div className="space-y-3.5 py-3">
             <div className="space-y-1.5">
-              <Label htmlFor="event-title" className="text-xs font-semibold">
-                Title <span className="text-destructive">*</span>
+              <Label htmlFor="event-title" className="text-xs font-semibold text-foreground">
+                Event Title <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="event-title"
@@ -135,27 +146,30 @@ export function AddEventModal({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="text-xs h-9"
+                className="text-xs h-10 rounded-xl"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="event-type" className="text-xs font-semibold">
-                  Category
+                <Label htmlFor="event-type" className="text-xs font-semibold text-foreground">
+                  Event Category
                 </Label>
-                <select
-                  id="event-type"
+                <Select
                   value={eventType}
-                  onChange={(e) => setEventType(e.target.value as CalendarEventType)}
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  onValueChange={(val) => setEventType(val as CalendarEventType)}
                 >
-                  <option value="REMINDER">Personal Reminder</option>
-                  <option value="INTERVIEW">Interview / Round</option>
-                  <option value="APPLICATION_DEADLINE">Target Deadline</option>
-                  <option value="CAREER_FAIR">Career Fair</option>
-                  <option value="OTHER">Other Note</option>
-                </select>
+                  <SelectTrigger className="h-10 text-xs rounded-xl bg-card border-border/80 w-full">
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="REMINDER">Personal Reminder</SelectItem>
+                    <SelectItem value="INTERVIEW">Interview / Round</SelectItem>
+                    <SelectItem value="APPLICATION_DEADLINE">Target Deadline</SelectItem>
+                    <SelectItem value="CAREER_FAIR">Career Fair</SelectItem>
+                    <SelectItem value="OTHER">Other Note</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-1.5">

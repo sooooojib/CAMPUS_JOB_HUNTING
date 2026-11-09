@@ -46,6 +46,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ConfirmDialog } from "@/components/feedback/confirm-dialog";
 import { ConnectionButton, ConnectionState } from "@/components/community/connection-button";
+import { humanizeTitle } from "@/lib/utils";
 import type { MemberDirectoryItem, AdminMemberItem, VerificationStatus, AccountStatus } from "@/types";
 
 interface MemberDirectoryViewProps {
@@ -580,7 +581,7 @@ export function MemberDirectoryView({
                           className="text-base font-bold text-foreground hover:text-primary transition-colors leading-tight truncate block"
                           title={member.name}
                         >
-                          {member.name}
+                          {humanizeTitle(member.name)}
                         </Link>
 
                         {/* Non-Admin: Connection Button */}
@@ -869,39 +870,54 @@ export function MemberDirectoryView({
         open={!!suspendModalMember}
         onOpenChange={(open) => !open && setSuspendModalMember(null)}
       >
-        <DialogContent className="sm:max-w-md rounded-3xl">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-foreground">
-              {suspendAction === "SUSPEND" ? "Suspend Member Account" : "Restore Member Account"}
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              {suspendAction === "SUSPEND"
-                ? `Suspending ${suspendModalMember?.name} will immediately block their access to community posts, applications, and messaging.`
-                : `Restoring ${suspendModalMember?.name} will reactivate their credentials and community access.`}
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-start gap-1">
+            <div
+              className={`size-11 rounded-2xl flex items-center justify-center mb-2 transition-all ${
+                suspendAction === "SUSPEND"
+                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-8 ring-amber-500/5"
+                  : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-8 ring-emerald-500/5"
+              }`}
+            >
+              {suspendAction === "SUSPEND" ? (
+                <AlertTriangle className="size-5.5 stroke-[2.2]" />
+              ) : (
+                <ShieldCheck className="size-5.5 stroke-[2.2]" />
+              )}
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                {suspendAction === "SUSPEND" ? "Suspend Member Account" : "Restore Member Account"}
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {suspendAction === "SUSPEND"
+                  ? `Suspending ${humanizeTitle(suspendModalMember?.name)} will temporarily pause their posting, application, and messaging privileges.`
+                  : `Restoring ${humanizeTitle(suspendModalMember?.name)} will reactivate their full account access and membership privileges.`}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
           {suspendAction === "SUSPEND" && (
-            <div className="space-y-2 py-2">
-              <Label htmlFor="suspendReason" className="text-xs font-bold text-foreground">
-                Accountability Reason (Required)
+            <div className="space-y-1.5 py-1">
+              <Label htmlFor="suspendReason" className="text-xs font-semibold text-foreground">
+                Reason for Suspension (Required)
               </Label>
               <Textarea
                 id="suspendReason"
                 value={actionReason}
                 onChange={(e) => setActionReason(e.target.value)}
-                placeholder="Detail the policy violation or reason for suspension (minimum 5 characters)..."
-                className="text-xs min-h-[90px] rounded-2xl"
+                placeholder="Please describe why this account is being suspended (e.g. spam posts, harassment, unverified student credentials)..."
+                className="text-xs min-h-[90px] rounded-xl"
               />
             </div>
           )}
 
-          <DialogFooter className="gap-2 sm:gap-0">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setSuspendModalMember(null)}
-              className="rounded-lg text-xs"
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -910,10 +926,20 @@ export function MemberDirectoryView({
               size="sm"
               disabled={submittingSuspend || (suspendAction === "SUSPEND" && actionReason.trim().length < 5)}
               onClick={handleConfirmSuspension}
-              className="rounded-lg text-xs"
+              className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
             >
-              {submittingSuspend && <Loader2 className="size-3 animate-spin mr-1.5" />}
-              {suspendAction === "SUSPEND" ? "Confirm Suspension" : "Restore Access"}
+              {submittingSuspend && <Loader2 className="size-3.5 animate-spin" />}
+              {suspendAction === "SUSPEND" ? (
+                <>
+                  <ShieldAlert className="size-3.5" />
+                  <span>Suspend Account</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="size-3.5" />
+                  <span>Restore Access</span>
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -923,9 +949,9 @@ export function MemberDirectoryView({
       <ConfirmDialog
         open={!!confirmRevokeMember}
         onOpenChange={(open) => !open && setConfirmRevokeMember(null)}
-        title="Revoke Verification?"
-        description={`Are you sure you want to revoke university verification for ${confirmRevokeMember?.name}? Their status will revert to Pending.`}
-        confirmLabel="Revoke Verification"
+        title="Revoke Verification"
+        description={`Are you sure you want to revoke university verification for ${humanizeTitle(confirmRevokeMember?.name)}? Their status will return to pending review.`}
+        confirmLabel="Yes, Revoke Verification"
         variant="destructive"
         isLoading={revokeLoading}
         onConfirm={handleConfirmRevoke}
@@ -935,9 +961,9 @@ export function MemberDirectoryView({
       <ConfirmDialog
         open={!!confirmDeleteMember}
         onOpenChange={(open) => !open && setConfirmDeleteMember(null)}
-        title="Delete Member Account?"
-        description={`Are you sure you want to permanently delete the account for ${confirmDeleteMember?.name}? This action is irreversible and removes their profile, postings, and records from the platform.`}
-        confirmLabel="Permanently Delete"
+        title="Delete Member Account"
+        description={`Are you sure you want to permanently delete ${humanizeTitle(confirmDeleteMember?.name)}? This action is irreversible and removes their profile and records.`}
+        confirmLabel="Delete Account"
         variant="destructive"
         isLoading={deleteLoading}
         onConfirm={handleDeleteMember}
