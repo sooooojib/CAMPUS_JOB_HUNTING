@@ -21,3 +21,4 @@ export const UNIVERSITY_DEPARTMENTS = [
 ] as const;
 
 export type UniversityDepartment = (typeof UNIVERSITY_DEPARTMENTS)[number];
+
