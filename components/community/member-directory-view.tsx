@@ -298,7 +298,7 @@ export function MemberDirectoryView({
     switch (status) {
       case "VERIFIED":
         return (
-          <Badge className="bg-emerald-600/90 text-white hover:bg-emerald-700 text-[10px] font-semibold rounded-full px-2 py-0.5 gap-1">
+          <Badge className="bg-emerald-600/90 text-white hover:bg-emerald-700 text-[10px] font-semibold rounded-md px-2 py-0.5 gap-1">
             <CheckCircle2 className="size-3" />
             <span>Verified</span>
           </Badge>
@@ -307,7 +307,7 @@ export function MemberDirectoryView({
         return (
           <Badge
             variant="outline"
-            className="border-amber-500/60 text-amber-600 dark:text-amber-400 bg-amber-500/10 text-[10px] font-semibold rounded-full px-2 py-0.5 gap-1"
+            className="border-amber-500/60 text-amber-600 dark:text-amber-400 bg-amber-500/10 text-[10px] font-semibold rounded-md px-2 py-0.5 gap-1"
           >
             <Clock className="size-3" />
             <span>Pending</span>
@@ -315,19 +315,19 @@ export function MemberDirectoryView({
         );
       case "REJECTED":
         return (
-          <Badge variant="destructive" className="text-[10px] font-semibold rounded-full px-2 py-0.5">
+          <Badge variant="destructive" className="text-[10px] font-semibold rounded-md px-2 py-0.5">
             Rejected
           </Badge>
         );
       case "SUSPENDED":
         return (
-          <Badge variant="destructive" className="bg-rose-800 text-white text-[10px] font-semibold rounded-full px-2 py-0.5">
+          <Badge variant="destructive" className="bg-rose-800 text-white text-[10px] font-semibold rounded-md px-2 py-0.5">
             Suspended
           </Badge>
         );
       default:
         return (
-          <Badge variant="secondary" className="text-[10px] font-semibold rounded-full px-2 py-0.5">
+          <Badge variant="secondary" className="text-[10px] font-semibold rounded-md px-2 py-0.5">
             {status || "Unverified"}
           </Badge>
         );
@@ -471,14 +471,14 @@ export function MemberDirectoryView({
           </div>
           {hasActiveFilters && (
             <div className="flex items-center gap-2">
-              <span className="text-[11px] bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-medium">
+              <span className="text-[11px] bg-primary/10 text-primary px-2.5 py-0.5 rounded-md font-medium">
                 Filters Active
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleResetFilters}
-                className="h-7 px-2.5 text-xs text-muted-foreground hover:text-foreground rounded-full"
+                className="h-7 px-2.5 text-xs text-muted-foreground hover:text-foreground rounded-md"
               >
                 Clear
               </Button>
@@ -491,9 +491,9 @@ export function MemberDirectoryView({
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="p-5 space-y-4 rounded-3xl border border-border bg-card animate-pulse">
+            <Card key={i} className="p-5 space-y-4 rounded-2xl border border-border bg-card animate-pulse">
               <div className="flex items-start gap-3">
-                <div className="size-12 rounded-2xl bg-muted shrink-0" />
+                <div className="size-12 rounded-xl bg-muted shrink-0" />
                 <div className="space-y-2 flex-1">
                   <div className="h-4 bg-muted rounded-md w-3/4" />
                   <div className="h-3 bg-muted rounded-md w-1/2" />
@@ -502,22 +502,22 @@ export function MemberDirectoryView({
               <div className="h-3 bg-muted rounded-md w-full" />
               <div className="h-3 bg-muted rounded-md w-2/3" />
               <div className="pt-2 flex justify-between items-center">
-                <div className="h-6 bg-muted rounded-full w-20" />
-                <div className="h-6 bg-muted rounded-full w-24" />
+                <div className="h-6 bg-muted rounded-md w-20" />
+                <div className="h-6 bg-muted rounded-md w-24" />
               </div>
             </Card>
           ))}
         </div>
       ) : error ? (
-        <div className="p-12 text-center rounded-3xl border border-destructive/30 bg-destructive/5 space-y-3">
+        <div className="p-12 text-center rounded-2xl border border-destructive/30 bg-destructive/5 space-y-3">
           <p className="text-sm font-semibold text-destructive">{error}</p>
-          <Button variant="outline" size="sm" onClick={() => fetchMembers()} className="rounded-full">
+          <Button variant="outline" size="sm" onClick={() => fetchMembers()} className="rounded-lg">
             Retry Query
           </Button>
         </div>
       ) : members.length === 0 ? (
-        <div className="p-16 text-center rounded-3xl border border-dashed border-border/80 bg-card/50 space-y-3">
-          <div className="size-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+        <div className="p-16 text-center rounded-2xl border border-dashed border-border/80 bg-card/50 space-y-3">
+          <div className="size-12 rounded-xl bg-primary/10 text-primary mx-auto flex items-center justify-center">
             <Users className="size-6" />
           </div>
           <h3 className="text-base font-bold text-foreground">No members match your criteria</h3>
@@ -525,7 +525,7 @@ export function MemberDirectoryView({
             Try adjusting your search terms or clearing some filters to broaden your search within the campus network.
           </p>
           {hasActiveFilters && (
-            <Button variant="outline" size="sm" onClick={handleResetFilters} className="text-xs mt-2 rounded-full">
+            <Button variant="outline" size="sm" onClick={handleResetFilters} className="text-xs mt-2 rounded-lg">
               Clear All Filters
             </Button>
           )}
@@ -655,7 +655,7 @@ export function MemberDirectoryView({
                           </div>
                           <Badge
                             variant="outline"
-                            className={`text-[9px] font-semibold rounded-full px-2 py-0 gap-0.5 ${
+                            className={`text-[9px] font-semibold rounded-md px-2 py-0 gap-0.5 ${
                               member.isCgpaVerified
                                 ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
                                 : "border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/10"
@@ -728,7 +728,7 @@ export function MemberDirectoryView({
                           size="sm"
                           variant="outline"
                           onClick={() => setConfirmRevokeMember(member)}
-                          className="h-8 px-3 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full border-amber-500/30 font-medium"
+                          className="h-8 px-3 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-lg border-amber-500/30 font-medium"
                         >
                           Revoke
                         </Button>
@@ -736,7 +736,7 @@ export function MemberDirectoryView({
                         <Button
                           size="sm"
                           onClick={() => handleVerifyMember(member.id, member.name)}
-                          className="h-8 px-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-full gap-1 shadow-2xs font-medium"
+                          className="h-8 px-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg gap-1 shadow-2xs font-medium"
                         >
                           <CheckCircle2 className="size-3.5" />
                           <span>Verify</span>
@@ -750,7 +750,7 @@ export function MemberDirectoryView({
                             size="sm"
                             variant="outline"
                             onClick={() => handleToggleCgpa(member.id, false, member.name)}
-                            className="h-8 px-2.5 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-full border-amber-500/30 font-medium"
+                            className="h-8 px-2.5 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-lg border-amber-500/30 font-medium"
                             title="Revoke CG verification"
                           >
                             Revoke CG
@@ -760,7 +760,7 @@ export function MemberDirectoryView({
                             size="sm"
                             variant="outline"
                             onClick={() => handleToggleCgpa(member.id, true, member.name)}
-                            className="h-8 px-2.5 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 rounded-full border-emerald-500/30 font-medium gap-1"
+                            className="h-8 px-2.5 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 rounded-lg border-emerald-500/30 font-medium gap-1"
                             title="Verify student CGPA"
                           >
                             <CheckCircle2 className="size-3" />
@@ -776,7 +776,7 @@ export function MemberDirectoryView({
                             size="sm"
                             variant="outline"
                             onClick={() => handleOpenSuspendModal(member, "RESTORE")}
-                            className="h-8 px-3 text-xs border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10 rounded-full gap-1 font-medium"
+                            className="h-8 px-3 text-xs border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10 rounded-lg gap-1 font-medium"
                           >
                             <UserCheck className="size-3.5" />
                             <span>Restore</span>
@@ -786,7 +786,7 @@ export function MemberDirectoryView({
                             size="sm"
                             variant="outline"
                             onClick={() => handleOpenSuspendModal(member, "SUSPEND")}
-                            className="h-8 px-3 text-xs border-destructive/40 text-destructive hover:bg-destructive/10 rounded-full gap-1 font-medium"
+                            className="h-8 px-3 text-xs border-destructive/40 text-destructive hover:bg-destructive/10 rounded-lg gap-1 font-medium"
                           >
                             <UserX className="size-3.5" />
                             <span>Suspend</span>
@@ -802,7 +802,7 @@ export function MemberDirectoryView({
                           size="icon-sm"
                           variant="ghost"
                           onClick={() => setConfirmDeleteMember(member)}
-                          className="size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full"
+                          className="size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg"
                           title="Delete member permanently"
                         >
                           <Trash2 className="size-4" />
@@ -811,7 +811,7 @@ export function MemberDirectoryView({
 
                       <Link
                         href={`/profile/${member.id}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 py-1.5 px-3 rounded-full hover:bg-primary/5 transition-colors border border-border/50"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 py-1.5 px-3 rounded-lg hover:bg-primary/5 transition-colors border border-border/50"
                       >
                         <span>Profile</span>
                         <ExternalLink className="size-3" />
@@ -823,7 +823,7 @@ export function MemberDirectoryView({
                   <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2 mt-4">
                     <Link
                       href={`/profile/${member.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2.5 rounded-full hover:bg-primary/5 transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline py-1 px-2.5 rounded-lg hover:bg-primary/5 transition-colors"
                     >
                       <span>View Profile</span>
                       <ExternalLink className="size-3" />
@@ -844,7 +844,7 @@ export function MemberDirectoryView({
             size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1 || loading}
-            className="text-xs rounded-full"
+            className="text-xs rounded-lg"
           >
             Previous
           </Button>
@@ -857,7 +857,7 @@ export function MemberDirectoryView({
             size="sm"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages || loading}
-            className="text-xs rounded-full"
+            className="text-xs rounded-lg"
           >
             Next
           </Button>
@@ -901,7 +901,7 @@ export function MemberDirectoryView({
               variant="outline"
               size="sm"
               onClick={() => setSuspendModalMember(null)}
-              className="rounded-full text-xs"
+              className="rounded-lg text-xs"
             >
               Cancel
             </Button>
@@ -910,7 +910,7 @@ export function MemberDirectoryView({
               size="sm"
               disabled={submittingSuspend || (suspendAction === "SUSPEND" && actionReason.trim().length < 5)}
               onClick={handleConfirmSuspension}
-              className="rounded-full text-xs"
+              className="rounded-lg text-xs"
             >
               {submittingSuspend && <Loader2 className="size-3 animate-spin mr-1.5" />}
               {suspendAction === "SUSPEND" ? "Confirm Suspension" : "Restore Access"}

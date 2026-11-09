@@ -4,7 +4,7 @@ import * as React from "react";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Mail, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, Loader2, AlertCircle, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 function LoginForm() {
@@ -18,6 +18,7 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUnverified, setIsUnverified] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(
     urlError === "account_suspended"
       ? "Your account has been suspended by campus administration. Please contact registrar support."
@@ -27,6 +28,7 @@ function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setIsUnverified(false);
 
     if (!email.trim() || !password) {
       setErrorMessage("Please enter both your university email and password.");
@@ -44,7 +46,13 @@ function LoginForm() {
       });
 
       if (error) {
-        if (error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD") {
+        if (
+          error.status === 403 ||
+          error.code === "EMAIL_NOT_VERIFIED" ||
+          error.message?.toLowerCase().includes("not verified")
+        ) {
+          setIsUnverified(true);
+        } else if (error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD") {
           setErrorMessage("Invalid university email or password. Please try again.");
         } else if (error.status === 500) {
           setErrorMessage("Database connection failed on server. Please verify server configuration.");
@@ -80,8 +88,24 @@ function LoginForm() {
         </p>
       </div>
 
-      {/* Error alert */}
-      {errorMessage && (
+      {/* Verification required alert */}
+      {isUnverified ? (
+        <div className="mb-4 flex flex-col gap-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-800 dark:text-amber-200 animate-in fade-in-50">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="size-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+            <div className="leading-relaxed font-medium">
+              Your email is not verified yet. Please click the verification link in your inbox before signing in.
+            </div>
+          </div>
+          <Link
+            href={`/verify-email?email=${encodeURIComponent(email.trim().toLowerCase())}`}
+            className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors mt-0.5 shadow-xs"
+          >
+            <span>Check Status &amp; Resend Verification Link</span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+      ) : errorMessage && (
         <div className="mb-3.5 flex items-start gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive animate-in fade-in-50">
           <AlertCircle className="size-4 shrink-0 mt-0.5" />
           <div className="leading-relaxed">{errorMessage}</div>

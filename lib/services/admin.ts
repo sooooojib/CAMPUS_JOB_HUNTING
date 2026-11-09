@@ -117,7 +117,7 @@ export async function getAdminMembersList(options: {
     });
   }
 
-  if (membershipType) {
+  if (membershipType && membershipType !== "ALL") {
     andFilters.push({ membershipType });
   }
 
@@ -141,7 +141,7 @@ export async function getAdminMembersList(options: {
     }
   }
 
-  if (accountStatus) {
+  if (accountStatus && accountStatus !== "ALL") {
     andFilters.push({ accountStatus });
   }
 

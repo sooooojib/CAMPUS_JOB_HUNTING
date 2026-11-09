@@ -68,7 +68,8 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Allows account setup; verification required for member actions
+    requireEmailVerification: true, // Strict: No login allowed until email verification link is clicked
+    autoSignIn: false, // Ensure fresh signups do not auto-login before clicking link
     resetPasswordTokenExpiresIn: 1800, // 30 minutes expiration
     sendResetPassword: async ({ user, url, token }) => {
       await sendPasswordResetEmail({
@@ -81,6 +82,7 @@ export const auth = betterAuth({
   },
   emailVerification: {
     sendOnSignUp: true,
+    sendOnSignIn: true, // Automatically dispatches verification link if an unverified user tries to sign in
     sendVerificationEmail: async ({ user, url, token }) => {
       await sendVerificationEmail({
         to: user.email,

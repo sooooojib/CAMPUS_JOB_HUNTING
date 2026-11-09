@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu, Sparkles } from "lucide-react";
+import { Menu, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NotificationsPopover } from "./notifications-popover";
@@ -35,13 +35,12 @@ export function AppHeader({ onToggleSidebar }: AppHeaderProps) {
           </Button>
         )}
 
-        {/* Human-friendly Campus Network Pulse */}
-        <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-muted/40 border border-border/50 text-xs text-muted-foreground">
-          <span className="relative flex size-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full size-2 bg-emerald-500" />
-          </span>
-          <span className="font-semibold text-foreground/85">Jagannath University Campus Community</span>
+        {/* Grounded institutional identity anchor */}
+        <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-muted-foreground select-none">
+          <GraduationCap className="size-4 text-primary shrink-0" />
+          <span className="font-semibold text-foreground tracking-tight">Jagannath University</span>
+          <span className="text-border">/</span>
+          <span>Campus Career Community</span>
         </div>
       </div>
 

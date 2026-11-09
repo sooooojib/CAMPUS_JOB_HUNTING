@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     if (errorResponse) return errorResponse;
 
     const { searchParams } = new URL(request.url);
-    const query = adminMemberQuerySchema.parse({
+    const parsed = adminMemberQuerySchema.safeParse({
       q: searchParams.get("q") || undefined,
       membershipType: searchParams.get("membershipType") || undefined,
       verificationStatus: searchParams.get("verificationStatus") || undefined,
@@ -18,7 +18,24 @@ export async function GET(request: NextRequest) {
       pageSize: searchParams.get("pageSize") || undefined,
     });
 
-    const result = await getAdminMembersList(query);
+    if (!parsed.success) {
+      const issueDetails = parsed.error.issues
+        .map((issue) => `${issue.path.join(".") || "filter"}: ${issue.message}`)
+        .join("; ");
+      return NextResponse.json(
+        { success: false, error: { message: `Invalid filter parameters (${issueDetails})` } },
+        { status: 400 }
+      );
+    }
+
+    const { membershipType, verificationStatus, accountStatus, ...restQuery } = parsed.data;
+
+    const result = await getAdminMembersList({
+      ...restQuery,
+      membershipType: membershipType === "ALL" ? undefined : membershipType,
+      verificationStatus: verificationStatus === "ALL" ? undefined : verificationStatus,
+      accountStatus: accountStatus === "ALL" ? undefined : accountStatus,
+    });
 
     return NextResponse.json({
       success: true,

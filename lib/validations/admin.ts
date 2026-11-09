@@ -3,13 +3,13 @@ import { z } from "zod";
 export const adminMemberQuerySchema = z.object({
   q: z.string().trim().optional(),
   membershipType: z
-    .enum(["STUDENT", "ALUMNI", "ADMIN"])
+    .enum(["ALL", "STUDENT", "ALUMNI", "ADMIN"])
     .optional(),
   verificationStatus: z
-    .enum(["PENDING", "VERIFIED", "REJECTED", "SUSPENDED"])
+    .enum(["ALL", "PENDING", "VERIFIED", "REJECTED", "SUSPENDED", "CG_VERIFIED", "CG_PENDING"])
     .optional(),
   accountStatus: z
-    .enum(["ACTIVE", "PENDING_VERIFICATION", "SUSPENDED", "DEACTIVATED"])
+    .enum(["ALL", "ACTIVE", "PENDING_VERIFICATION", "SUSPENDED", "DEACTIVATED"])
     .optional(),
   page: z
     .string()

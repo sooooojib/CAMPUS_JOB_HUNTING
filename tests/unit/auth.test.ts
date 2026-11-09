@@ -65,7 +65,7 @@ describe("Stage 4: Authentication Engine & Account Security Unit Tests", () => {
 
   it("3. rejects duplicate email registration", async () => {
     try {
-      await auth.api.signUpEmail({
+      const res: any = await auth.api.signUpEmail({
         body: {
           email: testEmail,
           password: "AnotherPassword456!",
@@ -73,10 +73,18 @@ describe("Stage 4: Authentication Engine & Account Security Unit Tests", () => {
           membershipType: "ALUMNI",
         },
       });
-      expect.unreachable("Duplicate registration should have thrown an error");
+      // When email verification is required, duplicate attempts return synthetic response with no token
+      expect(res?.token).toBeNull();
+      const count = await prisma.user.count({ where: { email: testEmail } });
+      expect(count).toBe(1);
     } catch (error: any) {
       expect(error).toBeDefined();
-      expect(error.status === 422 || error.status === 400 || error.code === "USER_ALREADY_EXISTS" || error.message?.includes("already exists")).toBe(true);
+      expect(
+        error.status === 422 ||
+        error.status === 400 ||
+        error.code === "USER_ALREADY_EXISTS" ||
+        error.message?.includes("already exists")
+      ).toBe(true);
     }
   });
 
@@ -100,26 +108,24 @@ describe("Stage 4: Authentication Engine & Account Security Unit Tests", () => {
     }
   });
 
-  it("5. successfully authenticates valid credentials and establishes a session", async () => {
-    const signInResult = await auth.api.signInEmail({
-      body: {
-        email: testEmail,
-        password: rawPassword,
-      },
-    });
-
-    expect(signInResult).toBeDefined();
-    expect(signInResult.user.id).toBe(createdUserId);
-    expect(signInResult.token).toBeDefined();
-
-    // Verify session exists in database
-    const sessionInDb = await prisma.session.findUnique({
-      where: { token: signInResult.token },
-    });
-
-    expect(sessionInDb).toBeDefined();
-    expect(sessionInDb?.userId).toBe(createdUserId);
-    expect(sessionInDb?.expiresAt.getTime()).toBeGreaterThan(Date.now());
+  it("5. strictly blocks login attempts before email verification is complete", async () => {
+    try {
+      await auth.api.signInEmail({
+        body: {
+          email: testEmail,
+          password: rawPassword,
+        },
+      });
+      expect.unreachable("Login before email verification must be strictly blocked");
+    } catch (error: any) {
+      expect(error).toBeDefined();
+      const isVerificationError =
+        error.body?.code === "EMAIL_NOT_VERIFIED" ||
+        error.message?.includes("Email not verified") ||
+        error.status === 403 ||
+        error.statusCode === 403;
+      expect(isVerificationError).toBe(true);
+    }
   });
 
   it("6. generates and records email verification tokens", async () => {
@@ -147,6 +153,27 @@ describe("Stage 4: Authentication Engine & Account Security Unit Tests", () => {
     });
 
     expect(userAfterVerification?.emailVerified).toBe(true);
+
+    // Now that email is verified, sign-in must succeed and establish an authenticated session
+    const signInResult = await auth.api.signInEmail({
+      body: {
+        email: testEmail,
+        password: rawPassword,
+      },
+    });
+
+    expect(signInResult).toBeDefined();
+    expect(signInResult.user.id).toBe(createdUserId);
+    expect(signInResult.token).toBeDefined();
+
+    // Verify session exists in database
+    const sessionInDb = await prisma.session.findUnique({
+      where: { token: signInResult.token },
+    });
+
+    expect(sessionInDb).toBeDefined();
+    expect(sessionInDb?.userId).toBe(createdUserId);
+    expect(sessionInDb?.expiresAt.getTime()).toBeGreaterThan(Date.now());
   });
 
   it("8. executes full password reset flow with cryptographic tokens", async () => {
