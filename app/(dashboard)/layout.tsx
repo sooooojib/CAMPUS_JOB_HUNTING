@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   });
 
   if (!session || !session.user) {
-    redirect("/login");
+    redirect("/login?signout=true");
   }
 
   // Fetch real-time user record from database
@@ -39,7 +39,7 @@ export default async function DashboardLayout({
   });
 
   if (!dbUser) {
-    redirect("/login");
+    redirect("/login?signout=true");
   }
 
   // Account status security gate

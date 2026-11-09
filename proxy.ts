@@ -82,16 +82,22 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Authenticated users accessing login/register -> Redirect to /feed
-  // IMPORTANT: Do NOT redirect if callbackUrl or error is present.
-  // When a session is expired or revoked in DB, protected layouts redirect to /login?callbackUrl=...
-  // Redirecting back to callbackUrl creates an infinite redirect ping-pong (ERR_TOO_MANY_REDIRECTS in Chrome).
+  // 2. Authenticated users accessing login/register -> Redirect to requested callbackUrl or /feed
   if (isAuthRoute && isAuthenticated) {
-    const hasCallback = request.nextUrl.searchParams.has("callbackUrl");
     const hasError = request.nextUrl.searchParams.has("error");
 
-    if (!hasCallback && !hasError) {
-      return NextResponse.redirect(new URL("/feed", request.url));
+    if (!hasError) {
+      const callbackParam = request.nextUrl.searchParams.get("callbackUrl");
+      let destination = "/feed";
+
+      if (callbackParam) {
+        // Prevent redirecting back to an auth route
+        if (!callbackParam.startsWith("/login") && !callbackParam.startsWith("/register")) {
+          destination = callbackParam.startsWith("/") ? callbackParam : `/${callbackParam}`;
+        }
+      }
+
+      return NextResponse.redirect(new URL(destination, request.url));
     }
   }
 
