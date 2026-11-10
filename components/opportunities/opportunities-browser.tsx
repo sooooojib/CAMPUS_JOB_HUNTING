@@ -447,7 +447,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
           {/* Minimum CGPA Requirement */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
-              <span>Max Min CGPA</span>
+              <span>CGPA Requirement</span>
             </label>
             <Select
               value={cgpaFilter}

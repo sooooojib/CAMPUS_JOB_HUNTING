@@ -399,7 +399,7 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
 
       expect(canPostOpportunity(adminUser)).toBe(true);
       expect(canPostOpportunity(verifiedAlumni)).toBe(true);
-      expect(canPostOpportunity(verifiedStudent)).toBe(false); // Students cannot post opportunities by default
+      expect(canPostOpportunity(verifiedStudent)).toBe(true); // Verified students can post opportunities just like alumni
     });
 
     it("verifies applicant review and student career tools permissions", () => {

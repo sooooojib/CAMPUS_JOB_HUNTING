@@ -47,7 +47,7 @@ export function isVerifiedMember(user?: UserPermissionContext | null): boolean {
  * RULES (Non-negotiable):
  * 1. Unverified users (PENDING, REJECTED, SUSPENDED) CANNOT post opportunities.
  * 2. Platform ADMINs can always post.
- * 3. Verified ALUMNI, or verified members with explicit canPostOpportunities authorization can post.
+ * 3. Verified ALUMNI, verified STUDENTS, or verified members with explicit canPostOpportunities authorization can post.
  * 4. Frontend state cannot bypass this; server must assert this before saving.
  */
 export function canPostOpportunity(user?: UserPermissionContext | null): boolean {
@@ -62,13 +62,10 @@ export function canPostOpportunity(user?: UserPermissionContext | null): boolean
   // If explicit permission flag is set (e.g. authorized ambassador)
   if (user.canPostOpportunities === true) return true;
 
-  // Verified Alumni can post opportunities/job leads
-  if (user.membershipType === "ALUMNI") {
+  // Verified Alumni and verified Students can post opportunities/job leads
+  if (user.membershipType === "ALUMNI" || user.membershipType === "STUDENT") {
     return true;
   }
-
-  // By default, students cannot post opportunities
-  return false;
 
   return false;
 }

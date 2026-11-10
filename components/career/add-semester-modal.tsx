@@ -151,12 +151,22 @@ export function AddSemesterModal({
             <label className="text-xs font-semibold text-foreground">
               Academic Standing (Optional)
             </label>
-            <Input
-              value={academicYear}
-              onChange={(e) => setAcademicYear(e.target.value)}
-              placeholder="e.g. 1st Year, 2nd Year, 3rd Year, Final Year"
-              className="text-xs rounded-xl h-10"
-            />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {["1st Year", "2nd Year", "3rd Year", "4th Year"].map((yr) => (
+                <button
+                  type="button"
+                  key={yr}
+                  onClick={() => setAcademicYear(yr)}
+                  className={`py-1.5 px-2 text-xs rounded-xl font-medium border transition-all cursor-pointer ${
+                    academicYear === yr
+                      ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                      : "bg-muted/30 hover:bg-muted/60 text-muted-foreground border-border/80"
+                  }`}
+                >
+                  {yr}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-1.5">

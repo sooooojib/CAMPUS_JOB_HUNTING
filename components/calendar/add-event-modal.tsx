@@ -182,7 +182,7 @@ export function AddEventModal({
                   value={eventDate}
                   onChange={(e) => setEventDate(e.target.value)}
                   required
-                  className="text-xs h-9"
+                  className="text-xs h-10 rounded-xl"
                 />
               </div>
             </div>
@@ -193,7 +193,7 @@ export function AddEventModal({
                 id="is-all-day"
                 checked={isAllDay}
                 onChange={(e) => setIsAllDay(e.target.checked)}
-                className="size-4 rounded border-input text-primary focus:ring-primary"
+                className="size-4 rounded-md border-input text-primary focus:ring-primary cursor-pointer accent-primary"
               />
               <Label htmlFor="is-all-day" className="text-xs font-medium cursor-pointer">
                 All-day reminder (no specific time)
@@ -210,14 +210,14 @@ export function AddEventModal({
                   type="time"
                   value={eventTime}
                   onChange={(e) => setEventTime(e.target.value)}
-                  className="text-xs h-9"
+                  className="text-xs h-10 rounded-xl"
                 />
               </div>
             )}
 
             <div className="space-y-1.5">
               <Label htmlFor="event-desc" className="text-xs font-semibold">
-                Notes & Context (Optional)
+                Notes &amp; Details (Optional)
               </Label>
               <Textarea
                 id="event-desc"
@@ -225,19 +225,19 @@ export function AddEventModal({
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="text-xs"
+                className="text-xs rounded-xl"
               />
             </div>
           </div>
 
-          <DialogFooter className="gap-2 sm:gap-0">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={onClose}
               disabled={isSubmitting}
-              className="text-xs"
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -245,19 +245,10 @@ export function AddEventModal({
               type="submit"
               size="sm"
               disabled={isSubmitting}
-              className="text-xs gap-1.5"
+              className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="size-3.5 animate-spin" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="size-3.5" />
-                  <span>Create Event</span>
-                </>
-              )}
+              {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
+              <span>Save Reminder</span>
             </Button>
           </DialogFooter>
         </form>

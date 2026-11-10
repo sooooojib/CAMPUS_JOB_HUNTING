@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { canPostOpportunity } from "@/lib/permissions";
 import { OpportunitiesBrowser } from "@/components/opportunities/opportunities-browser";
 
 export const metadata = {
@@ -16,12 +17,15 @@ export default async function OpportunitiesPage() {
   if (session?.user?.id) {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { membershipType: true, systemRole: true, verificationStatus: true },
+      select: {
+        membershipType: true,
+        systemRole: true,
+        verificationStatus: true,
+        accountStatus: true,
+        canPostOpportunities: true,
+      },
     });
-    // Strictly Alumni and Admin can post opportunities (students cannot post)
-    canPost =
-      user?.verificationStatus === "VERIFIED" &&
-      (user.systemRole === "ADMIN" || user.membershipType === "ALUMNI");
+    canPost = canPostOpportunity(user);
   }
 
   return <OpportunitiesBrowser canPost={canPost} />;

@@ -349,62 +349,65 @@ export function AdminReportsTable() {
       {actionReport && (
         <Dialog open={!!actionReport} onOpenChange={() => setActionReport(null)}>
           <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-base flex items-center gap-2">
-                <ShieldAlert className="size-4 text-destructive" />
-                <span>
+            <div className="flex flex-col items-start gap-1">
+              <div className="size-11 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center ring-8 ring-destructive/5 mb-2">
+                <ShieldAlert className="size-5.5 stroke-[2.2]" />
+              </div>
+              <DialogHeader className="gap-1 text-left">
+                <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
                   {actionType === "DISMISS"
-                    ? "Dismiss Content Report"
+                    ? "Dismiss Report"
                     : actionType === "REMOVE_CONTENT"
-                    ? "Remove Inappropriate Content"
+                    ? "Remove Reported Content"
                     : actionType === "SUSPEND_AUTHOR"
                     ? "Remove Content & Suspend Author"
                     : "Resolve Report"}
-                </span>
-              </DialogTitle>
-              <DialogDescription className="text-xs">
-                {actionType === "DISMISS"
-                  ? "Mark this report as dismissed. The reported content will remain intact and visible."
-                  : actionType === "REMOVE_CONTENT"
-                  ? "The reported post/comment will immediately be marked as REMOVED and hidden from all community members."
-                  : actionType === "SUSPEND_AUTHOR"
-                  ? "The reported content will be removed, and the author's account will be suspended from platform activities."
-                  : "Resolve this report without modifying content."}
-              </DialogDescription>
-            </DialogHeader>
+                </DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {actionType === "DISMISS"
+                    ? "Dismiss this report if the content follows community guidelines. It will stay visible to everyone."
+                    : actionType === "REMOVE_CONTENT"
+                    ? "This post or comment will be hidden from the feed and community directory immediately."
+                    : actionType === "SUSPEND_AUTHOR"
+                    ? "This content will be taken down and the author account will be suspended."
+                    : "Mark this report as resolved."}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
 
             <div className="space-y-3 py-2 text-xs">
-              <div className="p-3 rounded-lg bg-muted/40 space-y-1">
-                <span className="text-[11px] text-muted-foreground block font-medium">Flagged Content:</span>
-                <p className="italic text-foreground">&quot;{actionReport.contentSnippet}&quot;</p>
+              <div className="p-3.5 rounded-2xl bg-muted/40 border border-border/70 space-y-1">
+                <span className="text-[11px] text-muted-foreground block font-semibold">Reported Content:</span>
+                <p className="italic text-foreground leading-relaxed">&ldquo;{actionReport.contentSnippet}&rdquo;</p>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="reviewNotes" className="text-xs">
-                  Administrative Review Notes (Logged to Audit Trail)
+              <div className="space-y-1.5">
+                <Label htmlFor="reviewNotes" className="text-xs font-semibold text-foreground">
+                  Moderator Notes (Optional)
                 </Label>
                 <Textarea
                   id="reviewNotes"
-                  placeholder="Explain the moderation action or findings..."
+                  placeholder="e.g. Reviewed post; violation of community standards regarding job advertising spam..."
                   value={reviewNotes}
                   onChange={(e) => setReviewNotes(e.target.value)}
-                  className="text-xs h-20"
+                  className="text-xs h-20 rounded-xl"
                 />
               </div>
 
               {actionError && (
-                <div className="p-2.5 rounded bg-destructive/10 border border-destructive/20 text-destructive text-xs">
+                <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs font-medium">
                   {actionError}
                 </div>
               )}
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="gap-2 sm:gap-0 pt-2">
               <Button
                 size="sm"
                 variant="outline"
                 disabled={submittingAction}
                 onClick={() => setActionReport(null)}
+                className="rounded-xl text-xs font-medium px-4 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -413,21 +416,24 @@ export function AdminReportsTable() {
                 variant={
                   actionType === "DISMISS"
                     ? "outline"
-                    : actionType === "SUSPEND_AUTHOR"
+                    : actionType === "SUSPEND_AUTHOR" || actionType === "REMOVE_CONTENT"
                     ? "destructive"
                     : "default"
                 }
                 disabled={submittingAction}
                 onClick={handleExecuteAction}
+                className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
               >
-                {submittingAction && <Loader2 className="size-3.5 animate-spin mr-1.5" />}
-                {actionType === "DISMISS"
-                  ? "Confirm Dismissal"
-                  : actionType === "REMOVE_CONTENT"
-                  ? "Confirm Content Removal"
-                  : actionType === "SUSPEND_AUTHOR"
-                  ? "Confirm Suspension & Removal"
-                  : "Resolve Report"}
+                {submittingAction && <Loader2 className="size-3.5 animate-spin" />}
+                <span>
+                  {actionType === "DISMISS"
+                    ? "Dismiss Report"
+                    : actionType === "REMOVE_CONTENT"
+                    ? "Remove Content"
+                    : actionType === "SUSPEND_AUTHOR"
+                    ? "Suspend & Remove"
+                    : "Save Decision"}
+                </span>
               </Button>
             </DialogFooter>
           </DialogContent>

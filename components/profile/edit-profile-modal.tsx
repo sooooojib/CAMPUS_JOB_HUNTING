@@ -368,18 +368,23 @@ export function EditProfileModal({ initialProfile }: EditProfileModalProps) {
             </div>
           </div>
 
-          <DialogFooter className="pt-2">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => setOpen(false)}
               disabled={loading}
-              className="text-xs"
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
-            <Button type="submit" size="sm" disabled={loading} className="text-xs gap-1.5">
+            <Button
+              type="submit"
+              size="sm"
+              disabled={loading}
+              className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
+            >
               {loading && <Loader2 className="size-3.5 animate-spin" />}
               <span>Save Changes</span>
             </Button>

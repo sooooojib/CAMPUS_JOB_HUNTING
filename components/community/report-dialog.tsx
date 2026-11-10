@@ -87,45 +87,49 @@ export function ReportDialog({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
-            <Flag className="size-5" />
-            <DialogTitle>Report {targetType === "POST" ? "Post" : "Comment"}</DialogTitle>
+        <div className="flex flex-col items-start gap-1">
+          <div className="size-11 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center ring-8 ring-destructive/5 mb-2">
+            <Flag className="size-5.5 stroke-[2.2]" />
           </div>
-          <DialogDescription>
-            Help maintain a respectful, professional university community. Reports are privately reviewed by administrators.
-          </DialogDescription>
-        </DialogHeader>
+          <DialogHeader className="gap-1 text-left">
+            <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+              Report {targetType === "POST" ? "Post" : "Comment"}
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              Help keep our university network safe and constructive. Our moderation team reviews every report.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
-          <div className="space-y-2">
-            <Label htmlFor="report-reason" className="text-xs font-semibold">
+          <div className="space-y-1.5">
+            <Label htmlFor="report-reason" className="text-xs font-semibold text-foreground">
               Reason for Reporting <span className="text-destructive">*</span>
             </Label>
             <Select
               value={reason}
               onValueChange={(val) => setReason(val as ReportReason)}
             >
-              <SelectTrigger id="report-reason" className="w-full">
+              <SelectTrigger id="report-reason" className="w-full h-10 rounded-xl text-xs">
                 <SelectValue placeholder="Select a reason" />
               </SelectTrigger>
               <SelectContent>
                 {REPORT_REASONS.map((r) => (
                   <SelectItem key={r.value} value={r.value}>
                     <div className="flex flex-col text-left">
-                      <span className="font-medium text-xs">{r.label}</span>
+                      <span className="font-medium text-xs text-foreground">{r.label}</span>
                     </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[11px] text-muted-foreground pt-0.5">
               {REPORT_REASONS.find((r) => r.value === reason)?.description}
             </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="report-desc" className="text-xs font-semibold">
+          <div className="space-y-1.5">
+            <Label htmlFor="report-desc" className="text-xs font-semibold text-foreground">
               Additional Details (Optional)
             </Label>
             <Textarea
@@ -134,17 +138,17 @@ export function ReportDialog({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={1000}
-              className="resize-none text-xs min-h-[90px]"
+              className="resize-none text-xs min-h-[90px] rounded-xl"
             />
-            <div className="text-right text-[11px] text-muted-foreground">
+            <div className="text-right text-[10px] text-muted-foreground">
               {description.length}/1000
             </div>
           </div>
 
-          <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-2.5 flex items-start gap-2 text-amber-800 dark:text-amber-300 text-xs">
+          <div className="rounded-2xl bg-amber-500/10 border border-amber-500/20 p-3 flex items-start gap-2.5 text-amber-800 dark:text-amber-300 text-xs">
             <AlertTriangle className="size-4 shrink-0 mt-0.5" />
-            <span>
-              False or malicious reporting is a violation of community guidelines.
+            <span className="text-[11px] leading-relaxed">
+              Reports remain confidential. False reports or repeated spam claims violate community standards.
             </span>
           </div>
 
@@ -155,6 +159,7 @@ export function ReportDialog({
               size="sm"
               onClick={onClose}
               disabled={isSubmitting}
+              className="rounded-xl text-xs font-medium px-4 cursor-pointer"
             >
               Cancel
             </Button>
@@ -162,16 +167,11 @@ export function ReportDialog({
               type="submit"
               variant="destructive"
               size="sm"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !reason}
+              className="rounded-xl text-xs font-semibold px-4 shadow-xs gap-1.5 cursor-pointer"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="size-3.5 mr-1.5 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                "Submit Report"
-              )}
+              {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
+              <span>Submit Report</span>
             </Button>
           </DialogFooter>
         </form>

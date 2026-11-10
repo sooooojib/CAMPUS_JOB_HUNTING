@@ -169,7 +169,10 @@ export async function reviewVerificationRequest(
     });
 
     // 2. Grant permissions based on verified membership type
-    const canPost = request.membershipType === "ADMIN" || request.membershipType === "ALUMNI";
+    const canPost =
+      request.membershipType === "ADMIN" ||
+      request.membershipType === "ALUMNI" ||
+      request.membershipType === "STUDENT";
     const canReview = request.membershipType === "ADMIN";
 
     const updatedUser = await prisma.user.update({

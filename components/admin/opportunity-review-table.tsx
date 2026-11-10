@@ -257,46 +257,50 @@ export function OpportunityReviewTable({ initialOpportunities }: OpportunityRevi
       {/* Rejection Dialog */}
       <Dialog open={!!rejectModalItem} onOpenChange={(open) => !open && setRejectModalItem(null)}>
         <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-destructive">
-              <AlertTriangle className="size-4" />
-              <span>Reject Career Opportunity</span>
-            </DialogTitle>
-            <DialogDescription>
-              Specify a clear explanation for rejecting &quot;{rejectModalItem?.title}&quot; from{" "}
-              {rejectModalItem?.companyName}. The submitting member will receive this notification.
-            </DialogDescription>
-          </DialogHeader>
+          <div className="flex flex-col items-start gap-1">
+            <div className="size-11 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center ring-8 ring-destructive/5 mb-2">
+              <AlertTriangle className="size-5.5 stroke-[2.2]" />
+            </div>
+            <DialogHeader className="gap-1 text-left">
+              <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
+                Decline Job Opportunity
+              </DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Provide feedback for not approving &ldquo;{rejectModalItem?.title.replace(/\b\d{10,14}\b/g, "").trim()}&rdquo; at{" "}
+                {rejectModalItem?.companyName.replace(/\b\d{10,14}\b/g, "").trim()}. The poster will receive this guidance.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
           {rejectError && (
-            <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">
+            <div className="p-3 rounded-xl bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">
               {rejectError}
             </div>
           )}
 
-          <form onSubmit={handleRejectSubmit} className="space-y-4 text-xs">
+          <form onSubmit={handleRejectSubmit} className="space-y-4 text-xs pt-1">
             <div className="space-y-1.5">
-              <Label htmlFor="oppRejectionReason" className="text-xs font-semibold">
-                Reason for Rejection (Required)
+              <Label htmlFor="oppRejectionReason" className="text-xs font-semibold text-foreground">
+                Feedback for Poster (Required)
               </Label>
               <Textarea
                 id="oppRejectionReason"
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="e.g. Unverified compensation details, invalid external application link, or insufficient job description details..."
+                placeholder="e.g. Please provide a verified corporate email, full job requirements, or valid compensation details..."
                 rows={4}
-                className="text-xs"
+                className="text-xs rounded-xl"
                 required
               />
             </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="gap-2 sm:gap-0 pt-2">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setRejectModalItem(null)}
-                className="text-xs"
+                className="rounded-xl text-xs font-medium px-4 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -305,10 +309,10 @@ export function OpportunityReviewTable({ initialOpportunities }: OpportunityRevi
                 variant="destructive"
                 size="sm"
                 disabled={loadingId === rejectModalItem?.id}
-                className="text-xs gap-1.5"
+                className="rounded-xl text-xs font-semibold px-4 gap-1.5 shadow-xs cursor-pointer"
               >
                 {loadingId === rejectModalItem?.id && <Loader2 className="size-3.5 animate-spin" />}
-                <span>Confirm Rejection</span>
+                <span>Decline Opportunity</span>
               </Button>
             </DialogFooter>
           </form>

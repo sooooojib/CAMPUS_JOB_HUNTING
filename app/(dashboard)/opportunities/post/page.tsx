@@ -43,8 +43,8 @@ export default async function PostOpportunityPage({ searchParams }: PageProps) {
     redirect("/login");
   }
 
-  // Students cannot post opportunities; strictly redirect to opportunities browser
-  if (user.membershipType === "STUDENT" || !canPostOpportunity(user)) {
+  // Only members with posting clearance (verified Students, Alumni, Admin) can post opportunities
+  if (!canPostOpportunity(user)) {
     redirect("/opportunities");
   }
 

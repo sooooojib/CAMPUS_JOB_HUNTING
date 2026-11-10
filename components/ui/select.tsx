@@ -83,7 +83,7 @@ function SelectContent({
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-50 max-h-72 min-w-(--anchor-width) w-auto max-w-[min(calc(100vw-2rem),28rem)] origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-2xl border border-border/80 bg-popover/98 p-1.5 text-popover-foreground shadow-2xl shadow-black/15 backdrop-blur-md ring-1 ring-foreground/5 duration-150 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            "relative isolate z-50 max-h-80 min-w-[max(var(--anchor-width,14rem),18.5rem)] w-auto max-w-[min(calc(100vw-2rem),32rem)] origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-2xl border border-border/80 bg-popover/98 p-1.5 text-popover-foreground shadow-2xl shadow-slate-900/15 backdrop-blur-md ring-1 ring-foreground/5 duration-150 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className
           )}
           {...props}
@@ -104,7 +104,7 @@ function SelectLabel({
   return (
     <SelectPrimitive.GroupLabel
       data-slot="select-label"
-      className={cn("px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground", className)}
+      className={cn("px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground", className)}
       {...props}
     />
   )
@@ -119,12 +119,12 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl py-2 px-3 text-xs sm:text-sm font-medium outline-hidden select-none transition-colors hover:bg-accent/80 focus:bg-accent text-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+        "relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-medium outline-hidden select-none transition-colors hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary text-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
         className
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-normal text-left leading-snug">
+      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-normal text-left leading-relaxed">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
@@ -132,7 +132,7 @@ function SelectItem({
           <span className="pointer-events-none flex size-4 items-center justify-center text-primary shrink-0 ml-2" />
         }
       >
-        <CheckIcon className="size-4" />
+        <CheckIcon className="size-4 stroke-[2.5]" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   )

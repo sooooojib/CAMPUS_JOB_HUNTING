@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { canPostOpportunity } from "@/lib/permissions";
 import { MyOpportunitiesView } from "@/components/opportunities/my-opportunities-view";
 
 export const metadata = {
@@ -19,11 +20,17 @@ export default async function MyOpportunitiesPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { membershipType: true, systemRole: true },
+    select: {
+      membershipType: true,
+      systemRole: true,
+      verificationStatus: true,
+      accountStatus: true,
+      canPostOpportunities: true,
+    },
   });
 
-  // Students cannot post or manage postings; redirect to browse
-  if (!user || (user.membershipType === "STUDENT" && user.systemRole !== "ADMIN")) {
+  // Only authorized members (verified Students, Alumni, Admin) can manage postings
+  if (!user || !canPostOpportunity(user)) {
     redirect("/opportunities");
   }
 
