@@ -11,9 +11,7 @@
 - **Target Audience**:
   - Current university students.
   - University alumni.
-  - Faculty and university staff.
-  - Recruiters and employers connected to the university.
-  - Approved external individuals with a genuine, verified connection to the university.
+  - University administration and platform governance staff.
 - **Platform Synergy**:
   1. A curated job and internship portal.
   2. A university-connected professional community feed and discussions.
@@ -32,14 +30,11 @@
 - **Email Verification**: Required before gaining access to member functionality.
 - **Post-Login Redirection**: Return users to their originally requested URL after successful authentication.
 
-## Membership Types & Verification
-- **Supported Membership Types**:
-  - `STUDENT`
-  - `ALUMNI`
-  - `FACULTY`
-  - `STAFF`
-  - `EMPLOYER`
-  - `EXTERNAL_CONNECTION`
+## Active Personas & Verification
+- **Active Membership Types**:
+  - `STUDENT`: Enrolled university students with access to academic career tools, job applications, and community leads.
+  - `ALUMNI`: Graduated alumni sharing opportunities, providing internal referrals, and reviewing candidate dossiers.
+  *(Platform governance and verification approvals are handled via `systemRole: ADMIN`)*
 - **Verification Statuses**:
   - `PENDING`
   - `VERIFIED`
@@ -57,23 +52,18 @@
   - `PART_TIME`
   - `CONTRACT`
   - `OTHER`
-- **Opportunity Classifications**:
-  - `OFFICIAL_EMPLOYER`: Submitted by an authorized representative of the hiring company.
-  - `COMMUNITY_SHARED`: Shared by a verified community member (lead/referral); must visibly clarify that the poster is sharing an opportunity and may not represent the employer.
+- **Opportunity Classification**:
+  - `COMMUNITY_SHARED`: All opportunities are shared by verified community members/alumni as verified job leads with official external application portals.
 - **Lifecycle & Statuses**:
-  - `DRAFT`
-  - `PENDING` (Admin review required before becoming public to members)
-  - `APPROVED` (Visible in feeds and search)
-  - `REJECTED`
-  - `EXPIRED`
-  - `CLOSED`
-- **Employer Rights**: Only authorized employers can manage applicants submitted to their postings.
+  - `APPROVED` (Active and visible in feeds and search)
+  - `REJECTED` (Administrative rejection with feedback)
+  - `EXPIRED` (Deadline passed)
+  - `CLOSED` (Manually closed)
 
 ## Applications
-- **Methods**: Internal direct applications and external application links.
-- **Components**: Resume upload (PDF/DOCX), optional cover letter, customized questions where configured.
-- **Integrity**: Duplicate application prevention, applicant withdrawal capability, automatic deadline closure.
-- **Privacy**: Resumes and candidate data must be stored in private storage with time-limited signed URLs. Never expose candidate records publicly.
+- **Methods**: External application links directing candidates to the official company hiring portal.
+- **Components**: External application destination URL, tracking details, and candidate dashboard management.
+- **Integrity**: Duplicate application tracking prevention, applicant removal capability, and automatic deadline closure.
 
 ## Community Features
 - Community feed, job announcements, career discussions, referral requests, member profiles, threaded comments/replies, reactions, post saving, reporting/moderation, member directory, and connection requests.

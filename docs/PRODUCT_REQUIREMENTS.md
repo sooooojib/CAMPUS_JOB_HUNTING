@@ -2,108 +2,113 @@
 
 ## 1. Product Identity & Purpose
 
-**UniCareer Community** is a private, university-connected career and job-seeking community platform bridging students, alumni, faculty, staff, and authorized industry partners.
+**UniCareer Community** is a university-connected career, mentorship, and opportunity networking platform bridging **Current Students**, **Alumni**, and **University Administrators** within the institutional ecosystem.
+
+The platform eliminates the impersonal noise, fake recruiters, and spam of open public job boards by anchoring access to verified institutional affiliation, transparent opportunity provenance, and peer advocacy.
 
 ---
 
-## 2. Complete Module & Feature Specifications
+## 2. Active User Personas
 
-### 2.1 Authentication & Session Management
-- **Public Entrypoints**: Only `/`, `/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`, and `/about` are publicly reachable.
-- **Email Verification**: Required prior to interacting with any authenticated member feature.
-- **Return Path Retention**: Query param `?callbackUrl=...` preserves the exact destination route so users return seamlessly upon login.
-- **Password Strength**: Minimum 8 characters with at least one uppercase, one number, and one special character (enforced on both client and server via Zod).
-- **Session Strategy**: HttpOnly, SameSite cookies with CSRF defense.
+The platform operates on a single unified account model supporting three active personas:
 
-### 2.2 Membership Verification & Types
-- **Membership Types**:
-  - `STUDENT`: Current enrolled students.
-  - `ALUMNI`: Graduated former students.
-  - `FACULTY`: University teaching faculty.
-  - `STAFF`: Administrative campus personnel.
-  - `EMPLOYER`: Authorized corporate recruiters/partners.
-  - `EXTERNAL_CONNECTION`: Vetted external mentors/partners.
-- **Verification Statuses**:
-  - `PENDING`: Account created and email verified, awaiting identity validation.
-  - `VERIFIED`: Identity approved; full platform capabilities unlocked.
-  - `REJECTED`: Submission rejected with actionable reviewer feedback.
-  - `SUSPENDED`: Administrative hold on all activities.
-- **Verification Channels**:
-  1. *Instant Academic Record Match*: Matches student ID and institutional email against pre-seeded `university_records`.
-  2. *Document Review Queue*: Manual document upload (student card, degree certificate, corporate email badge) for admin triage.
+1. **Student (`STUDENT`)**:
+   - Currently enrolled university students.
+   - Accesses personalized job recommendations, explainable skill matching, and market skill gap telemetry.
+   - Logs confidential semester academic records for automated CGPA calculation.
+   - Applies for opportunities, saves bookmarks, and requests internal referrals from alumni.
+2. **Alumni (`ALUMNI`)**:
+   - Graduated university members.
+   - Posts job opportunities and verified hiring leads.
+   - Reviews candidate applicants for posted roles and manages pipeline stages.
+   - Evaluates incoming student referral requests and provides mentorship.
+3. **Platform Administrator (`ADMIN`)**:
+   - University administration / governance staff.
+   - Validates student and alumni verification claims.
+   - Verifies academic CGPAs and handles account suspensions.
+   - Moderates opportunities and community content reports, backed by an immutable audit trail.
 
-### 2.3 User & Company Profiles
-- **Member Profiles**: Headline, biography, avatar, department/graduation year, skill tags, LinkedIn/GitHub links, and "Available for Mentorship" flag.
-- **Student-Specific Section**: Academic records (CGPA, completed credits) visible strictly to the student and authorized academic advisors.
-- **Company Profiles**: Company name, logo, industry, verified partner badge, company overview, active job listings, and affiliated team members.
+---
 
-### 2.4 Opportunities & Job Approval Workflow
+## 3. Core Modules & Feature Specifications
+
+### 3.1 Authentication & Session Integrity
+- **Public Routes**: Only `/`, `/login`, `/register`, `/forgot-password`, `/reset-password`, and `/verify-email` are publicly accessible.
+- **Registration**: Captures Full Name, Institutional Email, University ID / Student ID, and Department dropdown selection. Both University ID and Department are locked to prevent tampering.
+- **Email Verification**: Mandatory verification-first security gate. Users cannot sign in until clicking the cryptographic link sent to their university inbox via Gmail SMTP.
+- **Return Path Retention**: `callbackUrl` query parameter preserves the user's intended route across login and verification.
+- **Password Strength**: Minimum 8 characters with at least one uppercase letter, one number, and one special character.
+- **Session Security**: HttpOnly, SameSite cookies with rolling updates and CSRF defense.
+
+### 3.2 Membership Verification & Institutional Credentials
+- **Credentials Capture**:
+  - **Student Dossier**: Pre-populated and locked Student ID & Department, academic standing (e.g. 3rd Year / Junior), degree, graduation year, and registrar enrollment proof.
+  - **Alumni Dossier**: Pre-populated and locked Department, graduation year, degree, current company, designation, and alumni proof (thesis topic, batch number, or advisor).
+- **Admin Verification Queue (`/admin`)**:
+  - Submissions are queued in `membership_requests` with status `PENDING`.
+  - Administrators inspect claims, review submitted evidence, and approve or reject with specific feedback.
+  - Verified members receive verified badges and full platform privileges.
+
+### 3.3 Opportunities & Job Engine
 - **Opportunity Types**: `INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`.
-- **Classifications**:
-  - `OFFICIAL_EMPLOYER`: Submitted by an authorized employee/recruiter representing the hiring organization.
-  - `COMMUNITY_SHARED`: Shared by a verified alumni/student lead; clearly labeled as a referral/lead rather than official recruitment.
-- **Approval Lifecycle**:
-  - Default status upon creation: `PENDING`.
-  - Admin/Moderator reviews title, salary transparency, and compliance before promoting to `APPROVED`.
-  - Automated deadline tracking transitions expired listings to `EXPIRED`.
-  - Posters can manually mark listings as `CLOSED`.
+- **Workplace Types**: `ON_SITE`, `REMOTE`, `HYBRID`.
+- **Provenance Classification**:
+  - `COMMUNITY_SHARED`: All opportunities are shared by verified community members/alumni as verified job leads with official external application portals.
+- **Statuses**:
+  - `APPROVED`: Active, published opportunity visible in search and feeds.
+  - `REJECTED`: Opportunity rejected during administrative review with feedback.
+  - `EXPIRED`: Application deadline has passed.
+  - `CLOSED`: Manually closed by the poster or administrator.
+- **Discovery & Search**:
+  - Multi-faceted filtering by Role Type, Workplace Type, Department, and Minimum CGPA cutoff.
+  - Debounced keyword search matching title, description, or hiring company.
+  - Personal bookmarked opportunities collection (`/opportunities/saved`) with duplicate prevention.
 
-### 2.5 Job Applications & Candidate Vault
+### 3.4 Applications & Candidate Management
 - **Application Modalities**:
-  - `INTERNAL`: Submitted on-platform with resume selection/upload and optional cover letter.
-  - `EXTERNAL`: Outbound redirect link to company ATS.
-- **Integrity Constraints**:
-  - Database-enforced uniqueness: `@@unique([opportunity_id, applicant_id])` blocks duplicate submissions.
-  - Applicants can withdraw submissions while status is `SUBMITTED` or `UNDER_REVIEW`.
-- **Private Storage**: Resumes stored in private object storage; downloaded via temporary pre-signed URLs (<= 15 minute lifespan).
+  - `EXTERNAL`: Direct outbound application via official company careers portal ("Apply on Official Website").
+- **Integrity & Safeguards**:
+  - Database composite constraint `@@unique([opportunityId, applicantId])` prevents duplicate application records.
+  - Applicants can remove their application records directly from `/applications` using the "Remove" button.
+  - Deadline tracking automatically transitions expired opportunities to `EXPIRED`.
+- **Applicant Management (`/opportunities/[id]/applicants`)**:
+  - Author and administrator review dashboard to track candidate engagement and application status history.
 
-### 2.6 Employer Applicant Management
-- Dedicated dashboard (`/employer/postings/[id]/applicants`) for authorized posters.
-- Candidate pipeline columns: `SUBMITTED` → `UNDER_REVIEW` → `SHORTLISTED` → `INTERVIEWING` → `OFFERED` / `REJECTED`.
-- Status updates generate historical timeline entries in `application_status_history` and trigger applicant notifications.
+### 3.5 Community Feed & Discussions
+- **Feed Channels**: All Feed, Discussions & Q&A (`GENERAL_DISCUSSION`), Referrals (`REFERRAL_REQUEST`), Achievements (`ACHIEVEMENT`), and Saved Posts (`BOOKMARKED`).
+- **Post Composer (`CreatePostBox`)**: Rich text editor supporting optional headline, post type selection, character count limits (10–5,000 chars), and attached opportunity cards.
+- **Threaded Comments**: Hierarchical replies (`parentId`) with author editing, comment deletion, and reporting.
+- **Reactions**: Single-click atomic `LIKE` toggling with real-time counter updates.
+- **Content Moderation**: Flagging posts or comments with structured reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`); automatic escalation to `FLAGGED` upon receiving $\ge 3$ reports.
 
-### 2.7 Community Feed, Posts, Comments & Reactions
-- **Feed Topics / Categories**: `GENERAL`, `CAREER_ADVICE`, `JOB_ANNOUNCEMENT`, `REFERRAL_REQUEST`, `EVENT`, `ACADEMIC`.
-- **Rich Post Capabilities**: Optional opportunity card embedding, code snippets, and pinned announcements.
-- **Threaded Discussions**: Nested comment replies with self-referencing hierarchy.
-- **Reactions**: `LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE` (one reaction type per user per post).
-- **Post Bookmarking**: Personal bookmarking feed for offline reading.
+### 3.6 Student Career Tools (Exclusive to `STUDENT` Profiles)
+- **Explainable Skill Match Score**:
+  - Deterministic formula: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
+  - Color-coded badges: Green ($\ge 80\%$), Yellow ($50\%-79\%$), Red ($< 50\%$).
+  - Breakdown of matched competencies vs missing requirements.
+- **Campus Market Skill Gap Analysis**:
+  - Compares student skills against actual hiring demand across all approved opportunities.
+  - Prioritizes top missing skills and provides direct links to verified learning resources.
+- **Confidential Academic Transcript Logger**:
+  - Private semester GPA and credit logger (`components/career/add-semester-modal.tsx`).
+  - Credit-weighted cumulative CGPA calculation: $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$.
+  - Academic privacy: Transcripts are strictly visible only to the student and platform administrators.
 
-### 2.8 Member Directory & Connections
-- Searchable member directory filterable by role, department, graduation year, skills, and mentorship availability.
-- Connection requests (`PENDING` → `ACCEPTED` / `DECLINED`) enabling direct professional networking.
+### 3.7 Referrals System & Contributions
+- **Structured Referral Requests (`/referrals`)**:
+  - Students submit tailored elevator pitches and resumes directly to alumni at specific companies.
+  - Inbound queue allows alumni to review candidate qualifications, accept with personal response notes, or decline.
+- **Contributions Dashboard (`/contributions`)**:
+  - Telemetry tracking jobs posted, student referrals handled, and feed discussions authored.
 
-### 2.9 Referrals System
-- Structured referral request pipeline allowing students to submit an elevator pitch and resume directly to alumni working at target companies.
-- Alumni advocate dashboard to review, offer assistance, or submit internally.
+### 3.8 Notifications & Career Calendar
+- **Notification Center (`/notifications`)**: Activity alerts for application status changes, referral responses, post interactions, and deadline reminders.
+- **Personal Career Calendar (`/calendar`)**: Aggregates job application deadlines, scheduled interviews, and personal career milestone notes.
 
-### 2.10 Student Career Tools
-- **CGPA Eligibility Checker**: Real-time evaluation of student CGPA against opportunity minimum thresholds.
-- **Skill Gap Analyzer**: Visual comparison between student skills and job requirements with percentage match and suggested skill additions.
-- **Personalized Job Recommendations**: Algorithmic ranking prioritizing opportunities matching student department, graduation year, and skill sets.
-
-### 2.11 Notifications & Alerts
-- In-app notification center and badge count for application status updates, referral feedback, post mentions, and connection requests.
-
-### 2.12 Admin Moderation & Audit Trails
-- Central moderation dashboard (`/admin`) for:
-  - Reviewing pending opportunities.
-  - Processing member verification requests.
-  - Investigating user reports on posts, comments, or opportunities.
-  - Inspecting the immutable `audit_logs` table for administrative traceability.
-
----
-
-## 3. Feature Allocation Across Implementation Stages
-
-| Stage | Focus Area | Detailed Scope |
-| :---: | :--- | :--- |
-| **Stage 1** | **Design System & Shell** | Tailwind CSS tokens, shadcn/ui primitives, theme toggle (Light/Dark/System), AppNavbar, Sidebar, Footer, Responsive Layout, Loading/Empty/Error UI states. |
-| **Stage 2** | **Auth & Identity Engine** | Session handler (Better Auth / Auth.js), Registration, Login, Email Verification, Membership selection, Verification queue submission, Route Guard Middleware. |
-| **Stage 3** | **Opportunity Engine** | Job portal (`/opportunities`), filters, search, Posting Form (Official vs Community-shared), Admin Opportunity Review Queue, Details page. |
-| **Stage 4** | **Applications & Resumes** | Application modal, resume storage integration with signed URLs, duplicate prevention, candidate withdrawal, Employer Applicant Management Kanban. |
-| **Stage 5** | **Community & Networking** | Authenticated Feed, Category filters, Threaded comments, Reactions, Bookmarks, Member Directory, Connection requests. |
-| **Stage 6** | **Student Career Tools** | CGPA Eligibility Checker, Skill Matching radar, Skill Gap Analyzer, Student Dashboard with deadline reminders. |
-| **Stage 7** | **Referrals & Notifications** | Referral request pipeline, Alumni advocate dashboard, Notification dropdown & alert center. |
-| **Stage 8** | **Admin Suite & Moderation** | Admin command center, Verification review queue, Report investigation, System Audit Logs, Platform analytics. |
-| **Stage 9** | **QA, Security & Production** | Playwright E2E suites, Accessibility WCAG AA compliance, Performance optimization, Production deployment prep. |
+### 3.9 Administrative Governance Center (`/admin`)
+- **Overview**: Real-time institutional telemetry (Talent Pool, Verification Rate, Corporate Partners) and pending action alerts.
+- **Verification Review Queue**: Approve or reject student/alumni credential claims with registrar notes.
+- **Members Directory**: Member searching, filtering by role and verification state, one-click CGPA verification (`verify-cg`), and account suspension/restoration.
+- **Content Reports**: Triage user-flagged posts and comments with content removal and author suspension actions.
+- **Company Management**: Verify or suspend employer profiles.
+- **Security Audit Trail**: Append-only log recording all administrative mutations with admin attribution, affected entity, stated reason, and IP address.

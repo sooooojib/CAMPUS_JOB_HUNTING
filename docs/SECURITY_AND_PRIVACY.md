@@ -47,90 +47,57 @@
    - Unverified members (`PENDING`, `REJECTED`, `SUSPENDED`) are strictly prohibited from publishing opportunities.
    - The posting clearance check is executed on the server (`lib/permissions.ts`):
      - Platform administrators (`systemRole === 'ADMIN'`) always hold posting clearance.
-     - Verified `EMPLOYER`, `FACULTY`, and `STAFF` hold posting clearance upon institutional approval.
+     - Verified `STUDENT` and `ALUMNI` hold clearance to share community opportunities/leads.
      - Unverified accounts cannot bypass posting restrictions by modifying client payloads or DOM state.
 2. **Separation of Platform Role vs. Membership Type**:
-   - Institutional membership types (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) are strictly separated from administrative roles (`systemRole: MEMBER | MODERATOR | ADMIN`).
+   - Institutional membership types (`STUDENT`, `ALUMNI`) are strictly separated from platform governance roles (`systemRole: ADMIN`).
    - Better Auth user input configurations declare `systemRole`, `accountStatus`, and `canPostOpportunities` with `input: false`, preventing client-side registration payloads from self-elevating privileges.
 
 ---
 
-## 4. Resume & Private File Storage Security (Stage 8 Implemented)
+## 4. External Application Security & Link Protection (Stage 8 Implemented)
 
-1. **Private Local Vault Storage**:
-   - Resume documents are stored on disk in `storage/resumes/` outside of the Next.js `public/` web root. Resumes can NEVER be reached by direct static HTTP URL access.
-2. **Magic-Bytes Inspection Against MIME-Spoofing**:
-   - The system inspects file magic bytes (signatures) on upload:
-     - PDF: `%PDF-` (`0x25 0x50 0x44 0x46`)
-     - DOCX / OpenXML: `PK\x03\x04` (`0x50 0x4B 0x03 0x04`)
-     - DOC: `\xD0\xCF\x11\xE0`
-   - Rejects spoofed text files, HTML scripts, executables, or disguised binaries even if given a `.pdf` extension.
-   - Enforces a strict maximum file size of 5 MB (5,242,880 bytes).
-3. **Cryptographic Storage Keys**:
-   - Physical filenames on disk use non-guessable random tokens: `${userId}-${Date.now()}-${random16HexBytes}${extension}` with strict file permission `0o600`.
-4. **Anti-IDOR Authorization Gate on Downloads (`assertCanAccessResume`)**:
-   - Downloading a resume via `/api/resumes/[id]/download` requires authenticated verification:
-     - Is the user the owner of the resume? -> ALLOW.
-     - Is the user a platform `ADMIN`? -> ALLOW.
-     - Is the user an authorized recruiter/manager of a company whose opportunity received an application with this resume? -> ALLOW.
-     - Any other member (even other verified members) -> REJECT with `403 Forbidden`.
+1. **Safe External Application Redirection**:
+   - Opportunities link directly to official external company career portals ("Apply on Official Website").
+   - Destination URLs are validated for well-formed HTTPS syntax to prevent malicious link injection.
+2. **Duplicate Application Prevention**:
+   - The PostgreSQL table `applications` enforces a composite unique constraint `@@unique([opportunityId, applicantId])`. Duplicate submissions cannot occur even under concurrent race conditions.
+3. **Candidate Record Safeguards**:
+   - Candidates can remove their application records directly from their dashboard at any point with full data integrity. Other members cannot remove another candidate's application.
 
 ---
 
-## 5. Applications & Recruitment Authorization Security (Stage 8 Implemented)
+## 5. Applications & External Link Application Tracking (Stage 8 Implemented)
 
 1. **Database-Level Duplicate Application Prevention**:
    - The PostgreSQL table `applications` enforces a composite unique constraint `@@unique([opportunityId, applicantId])`. Duplicate submissions cannot occur even under concurrent race conditions.
-2. **Strict Community Poster Isolation**:
-   - Verified community members who share leads (`sourceType: COMMUNITY_SHARED`) are strictly prevented from viewing or managing candidate applicant dossiers.
-   - Only authorized company representatives (`CompanyMember` with `role: OWNER | ADMIN` or `canManageCompany: true | canPostOpportunities: true`) for official employer postings can access candidate applications.
-3. **Recruiter Stage Transition Audit Trail**:
-   - Recruiter status transitions (`UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`) create immutable records in `application_status_history` storing timestamp, `changedById`, and feedback notes.
+2. **Safe External Application Redirection**:
+   - Opportunities link directly to official external company career portals ("Apply on Official Website").
+   - Destination URLs are validated for well-formed HTTPS syntax to prevent malicious link injection.
+3. **Strict Candidate Isolation**:
+   - Verified community members who share leads (`sourceType: COMMUNITY_SHARED`) are strictly prevented from viewing other candidates' application actions.
+   - Applications are private between the candidate and platform administration.
 4. **Candidate Withdrawal Safeguards**:
-   - Candidates can withdraw their submitted applications at any point, with full audit trail preservation. Other members cannot withdraw another candidate's application.
+   - Candidates can remove their tracked application records at any point via `DELETE /api/applications?id=...`. Other members cannot delete or modify another candidate's application.
 
 ---
 
-## 6. Audit Trails & Governance History
-
-1. **Immutable Request History**: Rejections and resubmissions create distinct records in `membership_requests`, ensuring complete historical traceability of credential reviews and rejection justifications.
-2. **Reviewer Attribution**: Every approved or rejected verification logs the `reviewerId` and `reviewedAt` timestamp in PostgreSQL.
-
----
-
-## 6. Corporate Authorization & Anti-IDOR Controls (Stage 6 Implemented)
+## 6. Corporate Authorization & Governance Controls (Stage 6 Implemented)
 
 1. **Company Management Boundary (`assertCanManageCompany`)**:
    - Updates to corporate profiles (`PUT /api/companies/[id]`) and member associations (`POST /api/companies/[id]/members`) strictly enforce server-side validation.
    - Only platform `ADMIN` or users holding `OWNER`, `ADMIN`, or `canManageCompany: true` for that specific company can modify company information.
    - Any attempt by ordinary members to edit unmanaged companies throws `FORBIDDEN_COMPANY_MODIFICATION (403)`.
-2. **Official Employer Representation Boundary (`assertCanPostForCompany`)**:
-   - An opportunity submitted with `sourceType = OFFICIAL_EMPLOYER` requires a verified `companyId` and asserts that the posting member has active company posting authorization (`canPostOpportunities: true`).
-   - Ordinary members cannot claim an official employer affiliation without verified company membership.
+2. **Standardized Community Postings**:
+   - All opportunities across the platform are standardized as `COMMUNITY_SHARED` leads with direct external portal URLs.
+   - Verified members post leads transparently with clear disclaimer that the poster is sharing an opportunity for the community.
 
 ---
 
-## 8. Applications & Private Resume Vault Protections (Stage 8 Implemented)
+## 7. Audit Trails & Governance History
 
-1. **Private Storage Location**:
-   - Resume binaries are stored on disk under `storage/resumes/` completely outside of `public/` web assets.
-   - Public URLs to candidate resumes do NOT exist anywhere in the application.
-2. **Binary Magic-Bytes Verification**:
-   - `inspectFileMagicBytes` validates real binary file headers:
-     - PDF: `%PDF-` (`0x25 0x50 0x44 0x46`)
-     - DOCX: `PK\x03\x04` (`0x50 0x4B 0x03 0x04`)
-   - Rejects file extension spoofing, binary exploits, or disguised executables.
-   - Enforces 5MB file size limit.
-3. **Anti-IDOR Download Authorization**:
-   - Direct downloads via `GET /api/resumes/[id]/download` require `assertCanAccessResume`:
-     - Resume owner can access.
-     - Authorized employer whose company received an application with the resume can access.
-     - Platform admin can access for moderation.
-     - Unauthorized members are blocked with `403 Forbidden`.
-4. **Duplicate Application Prevention**:
-   - Database composite unique constraint `@@unique([opportunityId, applicantId])` blocks race conditions and duplicate applications at the database engine level.
-5. **Community Poster Strict Isolation**:
-   - Members who merely shared a listing (`COMMUNITY_SHARED`) are prevented from viewing candidate dossiers or downloading resumes via `assertCanManageApplicantsForOpportunity (403 Forbidden)`.
+1. **Immutable Request History**: Rejections and resubmissions create distinct records in `membership_requests`, ensuring complete historical traceability of credential reviews and rejection justifications.
+2. **Reviewer Attribution**: Every approved or rejected verification logs the `reviewerId` and `reviewedAt` timestamp in PostgreSQL.
 
 ---
 
@@ -222,23 +189,23 @@
 
 ---
 
-## 14. Rate Limiting, Anti-IDOR & Upload Hardening (Stage 14 Implemented)
+## 14. Rate Limiting, Anti-IDOR & Link Hardening (Stage 14 Implemented)
 
 1. **Sliding-Window In-Memory Rate Limiting**:
    - `lib/security/rate-limit.ts` enforces sliding-window rate limiting on critical mutation endpoints:
-     - Resume Uploads (`POST /api/resumes`): 10 uploads / 10 minutes.
      - Verification Requests (`POST /api/verification/request`): 10 submissions / 10 minutes.
      - Application Submissions (`POST /api/applications`): 30 applications / 1 hour.
+     - Community Posts (`POST /api/community/posts`): 20 posts / 10 minutes.
    - Client identifier is derived from `x-forwarded-for`, `x-real-ip`, or user session ID.
    - Rejections return HTTP 429 Too Many Requests with standard RFC headers (`Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`).
 2. **Anti-IDOR (Insecure Direct Object Reference) Protection**:
-   - Applicant management endpoints (`/opportunities/[id]/applicants` and status mutations) assert employer affiliation with the opportunity's company via `assertCanManageApplicantsForOpportunity`. Third-party authenticated users cannot inspect or manage candidate pipelines.
-   - Candidate resumes are streamed through private endpoint `/api/resumes/[id]/download`, requiring either user ownership (`resume.userId === session.user.id`), an active employer role for an opportunity the candidate applied to, or platform administrator clearance.
+   - Application tracking endpoints (`/api/applications`) enforce strict identity isolation: users can only view, track, or delete their own applications (`userId === session.user.id`).
+   - Third-party authenticated users cannot inspect or manage other candidates' application history.
    - Referral requests enforce access exclusively to the requesting student, receiving alumni/member, or platform administrator (`assertCanAccessReferral`).
-3. **Magic-Bytes File Inspection & Upload Isolation**:
-   - File uploads are validated via binary magic bytes (`%PDF-` for PDF, `PK\x03\x04` for DOCX) rather than client-reported MIME types or file extensions.
-   - Uploads are capped at 5 MB; executable or macro-enabled documents are strictly rejected.
-   - Files are stored with randomized UUID identifiers in isolated storage containers.
+3. **External Link Hardening & Safe Redirection**:
+   - Application links and external URLs are validated for well-formed HTTPS syntax and sanitized against open redirect vulnerabilities.
+   - Outbound clicks open in sandboxed tabs (`target="_blank" rel="noopener noreferrer"`).
+
 
 
 

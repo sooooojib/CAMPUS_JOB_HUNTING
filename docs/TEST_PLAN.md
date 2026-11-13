@@ -32,8 +32,7 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - **Opportunity Creation & Posting Clearance**:
   - Unverified users (`PENDING`, `REJECTED`, `SUSPENDED`) are blocked from publishing opportunities.
   - Verified members can post `COMMUNITY_SHARED` opportunities with required external application URLs.
-  - Verified company members with `canPostOpportunities: true` can publish `OFFICIAL_EMPLOYER` opportunities.
-  - Non-company members attempting to publish `OFFICIAL_EMPLOYER` opportunities are rejected.
+  - All opportunities are standardized as `COMMUNITY_SHARED` leads with transparent peer attribution.
   - Validation: Future deadline check, required description length (min 20 characters), external URL requirement when `applicationMethod = EXTERNAL`.
 - **Admin Moderation & Review Workflow**:
   - Submitted opportunities enter `PENDING` status and are queued for administrator review.
@@ -50,40 +49,26 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - `expireOverdueOpportunities()` transitions past-deadline opportunities to `EXPIRED` status.
 
 ### 2.3 Opportunity Discovery, Multi-Filter Search & Posting (Stage 7 - Vitest & Integration)
-- Multi-filter query parsing: keywords, opportunity types, workplace modes, source types, department targeting, minimum CGPA cutoff, and bookmark filtering.
+- Multi-filter query parsing: keywords, opportunity types, workplace modes, department targeting, minimum CGPA cutoff, and bookmark filtering.
 - Public/unauthenticated restriction: verifies anonymous users cannot access `/opportunities`, `/opportunities/[id]`, or `/opportunities/post`.
-- Posting permission gate: blocks unauthorized or unverified users; requires managed company for `OFFICIAL_EMPLOYER` postings.
-- Draft creation, preview toggling, and review submission into `PENDING` queue.
+- Posting permission gate: blocks unauthorized or unverified users; ensures verified members post `COMMUNITY_SHARED` leads with external application URLs.
+- Draft creation, preview toggling, and review submission into moderation queue.
 - Bookmark toggling: verifies atomic bookmark creation and removal; confirms duplicate prevention with composite unique index.
-- Author management console: verifies status filtering, closure, and rejected resubmission workflows.
+- Author management console: verifies status filtering, closure, and resubmission workflows.
 
 ### 2.4 Applications & Applicant Management (Stage 8 - Vitest & Integration)
 - **Pre-Application Eligibility**:
   - Verifies department restrictions, CGPA warnings (advisory vs disqualifying), open deadline checks.
-  - Verifies that closed, draft, pending, or expired opportunities reject applications.
-- **Resume Vault Management**:
-  - File upload with magic-bytes inspection (`%PDF-` for PDF, `PK\x03\x04` for DOCX). Rejects spoofed MIME types.
-  - File size validation (<= 5MB).
-  - Private disk storage (`storage/resumes/` outside public web directory).
-  - Anti-IDOR download authorization: permits owner, employer reviewing candidate application, or platform admin. Blocks unauthorized third-party members.
-  - Setting default resume and deleting unused resumes.
-- **Internal Application Workflow**:
-  - Submitting application with existing vault resume or immediate upload.
-  - Optional cover letter and metadata tracking.
-  - Audit trail logging initial status transition (`SUBMITTED`) in `ApplicationStatusHistory`.
+  - Verifies that closed, rejected, or expired opportunities reject applications.
+- **External Application Link Tracking**:
+  - Direct redirection to official external corporate career URL ("Apply on Official Website") with clear peer-lead disclaimer notice.
+  - Records user's tracking state (`method: EXTERNAL`) cleanly in student dashboard.
 - **Database Duplicate Prevention**:
   - Composite unique constraint `@@unique([opportunityId, applicantId])` blocks second application attempt with `DUPLICATE_APPLICATION`.
-- **External Application Tracking**:
-  - Redirects to external corporate career URL with disclaimer notice.
-  - Records user's manual tracking state (`method: EXTERNAL`) without claiming automated ATS sync.
-- **Candidate Self-Service**:
-  - Viewing user's active/historic applications with real-time status badges.
-  - Application withdrawal (`WITHDRAWN`) with reason tracking in history log.
-- **Employer Pipeline Management**:
-  - Candidate dossier review: profile, department, skills, resume access.
-  - Status updates: `SUBMITTED` -> `UNDER_REVIEW` -> `SHORTLISTED` -> `INTERVIEW` -> `SELECTED` / `REJECTED`.
-  - Recruiter notes and audit logging of state changes with reviewer ID and timestamp.
-  - **Community Poster Strict Restriction**: Verified community member sharing `COMMUNITY_SHARED` opportunity is blocked with 403 Forbidden from viewing applicants or downloading candidate resumes.
+- **Candidate Self-Service & Privacy**:
+  - Viewing user's active/historic tracked applications with real-time status badges.
+  - Application deletion/removal (`DELETE /api/applications?id=...`).
+  - Community posters who share leads are strictly blocked from viewing or managing other members' applications.
 
 ### 2.5 Community Feed, Discussions & Moderation (Stage 9 - Vitest & Integration)
 - **Post Creation & Validation**:
@@ -91,7 +76,7 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Rejects short content (< 10 chars).
   - Blocks suspended and deactivated accounts from creating posts (`accountStatus: SUSPENDED`).
 - **Post Lifecycle & Access Control**:
-  - Author can update title, content, postType, and tags.
+  - Author can update title, content, and postType.
   - Unauthorized members are blocked from editing or deleting other users' posts (403 Forbidden).
   - Platform administrators can edit or delete any post for moderation.
   - Cascading deletion of comments, reactions, bookmarks, and reports when post is deleted.
@@ -102,9 +87,9 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Author deletion of comments and decrementing `commentsCount`.
   - Unauthorized members blocked from editing other users' comments.
 - **Reactions Engine & Duplicate Prevention**:
-  - Adding reactions (`LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE`) and incrementing counters.
+  - Adding reactions (`LIKE`) and incrementing counters.
   - Toggling off reaction when clicked again (duplicate reaction prevention).
-  - Switching reaction type atomically (e.g. `LIKE` to `INSIGHTFUL`).
+  - Updating reaction state atomically.
 - **Post Bookmarks & Saved Feed**:
   - Saving/bookmarking posts with composite unique constraint `@@unique([postId, userId])`.
   - Un-bookmarking and querying saved posts feed.
@@ -256,7 +241,7 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Magic-bytes validated PDF resume upload and internal application submission.
   - Database-enforced duplicate application rejection.
   - Real-time application status tracking and notification dispatch.
-  - Community feed engagement (posting, commenting, insightful reaction toggle).
+  - Community feed engagement (posting, commenting, like reaction toggle).
 - **Workflow B: Alumni Complete Journey**:
   - Alumni claim submission with graduation year and employer details.
   - Community opportunity lead sharing with external ATS link.

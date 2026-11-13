@@ -44,8 +44,8 @@
 4. **Opportunity Browsing & Filtering**: Student executes multi-faceted search matching hybrid software engineering internships targeted to their department.
 5. **Eligibility & Explainable Skill Match**: Deterministic match percentage calculates to 100% (`scoreColor: green`); eligibility confirmed (`status: ELIGIBLE`, `canApply: true`).
 6. **Bookmarking**: Student saves opportunity to personal collection with unique bookmark deduplication.
-7. **Resume Upload & Internal Application**: Student uploads valid PDF resume (magic bytes verified) and submits internal application with cover letter.
-8. **Duplicate Application Prevention**: Subsequent application attempts by same student for same opportunity are rejected at database level.
+7. **External Application Tracking**: Student submits application tracking record linking to official external application portal.
+8. **Duplicate Application Prevention**: Subsequent application tracking attempts by same student for same opportunity are rejected at database level.
 9. **Tracking & Notification**: Application status tracked in student dashboard; confirmation notification dispatched and logged.
 10. **Community Interaction**: Student publishes discussion post, receives threaded comments, and toggles insightful reaction.
 
@@ -55,11 +55,11 @@
 3. **Networking Connections**: Student discovers alumni profile in directory; sends connection request; alumni accepts request.
 4. **Referral Request Lifecycle**: Connected student requests referral for cloud engineer role; alumni reviews profile and accepts request with personalized response note.
 
-### Workflow C: Employer & Recruiter Complete Journey (4/4 Passed)
-1. **Employer Verification**: Recruiter registers with corporate email (`@vercel.com`); registrar verifies institutional connection and grants `canPostOpportunities = true` and `canReviewApplicants = true`.
-2. **Company Registration**: Recruiter registers verified corporate company profile (`Vercel Labs`).
-3. **Official Opportunity Posting**: Recruiter publishes `OFFICIAL_EMPLOYER` opportunity with transparent compensation details and submission deadline; enters admin review queue as `PENDING`.
-4. **Admin Approval & Candidate Pipeline Management**: Platform admin reviews and approves opportunity. Student applies. Recruiter inspects candidate pipeline, verifies Anti-IDOR security (unauthorized users strictly blocked from candidate records), and advances candidate to `SHORTLISTED` with feedback notes.
+### Workflow C: Recruiter / Partner Complete Journey (4/4 Passed)
+1. **Institutional Verification**: Partner/alumni registers; registrar verifies connection and grants posting capabilities.
+2. **Company Registration**: Partner registers company profile (`Vercel Labs`).
+3. **Community Opportunity Posting**: Publishes `COMMUNITY_SHARED` opportunity with external application URL, transparent compensation details and submission deadline; approved to become visible in opportunities feed.
+4. **Admin Approval & Candidate Pipeline Verification**: Platform admin reviews and approves opportunity. Candidate tracking records maintain strict data isolation and Anti-IDOR security (unauthorized users strictly blocked from accessing other candidates' records).
 
 ### Workflow D: Administrator Complete Command & Moderation (6/6 Passed)
 1. **Session Clearance & RBAC**: Admin session assertively verifies `systemRole: ADMIN`.
@@ -67,7 +67,7 @@
 3. **Opportunity Moderation**: Admin reviews pending opportunities, approves high-quality postings, and closes expired or filled positions.
 4. **Community Content Moderation**: Admin reviews flagged community reports, removes violating spam content, and marks report as resolved.
 5. **User Account Suspension & Audit**: Admin suspends abusive account; restores account following review; all administrative mutations write to immutable `AdminAuditLog` table.
-6. **Platform KPIs & Telemetry**: Admin queries live platform metrics (total members, verified count, opportunities, conversion rates) with zero mock data.
+6. **Platform KPIs & Telemetry**: Admin queries live platform metrics (total members, verified count, opportunities, corporate partners) with zero mock data.
 
 ---
 
@@ -78,5 +78,5 @@
 | **TypeScript Type Check** | `tsc --noEmit` | **0 errors** | Strict mode compliant across all 68 routes and models |
 | **ESLint Rules** | `eslint .` | **0 errors** | Clean code style; React 19 compiler hooks and render purity verified |
 | **Production Build** | `next build` (Turbopack) | **0 errors** | 68/68 static and dynamic routes compiled in 4.0s |
-| **Database Migrations** | `prisma migrate deploy` | **Synced** | 27 models fully synchronized with PostgreSQL 16 on Neon |
+| **Database Migrations** | `prisma migrate deploy` | **Synced** | 30 models fully synchronized with PostgreSQL 16 on Neon |
 

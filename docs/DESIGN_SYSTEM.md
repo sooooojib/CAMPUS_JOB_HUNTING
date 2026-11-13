@@ -92,17 +92,17 @@ UniCareer Community embodies a **high-trust, academic-meets-modern-tech aestheti
 ### 5.3 Opportunity Domain Components (`components/opportunities/`)
 - `JobCard`: Full job listing presentation with employer badge, salary, location, skills, bookmark toggle, and deadline indicator.
 - `CompanyCard`: Employer partner card with active jobs count and industry metadata.
-- `EmployerBadge`: Differentiates `OFFICIAL_EMPLOYER` (blue shield) from `COMMUNITY_SHARED` (amber referral).
+- `EmployerBadge`: Displays `COMMUNITY_SHARED` community lead badge indicating peer-shared listings.
 - `VerifiedBadge`: Displays verification state (`VERIFIED`, `PENDING`, `REJECTED`, `SUSPENDED`).
 - `MatchScoreIndicator`: Student qualification overlap badge (e.g. 92% Match).
 - `DeadlineIndicator`: Urgent deadline indicator (<3 days highlighted with pulsing dot).
 - `ApplicationStatusBadge`: Color-coded pipeline state (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEWING`, `OFFERED`, `REJECTED`, `WITHDRAWN`).
-- `ApplicantSummaryCard`: Candidate review card with status badge and resume indicator.
+- `ApplicantSummaryCard`: Candidate card with application tracking status badge.
 
 ### 5.4 Community Domain Components (`components/community/`)
-- `CreatePostBox`: Interactive post submission trigger with category tags.
+- `CreatePostBox`: Interactive post submission trigger with post type selection and attached opportunity support.
 - `FeedPostCard`: Discussion card supporting embedded job card pills and reaction bars.
-- `ReactionButtons`: Like, Insightful, Support, Celebrate counters with active toggle states.
+- `ReactionButtons`: Interactive Like button with real-time toggle counter and optimistic updates.
 - `MemberProfileCard`: Member directory card with mentorship indicator and connection button.
 - `ConnectionButton`: Multi-state button (`Connect` → `Pending` → `Connected`).
 - `ReferralCard`: Structured student elevator pitch targeting alumni at specific firms.
@@ -110,21 +110,20 @@ UniCareer Community embodies a **high-trust, academic-meets-modern-tech aestheti
 
 ---
 
-## 6. Live Design System Showcase
+## 6. Design System Integration
 
-The design system can be explored and tested interactively at `/design-system`:
-- Interactive tabs across all 6 component categories.
-- Real-time Light/Dark theme switching.
-- Toast notifications and modal triggers.
+The design system tokens and component primitives are directly integrated across the application:
+- Theme configuration in `app/globals.css` with OKLCH color spaces.
+- Real-time Light/Dark/System theme switching via `next-themes`.
+- Accessible shadcn/ui primitives in `components/ui/`.
 - Fully responsive across mobile, tablet, and desktop viewports.
-
 
 ---
 
 ## 7. Layout & Navigation Architecture (Stage 3)
 
 ### 7.1 Shell Layouts
-- `app/(public)/layout.tsx`: Gated marketing and public legal pages with `AppNavbar` and `AppFooter`.
+- `app/(public)/layout.tsx`: Public marketing landing page with minimalist `AppNavbar` and `AppFooter`.
 - `app/(auth)/layout.tsx`: Centered, distraction-free authentication card layout with university branding.
 - `app/(dashboard)/layout.tsx`: Main authenticated application layout powered by `AuthenticatedShell`.
 

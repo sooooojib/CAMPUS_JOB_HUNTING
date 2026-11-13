@@ -192,10 +192,10 @@ export function OpportunityReviewTable({ initialOpportunities }: OpportunityRevi
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={opp.sourceType === "OFFICIAL_EMPLOYER" ? "success" : "secondary"}
+                      variant="secondary"
                       className="text-[10px]"
                     >
-                      {opp.sourceType === "OFFICIAL_EMPLOYER" ? "Official Employer" : "Community Shared"}
+                      Community Shared
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground space-y-0.5">

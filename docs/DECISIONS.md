@@ -9,21 +9,21 @@
 
 ---
 
-## ADR-002: Opportunity Provenance Classification
+## ADR-002: Opportunity Provenance & External Application Standardization
 
 - **Status**: Accepted
-- **Context**: In university networks, informal job leads and referrals are common alongside official campus recruitment drives. Conflating the two causes applicant frustration when a poster has no hiring authority.
-- **Decision**: Classify all opportunities as either `OFFICIAL_EMPLOYER` or `COMMUNITY_SHARED`. Community-shared postings explicitly indicate the poster is sharing a lead or offering a referral rather than representing the hiring committee.
-- **Consequence**: Preserves trust and transparent communication between candidates and posters.
+- **Context**: In university networks, informal job leads and referrals are common alongside campus recruitment drives. Conflating unstructured resume vaults and arbitrary postings causes security issues, applicant frustration, and storage liability.
+- **Decision**: Standardize all opportunities across the platform as `COMMUNITY_SHARED` leads linking directly to official external application portals ("Apply on Official Website"). Remove unstructured resume file uploads and magic-bytes binary parsing in favor of deterministic external application tracking.
+- **Consequence**: Preserves trust, eliminates arbitrary binary vulnerability vectors, and enables transparent peer-shared job leads with external ATS verification.
 
 ---
 
-## ADR-003: Mandatory Pre-Publication Moderation Gate
+## ADR-003: Reconciled Opportunity Status Lifecycle
 
 - **Status**: Accepted
-- **Context**: Open posting risks spam, outdated third-party scrapes, and low-quality offers that erode platform credibility.
-- **Decision**: All new opportunities default to `PENDING` status and require administrative review prior to public member visibility.
-- **Consequence**: Ensures high quality, verified listings, and adherence to university compensation standards.
+- **Context**: Clear lifecycle management is essential to prevent expired or filled positions from lingering in active search feeds.
+- **Decision**: Reconcile opportunity statuses strictly to 4 core states: `APPROVED` (active in member feeds), `REJECTED` (denied publication), `EXPIRED` (past application deadline), and `CLOSED` (filled or archived).
+- **Consequence**: Simplifies status management, eliminates ambiguous intermediate states, and guarantees clean, valid opportunity feeds for all members.
 
 ---
 

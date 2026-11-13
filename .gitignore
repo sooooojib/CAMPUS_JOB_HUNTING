@@ -25,6 +25,8 @@
 *.pem
 .claude/
 .windsurf/
+~$*
+
 
 # debug
 npm-debug.log*

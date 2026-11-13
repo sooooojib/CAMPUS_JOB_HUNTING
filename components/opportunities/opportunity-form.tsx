@@ -185,16 +185,6 @@ export function OpportunityForm({
     }
   };
 
-  const handleSourceTypeChange = (sourceType: "OFFICIAL_EMPLOYER" | "COMMUNITY_SHARED") => {
-    setValue("sourceType", sourceType);
-    if (sourceType === "OFFICIAL_EMPLOYER" && managedCompanies.length > 0) {
-      setValue("companyId", managedCompanies[0].id);
-      setValue("companyName", managedCompanies[0].name);
-    } else if (sourceType === "COMMUNITY_SHARED") {
-      setValue("companyId", undefined);
-    }
-  };
-
   const handleCompanySelect = (companyId: string) => {
     const selected = managedCompanies.find((c) => c.id === companyId);
     if (selected) {

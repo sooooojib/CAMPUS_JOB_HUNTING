@@ -17,9 +17,15 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - `POST /api/auth/sign-up/email`
   - Registers a new user.
   - **Body**: `{ email, password, name, membershipType, callbackURL }`
-  - **Validation**: Passwords must be at least 8 characters. Valid email format. `membershipType` defaults to `STUDENT`.
+  - **Validation**: Passwords must be at least 8 characters. Valid email format. `membershipType` is either `STUDENT` or `ALUMNI`.
   - **Behavior**: Scrypt-hashes password into `accounts` table, creates `users` record, creates `sessions` record, generates email verification token, and calls `sendVerificationEmail`.
   - **Output**: `{ user: User, session: Session }`
+
+- `POST /api/auth/register-details`
+  - Persists initial Student ID, Department, and Membership Type immediately after signup.
+  - **Body**: `{ email, studentId, department, membershipType }`
+  - **Behavior**: Stores credentials on the user's profile and enqueues initial `MembershipRequest`.
+  - **Output**: `{ success: true }`
 
 - `POST /api/auth/sign-in/email`
   - Authenticates an existing user.
@@ -86,9 +92,9 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 ### Onboarding & Verification Endpoints
 
 - `POST /api/onboarding`
-  - Submits role-specific onboarding credentials, provisions the user profile, and triggers an initial institutional verification request.
+  - Submits role-specific onboarding credentials (`STUDENT` or `ALUMNI`), provisions the user profile, and triggers an initial institutional verification request.
   - **Access**: Authenticated member.
-  - **Body**: `{ membershipType, studentData?, alumniData?, facultyData?, employerData? }`
+  - **Body**: `{ membershipType: 'STUDENT' | 'ALUMNI', studentData?, alumniData? }`
   - **Behavior**: Updates user's `membershipType`, creates `Profile`, creates `MembershipRequest` with status `PENDING`, sets `user.verificationStatus = PENDING`.
   - **Output**: `{ success: true, data: { profile, verificationRequest } }`
 
@@ -178,7 +184,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - `GET /api/opportunities`
   - Retrieves approved and active opportunities with department, search, and type filtering.
   - **Access**: Authenticated members.
-  - **Query Params**: `query`, `type`, `department`, `workplaceType`, `sourceType`, `page`, `limit`.
+  - **Query Params**: `query`, `type`, `department`, `workplaceType`, `page`, `limit`.
   - **Filtering**: Returns postings where `status = APPROVED` and `deadline > now()`. When filtered by department, includes both department-matched and `openToAllDepartments = true` postings.
   - **Output**: `{ success: true, data: Opportunity[], pagination: { total, page, limit, totalPages } }`
 
@@ -186,10 +192,8 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - Creates a new career opportunity (internship or job).
   - **Access**: Authorized members with `canPostOpportunities: true`.
   - **Validation**: Enforces future deadline, required description (min 20 chars), and external URL when application method is `EXTERNAL`.
-  - **Provenance**:
-    - If `sourceType: OFFICIAL_EMPLOYER`: Requires valid `companyId` and asserts poster is an authorized company member.
-    - If `sourceType: COMMUNITY_SHARED`: Accessible to verified members/alumni sharing external leads with explicit disclaimer.
-  - **Initial State**: Sets status to `PENDING` (or `DRAFT` if `submitForReview: false`).
+  - **Provenance**: All opportunities are published as `sourceType: COMMUNITY_SHARED` (community / alumni shared leads) with direct links to the official employer portal.
+  - **Status**: Sets status to `APPROVED`.
   - **Output**: `{ success: true, data: Opportunity }`
 
 ### Endpoints: `/api/opportunities/[id]`
@@ -262,30 +266,30 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 7. Resume Vault & Application APIs (Stage 8 Implemented)
+## 7. Application Tracking APIs (Stage 8 Implemented)
 
-### Endpoints: `/api/resumes`
+### Endpoints: `/api/applications`
 
-- `GET /api/resumes`
-  - Retrieves all active resume documents in the authenticated user's private vault.
+- `GET /api/applications`
+  - Retrieves candidate's tracked application records and status updates.
   - **Access**: Authenticated member.
-  - **Output**: `{ success: true, data: Resume[] }`
+  - **Output**: `{ success: true, data: Application[] }`
 
-- `POST /api/resumes`
-  - Uploads a new PDF/DOCX resume file (max 5 MB). Validates magic bytes to prevent content-type spoofing.
+- `POST /api/applications`
+  - Submits or tracks an external job application record.
   - **Access**: Authenticated member.
-  - **Body**: `multipart/form-data` with `file`.
-  - **Output**: `{ success: true, data: Resume }`
+  - **Body**: `{ opportunityId, method: 'EXTERNAL', externalNotes? }`
+  - **Output**: `{ success: true, data: Application }`
 
-### Endpoints: `/api/resumes/[id]` & `/download`
+### Endpoints: `/api/applications/[id]`
 
-- `DELETE /api/resumes/[id]`
-  - Deletes a resume from user's vault.
-  - **Access**: Resume owner only.
+- `GET /api/applications/[id]`
+  - Retrieves application details.
+  - **Access**: Applicant owner or platform `ADMIN`.
 
-- `GET /api/resumes/[id]/download`
-  - Securely streams binary resume buffer with proper content headers.
-  - **Access**: Owner, authorized employer whose opportunity received an application with this resume, or platform `ADMIN`. Strictly prevents IDOR access.
+- `DELETE /api/applications/[id]`
+  - Removes the application record from the member's application dashboard.
+  - **Access**: Applicant owner or platform `ADMIN`.
 
 ### Endpoints: `/api/applications`
 
@@ -311,6 +315,10 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - Retracts submitted application, transitioning status to `WITHDRAWN`.
   - **Access**: Applicant owner only.
   - **Body**: `{ reason?: string }`
+
+- `DELETE /api/applications/[id]`
+  - Removes the application record from the member's application dashboard.
+  - **Access**: Applicant owner or platform `ADMIN`.
 
 ### Endpoints: `/api/opportunities/[id]/eligibility`
 
@@ -341,8 +349,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - **Access**: Authenticated member.
   - **Query Parameters**:
     - `postType`: Filter by `GENERAL_DISCUSSION`, `CAREER_ADVICE`, `QUESTION`, `REFERRAL_REQUEST`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `ACHIEVEMENT`, or `ALL`.
-    - `search`: Case-insensitive text search matching title, content, or topic tags.
-    - `tag`: Filter by specific topic tag.
+    - `search`: Case-insensitive text search matching title or content.
     - `bookmarkedOnly`: If `true`, returns viewer's saved posts.
     - `page`: Page number (default: 1).
     - `limit`: Items per page (default: 10, max: 30).
@@ -351,7 +358,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - `POST /api/posts`
   - Creates a new community post.
   - **Access**: Authenticated active member.
-  - **Body**: `{ title?, content, postType, visibility?, attachedOpportunityId?, tags? }`
+  - **Body**: `{ title?, content, postType, visibility?, attachedOpportunityId? }`
   - **Rules**: Content min 10 chars, max 5,000 chars. Suspended accounts are blocked.
   - **Output**: `{ success: true, data: FeedPostResult }` (Status 201)
 
@@ -362,7 +369,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - **Access**: Authenticated member.
 
 - `PUT /api/posts/[id]`
-  - Updates post title, content, postType, or tags.
+  - Updates post title, content, or postType.
   - **Access**: Post author or platform `ADMIN`.
 
 - `DELETE /api/posts/[id]`
@@ -372,10 +379,10 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 ### Endpoints: `/api/posts/[id]/react`
 
 - `POST /api/posts/[id]/react`
-  - Atomically toggles a reaction (`LIKE`, `INSIGHTFUL`, `SUPPORT`, `CELEBRATE`).
+  - Atomically toggles a reaction (`LIKE`).
   - **Access**: Authenticated member.
   - **Body**: `{ type: ReactionType }`
-  - **Behavior**: Toggles off if already active; switches cleanly between reaction types. Prevents duplicate reactions via database constraint.
+  - **Behavior**: Toggles like on/off; updates post like counter. Prevents duplicate reactions via database constraint.
   - **Output**: `{ success: true, data: { reacted: boolean, currentReaction, reactions, totalLikes } }`
 
 ### Endpoints: `/api/posts/[id]/bookmark` & `/bookmarks`

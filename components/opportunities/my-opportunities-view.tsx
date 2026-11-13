@@ -85,7 +85,6 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
   // Admin filter dropdown states (Screenshot 3)
   const [roleType, setRoleType] = React.useState<string>("ALL");
   const [workplaceType, setWorkplaceType] = React.useState<string>("ALL");
-  const [sourceType, setSourceType] = React.useState<string>("ALL");
   const [department, setDepartment] = React.useState<string>("ALL");
   const [maxMinCgpa, setMaxMinCgpa] = React.useState<string>("ALL");
 
@@ -101,7 +100,6 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
       if (isAdmin) {
         if (roleType !== "ALL") params.set("roleType", roleType);
         if (workplaceType !== "ALL") params.set("workplaceType", workplaceType);
-        if (sourceType !== "ALL") params.set("sourceType", sourceType);
         if (department !== "ALL") params.set("department", department);
         if (maxMinCgpa !== "ALL") params.set("maxMinCgpa", maxMinCgpa);
       }
@@ -126,7 +124,7 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
     } finally {
       setLoading(false);
     }
-  }, [activeTab, isAdmin, roleType, workplaceType, sourceType, department, maxMinCgpa]);
+  }, [activeTab, isAdmin, roleType, workplaceType, department, maxMinCgpa]);
 
   React.useEffect(() => {
     fetchOpportunities();
@@ -194,7 +192,7 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
       {/* Admin Advanced Filter Bar (Screenshot 3) */}
       {isAdmin && (
         <div className="rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-2xs space-y-3">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* 1. Role Type */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
@@ -233,24 +231,7 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
               </Select>
             </div>
 
-            {/* 3. Posting Source */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
-                Posting Source
-              </label>
-              <Select value={sourceType} onValueChange={(val) => setSourceType(val || "ALL")}>
-                <SelectTrigger className="rounded-xl text-xs bg-background h-9">
-                  <SelectValue placeholder="ALL" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  <SelectItem value="ALL">ALL</SelectItem>
-                  <SelectItem value="OFFICIAL_EMPLOYER">Official Employer</SelectItem>
-                  <SelectItem value="COMMUNITY_SHARED">Community Shared</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* 4. Department / Major */}
+            {/* 3. Department / Major */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
                 Department / Major
@@ -270,7 +251,7 @@ export function MyOpportunitiesView({ isAdmin = false }: MyOpportunitiesViewProp
               </Select>
             </div>
 
-            {/* 5. Max Min CGPA */}
+            {/* 4. Max Min CGPA */}
             <div className="space-y-1.5 col-span-2 sm:col-span-1">
               <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
                 Max Min CGPA

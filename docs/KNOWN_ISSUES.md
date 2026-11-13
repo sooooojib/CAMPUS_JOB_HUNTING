@@ -8,10 +8,10 @@
 
 | Decision | Rationale | AGENTS.md Directive |
 | :--- | :--- | :--- |
-| **Unified Single Account Model** | Multiple roles (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) are modeled on a single `User` record with verification status flags rather than separate auth tables. | *"Do NOT create separate authentication systems for different roles. A single unified account model manages membership types, verification statuses, and capabilities."* |
+| **Unified Single Account Model** | Multiple active personas (`STUDENT`, `ALUMNI`, `ADMIN`) are modeled on a single `User` record with verification status flags rather than separate auth tables. | *"Do NOT create separate authentication systems for different roles. A single unified account model manages membership types, verification statuses, and capabilities."* |
 | **Server-Enforced Authorization** | All permission and role checks are executed on route handlers and server actions. Frontend UI elements conditionally render for UX, but API security never relies on client state. | *"Server Enforcement: All permission, membership, and role checks must be executed on the server. Never rely on frontend UI hiding alone."* |
 | **Explainable Algorithmic Matching** | Skill match scores use deterministic, transparent formula: `(Matched Required Skills / Total Required Skills) * 100`, coupled with strict eligibility rules (Department, CGPA, Academic Year, Deadline). No opaque black-box AI algorithms. | *"Use actual profile, academic, skill, and opportunity data. Do not use fabricated AI recommendations. Calculate skill match percentage using: Matched required skills / Total required skills × 100."* |
-| **Private Resume File Routing** | Resumes are never exposed via public URLs or static asset directories. Downloads must stream through authenticated endpoint `/api/resumes/[id]/download` verifying owner or authorized recruiter identity. | *"Resumes and candidate data must be stored in private storage with time-limited signed URLs. Never expose candidate records publicly."* |
+| **External Application Redirection & Privacy** | Opportunities direct applicants to official employer job links ("Apply on Official Website"). Application tracking records remain strictly private to the applicant and administrators. | *"Unauthenticated visitors cannot browse job listings, view full job descriptions... Never expose candidate records publicly."* |
 | **Zero Mock Data in Core Feeds** | Feeds, dashboards, candidate rosters, and administrative KPIs strictly query live database rows. Zero hardcoded mock arrays exist in production code paths. | *"Zero Fake Data: Never use hardcoded mock data as a substitute for real backend functionality."* |
 
 ---
@@ -29,9 +29,9 @@
 ### C. Redirect Loop Prevention on Expired Sessions (Resolved)
 - **Resolved**: In earlier stages, stale browser session cookies combined with database session revocation could trigger a redirect loop between protected layouts and `/login`. This was resolved in `proxy.ts` and `app/(dashboard)/layout.tsx` by issuing an explicit `?signout=true` redirect that immediately clears all session cookies from the browser response.
 
-### D. Large File Upload Boundary
-- **Current Behavior**: Resume uploads are capped at 5 MB with strict magic-bytes inspection (`%PDF-`, `PK\x03\x04`). Files larger than 5 MB are rejected with HTTP 400.
-- **Rationale**: 5 MB is more than adequate for 2–4 page PDF/DOCX resumes while protecting the server against denial-of-service via large binary uploads.
+### D. External Application Portal Architecture
+- **Current Behavior**: Rather than hosting unstructured resume binaries, opportunities direct applicants to official external job links ("Apply on Official Website") while allowing students to track their application submissions directly in their dashboard.
+- **Rationale**: Direct application portals eliminate arbitrary file vulnerability vectors, reduce platform storage liability, and allow candidates to apply directly through official employer ATS/portals.
 
 ---
 

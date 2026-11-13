@@ -23,11 +23,11 @@ Every major functional requirement from `docs/PRODUCT_REQUIREMENTS.md` has been 
 | PRD Module | Core Requirements | Implementation Status | Verification Evidence |
 | :--- | :--- | :--- | :--- |
 | **Authentication & Accounts** | Email/password, argon2id hashing, email verification gating, cryptographic password reset, session cookies | **COMPLETE** | `lib/auth/auth.ts`, `tests/unit/auth.test.ts` (8/8 passing), `app/(auth)/*` |
-| **Membership & Verification** | Single unified account model, 6 membership types (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`), registrar document review queue, verification badges | **COMPLETE** | `lib/services/verification.ts`, `tests/unit/membership-and-profiles.test.ts` (14/14 passing) |
-| **Companies & Opportunity Management** | Corporate profiles, employer roster permissions, official vs community-shared opportunities, salary/stipend disclosures, moderation workflow | **COMPLETE** | `lib/services/company.ts`, `lib/services/opportunity.ts`, `tests/unit/companies-and-opportunities.test.ts` (18/18 passing) |
+| **Membership & Verification** | Single unified account model, 3 active personas (`STUDENT`, `ALUMNI`, `ADMIN`), registrar document review queue, verification badges | **COMPLETE** | `lib/services/verification.ts`, `tests/unit/membership-and-profiles.test.ts` (14/14 passing) |
+| **Companies & Opportunity Management** | Corporate profiles, community-shared opportunities, salary/stipend disclosures, moderation workflow (`APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`) | **COMPLETE** | `lib/services/company.ts`, `lib/services/opportunity.ts`, `tests/unit/companies-and-opportunities.test.ts` (18/18 passing) |
 | **Job Browsing & Search** | Keyword search, multi-faceted filtering (department, workplace, type, CGPA, compensation, deadline), bookmarked collections, mobile-responsive cards | **COMPLETE** | `app/(dashboard)/opportunities/page.tsx`, `tests/unit/job-browsing-and-posting.test.ts` (14/14 passing) |
-| **Applications & Candidate Management** | Internal direct application, external application tracking, PDF/DOCX magic bytes resume upload, Anti-IDOR applicant pipeline, interview/shortlist status history | **COMPLETE** | `lib/services/application.ts`, `lib/services/resume.ts`, `tests/unit/applications.test.ts` (17/17 passing) |
-| **Community Feed & Discussions** | 7 post categories, threaded comments, multi-reaction toggles, bookmarks, content reporting, institutional verification badges | **COMPLETE** | `lib/services/community.ts`, `tests/unit/community.test.ts` (22/22 passing) |
+| **Applications & Candidate Management** | External application tracking, "Apply on Official Website" redirection, duplicate application prevention, candidate application withdrawal | **COMPLETE** | `lib/services/application.ts`, `tests/unit/applications.test.ts` (17/17 passing) |
+| **Community Feed & Discussions** | 7 post categories, threaded comments, atomic reaction toggle, bookmarks, content reporting, institutional verification badges | **COMPLETE** | `lib/services/community.ts`, `tests/unit/community.test.ts` (22/22 passing) |
 | **Member Directory & Networking** | Directory search with privacy respect, mutual connection requests, career referral requests, professional profiles | **COMPLETE** | `lib/services/connection.ts`, `lib/services/referral.ts`, `tests/unit/connections-and-referrals.test.ts` (12/12 passing) |
 | **Smart Matching & Student Career Tools** | Algorithmic explainable skill match percentage (Matched/Total * 100), traffic-light scoring, skill gap analyzer with curated resources, CGPA eligibility checker | **COMPLETE** | `lib/services/matching.ts`, `tests/unit/smart-matching-and-career-tools.test.ts` (20/20 passing) |
 | **Notifications & Calendar** | Centralized notification dispatch, deduplicated upcoming deadline alerts (cron), personal academic & career calendar | **COMPLETE** | `lib/services/notification.ts`, `lib/services/calendar.ts`, `tests/unit/notifications-and-calendar.test.ts` (12/12 passing) |
@@ -61,21 +61,18 @@ Every major functional requirement from `docs/PRODUCT_REQUIREMENTS.md` has been 
    - Authentication required for all opportunities, community, directory, tools, and profile routes.
    - Unauthenticated visitors restricted exclusively to public marketing, login, register, forgot-password, and email verification routes.
 2. **Anti-IDOR & Server-Enforced RBAC**:
-   - Applicant resumes and candidate pipelines can only be viewed by authorized employers of that company or platform administrators (`assertCanManageApplicantsForOpportunity`).
-   - Private resume downloads stream strictly through private file streaming route (`/api/resumes/[id]/download`) with access validation; resumes are never exposed via public URLs.
+   - Application tracking is isolated to the authenticated candidate or platform administrators. Third-party authenticated users cannot inspect another candidate's applications.
+   - All opportunities are standardized as `COMMUNITY_SHARED` leads linking directly to verified official employer portals.
    - Referral requests enforce access exclusively to the sender, recipient, or administrator (`assertCanAccessReferral`).
    - Academic records and CGPA calculations are strictly scoped to authenticated student profiles; non-student profiles are blocked from academic tooling.
 3. **Rate Limiting Protection**:
    - Integrated sliding-window rate limiter (`lib/security/rate-limit.ts`) protecting sensitive API entry points:
-     - Resume uploads (`/api/resumes`): 10 uploads / 10 minutes per IP/User.
      - Verification claims (`/api/verification/request`): 10 submissions / 10 minutes per IP/User.
-     - Internal applications (`/api/applications`): 30 applications / 1 hour per IP/User.
+     - Application tracking submissions (`/api/applications`): 30 applications / 1 hour per IP/User.
      - Standard HTTP 429 response headers (`Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`).
-4. **File Upload Security**:
-   - Client-reported MIME types and extensions are treated as untrusted.
-   - Magic bytes inspection detects `%PDF-` header for PDF and PK zip signatures for DOCX.
-   - File size strictly capped at 5 MB.
-   - Files stored with sanitized UUID paths in isolated storage.
+4. **Link Hardening & Safe Redirection**:
+   - Direct application buttons link to external employer career pages with well-formed HTTPS syntax.
+   - Links open in sandboxed tabs (`target="_blank" rel="noopener noreferrer"`) protecting against reverse tabnabbing.
 
 ---
 

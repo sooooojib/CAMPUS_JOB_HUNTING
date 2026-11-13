@@ -92,7 +92,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
   const [debouncedQuery, setDebouncedQuery] = React.useState("");
   const [typeFilter, setTypeFilter] = React.useState<string>("ALL");
   const [workplaceFilter, setWorkplaceFilter] = React.useState<string>("ALL");
-  const [sourceTypeFilter, setSourceTypeFilter] = React.useState<string>("ALL");
   const [departmentFilter, setDepartmentFilter] = React.useState<string>("ALL");
   const [cgpaFilter, setCgpaFilter] = React.useState<string>("ALL");
   const [page, setPage] = React.useState(1);
@@ -122,7 +121,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
       if (debouncedQuery.trim()) params.set("query", debouncedQuery.trim());
       if (typeFilter !== "ALL") params.set("type", typeFilter);
       if (workplaceFilter !== "ALL") params.set("workplaceType", workplaceFilter);
-      if (sourceTypeFilter !== "ALL") params.set("sourceType", sourceTypeFilter);
       if (departmentFilter !== "ALL") params.set("department", departmentFilter);
       if (cgpaFilter !== "ALL") params.set("maxMinCgpa", cgpaFilter);
       if (activeTab === "BOOKMARKED") params.set("bookmarkedOnly", "true");
@@ -153,7 +151,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
     debouncedQuery,
     typeFilter,
     workplaceFilter,
-    sourceTypeFilter,
     departmentFilter,
     cgpaFilter,
     activeTab,
@@ -219,7 +216,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
     debouncedQuery !== "" ||
     typeFilter !== "ALL" ||
     workplaceFilter !== "ALL" ||
-    sourceTypeFilter !== "ALL" ||
     departmentFilter !== "ALL" ||
     cgpaFilter !== "ALL";
 
@@ -228,7 +224,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
     setDebouncedQuery("");
     setTypeFilter("ALL");
     setWorkplaceFilter("ALL");
-    setSourceTypeFilter("ALL");
     setDepartmentFilter("ALL");
     setCgpaFilter("ALL");
     setPage(1);
@@ -336,7 +331,7 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
         </div>
 
         {/* Filter Controls Grid with Defined Input Borders and Ample Spacing */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
           {/* Opportunity Type */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
@@ -387,31 +382,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
                 <SelectItem value="ON_SITE">On-Site</SelectItem>
                 <SelectItem value="REMOTE">Remote</SelectItem>
                 <SelectItem value="HYBRID">Hybrid</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Source Classification */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
-              <span>Posting Source</span>
-            </label>
-            <Select
-              value={sourceTypeFilter}
-              onValueChange={(val) => {
-                if (val) {
-                  setSourceTypeFilter(val);
-                  setPage(1);
-                }
-              }}
-            >
-              <SelectTrigger className="w-full bg-background/70 hover:bg-background h-11 text-xs rounded-xl border border-border/80 hover:border-primary/50 text-foreground font-medium px-3.5 shadow-2xs transition-all focus:ring-2 focus:ring-primary/20">
-                <SelectValue placeholder="All Sources" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">All Sources</SelectItem>
-                <SelectItem value="OFFICIAL_EMPLOYER">Official Employer Direct</SelectItem>
-                <SelectItem value="COMMUNITY_SHARED">Community / Alumni Lead</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -489,11 +459,6 @@ export function OpportunitiesBrowser({ canPost = false }: OpportunitiesBrowserPr
               {workplaceFilter !== "ALL" && (
                 <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
                   {workplaceFilter}
-                </Badge>
-              )}
-              {sourceTypeFilter !== "ALL" && (
-                <Badge variant="secondary" className="text-[11px] font-normal rounded-full px-2.5">
-                  {sourceTypeFilter === "OFFICIAL_EMPLOYER" ? "Official" : "Community Lead"}
                 </Badge>
               )}
               {departmentFilter !== "ALL" && (

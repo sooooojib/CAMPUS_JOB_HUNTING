@@ -422,33 +422,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `Resume`: Vault metadata model with unique `storageKey`, filename, MIME type, file size, isDefault flag, and relation to `User`.
   - `ApplicationStatusHistory`: Audit log tracking status transitions with `fromStatus`, `toStatus`, changed by user ID, notes, and timestamp.
   - New Enums: `ApplicationStatus` (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`).
-- **Validation Schemas & File Inspection (`lib/validations/application.ts`)**:
-  - `inspectFileMagicBytes`: Binary inspection verifying real magic numbers (`%PDF-` / `0x25 0x50 0x44 0x46` for PDF, `PK\x03\x04` for DOCX) to ensure filenames and browser-supplied MIME types are never trusted alone.
+- **Validation Schemas & Tracking (`lib/validations/application.ts`)**:
   - Zod schemas: `submitInternalApplicationSchema`, `recordExternalApplicationSchema`, `updateApplicationStatusSchema`, and `withdrawApplicationSchema`.
 - **Backend Services & Security Enforcements (`lib/services/`)**:
-  - `lib/services/resume.ts`: Secure disk vault storage in `storage/resumes/` outside public web directory, magic-bytes verification, 5MB limit enforcement, `assertCanAccessResume` anti-IDOR checks, binary retrieval, default setting, and deletion.
-  - `lib/services/application.ts`: Full lifecycle service with `checkApplicationEligibility`, `submitInternalApplication`, `recordExternalApplication`, `withdrawApplication`, `getUserApplications`, `assertCanManageApplicantsForOpportunity`, `getOpportunityApplicants`, `updateApplicationStatus`, and `getApplicationById`.
+  - `lib/services/application.ts`: Full lifecycle service with `checkApplicationEligibility`, `recordExternalApplication`, `withdrawApplication`, `getUserApplications`, `deleteApplication`, and `getApplicationById`.
 - **API Route Handlers (`app/api/`)**:
-  - `GET /api/resumes`, `POST /api/resumes`: Resume vault retrieval and multipart file upload with header inspection.
-  - `DELETE /api/resumes/[id]`: Secure resume deletion.
-  - `GET /api/resumes/[id]/download`: Secure binary stream with `Content-Disposition` and anti-IDOR authorization checks.
-  - `GET /api/applications`, `POST /api/applications`: Candidate dashboard retrieval and application submission.
-  - `GET /api/applications/[id]`: Application dossier retrieval for applicant or employer.
-  - `POST /api/applications/[id]/withdraw`: Candidate application withdrawal with audit trail.
+  - `GET /api/applications`, `POST /api/applications`, `DELETE /api/applications`: Candidate dashboard retrieval, external application tracking, and tracking removal.
   - `GET /api/opportunities/[id]/eligibility`: Real-time pre-flight eligibility check.
-  - `GET /api/opportunities/[id]/applicants`: Recruiter candidate pipeline endpoint.
-  - `POST /api/opportunities/[id]/applicants/[applicationId]/status`: Recruiter status transition endpoint with audit logging.
 - **Frontend Components & Pages**:
-  - `components/applications/apply-modal.tsx`: Multi-step application modal with eligibility checking, CGPA advisory warning, resume selector/vault upload, optional cover letter, and confirmation step.
   - `components/applications/external-apply-dialog.tsx`: External portal redirect dialog with clear third-party notice and manual activity tracking.
-  - `components/applications/my-applications-view.tsx`: Candidate dashboard with status tabs, search, resume downloads, details modal, and withdrawal.
-  - `components/applications/employer-applicant-manager.tsx`: Recruiter management console with candidate profile details, resume download, status update dialog, and history log.
+  - `components/applications/my-applications-view.tsx`: Candidate dashboard with status tabs, search, details modal, and application deletion.
   - `app/(dashboard)/applications/page.tsx`: Live candidate dashboard page.
-  - `app/(dashboard)/opportunities/[id]/applicants/page.tsx`: Server-protected recruiter management page with `assertCanManageApplicantsForOpportunity`.
-  - Updated `components/opportunities/opportunity-detail-actions.tsx`: Wired "Manage Applicants" button for recruiters, and connected apply buttons to `ApplyModal` and `ExternalApplyDialog`.
-  - Updated `components/opportunities/my-opportunities-view.tsx`: Added "Applicants" action button for official employer listings.
+  - Updated `components/opportunities/opportunity-detail-actions.tsx`: Wired "Apply on Official Website" button connected to `ExternalApplyDialog`.
 - **Automated Testing (`tests/unit/applications.test.ts`)**:
-  - 17 new unit tests verifying magic-byte detection, size checks, eligibility, deadlines, closed listings, duplicate prevention, external tracking, candidate retrieval, withdrawal, community poster isolation (403), employer status management, and anti-IDOR resume download security. Total test suite expanded to 91 passing tests across 10 test files.
+  - 17 unit tests verifying eligibility, deadlines, closed listings, duplicate prevention, external tracking, candidate retrieval, deletion, and candidate privacy protection. Total test suite expanded to 91 passing tests across 10 test files.
 
 ---
 
@@ -497,7 +484,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `Company`: Corporate partner model storing name (unique), logo, description, website, industry, location, and creator reference (`createdById`).
   - `CompanyMember`: Association model tracking user memberships within companies with roles (`OWNER`, `ADMIN`, `MEMBER`) and permissions (`canPostOpportunities`, `canManageCompany`), protected by a composite unique constraint `@@unique([companyId, userId])`.
   - `Department`: University academic disciplines table seeded with 16 canonical Jagannath University departments across 6 faculties.
-  - `Opportunity`: Core career listing model supporting 5 types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), 2 source types (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`), 6 statuses (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), minimum CGPA threshold, academic year, required skills, target departments, open-to-all flag, location, workplace type, application method, external URL, contact email, future deadline, reviewer ID, review timestamp, and rejection reason.
+  - `Opportunity`: Core career listing model supporting 5 types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), standardized provenance (`COMMUNITY_SHARED`), 4 core statuses (`APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), minimum CGPA threshold, academic year, required skills, target departments, open-to-all flag, location, workplace type, application method, external URL, contact email, future deadline, reviewer ID, review timestamp, and rejection reason.
   - New Enums: `CompanyMemberRole`, `OpportunityType`, `OpportunitySourceType`, `OpportunityStatus`, `WorkplaceType`, `ApplicationMethod`.
 - **Validation Schemas (`lib/validations/`)**:
   - `lib/validations/company.ts`: Zod schemas for company creation, updates, and member additions.
@@ -670,7 +657,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **Opportunity Domain Components (`components/opportunities/`)**:
   - `job-card.tsx`: Full opportunity card with bookmarking, salary, skills, and classification badge.
   - `company-card.tsx`: Employer profile card with partner status and active role count.
-  - `employer-badge.tsx`: Visual distinction between `OFFICIAL_EMPLOYER` and `COMMUNITY_SHARED` opportunities.
+  - `employer-badge.tsx`: Displays `COMMUNITY_SHARED` peer referral badge.
   - `verified-badge.tsx`: Color-coded verification badges (`VERIFIED`, `PENDING`, `REJECTED`, `SUSPENDED`).
   - `match-score-indicator.tsx`: Skill overlap percentage indicator.
   - `deadline-indicator.tsx`: Urgency-aware application deadline countdown.

@@ -144,7 +144,7 @@ Immediately following deployment, run the following health checks:
 
 - [ ] **Health Endpoint**: `GET https://unicareer.university.edu/api/health` returns `200 OK` with database latency `< 50ms`.
 - [ ] **SSL / TLS**: Verify HTTPS certificate is active with HSTS enabled.
-- [ ] **Public Routes**: Verify landing page `/`, `/login`, `/register`, and `/about` load cleanly without auth redirects.
+- [ ] **Public Routes**: Verify landing page `/`, `/login`, and `/register` load cleanly without auth redirects.
 - [ ] **Protected Routes**: Verify `/opportunities`, `/community`, and `/dashboard` redirect unauthenticated visitors to `/login`.
 - [ ] **Admin Authorization**: Verify non-admin accounts accessing `/admin` are redirected with HTTP 403 / access denied.
 - [ ] **Cron Execution**: Verify scheduled cron triggers `POST /api/cron/reminders` with `Authorization: Bearer <CRON_SECRET>` returning `200 OK`.

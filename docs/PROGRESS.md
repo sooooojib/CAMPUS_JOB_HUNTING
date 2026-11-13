@@ -9,7 +9,7 @@ flowchart TD
     S2 --> S3["Stage 3: Website Layout & Navigation (Current)"]
     S3 --> S4["Stage 4: Authentication Engine & Verification"]
     S4 --> S5["Stage 5: Opportunity Portal & Review Engine"]
-    S4 --> S6["Stage 6: Applications & Resume Vault"]
+    S4 --> S6["Stage 6: Applications & External Tracking"]
     S5 & S6 --> S7["Stage 7: Community Feed & Member Networking"]
     S6 --> S8["Stage 8: Student Career Tools (CGPA / Skills)"]
     S7 & S8 --> S9["Stage 9: Referrals & Notification Pipeline"]
@@ -53,7 +53,7 @@ flowchart TD
   - 3 feedback micro-UIs in `components/feedback/` (`EmptyState`, `ErrorBanner`, `ConfirmDialog`).
   - 8 Opportunity domain components in `components/opportunities/` (`JobCard`, `CompanyCard`, `EmployerBadge`, `VerifiedBadge`, `MatchScoreIndicator`, `DeadlineIndicator`, `ApplicationStatusBadge`, `ApplicantSummaryCard`).
   - 7 Community domain components in `components/community/` (`CreatePostBox`, `FeedPostCard`, `ReactionButtons`, `MemberProfileCard`, `ConnectionButton`, `ReferralCard`, `CommentThread`).
-  - Interactive Design System demonstration page at `/design-system`.
+  - Design System tokens and preview primitives integrated in `components/ui/`.
   - Automated component unit tests (7/7 passing).
 
 ### Stage 3: Website Layout & Navigation
@@ -61,7 +61,7 @@ flowchart TD
 - **Prerequisites**: Stage 2.
 - **Core Deliverables Delivered**:
   - **Shared Authenticated Shell**: Responsive desktop sidebar (`AppSidebar`), sticky header (`AppHeader`) with global search and notification drawer, and mobile bottom bar + off-canvas drawer (`MobileNav`).
-  - **Public Gated Entry Layout**: `app/(public)/layout.tsx` wrapping welcome landing (`/`), mission background (`/about`), terms of service (`/terms`), and student data privacy statement (`/privacy`). Zero public leakage of member directories or job details.
+  - **Public Gated Entry Layout**: `app/(public)/layout.tsx` wrapping welcome landing (`/`). Zero public leakage of member directories or job details.
   - **Distraction-Free Auth Shell**: `app/(auth)/layout.tsx` wrapping member login (`/login`), verified registration (`/register`), and password recovery (`/forgot-password`).
   - **6 Reusable Page Templates**: `DashboardTemplate`, `ListingTemplate`, `DetailsTemplate`, `FormTemplate`, `ProfileTemplate`, `AdminTemplate`.
   - **Authenticated Domain Views**: Full page implementations for `/dashboard`, `/feed`, `/opportunities`, `/opportunities/[id]`, `/opportunities/post`, `/community`, `/referrals`, `/applications`, `/career-tools`, `/contributions`, `/profile/me`, `/settings`, `/notifications`, `/admin`.
@@ -104,7 +104,7 @@ flowchart TD
 - **Prerequisites**: Stage 5.
 - **Core Deliverables Delivered**:
   - **Company Database Model & RBAC (`prisma/schema.prisma`)**: Integrated `Company` and `CompanyMember` models with role-based governance (`OWNER`, `ADMIN`, `MEMBER`) and granular capability flags (`canManageCompany`, `canPostOpportunities`). Creator is automatically assigned as company `OWNER`.
-  - **Opportunity Model & Lifecycle**: Comprehensive `Opportunity` schema supporting 5 opportunity types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), 2 provenance classifications (`OFFICIAL_EMPLOYER`, `COMMUNITY_SHARED`), 6 statuses (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), workplace types, application methods, minimum CGPA scale, academic year, and compensation.
+  - **Opportunity Model & Lifecycle**: Comprehensive `Opportunity` schema supporting 5 opportunity types (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), standardized as `COMMUNITY_SHARED` peer-leads, 4 core statuses (`APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`), workplace types, direct external application routing, minimum CGPA scale, academic year, and compensation.
   - **University Department Targeting**: Seeded 16 canonical Jagannath University departments into `departments` table. Supported department-specific targeting and `openToAllDepartments` filtering.
   - **Institutional Approval & Moderation System**: Server-side review queue (`getPendingOpportunities`, `reviewOpportunity`). Platform administrators evaluate opportunities with mandatory rejection feedback and permanent reviewer attribution.
   - **Anti-IDOR & Permission Assertion Services (`lib/services/`)**: `assertCanManageCompany`, `assertCanPostForCompany`, `assertCanModifyOpportunity`, and `createOpportunity` enforce server-side boundaries preventing unauthorized publishing, company editing, or unapproved posting discovery.
@@ -117,8 +117,8 @@ flowchart TD
 - **Status**: **COMPLETE** (2026-11-05)
 - **Prerequisites**: Stage 6.
 - **Core Deliverables Delivered**:
-  - **Opportunity Browsing Page (`/opportunities`)**: Approved opportunity discovery grid displaying company logos, job title, type, location, workplace mode, compensation, urgency deadline indicator, required skills, department tags, and official vs community-shared provenance badges.
-  - **Multi-Filter & Real-Time Search**: Live keyword search with debouncing, opportunity type, workplace mode, source type, department targeting, and minimum CGPA filters working directly against backend database queries with pagination.
+  - **Opportunity Browsing Page (`/opportunities`)**: Approved opportunity discovery grid displaying company logos, job title, type, location, workplace mode, compensation, urgency deadline indicator, required skills, and department tags.
+  - **Multi-Filter & Real-Time Search**: Live keyword search with debouncing, opportunity type, workplace mode, department targeting, and minimum CGPA filters working directly against backend database queries with pagination.
   - **Opportunity Details View (`/opportunities/[id]`)**: Full job specifications, company identity, requirements, academic criteria, application routing (external redirect vs internal notice), deadline countdown, poster attribution, bookmark toggle, and related openings.
   - **Opportunity Submission Interface (`/opportunities/post`)**: React Hook Form + Zod form supporting managed company selection or custom company names, skills tag input, target department multi-selection, and server-side posting clearance checks.
   - **Posting Workflow with Live Preview**: Seamless toggle between form mode and live card preview mode. Support for saving as `DRAFT` or direct submission for institutional review (`PENDING`).
@@ -131,18 +131,16 @@ flowchart TD
 
 ## 3. Next Stage Preview
 
-### Stage 8: Applications and Applicant Management
+### Stage 8: Applications and External Link Tracking
 - **Status**: **COMPLETE** (2026-11-05)
 - **Prerequisites**: Stage 7.
 - **Core Deliverables Delivered**:
-  - **Application Database & Unique Constraints (`prisma/schema.prisma`)**: Integrated `Application`, `Resume`, and `ApplicationStatusHistory` models with database-level composite unique constraint `@@unique([opportunityId, applicantId])` preventing duplicate applications.
-  - **Secure Private Resume Vault (`lib/services/resume.ts`)**: Private disk storage in `storage/resumes/` outside public web root with magic-bytes inspection (`%PDF-` for PDF, `PK\x03\x04` for DOCX) verifying actual file headers rather than browser-supplied MIME types. Anti-IDOR download authorization (`/api/resumes/[id]/download`).
-  - **Dual Application Methods**: Supported `INTERNAL_APPLICATION` (direct via UniCareer with resume selection/upload and cover letter) and `EXTERNAL_APPLICATION` (redirects to third-party employer portal with disclaimer and manual activity recording).
-  - **Eligibility & Pre-Flight Validation**: Real-time pre-flight verification checking department eligibility, deadline expiration, opportunity status, and advisory CGPA warnings.
-  - **Candidate Self-Service Dashboard (`/applications`)**: Live applicant dashboard (`MyApplicationsView`) displaying applied opportunities, real-time status badges, submitted resume downloads, application detail modal, and application withdrawal.
-  - **Employer Applicant Management Console (`/opportunities/[id]/applicants`)**: Live recruiter dashboard (`EmployerApplicantManager`) for authorized company managers with candidate dossier review, candidate resume access, status transition management (`SUBMITTED`, `UNDER_REVIEW`, `SHORTLISTED`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`), status audit trail, and private recruiter notes.
-  - **Community Poster Strict Isolation**: Server-enforced verification (`assertCanManageApplicantsForOpportunity`) ensuring members who merely shared job leads (`COMMUNITY_SHARED`) cannot access candidate dossiers or download resumes (403 Forbidden).
-  - **Automated Testing**: 17 new unit tests in `tests/unit/applications.test.ts` (91/91 passing across all 10 test files).
+  - **Application Database & Unique Constraints (`prisma/schema.prisma`)**: Integrated `Application` model with database-level composite unique constraint `@@unique([opportunityId, applicantId])` preventing duplicate applications.
+  - **External Portal Redirection Engine**: Integrated "Apply on Official Website" modal flow (`ExternalApplyDialog`) validating external HTTPS career URLs and providing transparent peer-lead disclaimers.
+  - **Eligibility & Pre-Flight Validation**: Real-time pre-flight verification checking department eligibility, deadline expiration, and opportunity status.
+  - **Candidate Self-Service Dashboard (`/applications`)**: Live applicant dashboard (`MyApplicationsView`) displaying tracked opportunities, external application links, tracking notes, and application deletion.
+  - **Candidate Privacy & Strict Isolation**: Server-enforced isolation ensuring third-party members and community posters cannot inspect another member's application tracking records.
+  - **Automated Testing**: 17 unit tests in `tests/unit/applications.test.ts` (91/91 passing across all 10 test files).
   - **Production Build**: 44 App Router routes compiled cleanly with Next.js Turbopack.
 
 ---
@@ -154,9 +152,9 @@ flowchart TD
   - **Community Database Models (`prisma/schema.prisma`)**: Integrated `Post`, `Comment`, `PostReaction`, `PostBookmark`, and `ContentReport` models into PostgreSQL with granular enums (`PostType`, `ModerationStatus`, `PostVisibility`, `ReactionType`, `ReportTargetType`, `ReportReason`, `ReportStatus`).
   - **Composite Unique Constraints**: Database-level unique constraint `@@unique([postId, userId, type])` preventing duplicate reactions of the same type, and `@@unique([postId, userId])` preventing duplicate post bookmarks.
   - **Dedicated Community Feed (`/feed`) & Live Dashboard (`/dashboard`)**: Full-featured feeds built on `CommunityFeedView` supporting channel filtering (`GENERAL_DISCUSSION`, `CAREER_ADVICE`, `QUESTION`, `REFERRAL_REQUEST`, `JOB_ANNOUNCEMENT`, `INTERNSHIP_ANNOUNCEMENT`, `ACHIEVEMENT`, `BOOKMARKED`), live debounced search, active university statistics, loading skeletons, and pagination.
-  - **Interactive Post Creation (`CreatePostBox`)**: Rich post publisher supporting post type selection, optional headline, topic tag chips, opportunity linkage, character counters (min 10, max 5,000 chars), and immediate optimistic feed updates.
+  - **Interactive Post Creation (`CreatePostBox`)**: Rich post publisher supporting post type selection, optional headline, attached opportunity linkage, character counters (min 10, max 5,000 chars), and immediate optimistic feed updates.
   - **Threaded Comments & Replies (`CommentThread`)**: Single-level hierarchical reply structure (`parentId`), in-place comment editing for authors, comment deletion with automatic post count synchronization, and comment reporting.
-  - **Atomic Reactions Engine**: Like, Insightful, Support, and Celebrate reaction buttons with real-time counters, toggle-off capability, and clean type switching.
+  - **Atomic Reactions Engine**: Interactive Like button with real-time toggle counters and optimistic updates.
   - **Post Interactions & Bookmarks**: In-place post editing (author or admin), post deletion with cascade, saved posts collection (`/api/posts/bookmarks`), and internal shareable link generation.
   - **Community Content Moderation Foundation**: Report dialog for posts and comments with categorized reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`), duplicate report protection, and auto-flagging threshold (flagged when >= 3 pending reports are lodged).
   - **Automated Testing**: 22 new unit and integration tests in `tests/unit/community.test.ts` (113/113 passing across all 11 test files).
@@ -272,7 +270,7 @@ flowchart TD
 | **Stage 5** | Membership Verification & Profiles | **COMPLETE** | 14/14 Passing |
 | **Stage 6** | Companies & Opportunity Core | **COMPLETE** | 18/18 Passing |
 | **Stage 7** | Job Browsing & Search Discovery | **COMPLETE** | 14/14 Passing |
-| **Stage 8** | Applications & Resume Vault | **COMPLETE** | 17/17 Passing |
+| **Stage 8** | Applications & External Tracking | **COMPLETE** | 17/17 Passing |
 | **Stage 9** | Community Feed & Discussions | **COMPLETE** | 22/22 Passing |
 | **Stage 10** | Member Directory & Referrals | **COMPLETE** | 12/12 Passing |
 | **Stage 11** | Smart Matching & Student Career Tools | **COMPLETE** | 20/20 Passing |

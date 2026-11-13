@@ -31,7 +31,7 @@ se_project/
 │   ├── not-found.tsx             # 404 handler with return home action
 │   ├── globals.css               # Design tokens, OKLCH theme palettes, animations
 │   ├── (auth)/                   # Public auth routes (Stage 2)
-│   ├── (public)/                 # Marketing & about routes
+│   ├── (public)/                 # Public landing page
 │   ├── (dashboard)/              # Authenticated member core routes (Stage 3+)
 │   └── api/                      # Route handlers & webhooks
 ├── components/                   # UI Presentation Components
@@ -97,7 +97,7 @@ se_project/
                   │   (Business Logic & Rules)    │
                   └───────┬───────────────┬───────┘
                           │               │
-       Prisma Driver Pool │               │ Signed URL Requests
+       Prisma Driver Pool │               │ Authenticated Stream
                           ▼               ▼
         ┌───────────────────────┐   ┌───────────────────────┐
         │      PostgreSQL       │   │    Private Storage    │
@@ -110,6 +110,6 @@ se_project/
 3. **Validation & Permissions**: Shared Zod schemas validate payload shapes. `lib/permissions.ts` verifies session authenticity, role capabilities, and resource ownership before invoking services.
 4. **Domain Services**: Encapsulate transactions, audit logging, status transitions, and data integrity rules.
 5. **Database**: Prisma ORM executes typed SQL queries against PostgreSQL via `@prisma/adapter-pg`.
-6. **Storage**: Resumes and verification IDs are never saved in public paths; secure, short-lived signed URLs govern candidate document access.
+6. **External Applications**: Opportunities link directly to official external company career portals ("Apply on Official Website"), keeping candidate applications direct and authentic without file uploads.
 7. **Rate Limiting**: Integrated sliding-window rate limiter in `lib/security/rate-limit.ts` protects mutation routes against spam, scraping, and brute force with HTTP 429 response headers.
 8. **Testing**: Vitest executes fast unit, schema, and end-to-end multi-persona workflow tests; Playwright runs browser workflows.

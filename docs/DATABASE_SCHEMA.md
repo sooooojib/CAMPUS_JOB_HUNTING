@@ -278,8 +278,8 @@ erDiagram
 | `companyLogo`| `TEXT` | `NULLABLE` | Company logo URL |
 | `type` | `OpportunityType`| `DEFAULT FULL_TIME` | `INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER` |
 | `posterId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Submitting member referencing `users(id)` |
-| `sourceType` | `OpportunitySourceType` | `DEFAULT COMMUNITY_SHARED` | `OFFICIAL_EMPLOYER` vs `COMMUNITY_SHARED` |
-| `status` | `OpportunityStatus`| `DEFAULT DRAFT` | `DRAFT`, `PENDING`, `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED` |
+| `sourceType` | `OpportunitySourceType` | `DEFAULT COMMUNITY_SHARED` | Standardized to `COMMUNITY_SHARED` (peer-shared leads) |
+| `status` | `OpportunityStatus`| `DEFAULT APPROVED` | Reconciled lifecycle statuses: `APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED` |
 | `minCgpa` | `DECIMAL(3,2)` | `NULLABLE` | Minimum CGPA threshold (0.00 – 4.00) |
 | `minAcademicYear` | `VARCHAR(50)` | `NULLABLE` | Minimum academic standing (e.g. 3rd Year) |
 | `requiredSkills` | `TEXT[]` | `DEFAULT '{}'` | Skill tags required for role |
@@ -298,14 +298,16 @@ erDiagram
 | `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Submission timestamp |
 | `updatedAt` | `TIMESTAMPTZ` | `AUTO UPDATE` | Last modification timestamp |
 
-### `resumes` (Stage 8 Implemented)
+### `resumes` (Internal Storage Reference)
+> **Note**: Candidate workflows are standardized on direct external official portal applications (`externalUrl`). The resume upload table remains in the database schema for backwards compatibility, but user-facing application flows do not require file uploads or magic-bytes binary inspection.
+
 | Column | Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
 | `id` | `VARCHAR(30)` | `PRIMARY KEY` (cuid) | Unique resume identifier |
 | `userId` | `VARCHAR(30)` | `NOT NULL`, `FK` | Owning candidate referencing `users(id)` ON DELETE CASCADE |
 | `fileName` | `VARCHAR(100)` | `NOT NULL` | Sanitized original document name |
-| `fileSize` | `INTEGER` | `NOT NULL` | File byte length (max 5 MB) |
-| `mimeType` | `VARCHAR(100)` | `NOT NULL` | Validated MIME type (`application/pdf`, `application/vnd.openxmlformats...`) |
+| `fileSize` | `INTEGER` | `NOT NULL` | File byte length |
+| `mimeType` | `VARCHAR(100)` | `NOT NULL` | Document MIME type |
 | `storageKey` | `VARCHAR(255)` | `NOT NULL`, `UNIQUE` | Non-guessable storage filename in private vault |
 | `isDefault` | `BOOLEAN` | `DEFAULT false` | Primary candidate resume flag |
 | `createdAt` | `TIMESTAMPTZ` | `DEFAULT now()` | Upload timestamp |

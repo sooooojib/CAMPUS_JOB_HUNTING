@@ -1,6 +1,9 @@
 # UniCareer Community — Routes & Pages Inventory
 
-> **Platform Status**: All 14 Stages Complete, Production Verified, and Deployed on Vercel (`https://jnujobhunting.vercel.app`).
+> **Platform Deployment**: Production Verified on Vercel (`https://jnujobhunting.vercel.app`)  
+> **Target Audience**: Current Students, Alumni, and University Administrators
+
+---
 
 ## 1. Route Map & Implementation Status
 
@@ -8,8 +11,8 @@
 | Route | Component / Purpose | Layout Group | Implementation Status |
 | :--- | :--- | :--- | :--- |
 | `/` | Landing / Marketing Homepage (No Private Data Leaks) | `app/(public)/layout.tsx` | **Implemented** |
-| `/login` | Member Login with verification-first enforcement | `app/(auth)/layout.tsx` | **Implemented** |
-| `/register` | Member Registration & Role Selection | `app/(auth)/layout.tsx` | **Implemented** |
+| `/login` | Member Login with email verification-first enforcement | `app/(auth)/layout.tsx` | **Implemented** |
+| `/register` | Member Registration (Student ID & Department Dropdown) | `app/(auth)/layout.tsx` | **Implemented** |
 | `/forgot-password` | Password Reset Request | `app/(auth)/layout.tsx` | **Implemented** |
 | `/reset-password` | Single-Use Cryptographic Password Reset | `app/(auth)/layout.tsx` | **Implemented** |
 | `/verify-email` | Cryptographic Token Redemption & Resend Gateway | `app/(auth)/layout.tsx` | **Implemented** |
@@ -17,152 +20,85 @@
 ### 1.2 Authenticated Member Routes (Protected Application Shell)
 All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 
-| Route | Purpose | Template Used | Implementation Status |
+| Route | Purpose | Target Personas | Template / View Used |
 | :--- | :--- | :--- | :--- |
-| `/dashboard` | Member Overview, Recent Activity, Alerts & Live Feed | `DashboardTemplate` + `CommunityFeedView` | **Implemented (Stage 9)** |
-| `/feed` | Dedicated University Community Feed, Discussions, Questions & Advice | `DashboardTemplate` + `CommunityFeedView` | **Implemented (Stage 9)** |
-| `/opportunities` | Job & Internship Portal, Live Filter, Keyword Search, Pagination | `OpportunitiesBrowser` | **Implemented (Stage 7)** |
-| `/opportunities/[id]` | Full Job Description, Requirements, Apply Routing, Related Openings | Server Page + `OpportunityDetailActions` | **Implemented (Stage 7)** |
-| `/opportunities/[id]/applicants` | Recruiter Applicant Management Pipeline & Dossier Review | `EmployerApplicantManager` | **Implemented (Stage 8)** |
-| `/opportunities/post` | Submit Opportunity (Managed Company or Community Lead, Preview Mode) | `OpportunityForm` | **Implemented (Stage 7)** |
-| `/opportunities/my` | Author Console (Status Tabs, Edit, Close, Resubmit Rejected) | `MyOpportunitiesView` | **Implemented (Stage 7)** |
-| `/opportunities/saved` | Member Bookmarked Opportunities Collection | `OpportunitiesBrowser` (Bookmarked Mode) | **Implemented (Stage 7)** |
-| `/community` | Member Directory & Campus Network Search | `ListingTemplate` + `MemberDirectoryView` | **Implemented (Stage 10)** |
-| `/referrals` | Dedicated Referral Hub, Inbound & Outbound Requests Tracker | `ListingTemplate` + `ReferralsHubView` | **Implemented (Stage 10)** |
-| `/profile/[id]` | Member Profile, Connection State, Shared Network, Recent Activity | `ProfileTemplate` + `ProfileActions` | **Implemented (Stage 10)** |
-| `/applications` | Candidate's Submitted Applications Tracker & Withdrawal | `MyApplicationsView` | **Implemented (Stage 8)** |
-| `/calendar` | Personal Career Calendar (Deadlines, Interviews, Saved Targets, Custom Reminders) | `ListingTemplate` + `CareerCalendarView` | **Implemented (Stage 12)** |
-| `/contributions` | Shared Leads, Referrals Offered, Community Posts | `DashboardTemplate` | **Implemented** |
-| `/notifications` | Activity alerts, status updates & announcements | `ListingTemplate` + `NotificationsCenterView` | **Implemented (Stage 12)** |
-| `/profile/me` | Current Member Profile & Experience | `ProfileTemplate` | **Implemented** |
-| `/settings` | Edit Personal Profile, Privacy, Vault Security | `FormTemplate` | **Implemented** |
+| `/feed` | University Community Feed (Discussions, Q&A, Referrals, Achievements) | All Verified Members | `DashboardTemplate` + `CommunityFeedView` |
+| `/dashboard` | Member Dashboard & Community Overview | All Verified Members | `DashboardTemplate` + `CommunityFeedView` |
+| `/opportunities` | Job & Internship Portal, Multi-Filter Search, Pagination | Students & Alumni | `OpportunitiesBrowser` |
+| `/opportunities/[id]` | Full Job Description, Requirements, Apply Routing | Students & Alumni | Server Page + `OpportunityDetailActions` |
+| `/opportunities/[id]/applicants` | Applicant Management Pipeline & Dossier Review | Alumni Posters & Admins | `EmployerApplicantManager` |
+| `/opportunities/post` | Submit Opportunity (Company Posting or Community Lead) | Verified Alumni, Students & Admins | `OpportunityForm` |
+| `/opportunities/my` | Manage Postings (Status Tabs, Edit, Close) | Alumni Posters & Admins | `MyOpportunitiesView` |
+| `/opportunities/saved` | Member Bookmarked Opportunities Collection | Students & Alumni | `OpportunitiesBrowser` (Bookmarked Mode) |
+| `/community` | Member Network Directory & Campus Search | All Verified Members | `ListingTemplate` + `MemberDirectoryView` |
+| `/referrals` | Referral Hub (Incoming Requests & Sent Requests) | Students & Alumni | `ListingTemplate` + `ReferralsHubView` |
+| `/profile/[id]` | Member Profile, Connection State, Shared Network | All Authenticated Members | `ProfileTemplate` + `ProfileActions` |
+| `/applications` | Candidate's Submitted Applications Tracker & Removal | Students & Alumni | `MyApplicationsView` |
+| `/calendar` | Personal Career Calendar (Deadlines, Interviews, Notes) | Students & Alumni | `ListingTemplate` + `CareerCalendarView` |
+| `/contributions` | Shared Leads, Referrals Handled, Community Footprint | Students & Alumni | `DashboardTemplate` + `ContributionsPage` |
+| `/notifications` | Activity Alerts, Status Updates & Reminders | All Authenticated Members | `ListingTemplate` + `NotificationsCenterView` |
+| `/profile/me` | Current Member Profile & Career Experience | All Authenticated Members | `ProfileTemplate` |
+| `/settings` | Edit Profile Info, Privacy Controls, Locked Credentials | All Authenticated Members | `FormTemplate` + `SettingsProfileForm` |
+| `/onboarding` | Academic / Alumni Verification Dossier Submission | Students & Alumni (`PENDING`) | `Card` + `OnboardingCredentialsForm` |
 
 ### 1.3 Student Career Tools (Exclusive to `STUDENT` Profiles)
-| Route | Purpose | Template Used | Implementation Status |
+| Route | Purpose | Target Personas | Template Used |
 | :--- | :--- | :--- | :--- |
-| `/career-tools` | Student Career Hub, CGPA Eligibility, Skill Matching, Vault | `DashboardTemplate` | **Implemented** |
+| `/career-tools` | Student Career Hub, Skill Matching, Skill Gap Analysis, CGPA Logger | Verified Students Only | `DashboardTemplate` + `CareerDashboardView` |
 
-### 1.4 Admin & Moderation Routes
-| Route | Purpose | Template Used | Implementation Status |
+### 1.4 Admin & Governance Routes (Exclusive to `systemRole === "ADMIN"`)
+| Route | Purpose | Target Personas | Template Used |
 | :--- | :--- | :--- | :--- |
-| `/admin` | Administration Command Center, Review Queues, Audit Trail | `AdminTemplate` | **Implemented** |
+| `/admin` | Administration Command Center, Review Queues, Audit Trail | Platform Admins Only | `AdminTemplate` + `AdminDashboardContainer` |
 
 ---
 
-## 2. Stage 11: Student Career Tools & Smart Matching (`/career-tools`)
+## 2. Core Functional Views
 
-### Overview
-- **Path**: `/career-tools`
-- **Target Role**: Enrolled Students (`STUDENT` membership role).
-- **Access Guard**: `canAccessStudentTools(user)`. Non-student profiles receive a graceful role explanation and redirect links to opportunities and community feeds.
-- **Client View**: `components/career/career-dashboard-view.tsx`
+### 2.1 Student Career Tools (`/career-tools`)
+* **Access Guard**: `canAccessStudentTools(user)`. Strictly restricted to `STUDENT` membership accounts. Non-students receive an informative access restriction banner.
+* **Functional Tabs**:
+  1. **Personalized Recommendations & Explainable Matches**:
+     - Mathematical match percentage: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
+     - Color indicators: Green ($\ge 80\%$), Yellow ($50\%-79\%$), Red ($< 50\%$).
+     - Breakdown of matched vs missing skills, plus institutional criteria warnings (CGPA cutoff, department targeting, deadline).
+  2. **Campus Market Skill Gap Analytics**:
+     - Demand frequency computed across all active approved opportunities.
+     - Identifies prioritized learning gaps with direct links to official documentation and university tracks.
+  3. **Academic Performance & Semester Log**:
+     - Private semester GPA and credit logger (`components/career/add-semester-modal.tsx`).
+     - Real-time credit-weighted cumulative CGPA calculation.
+     - Strict academic privacy: visible exclusively to the student and platform administrators.
 
-### Functional Tabs & Features:
-1. **Personalized Opportunity Recommendations**:
-   - Algorithmic skill matching score: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
-   - Strict color coding: Green ($\ge 80\%$), Yellow ($50\% - 79\%$), Red ($< 50\%$).
-   - Breakdown of matched vs missing competencies.
-   - Institutional eligibility badge (`ELIGIBLE`, `NOT_ELIGIBLE`, `NEEDS_REVIEW`) and specific checklist warnings (CGPA cutoff, target department, academic year standing, application deadline).
-   - Mandatory disclaimer: High match score does not guarantee academic eligibility, interview shortlisting, or job offers.
-2. **Skill Gap & Curriculum Analytics**:
-   - Real campus market demand frequency calculated across all active approved opportunities.
-   - Categorized view of verified student skills vs missing skills.
-   - Top 5 prioritized learning recommendations based on market demand.
-   - Curated list of verified external learning resources (official documentation, university tracks) matching student's priority gaps.
-3. **Academic Performance & Semester Log**:
-   - Confidential semester transcript logger (`components/career/add-semester-modal.tsx`).
-   - Credit-weighted cumulative CGPA calculation: $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$.
-   - Auto-synced `Profile.currentCgpa` cached field.
-   - Semester history table with Term, GPA, Credits, Standing, Notes, and record removal.
-   - Strict academic privacy: Academic records visible only to the student and platform administrators.
+### 2.2 Community Feed (`/feed`)
+* **Component**: `components/community/community-feed-view.tsx`
+* **Filter Tabs**: All Feed, Discussions & Q&A (`GENERAL_DISCUSSION`), Referrals (`REFERRAL_REQUEST`), Achievements (`ACHIEVEMENT`), and Saved Posts (`BOOKMARKED`).
+* **Post Box (`CreatePostBox`)**: Rich text composer supporting optional headline, post type selection, character count limits (10–5,000 chars), and attached opportunity cards.
+* **Interactions**: Single-click atomic `LIKE` toggling, threaded comment replies with author editing/deletion, post bookmarks, and content reporting.
 
----
+### 2.3 Opportunity Engine (`/opportunities`)
+* **Component**: `components/opportunities/opportunities-browser.tsx`
+* **Filters**: Role Type (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), Workplace Type (`ON_SITE`, `REMOTE`, `HYBRID`), Department, Minimum CGPA cutoff, and debounced text search. All postings are community-shared leads (`COMMUNITY_SHARED`).
+* **Detail Page (`/opportunities/[id]`)**: Full job description, salary/compensation, requirements, explainable match score card, and application trigger.
 
-## 3. Stage 12: Notifications, Activity Alerts & Personal Career Calendar
+### 2.4 Candidate Applications Tracker (`/applications`)
+* **Component**: `components/applications/my-applications-view.tsx`
+* **Features**: Displays candidate's submitted application records, company name, applied date, opportunity deadline, and direct link to target portal.
+* **Removal**: Candidate can remove an application record with a single click ("Remove" button).
 
-### 3.1 Notification Center (`/notifications`)
-- **Path**: `/notifications`
-- **Component**: `components/notifications/notifications-center-view.tsx`
-- **Features**:
-  - Filter tabs: All Alerts, Unread, Applications, Opportunities, Community, Referrals.
-  - Granular action controls: "Mark as Read", "Mark All as Read", "Dismiss / Delete".
-  - Deep-link action targets: Direct navigation to related applications, job descriptions, community posts, or referral requests.
-  - Real-time unread counter badge.
-  - Recipient-isolated data fetching: Members can only view and mutate their own notifications.
-  - Header Popover integration (`components/navigation/notifications-popover.tsx`): Displays recent unread notifications and links directly to the full notification center.
+### 2.5 Referrals Hub (`/referrals`)
+* **Component**: `components/referrals/referrals-hub-view.tsx`
+* **Tabs**:
+  - `Incoming Requests`: For alumni to review candidate pitches, view student profiles, and accept/decline referral requests.
+  - `Sent Requests`: For students to track referral requests submitted to alumni.
 
-### 3.2 Personal Career Calendar (`/calendar`)
-- **Path**: `/calendar`
-- **Component**: `components/calendar/career-calendar-view.tsx`
-- **Features**:
-  - Full-month calendar grid (7 days x 5-6 weeks) with previous/next month navigation and "Today" quick button.
-  - Automated event aggregation:
-    - Target Application Deadlines (Blue badge)
-    - Active Interview Rounds & Stages (Emerald badge)
-    - Saved / Bookmarked Opportunity Closures (Amber badge)
-    - Custom Career Notes & Reminders (Purple badge)
-  - Interactive Event Detail Dialog: Displays title, company name, date/time, action links to the opportunity/application, and reminder deletion.
-  - "Add Career Reminder" Modal (`components/calendar/add-event-modal.tsx`): Allows scheduling custom reminders, interview preps, and milestone notes.
-
-### 3.3 Notification Channels & Preferences (`/settings`)
-- **Path**: `/settings` (Section 4)
-- **Component**: `components/settings/notification-preferences-card.tsx`
-- **Features**:
-  - Independent In-App and Email toggles across 5 key functional categories:
-    - Opportunities & Matches
-    - Applications & Status
-    - Community & Networking
-    - Membership & Verification
-    - Reminders & Deadlines
-  - Instant preferences synchronization with `/api/notifications/preferences`.
-  - Notification suppression: When a channel is toggled off, automated notification services suppress dispatches accordingly.
-
----
-
-## 4. Stage 13: Complete Admin Dashboard and Moderation Command Center (`/admin`)
-
-### Overview
-- **Path**: `/admin`
-- **Target Role**: Platform Administrators (`systemRole === "ADMIN"`).
-- **Access Guard**: `isPlatformAdmin(currentUser)`. Non-admins receive an immediate HTTP 403 / Access Restricted interface.
-- **Client Container**: `components/admin/admin-dashboard-container.tsx`
-- **Layout**: `AdminTemplate` with real-time clearance badges and action alerts.
-
-### Functional Command Tabs:
-1. **Overview (`components/admin/admin-overview-view.tsx`)**:
-   - Institutional governance metric cards: Total registered members, verified members, active opportunities, total applications, community posts, pending reports, suspended accounts, and registered companies.
-   - Actionable alert banners with direct navigation buttons for pending verifications, opportunity reviews, and content reports.
-   - Zero fake data guarantee: All metrics computed directly from PostgreSQL rows.
-2. **Members Management (`components/admin/admin-members-table.tsx`)**:
-   - Search by name, email, department, or student ID.
-   - Granular filters by Membership Type, Verification Status, and Account Status.
-   - Member profile and latest verification claim inspection modal.
-   - Account Suspension / Restoration modal with mandatory stated reason ($\ge 5$ characters) and self-suspension blocking.
-3. **Opportunity Moderation (`components/admin/admin-opportunity-table.tsx`)**:
-   - Status tabs: Pending Review, Approved, Rejected, Closed, All.
-   - Search by title, keyword, company; filter by opportunity type.
-   - Moderation actions: Approve, Reject (with mandatory feedback reason $\ge 5$ characters sent to author), Close, Delete.
-   - Comprehensive posting details dialog with department targeting and applications count.
-4. **Verifications Queue (`components/admin/verification-table.tsx`)**:
-   - In-depth review of student, alumni, faculty, staff, employer, and external connection credential requests.
-   - Approval and rejection with registrar feedback.
-5. **Content Moderation (`components/admin/admin-reports-table.tsx`)**:
-   - Community moderation queue for flagged posts and comments.
-   - Previews flagged content snippets, reporter justifications, and author details.
-   - Actions: Dismiss Report, Remove Inappropriate Content, Suspend Author.
-6. **Company Management (`components/admin/admin-companies-table.tsx`)**:
-   - View all employer companies, creators, member counts, and opportunity counts.
-   - Actions: Verify / Unverify organization, Suspend / Restore company profile (suspending prevents posting).
-7. **Institutional Analytics (`components/admin/admin-analytics-view.tsx`)**:
-   - Recharts visual graphs computed from actual database aggregates:
-     - Member Registrations Over Time (Line Chart)
-     - Opportunity Volume: Created vs Approved (Bar Chart)
-     - Department Participation: Members & Applications (Horizontal Bar Chart)
-     - Opportunity Types & Member Verification Distributions (Donut / Pie Charts)
-8. **Audit Trail (`components/admin/admin-audit-table.tsx`)**:
-   - Searchable, filterable security event ledger.
-   - Filter by Action Enum and Target Entity Type.
-   - Displays timestamp, administrator, action badge, target entity/label, stated reason, and client IP address.
-   - Modal to inspect full JSON payload and pre/post transition state metadata.
-
-
+### 2.6 Admin Command Center (`/admin`)
+* **Component**: `components/admin/admin-dashboard-container.tsx`
+* **Access Guard**: `isPlatformAdmin(user)`. Returns HTTP 403 / Access Restricted for non-admins.
+* **6 Operational Tabs**:
+  1. `Overview`: High-density institutional KPI ribbon (Talent Pool, Verification Rate, Corporate Partners) and pending action alerts.
+  2. `Verification Requests`: Review student and alumni credential claims, inspect proof details, and approve or reject with registrar feedback.
+  3. `Members Directory`: Roster of all members with search, role filters, quick verify, CGPA verification toggle (`verify-cg`), and account suspension/restoration.
+  4. `Content Reports`: Community moderation queue for flagged posts and comments with one-click content removal and author suspension.
+  5. `Companies`: View and manage employer partner organizations.
+  6. `Analytics`: Visual Recharts graphs for registration growth, opportunity volume, and department distributions.

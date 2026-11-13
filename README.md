@@ -2,7 +2,7 @@
 
 > A high-trust, university-connected career, mentorship, and opportunity networking platform.
 
-UniCareer Community connects current university students, alumni, faculty, staff, and authorized corporate partners within the **Jagannath University** ecosystem to facilitate career growth, vetted internships, official job postings, alumni mentorship, and high-trust referrals.
+UniCareer Community connects current university students, alumni, and university administrators within the **Jagannath University** ecosystem to facilitate career growth, vetted internships, job postings, alumni mentorship, and high-trust referrals.
 
 **Live Production Deployment**: [https://jnujobhunting.vercel.app](https://jnujobhunting.vercel.app)
 
@@ -30,9 +30,9 @@ UniCareer Community connects current university students, alumni, faculty, staff
 | **Stage 3** | Navigation & Shell Layout | Responsive desktop sidebar, mobile drawer, authenticated shell, public landing. |
 | **Stage 4** | Authentication & Security | Single unified account model, scrypt password hashing, verification tokens, password recovery. |
 | **Stage 5** | Membership & Profiles | Role-tailored onboarding, registrar document review queue, profile editor, student ID privacy redaction. |
-| **Stage 6** | Companies & Opportunities | Corporate profiles, official employer vs community-shared listings, institutional review queue. |
+| **Stage 6** | Companies & Opportunities | Corporate profiles, community-shared job listings, status lifecycle (`APPROVED`, `REJECTED`, `EXPIRED`, `CLOSED`). |
 | **Stage 7** | Job Browsing & Search | Multi-faceted filtering (department, workplace, CGPA, compensation, deadline), bookmarks. |
-| **Stage 8** | Applications & Resume Vault | Internal direct application, magic bytes PDF/DOCX inspection, Anti-IDOR resume download. |
+| **Stage 8** | Applications & External Tracking | Direct external application portal linking ("Apply on Official Website"), duplicate prevention, candidate dashboard. |
 | **Stage 9** | Community Feed & Discussions | 7 post channels, threaded comments, atomic reactions, post bookmarks, content reporting. |
 | **Stage 10** | Directory & Referrals | Searchable member directory, mutual connection requests, career referral requests hub. |
 | **Stage 11** | Smart Matching & Career Tools | Explainable skill match scoring `(Matched/Total * 100)`, market skill gap analysis, CGPA calculator. |
@@ -46,8 +46,8 @@ UniCareer Community connects current university students, alumni, faculty, staff
 ## Core Security & Business Rules
 
 1. **Mandatory Verification-First Login**: Users must click the cryptographic verification link sent to their university inbox before gaining login access. Unverified login attempts are strictly blocked with HTTP 403 `EMAIL_NOT_VERIFIED`.
-2. **Single Account Architecture**: All six membership types (`STUDENT`, `ALUMNI`, `FACULTY`, `STAFF`, `EMPLOYER`, `EXTERNAL_CONNECTION`) operate through a single unified account model. Platform administration (`systemRole: ADMIN`) is strictly decoupled from membership.
-3. **Private File & Resume Vault**: Resumes are stored on isolated storage outside the web root. Direct static file access is prohibited; downloads stream strictly through authenticated Anti-IDOR route `/api/resumes/[id]/download`.
+2. **Single Account Architecture**: Supports the core membership personas (`STUDENT`, `ALUMNI`) unified with platform governance (`systemRole: ADMIN`). Platform administration is strictly decoupled from membership.
+3. **External Application Tracking & Privacy**: Candidate applications redirect to official employer portals ("Apply on Official Website") with direct application tracking. Candidate records remain strictly private between the candidate and administrators.
 4. **Zero Fake Data**: All feeds, dashboards, statistics, and directories query live PostgreSQL rows. No synthetic arrays exist in production code paths.
 5. **Server-Enforced Authorization**: All permission checks (`canPostOpportunities`, `canReviewApplicants`, `isPlatformAdmin`) execute on server actions and route handlers.
 
@@ -132,7 +132,7 @@ npm run build
 
 Comprehensive technical documentation is maintained in the `docs/` directory:
 - [`docs/ARCHITECTURE.md`](file:///Users/sajib/se_project/docs/ARCHITECTURE.md) — System design and data flow
-- [`docs/DATABASE_SCHEMA.md`](file:///Users/sajib/se_project/docs/DATABASE_SCHEMA.md) — Complete 27-model ERD and table specifications
+- [`docs/DATABASE_SCHEMA.md`](file:///Users/sajib/se_project/docs/DATABASE_SCHEMA.md) — Complete 30-model ERD and table specifications
 - [`docs/API_REFERENCE.md`](file:///Users/sajib/se_project/docs/API_REFERENCE.md) — Exhaustive REST route documentation
 - [`docs/USER_ROLES_AND_PERMISSIONS.md`](file:///Users/sajib/se_project/docs/USER_ROLES_AND_PERMISSIONS.md) — Access control and permission matrix
 - [`docs/SECURITY_AND_PRIVACY.md`](file:///Users/sajib/se_project/docs/SECURITY_AND_PRIVACY.md) — Security baseline and privacy redaction
