@@ -41,4 +41,5 @@ The following items are explicitly marked in `AGENTS.md` and project requirement
 - **Real-Time WebSockets / Private Direct Messaging**: Direct member-to-member real-time chat is deferred. Current communication occurs through connection requests, referral request notes, community comments, and official employer email contacts.
 - **University Registrar SIS Live Integration**: Verification requests are processed through an administrative queue with document proof verification. Direct automated REST/LDAP synchronization with campus SIS (Student Information Systems) will be integrated in Phase 2 via university API gateways.
 - **Advanced Live Campus Events & Ticketing**: Career fair live booth ticketing and virtual video interview rooms are deferred.
+- **Standalone Career Tools Dashboard (`/career-tools`)**: Standalone student career tools (skill gap analysis, semester GPA logging) have been removed in favor of core community job search and external application tracking. Requests to `/career-tools` automatically redirect to `/feed`.
 

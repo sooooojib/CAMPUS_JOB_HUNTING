@@ -17,7 +17,7 @@
 | :--- | :--- | :---: | :---: | :---: |
 | `tests/unit/complete-user-workflows.test.ts` | End-to-end Workflows (Student, Alumni, Employer, Admin) | 23 | **PASSED** | ~15.2s |
 | `tests/unit/connections-and-referrals.test.ts` | Connections, referral requests, network limits | 12 | **PASSED** | ~14.9s |
-| `tests/unit/smart-matching-and-career-tools.test.ts` | Skill matching, CGPA eligibility, career gap analysis | 20 | **PASSED** | ~12.2s |
+| `tests/unit/smart-matching-and-career-tools.test.ts` | Skill matching, CGPA eligibility, and skills catalog | 20 | **PASSED** | ~12.2s |
 | `tests/unit/community.test.ts` | Posts, comments, reactions, bookmarks, reporting | 22 | **PASSED** | ~7.8s |
 | `tests/unit/companies-and-opportunities.test.ts` | Company roster, official opportunities, moderation | 18 | **PASSED** | ~8.1s |
 | `tests/unit/applications.test.ts` | Internal application, duplicate block, applicant status | 17 | **PASSED** | ~6.5s |

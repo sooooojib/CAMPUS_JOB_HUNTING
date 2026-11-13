@@ -81,31 +81,18 @@ The platform operates on a single unified account model supporting three active 
 - **Reactions**: Single-click atomic `LIKE` toggling with real-time counter updates.
 - **Content Moderation**: Flagging posts or comments with structured reasons (`SPAM`, `HARASSMENT`, `INAPPROPRIATE`, `MISINFORMATION`, `OTHER`); automatic escalation to `FLAGGED` upon receiving $\ge 3$ reports.
 
-### 3.6 Student Career Tools (Exclusive to `STUDENT` Profiles)
-- **Explainable Skill Match Score**:
-  - Deterministic formula: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
-  - Color-coded badges: Green ($\ge 80\%$), Yellow ($50\%-79\%$), Red ($< 50\%$).
-  - Breakdown of matched competencies vs missing requirements.
-- **Campus Market Skill Gap Analysis**:
-  - Compares student skills against actual hiring demand across all approved opportunities.
-  - Prioritizes top missing skills and provides direct links to verified learning resources.
-- **Confidential Academic Transcript Logger**:
-  - Private semester GPA and credit logger (`components/career/add-semester-modal.tsx`).
-  - Credit-weighted cumulative CGPA calculation: $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$.
-  - Academic privacy: Transcripts are strictly visible only to the student and platform administrators.
-
-### 3.7 Referrals System & Contributions
+### 3.6 Referrals System & Contributions
 - **Structured Referral Requests (`/referrals`)**:
-  - Students submit tailored elevator pitches and resumes directly to alumni at specific companies.
+  - Students submit tailored elevator pitches directly to alumni at specific companies.
   - Inbound queue allows alumni to review candidate qualifications, accept with personal response notes, or decline.
 - **Contributions Dashboard (`/contributions`)**:
   - Telemetry tracking jobs posted, student referrals handled, and feed discussions authored.
 
-### 3.8 Notifications & Career Calendar
+### 3.7 Notifications & Career Calendar
 - **Notification Center (`/notifications`)**: Activity alerts for application status changes, referral responses, post interactions, and deadline reminders.
 - **Personal Career Calendar (`/calendar`)**: Aggregates job application deadlines, scheduled interviews, and personal career milestone notes.
 
-### 3.9 Administrative Governance Center (`/admin`)
+### 3.8 Administrative Governance Center (`/admin`)
 - **Overview**: Real-time institutional telemetry (Talent Pool, Verification Rate, Corporate Partners) and pending action alerts.
 - **Verification Review Queue**: Approve or reject student/alumni credential claims with registrar notes.
 - **Members Directory**: Member searching, filtering by role and verification state, one-click CGPA verification (`verify-cg`), and account suspension/restoration.

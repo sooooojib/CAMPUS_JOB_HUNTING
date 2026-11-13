@@ -8,7 +8,7 @@ Revised after reading AGENTS.md, README, PROJECT_OVERVIEW, ARCHITECTURE, DATABAS
 |---|---|---|
 | Title | UniCareer Community: a private, university-connected career and job-seeking community. It is "NOT a generic public job board" | AGENTS.md section 1 |
 | Institution / URL | Jagannath University (JnU); https://jnujobhunting.vercel.app | README |
-| 5 pillars | Curated portal, professional feed, alumni directory, high-trust referrals, student career toolkit | PROJECT_OVERVIEW |
+| 4 pillars | Curated portal, professional feed, alumni directory, high-trust referrals | PROJECT_OVERVIEW |
 | Account model | One `User` record. 3 active personas: `STUDENT`, `ALUMNI`, `ADMIN`. Capability flags `canPostOpportunities` and `canReviewApplicants` | AGENTS section 2, ADR-001 |
 | Status enums | verificationStatus: PENDING, VERIFIED, REJECTED, SUSPENDED. accountStatus: ACTIVE, PENDING_VERIFICATION, SUSPENDED, DEACTIVATED | schema.prisma |
 | Opportunity lifecycle | APPROVED, REJECTED, EXPIRED, CLOSED. Types: INTERNSHIP, FULL_TIME, PART_TIME, CONTRACT, OTHER. Standardized as COMMUNITY_SHARED | AGENTS, ADR-002, ADR-003 |
@@ -18,7 +18,7 @@ Revised after reading AGENTS.md, README, PROJECT_OVERVIEW, ARCHITECTURE, DATABAS
 | Stack | Next.js 16.4.3 App Router (server-first, ADR-004), React 19.3, TypeScript strict, Tailwind v4 + shadcn/ui, PostgreSQL 16 on Neon, Prisma 7.10 + `@prisma/adapter-pg` with pg.Pool (ADR-005), Better Auth 1.7.17, Zod 4, React Hook Form, Recharts, Nodemailer and Gmail SMTP (ADR-008), Vitest 5, Vercel | package.json, ARCHITECTURE |
 | Layers | UI (RSC + client islands), then route handlers / server actions, then auth + Zod guard, then `lib/services` (17 domain services), then Prisma, then PostgreSQL and private storage | ARCHITECTURE section 3 |
 | Database | **30 models, 28 enums**, 3NF, composite indexes, e.g. `[status, deadline]` | schema.prisma |
-| API / UI surface | 22 API route groups; 6 public routes, 19 member routes, `/career-tools` (STUDENT only), `/admin` | API_REFERENCE, ROUTES_AND_PAGES |
+| API / UI surface | 22 API route groups; 6 public routes, 19 member routes, `/admin` | API_REFERENCE, ROUTES_AND_PAGES |
 | Server gates | `isAccountActive`, `isPlatformAdmin`, `isVerifiedMember`, `canPostOpportunity`, `canReviewApplicants`, `canAccessStudentTools`, `assertCanPostOpportunity`, `assertAdmin`; plus per-resource `assertCanManageApplicantsForOpportunity` and `assertCanAccessReferral` | lib/permissions.ts, SECURITY |
 | Limits | Password at least 8 characters with uppercase, number and symbol. Login blocked until email verified (HTTP 403 `EMAIL_NOT_VERIFIED`, ADR-007). Rate limits: verification 10 per 10 min, applications 30 per hour (HTTP 429). Opportunity page size 12. Reminder cron covers the next 72 hours with de-duplication | PRD, SECURITY, API_REFERENCE section 8.3 |
 | Integrity | Unique `[opportunityId, applicantId]`, `[userId, opportunityId]` bookmark, `[postId, userId, type]` reaction, `[companyId, userId]`; `$transaction` used in application, community and resume services | schema, lib/services |

@@ -35,7 +35,7 @@ UniCareer Community connects current university students, alumni, and university
 | **Stage 8** | Applications & External Tracking | Direct external application portal linking ("Apply on Official Website"), duplicate prevention, candidate dashboard. |
 | **Stage 9** | Community Feed & Discussions | 7 post channels, threaded comments, atomic reactions, post bookmarks, content reporting. |
 | **Stage 10** | Directory & Referrals | Searchable member directory, mutual connection requests, career referral requests hub. |
-| **Stage 11** | Smart Matching & Career Tools | Explainable skill match scoring `(Matched/Total * 100)`, market skill gap analysis, CGPA calculator. |
+| **Stage 11** | Skills & Algorithmic Matching | Controlled skills dictionary, explainable mathematical skill match scoring `(Matched/Total * 100)`. |
 | **Stage 12** | Notifications & Calendar | 22 notification event triggers, upcoming deadline cron worker, personal career calendar. |
 | **Stage 13** | Admin Dashboard & Moderation | Platform KPIs, member governance, opportunity moderation, content review, immutable audit trail. |
 | **Stage 14** | Testing, Hardening & Workflows | 23 end-to-end multi-persona workflows, sliding-window rate limiting, 100% test pass rate. |

@@ -40,7 +40,6 @@ se_project/
 │   ├── providers/                # Global context providers (ThemeProvider, etc.)
 │   ├── opportunities/            # Job portal components (Stage 3)
 │   ├── community/                # Feed & post components (Stage 5)
-│   ├── career-tools/             # Student tools (Stage 6)
 │   └── feedback/                 # Skeletons, empty states, error banners
 ├── lib/                          # Infrastructure & Utilities
 │   ├── prisma.ts                 # Prisma Client singleton with PgPool driver adapter

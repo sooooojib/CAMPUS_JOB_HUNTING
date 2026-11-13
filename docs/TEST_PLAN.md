@@ -102,10 +102,9 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Real-time debounced keyword and hashtag search.
   - Paginated loading with page, pageSize, totalPages, and boundary flags.
 
-### 2.6 Career Tools & CGPA Checking (Vitest)
+### 2.6 CGPA & Eligibility Checking (Vitest)
 - Student with GPA 3.4 checks opportunity requiring GPA 3.5: reports `isEligible: false`.
 - Skill matching algorithm correctly computes overlap percentage and missing skill list.
-- Non-student user attempting to open `/career-tools` is blocked.
 
 ### 2.7 Responsive & Theme Audits (Playwright + Axe-Core)
 - Theme switching light/dark preserves WCAG AA contrast.
@@ -133,7 +132,7 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
   - Recipient responses (`ACCEPTED`, `COMPLETED`, `DECLINED`) with notes.
   - Server-side access authorization (`assertCanAccessReferral`): requester allowed, recipient allowed, admin allowed, unauthorized third-party rejected with 403 Forbidden.
 
-### 2.9 Smart Matching & Student Career Tools (Stage 11: Vitest)
+### 2.9 Skills & Algorithmic Matching (Stage 11: Vitest)
 - **Shared Skill System**:
   - Controlled skill creation with category and description.
   - Idempotent retrieval of existing skills without duplication.

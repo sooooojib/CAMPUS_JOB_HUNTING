@@ -96,8 +96,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed & Fixed
 - **Role-Based Navigation & Dashboard Isolation (`components/navigation/sidebar.tsx`)**:
-  - Strictly isolated "System & Administration" and "Admin Command" to `systemRole === "ADMIN"`. Students, alumni, and employers never see admin controls.
-  - Strictly restricted "My Career Tools" (CGPA eligibility, skill gap analysis) to `STUDENT` accounts.
+  - Strictly isolated "System & Administration" and "Admin Command" to `systemRole === "ADMIN"`. Students and alumni never see admin controls.
   - Restricted "Manage Postings" to `EMPLOYER`, authorized posters, and administrators.
 - **Authentication & Rate Limiting Hardening (`lib/auth.ts`, `app/(auth)/login/page.tsx`)**:
   - Disabled Better Auth built-in strict sign-in rate limits (`rateLimit: { enabled: false }`) in `lib/auth.ts` to prevent HTTP 429 lockouts during rapid multi-account testing.
@@ -285,7 +284,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Stage 11: Smart Matching and Student Career Tools] - 2026-11-05
+## [Stage 11: Skills and Algorithmic Matching] - 2026-11-05
 
 ### Added
 - **Database Schema Models & Enums (`prisma/schema.prisma`)**:
@@ -586,7 +585,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - **Navigation Components (`components/navigation/`)**:
-  - `sidebar.tsx`: Sticky desktop sidebar with brand identity, primary navigation links, student career tools badge, and admin center entry.
+  - `sidebar.tsx`: Sticky desktop sidebar with brand identity, primary navigation links, and admin center entry.
   - `header.tsx`: Sticky top application header with global search (⌘K shortcut), verified network status indicator, notification drawer trigger, theme toggle, and user profile menu.
   - `mobile-nav.tsx`: Bottom sticky navigation bar optimized for thumb reach, paired with an off-canvas drawer overlay for full menu access.
   - `user-menu.tsx`: Dropdown user menu displaying verified badge, role, email, profile navigation, and logout action.
@@ -621,7 +620,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `app/(dashboard)/community/page.tsx`: Verified member network directory.
   - `app/(dashboard)/referrals/page.tsx`: Alumni referral network hub.
   - `app/(dashboard)/applications/page.tsx`: Candidate application status tracker.
-  - `app/(dashboard)/career-tools/page.tsx`: Student career tools, CGPA checker, and skill gap progress.
+  - `app/(dashboard)/career-tools/page.tsx`: Route redirected to `/feed`.
   - `app/(dashboard)/contributions/page.tsx`: Member contribution and impact score tracker.
   - `app/(dashboard)/profile/me/page.tsx`: Current user profile and credentials.
   - `app/(dashboard)/settings/page.tsx`: Account, notification, and vault security settings.

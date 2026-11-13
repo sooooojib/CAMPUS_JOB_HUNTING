@@ -495,7 +495,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 ---
 
-## 7. Stage 11 API: Skills, Academic Records & Smart Career Tools
+## 7. Stage 11 API: Skills, Academic Records & Opportunity Matching
 
 ### 7.1 Controlled Skills Endpoints
 
@@ -568,7 +568,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - **Access**: Owner of academic record or platform `ADMIN`.
 - **Output**: `{ success: true, cumulativeCgpa: number | null }`
 
-### 7.3 Smart Matching & Career Analytics Endpoints
+### 7.3 Opportunity Matching & Eligibility Endpoints
 
 #### `GET /api/career/recommendations`
 - **Description**: Generates explainable, personalized opportunity recommendations for enrolled students based on exact mathematical skill match scores `(Matched / Total) * 100` and institutional eligibility rules.

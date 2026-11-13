@@ -11,7 +11,7 @@ flowchart TD
     S4 --> S5["Stage 5: Opportunity Portal & Review Engine"]
     S4 --> S6["Stage 6: Applications & External Tracking"]
     S5 & S6 --> S7["Stage 7: Community Feed & Member Networking"]
-    S6 --> S8["Stage 8: Student Career Tools (CGPA / Skills)"]
+    S6 --> S8["Stage 8: Skills & Opportunity Matching"]
     S7 & S8 --> S9["Stage 9: Referrals & Notification Pipeline"]
     S4 & S5 & S6 & S7 & S8 & S9 --> S10["Stage 10: Admin Governance & Moderation"]
     S10 --> S11["Stage 11: End-to-End QA, Security & Deployment"]
@@ -178,7 +178,7 @@ flowchart TD
 
 ---
 
-### Stage 11: Smart Matching and Student Career Tools
+### Stage 11: Skills and Algorithmic Matching
 - **Status**: **COMPLETE** (2026-11-05)
 - **Prerequisites**: Stage 10.
 - **Core Deliverables Delivered**:
@@ -186,10 +186,7 @@ flowchart TD
   - **Shared Controlled Skill Dictionary (`lib/services/skill.ts`)**: Auto-seeded standard catalog of 30+ engineering, tech, and business skills with category mappings, duplicate prevention, and automated synchronization of `Profile.skills` string array on association and removal.
   - **Explainable Skill Match Scoring (`lib/services/matching.ts`)**: Mathematical overlap score $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$ with strict color coding (Green $\ge 80\%$, Yellow $50\% - 79\%$, Red $< 50\%$), clean handling of 0 required skills (100% with note), and mandatory non-guarantee disclaimer.
   - **Institutional Eligibility Checker**: Comprehensive eligibility verification checking minimum CGPA cutoff, target academic departments, academic year standing, application deadline expiration, and opportunity approval status. Evaluates `ELIGIBLE`, `NOT_ELIGIBLE`, or `NEEDS_REVIEW` (for incomplete profile data).
-  - **Skill Gap & Curriculum Market Analyzer**: Aggregation of competencies across all active approved campus opportunities to compute real market demand frequency, contrast student competencies against missing requirements, generate top 5 prioritized recommendations, and curate verified educational resources.
   - **Confidential Academic Transcript & CGPA Vault (`lib/services/academic.ts`)**: Term GPA and credits tracker using standard credit-weighted formula $\frac{\sum (\text{GPA}_i \times \text{Credits}_i)}{\sum \text{Credits}_i}$, unique semester constraint per student (`@@unique([userId, semester])`), and automatic sync of cached `Profile.currentCgpa`.
-  - **Strict Academic Privacy & Non-Student Role Isolation**: Academic transcripts and semester GPAs are confidential, visible ONLY to the student and platform administrators (`ACCESS_DENIED` / 403 Forbidden). Non-student profiles navigating to `/career-tools` are greeted with a graceful explanatory banner and redirected to opportunities and community feeds.
-  - **Personalized Student Career Dashboard (`/career-tools`)**: Interactive multi-tab hub (`CareerDashboardView`) featuring Recommendations (match score badges, reasons, checklist eligibility, filter by department), Skill Gap Analyzer (market demand cards, prioritized recommendations, learning tracks), and Academic Performance (cumulative CGPA gauge, semester transcript log, `AddSemesterModal`).
   - **Automated Testing**: 20 new unit and integration tests in `tests/unit/smart-matching-and-career-tools.test.ts` (145/145 passing across all 13 test files).
   - **Production Build**: 56 App Router routes compiled cleanly with Next.js Turbopack.
 
@@ -273,7 +270,7 @@ flowchart TD
 | **Stage 8** | Applications & External Tracking | **COMPLETE** | 17/17 Passing |
 | **Stage 9** | Community Feed & Discussions | **COMPLETE** | 22/22 Passing |
 | **Stage 10** | Member Directory & Referrals | **COMPLETE** | 12/12 Passing |
-| **Stage 11** | Smart Matching & Student Career Tools | **COMPLETE** | 20/20 Passing |
+| **Stage 11** | Skills & Algorithmic Matching | **COMPLETE** | 20/20 Passing |
 | **Stage 12** | Notifications & Career Calendar | **COMPLETE** | 12/12 Passing |
 | **Stage 13** | Admin Dashboard & Moderation | **COMPLETE** | 13/13 Passing |
 | **Stage 14** | Final Testing, Security & Optimization | **COMPLETE** | 23/23 Passing |

@@ -65,7 +65,6 @@ UniCareer Community operates on a **Single Unified Account Architecture**. Rathe
 | **Review Applicants to Postings** | ❌ | ❌ | ❌ | ❌ | ✅ (Own Posts) | ✅ (All Posts) |
 | **Request Internal Referrals** | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
 | **Review & Grant Inbound Referrals** | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| **Student Career Tools (CGPA, Match, Gaps)** | ❌ | ❌ | ❌ | ✅ | ❌ (Hidden) | ✅ (Audit view) |
 | **Approve / Reject Member Verifications** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Verify / Revoke Student CGPAs** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **Suspend / Restore Member Accounts** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
@@ -79,10 +78,6 @@ UniCareer Community operates on a **Single Unified Account Architecture**. Rathe
 * **Primary Mission**: Discover career pathways, prepare for campus recruitment, track applications, and request mentorship from alumni.
 * **Onboarding Dossier**: Pre-populated and locked Student ID and Department, academic year, degree, expected graduation year, and registrar enrollment proof.
 * **Exclusive Modules**:
-  * **My Career Tools (`/career-tools`)**:
-    * **Explainable Skill Match Score**: Mathematical match percentage $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$ with green ($\ge 80\%$), yellow ($50\%-79\%$), and red ($<50\%$) visual indicators.
-    * **Campus Market Skill Gap Analysis**: Identifies top missing skills against active market demand with direct learning resource links.
-    * **Confidential Academic Log**: Private semester transcript logger calculating credit-weighted cumulative CGPA.
   * **My Applications (`/applications`)**: Track submitted jobs, access target portals, and remove outdated application records.
   * **Career Calendar (`/calendar`)**: Aggregates job deadlines, upcoming interview rounds, and personal milestone notes.
   * **Referral Outbox (`/referrals`)**: Send structured elevator pitches to alumni working at target companies.

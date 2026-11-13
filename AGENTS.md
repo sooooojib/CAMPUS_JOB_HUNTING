@@ -17,7 +17,6 @@
   2. A university-connected professional community feed and discussions.
   3. An alumni and member networking directory.
   4. A high-trust referral and career-support system.
-  5. A personalized career development toolkit.
 - **Core Principle**: This is **NOT** a generic public job board, nor is it exclusively for students. It facilitates trusted career connections, referrals, and opportunities within the university ecosystem.
 
 ---
@@ -32,7 +31,7 @@
 
 ## Active Personas & Verification
 - **Active Membership Types**:
-  - `STUDENT`: Enrolled university students with access to academic career tools, job applications, and community leads.
+  - `STUDENT`: Enrolled university students with access to job applications, saved opportunities, and community leads.
   - `ALUMNI`: Graduated alumni sharing opportunities, providing internal referrals, and reviewing candidate dossiers.
   *(Platform governance and verification approvals are handled via `systemRole: ADMIN`)*
 - **Verification Statuses**:
@@ -68,10 +67,6 @@
 ## Community Features
 - Community feed, job announcements, career discussions, referral requests, member profiles, threaded comments/replies, reactions, post saving, reporting/moderation, member directory, and connection requests.
 - *(Note: Private messaging and advanced events are deferred to later stages).*
-
-## University Career Tools (Verified Student Profiles)
-- CGPA eligibility checker, skill matching, personalized job recommendations, skill gap analysis, resume version management, deadline tracking, and career readiness progress.
-- Non-student profiles must not see academic/CGPA tooling.
 
 ---
 

@@ -41,12 +41,7 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 | `/settings` | Edit Profile Info, Privacy Controls, Locked Credentials | All Authenticated Members | `FormTemplate` + `SettingsProfileForm` |
 | `/onboarding` | Academic / Alumni Verification Dossier Submission | Students & Alumni (`PENDING`) | `Card` + `OnboardingCredentialsForm` |
 
-### 1.3 Student Career Tools (Exclusive to `STUDENT` Profiles)
-| Route | Purpose | Target Personas | Template Used |
-| :--- | :--- | :--- | :--- |
-| `/career-tools` | Student Career Hub, Skill Matching, Skill Gap Analysis, CGPA Logger | Verified Students Only | `DashboardTemplate` + `CareerDashboardView` |
-
-### 1.4 Admin & Governance Routes (Exclusive to `systemRole === "ADMIN"`)
+### 1.3 Admin & Governance Routes (Exclusive to `systemRole === "ADMIN"`)
 | Route | Purpose | Target Personas | Template Used |
 | :--- | :--- | :--- | :--- |
 | `/admin` | Administration Command Center, Review Queues, Audit Trail | Platform Admins Only | `AdminTemplate` + `AdminDashboardContainer` |
@@ -55,44 +50,29 @@ All wrapped by `app/(dashboard)/layout.tsx` using `<AuthenticatedShell>`:
 
 ## 2. Core Functional Views
 
-### 2.1 Student Career Tools (`/career-tools`)
-* **Access Guard**: `canAccessStudentTools(user)`. Strictly restricted to `STUDENT` membership accounts. Non-students receive an informative access restriction banner.
-* **Functional Tabs**:
-  1. **Personalized Recommendations & Explainable Matches**:
-     - Mathematical match percentage: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$.
-     - Color indicators: Green ($\ge 80\%$), Yellow ($50\%-79\%$), Red ($< 50\%$).
-     - Breakdown of matched vs missing skills, plus institutional criteria warnings (CGPA cutoff, department targeting, deadline).
-  2. **Campus Market Skill Gap Analytics**:
-     - Demand frequency computed across all active approved opportunities.
-     - Identifies prioritized learning gaps with direct links to official documentation and university tracks.
-  3. **Academic Performance & Semester Log**:
-     - Private semester GPA and credit logger (`components/career/add-semester-modal.tsx`).
-     - Real-time credit-weighted cumulative CGPA calculation.
-     - Strict academic privacy: visible exclusively to the student and platform administrators.
-
-### 2.2 Community Feed (`/feed`)
+### 2.1 Community Feed (`/feed`)
 * **Component**: `components/community/community-feed-view.tsx`
 * **Filter Tabs**: All Feed, Discussions & Q&A (`GENERAL_DISCUSSION`), Referrals (`REFERRAL_REQUEST`), Achievements (`ACHIEVEMENT`), and Saved Posts (`BOOKMARKED`).
 * **Post Box (`CreatePostBox`)**: Rich text composer supporting optional headline, post type selection, character count limits (10–5,000 chars), and attached opportunity cards.
 * **Interactions**: Single-click atomic `LIKE` toggling, threaded comment replies with author editing/deletion, post bookmarks, and content reporting.
 
-### 2.3 Opportunity Engine (`/opportunities`)
+### 2.2 Opportunity Engine (`/opportunities`)
 * **Component**: `components/opportunities/opportunities-browser.tsx`
 * **Filters**: Role Type (`INTERNSHIP`, `FULL_TIME`, `PART_TIME`, `CONTRACT`, `OTHER`), Workplace Type (`ON_SITE`, `REMOTE`, `HYBRID`), Department, Minimum CGPA cutoff, and debounced text search. All postings are community-shared leads (`COMMUNITY_SHARED`).
-* **Detail Page (`/opportunities/[id]`)**: Full job description, salary/compensation, requirements, explainable match score card, and application trigger.
+* **Detail Page (`/opportunities/[id]`)**: Full job description, salary/compensation, requirements, and application trigger.
 
-### 2.4 Candidate Applications Tracker (`/applications`)
+### 2.3 Candidate Applications Tracker (`/applications`)
 * **Component**: `components/applications/my-applications-view.tsx`
 * **Features**: Displays candidate's submitted application records, company name, applied date, opportunity deadline, and direct link to target portal.
 * **Removal**: Candidate can remove an application record with a single click ("Remove" button).
 
-### 2.5 Referrals Hub (`/referrals`)
+### 2.4 Referrals Hub (`/referrals`)
 * **Component**: `components/referrals/referrals-hub-view.tsx`
 * **Tabs**:
   - `Incoming Requests`: For alumni to review candidate pitches, view student profiles, and accept/decline referral requests.
   - `Sent Requests`: For students to track referral requests submitted to alumni.
 
-### 2.6 Admin Command Center (`/admin`)
+### 2.5 Admin Command Center (`/admin`)
 * **Component**: `components/admin/admin-dashboard-container.tsx`
 * **Access Guard**: `isPlatformAdmin(user)`. Returns HTTP 403 / Access Restricted for non-admins.
 * **6 Operational Tabs**:
