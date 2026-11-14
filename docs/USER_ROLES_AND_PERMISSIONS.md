@@ -86,8 +86,7 @@ UniCareer Community operates on a **Single Unified Account Architecture**. Rathe
 * **Primary Mission**: Share job openings, provide referral advocacy for students, and build a trusted professional alumni network.
 * **Onboarding Dossier**: Graduation year, degree, current employer, job designation, and verification proof (thesis topic, batch number, or advisor).
 * **Exclusive Modules**:
-  * **Manage Postings (`/opportunities/my`)**: Create, edit, and close job postings.
-  * **Applicant Review Dashboard (`/opportunities/[id]/applicants`)**: Review candidate applications, inspect dossiers, and manage recruitment pipeline stages.
+  * **Manage Postings (`/opportunities/my`)**: Create, edit, and close community-shared job leads.
   * **Referrals Hub (`/referrals`)**: Inbound referral queue to evaluate student pitches and provide internal recommendations.
   * **Contributions Hub (`/contributions`)**: Telemetry tracking total jobs posted, student referrals handled, and feed discussions authored.
 

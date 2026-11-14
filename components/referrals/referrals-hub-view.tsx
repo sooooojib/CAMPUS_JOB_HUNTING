@@ -16,6 +16,7 @@ import {
   FileText,
   User,
   ShieldAlert,
+  Mail,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +39,7 @@ interface ReferralItem {
   requester: {
     id: string;
     name: string;
+    email?: string | null;
     image: string | null;
     membershipType: string;
     profile?: {
@@ -50,6 +52,7 @@ interface ReferralItem {
   recipient: {
     id: string;
     name: string;
+    email?: string | null;
     image: string | null;
     membershipType: string;
     profile?: {
@@ -401,7 +404,37 @@ export function ReferralsHubView() {
                       Referral ID: <span className="font-mono">{item.id.slice(0, 10)}...</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Direct Mail Candidate for Alumnus */}
+                      {isIncoming && item.requester.email && (
+                        <a
+                          href={`mailto:${item.requester.email}?subject=${encodeURIComponent(
+                            `[UniCareer Referral] Regarding your request for ${item.roleTitle} at ${item.companyName}`
+                          )}&body=${encodeURIComponent(
+                            `Hi ${item.requester.name},\n\nI received your referral inquiry for the ${item.roleTitle} role at ${item.companyName} on UniCareer.\n\n`
+                          )}`}
+                          className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors"
+                        >
+                          <Mail className="size-3 text-primary" />
+                          <span>Mail Candidate</span>
+                        </a>
+                      )}
+
+                      {/* Direct Mail Alumnus for Student on Accepted */}
+                      {!isIncoming && item.status === "ACCEPTED" && item.recipient.email && (
+                        <a
+                          href={`mailto:${item.recipient.email}?subject=${encodeURIComponent(
+                            `[UniCareer Referral Follow-up] ${item.roleTitle} at ${item.companyName}`
+                          )}&body=${encodeURIComponent(
+                            `Hi ${item.recipient.name},\n\nThank you for accepting my referral request for the ${item.roleTitle} position at ${item.companyName}!\n\n`
+                          )}`}
+                          className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-xs font-medium text-primary transition-colors"
+                        >
+                          <Mail className="size-3" />
+                          <span>Mail Alumnus</span>
+                        </a>
+                      )}
+
                       {/* Incoming Pending Actions */}
                       {isIncoming && item.status === "PENDING" && (
                         <>

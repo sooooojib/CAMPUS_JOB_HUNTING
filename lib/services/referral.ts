@@ -122,6 +122,7 @@ export async function assertCanAccessReferral(viewerUserId: string, referralId: 
         select: {
           id: true,
           name: true,
+          email: true,
           image: true,
           membershipType: true,
           verificationStatus: true,
@@ -139,6 +140,7 @@ export async function assertCanAccessReferral(viewerUserId: string, referralId: 
         select: {
           id: true,
           name: true,
+          email: true,
           image: true,
           membershipType: true,
           verificationStatus: true,
@@ -332,6 +334,7 @@ export async function getUserReferralRequests(
           select: {
             id: true,
             name: true,
+            email: true,
             image: true,
             membershipType: true,
             verificationStatus: true,
@@ -348,6 +351,7 @@ export async function getUserReferralRequests(
           select: {
             id: true,
             name: true,
+            email: true,
             image: true,
             membershipType: true,
             verificationStatus: true,

@@ -19,8 +19,7 @@ The platform operates on a single unified account model supporting three active 
    - Applies for opportunities, saves bookmarks, and requests internal referrals from alumni.
 2. **Alumni (`ALUMNI`)**:
    - Graduated university members.
-   - Posts job opportunities and verified hiring leads.
-   - Reviews candidate applicants for posted roles and manages pipeline stages.
+   - Posts verified community job opportunities and hiring leads (directing candidates to official external company portals).
    - Evaluates incoming student referral requests and provides mentorship.
 3. **Platform Administrator (`ADMIN`)**:
    - University administration / governance staff.
@@ -74,8 +73,8 @@ The platform operates on a single unified account model supporting three active 
   - Database composite constraint `@@unique([opportunityId, applicantId])` prevents duplicate application records.
   - Applicants can remove their application records directly from `/applications` using the "Remove" button.
   - Deadline tracking automatically transitions expired opportunities to `EXPIRED`.
-- **Applicant Management (`/opportunities/[id]/applicants`)**:
-  - Author and administrator review dashboard to track candidate engagement and application status history.
+- **Application Tracking & Destination Links**:
+  - Candidates track outbound applications in their personal dashboard (`/applications`). All community-shared opportunities direct applicants to official corporate career portals (no internal resume collection).
 
 ### 3.5 Community Feed & Discussions
 - **Feed Channels**: All Feed, Discussions & Q&A (`GENERAL_DISCUSSION`), Referrals (`REFERRAL_REQUEST`), Achievements (`ACHIEVEMENT`), and Saved Posts (`BOOKMARKED`).

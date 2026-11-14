@@ -16,6 +16,7 @@ import {
   Clock,
   Layers,
   Sparkles,
+  Mail,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
 import {
@@ -248,11 +249,24 @@ export default async function OpportunityDetailsPage({ params }: PageProps) {
                   </span>
                 </div>
                 {opportunity.contactEmail && (
-                  <div className="flex justify-between py-1 border-b border-border/40">
-                    <span className="text-muted-foreground">Contact Inquiries:</span>
-                    <span className="font-mono text-foreground">
-                      {opportunity.contactEmail}
-                    </span>
+                  <div className="pt-2 space-y-2 border-t border-border/40">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-muted-foreground">Inquiries &amp; Referral:</span>
+                      <span className="font-mono text-foreground font-medium truncate max-w-[170px]" title={opportunity.contactEmail}>
+                        {opportunity.contactEmail}
+                      </span>
+                    </div>
+                    <a
+                      href={`mailto:${opportunity.contactEmail}?subject=${encodeURIComponent(
+                        `[UniCareer Referral] Application for ${opportunity.title} at ${opportunity.companyName}`
+                      )}&body=${encodeURIComponent(
+                        `Dear Hiring Contact,\n\nI am reaching out via UniCareer Community regarding the ${opportunity.title} position at ${opportunity.companyName}.\n\nI would appreciate if you could review my qualifications for an internal referral or candidate consideration.\n\nBest regards,\n`
+                      )}`}
+                      className="inline-flex w-full items-center justify-center gap-2 h-9 px-3 rounded-xl bg-primary/10 hover:bg-primary/15 text-primary text-xs font-semibold border border-primary/20 transition-colors"
+                    >
+                      <Mail className="size-3.5" />
+                      <span>Mail Me / Contact for Referral</span>
+                    </a>
                   </div>
                 )}
               </div>
