@@ -1,0 +1,2824 @@
+{
+ "models": {
+  "User": {
+   "table": "users",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "name",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "email",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "emailVerified",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "image",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "membershipType",
+     "type": "MembershipType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "systemRole",
+     "type": "SystemRole",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "accountStatus",
+     "type": "AccountStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "verificationStatus",
+     "type": "VerificationStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "canPostOpportunities",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "canReviewApplicants",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "verifiedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "verifiedBy",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Company": {
+   "table": "companies",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "name",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "slug",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "logo",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "description",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "website",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "industry",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "location",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isVerified",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "isSuspended",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdById",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "CompanyMember": {
+   "table": "company_members",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "companyId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "companies"
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "role",
+     "type": "CompanyMemberRole",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "canPostOpportunities",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "canManageCompany",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "title",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "companyId,userId"
+   ]
+  },
+  "Department": {
+   "table": "departments",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "code",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "name",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "faculty",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Opportunity": {
+   "table": "opportunities",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "title",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "description",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "companyId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "companies"
+    },
+    {
+     "name": "companyName",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "companyLogo",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "type",
+     "type": "OpportunityType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "posterId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "sourceType",
+     "type": "OpportunitySourceType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "OpportunityStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "minCgpa",
+     "type": "Float?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "minAcademicYear",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "requiredSkills",
+     "type": "String[]",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "targetDepartments",
+     "type": "String[]",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "openToAllDepartments",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "salaryOrStipend",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "location",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "workplaceType",
+     "type": "WorkplaceType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "applicationMethod",
+     "type": "ApplicationMethod",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "externalUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "contactEmail",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "deadline",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reviewerId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "reviewedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "rejectionReason",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "OpportunityBookmark": {
+   "table": "opportunity_bookmarks",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "opportunityId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "opportunities"
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "userId,opportunityId"
+   ]
+  },
+  "Resume": {
+   "table": "resumes",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "fileName",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "fileSize",
+     "type": "Int",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "mimeType",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "storageKey",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isDefault",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Application": {
+   "table": "applications",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "opportunityId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "opportunities"
+    },
+    {
+     "name": "applicantId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "resumeId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "resumes"
+    },
+    {
+     "name": "coverLetter",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "method",
+     "type": "ApplicationMethod",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "ApplicationStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "externalAppliedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "externalNotes",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "employerNotes",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reviewedById",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "reviewedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "submittedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "opportunityId,applicantId"
+   ]
+  },
+  "ApplicationStatusHistory": {
+   "table": "application_status_history",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "applicationId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "applications"
+    },
+    {
+     "name": "status",
+     "type": "ApplicationStatus",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "note",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "changedById",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Profile": {
+   "table": "profiles",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "headline",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "bio",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "department",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "studentId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "academicYear",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "graduationYear",
+     "type": "Int?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "degree",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "currentCgpa",
+     "type": "Float?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isCgpaVerified",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "company",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "designation",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "skills",
+     "type": "String[]",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "interests",
+     "type": "String[]",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "projects",
+     "type": "Json?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "experience",
+     "type": "Json?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "linkedinUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "githubUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "websiteUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "phone",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "showEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "isOnboarded",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "MembershipRequest": {
+   "table": "membership_requests",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "membershipType",
+     "type": "MembershipType",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "VerificationRequestStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "institutionalId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "department",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "academicYear",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "graduationYear",
+     "type": "Int?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "organization",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "designation",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "workEmail",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "connectionNote",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "proofDetails",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "proofDocumentUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reviewerId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "rejectionReason",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reviewedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Session": {
+   "table": "sessions",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "expiresAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "token",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "ipAddress",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "userAgent",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    }
+   ],
+   "uniques": []
+  },
+  "Account": {
+   "table": "accounts",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "accountId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "providerId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "accessToken",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "refreshToken",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "idToken",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "accessTokenExpiresAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "refreshTokenExpiresAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "scope",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "password",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Verification": {
+   "table": "verifications",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "identifier",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "value",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "expiresAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Post": {
+   "table": "posts",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "authorId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "title",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "content",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "postType",
+     "type": "PostType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "visibility",
+     "type": "PostVisibility",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "ModerationStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "isPinned",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "attachedOpportunityId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "opportunities"
+    },
+    {
+     "name": "viewsCount",
+     "type": "Int",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "likesCount",
+     "type": "Int",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "commentsCount",
+     "type": "Int",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Comment": {
+   "table": "comments",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "postId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "posts"
+    },
+    {
+     "name": "authorId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "parentId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "comments"
+    },
+    {
+     "name": "content",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "ModerationStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "likesCount",
+     "type": "Int",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "PostReaction": {
+   "table": "post_reactions",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "postId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "posts"
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "type",
+     "type": "ReactionType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "postId,userId,type"
+   ]
+  },
+  "PostBookmark": {
+   "table": "post_bookmarks",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "postId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "posts"
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "postId,userId"
+   ]
+  },
+  "ContentReport": {
+   "table": "content_reports",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "reporterId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "targetType",
+     "type": "ReportTargetType",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "postId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "posts"
+    },
+    {
+     "name": "commentId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "comments"
+    },
+    {
+     "name": "reason",
+     "type": "ReportReason",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "description",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "ReportStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "reviewedById",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "reviewNotes",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reviewedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Connection": {
+   "table": "connections",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "senderId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "receiverId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "status",
+     "type": "ConnectionStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "senderId,receiverId"
+   ]
+  },
+  "ReferralRequest": {
+   "table": "referral_requests",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "requesterId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "recipientId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "companyId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "companies"
+    },
+    {
+     "name": "companyName",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "roleTitle",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "opportunityId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "opportunities"
+    },
+    {
+     "name": "message",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "resumeUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "ReferralStatus",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "responseNote",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "respondedAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "Skill": {
+   "table": "skills",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "name",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "category",
+     "type": "SkillCategory",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "description",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "AcademicRecord": {
+   "table": "academic_records",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "semester",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "gpa",
+     "type": "Float",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "credits",
+     "type": "Float",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "academicYear",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "notes",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isVerified",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "userId,semester"
+   ]
+  },
+  "Notification": {
+   "table": "notifications",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "recipientId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "type",
+     "type": "NotificationType",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "title",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "message",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "relatedEntityType",
+     "type": "RelatedEntityType?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "relatedEntityId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "actionUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isRead",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "readAt",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "NotificationPreference": {
+   "table": "notification_preferences",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": true,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "opportunitiesInApp",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "applicationsInApp",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "communityInApp",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "membershipInApp",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "remindersInApp",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "opportunitiesEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "applicationsEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "communityEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "membershipEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "remindersEmail",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "CareerCalendarEvent": {
+   "table": "career_calendar_events",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "title",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "description",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "eventType",
+     "type": "CalendarEventType",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "startDate",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "endDate",
+     "type": "DateTime?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "location",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "isAllDay",
+     "type": "Boolean",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "relatedOpportunityId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "relatedApplicationId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "DeadlineReminderLog": {
+   "table": "deadline_reminder_logs",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "opportunityId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "applicationId",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reminderType",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "channel",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "sentAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": [
+    "userId,opportunityId,reminderType,channel"
+   ]
+  },
+  "AdminAuditLog": {
+   "table": "admin_audit_logs",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "adminId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "action",
+     "type": "AdminAuditAction",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "targetType",
+     "type": "AuditTargetType",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "targetId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "targetLabel",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "reason",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "details",
+     "type": "Json?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "ipAddress",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "ManualApplication": {
+   "table": "manual_applications",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "userId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "companyName",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "roleTitle",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "location",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "jobUrl",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "notes",
+     "type": "String?",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "status",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "appliedDate",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  },
+  "OpportunityComment": {
+   "table": "opportunity_comments",
+   "fields": [
+    {
+     "name": "id",
+     "type": "String",
+     "pk": true,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "opportunityId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "opportunities"
+    },
+    {
+     "name": "authorId",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": "users"
+    },
+    {
+     "name": "content",
+     "type": "String",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    },
+    {
+     "name": "createdAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": true,
+     "fk": null
+    },
+    {
+     "name": "updatedAt",
+     "type": "DateTime",
+     "pk": false,
+     "uq": false,
+     "default": false,
+     "fk": null
+    }
+   ],
+   "uniques": []
+  }
+ }
+}

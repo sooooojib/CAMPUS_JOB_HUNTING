@@ -1,0 +1,3526 @@
+{
+ "exportedAt": "2026-11-14T09:13:16.479Z",
+ "tables": {
+  "academic_records": {
+   "count": 10,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "semester",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "gpa",
+     "type": "float8",
+     "nullable": false
+    },
+    {
+     "name": "credits",
+     "type": "float8",
+     "nullable": false
+    },
+    {
+     "name": "academic_year",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "notes",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "is_verified",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw90jye3000308jzp0ryqec3",
+     "user_id": "zw0XJr3KbwTWoM9S18hfFR3WCgilIzLf",
+     "semester": "Semester 6",
+     "gpa": "3.59",
+     "credits": "4",
+     "academic_year": "3rd Year",
+     "notes": null,
+     "is_verified": "true",
+     "created_at": "2026-11-09 02:42:51",
+     "updated_at": "2026-11-09 07:13:45"
+    },
+    {
+     "id": "cmw56alk6000007iful8infpv",
+     "user_id": "cmw54b6zy0059uar7d57zug0h",
+     "semester": "jhghjgfdsa",
+     "gpa": "0.01",
+     "credits": "3",
+     "academic_year": "3rd Year",
+     "notes": "asdasdas",
+     "is_verified": "false",
+     "created_at": "2026-11-06 10:12:27",
+     "updated_at": "2026-11-06 10:12:27"
+    },
+    {
+     "id": "cmw56bi4s000b08l4jejhwbyg",
+     "user_id": "cmw54b6zy0059uar7d57zug0h",
+     "semester": "fdsasasadfs",
+     "gpa": "0.93",
+     "credits": "3",
+     "academic_year": "4th Year",
+     "notes": "fsdfsd",
+     "is_verified": "false",
+     "created_at": "2026-11-06 10:13:10",
+     "updated_at": "2026-11-06 10:13:10"
+    },
+    {
+     "id": "cmw3br6zx001v9gr7xxp27zna",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "semester": "Fall 2023",
+     "gpa": "3.9",
+     "credits": "16.5",
+     "academic_year": "1st Year",
+     "notes": "Dean's List Honors",
+     "is_verified": "true",
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-05 03:10:37"
+    },
+    {
+     "id": "cmw3br71n001w9gr77gtes0xm",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "semester": "Spring 2024",
+     "gpa": "3.85",
+     "credits": "18",
+     "academic_year": "1st Year",
+     "notes": "Top marks in Data Structures & OOP",
+     "is_verified": "true",
+     "created_at": "2026-11-05 03:09:48",
+     "updated_at": "2026-11-05 03:10:37"
+    }
+   ]
+  },
+  "accounts": {
+   "count": 162,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "accountId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "providerId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "accessToken",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "refreshToken",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "idToken",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "accessTokenExpiresAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "refreshTokenExpiresAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "scope",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "password",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "M6oRmN0hSPLNR71b2yyuJIQyUkhkT2UV",
+     "accountId": "BsrbCebNKXMnUYFkfRtsGXV5OSRTgvJ1",
+     "providerId": "credential",
+     "userId": "BsrbCebNKXMnUYFkfRtsGXV5OSRTgvJ1",
+     "accessToken": null,
+     "refreshToken": null,
+     "idToken": null,
+     "accessTokenExpiresAt": null,
+     "refreshTokenExpiresAt": null,
+     "scope": null,
+     "password": "•••• hidden",
+     "createdAt": "2026-11-14 00:02:30",
+     "updatedAt": "2026-11-14 00:02:30"
+    },
+    {
+     "id": "c0jw22QoEj53kCQ3iLdvSXeIu1Vx1moq",
+     "accountId": "9eX2XFGRfXneGZFXb37Qdpo0RhAPWzSx",
+     "providerId": "credential",
+     "userId": "9eX2XFGRfXneGZFXb37Qdpo0RhAPWzSx",
+     "accessToken": null,
+     "refreshToken": null,
+     "idToken": null,
+     "accessTokenExpiresAt": null,
+     "refreshTokenExpiresAt": null,
+     "scope": null,
+     "password": "•••• hidden",
+     "createdAt": "2026-11-09 06:20:25",
+     "updatedAt": "2026-11-09 06:20:25"
+    },
+    {
+     "id": "zg3wbH9kVVEdFfxcFNGBrp18bnsTiVb7",
+     "accountId": "l1gQBbGkGyFhqUKNkJFyKAfX7uplfyrM",
+     "providerId": "credential",
+     "userId": "l1gQBbGkGyFhqUKNkJFyKAfX7uplfyrM",
+     "accessToken": null,
+     "refreshToken": null,
+     "idToken": null,
+     "accessTokenExpiresAt": null,
+     "refreshTokenExpiresAt": null,
+     "scope": null,
+     "password": "•••• hidden",
+     "createdAt": "2026-11-09 04:49:43",
+     "updatedAt": "2026-11-09 04:49:43"
+    },
+    {
+     "id": "c9Sc6FVfXxLT3BZBfmQ2m7R0fMWHUY3m",
+     "accountId": "lnCXe6mNhDbNA5kcNrPRCHyIrxn2BLTH",
+     "providerId": "credential",
+     "userId": "lnCXe6mNhDbNA5kcNrPRCHyIrxn2BLTH",
+     "accessToken": null,
+     "refreshToken": null,
+     "idToken": null,
+     "accessTokenExpiresAt": null,
+     "refreshTokenExpiresAt": null,
+     "scope": null,
+     "password": "•••• hidden",
+     "createdAt": "2026-11-09 04:34:17",
+     "updatedAt": "2026-11-09 04:34:17"
+    },
+    {
+     "id": "6yjxsU69iBYjIE0GlKpOoSrVw2Kay8Yy",
+     "accountId": "zw0XJr3KbwTWoM9S18hfFR3WCgilIzLf",
+     "providerId": "credential",
+     "userId": "zw0XJr3KbwTWoM9S18hfFR3WCgilIzLf",
+     "accessToken": null,
+     "refreshToken": null,
+     "idToken": null,
+     "accessTokenExpiresAt": null,
+     "refreshTokenExpiresAt": null,
+     "scope": null,
+     "password": "•••• hidden",
+     "createdAt": "2026-11-09 02:33:49",
+     "updatedAt": "2026-11-09 02:33:49"
+    }
+   ]
+  },
+  "admin_audit_logs": {
+   "count": 322,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "admin_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "action",
+     "type": "AdminAuditAction",
+     "nullable": false
+    },
+    {
+     "name": "target_type",
+     "type": "AuditTargetType",
+     "nullable": false
+    },
+    {
+     "name": "target_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "target_label",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reason",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "details",
+     "type": "jsonb",
+     "nullable": true
+    },
+    {
+     "name": "ip_address",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3cosrm000wq2r7t74osnnt",
+     "admin_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "action": "OPPORTUNITY_APPROVED",
+     "target_type": "OPPORTUNITY",
+     "target_id": "cmw3cosck000vq2r743oo9slu",
+     "target_label": "Frontend Engineering Associate",
+     "reason": null,
+     "details": "{\"posterId\":\"cmw3cor1b000pq2r7vakryoqi\",\"newStatus\":\"APPROV…",
+     "ip_address": null,
+     "created_at": "2026-11-05 03:35:55"
+    },
+    {
+     "id": "cmw6rxvnz000wsyr7johxy5h9",
+     "admin_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "action": "OPPORTUNITY_APPROVED",
+     "target_type": "OPPORTUNITY",
+     "target_id": "cmw6rxv8m000vsyr7w6yn54a3",
+     "target_label": "Frontend Engineering Associate",
+     "reason": null,
+     "details": "{\"posterId\":\"cmw6rxtyx000psyr7lw1thn9c\",\"newStatus\":\"APPROV…",
+     "ip_address": null,
+     "created_at": "2026-11-07 13:06:12"
+    },
+    {
+     "id": "cmw6rxy21001asyr7qo4tjr6d",
+     "admin_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "action": "OPPORTUNITY_CLOSED",
+     "target_type": "OPPORTUNITY",
+     "target_id": "cmw6rxxpu0017syr76faoi2vt",
+     "target_label": "Temporary Review Opportunity",
+     "reason": null,
+     "details": "{\"posterId\":\"cmw34duhv00000nr702nxvgo1\",\"newStatus\":\"CLOSED…",
+     "ip_address": null,
+     "created_at": "2026-11-07 13:06:15"
+    },
+    {
+     "id": "cmw7lb5fu000whnr7ys9509qq",
+     "admin_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "action": "OPPORTUNITY_APPROVED",
+     "target_type": "OPPORTUNITY",
+     "target_id": "cmw7lb50s000vhnr7vk4kw3pi",
+     "target_label": "Frontend Engineering Associate",
+     "reason": null,
+     "details": "{\"posterId\":\"cmw7lb3xn000phnr7dql865os\",\"newStatus\":\"APPROV…",
+     "ip_address": null,
+     "created_at": "2026-11-08 02:48:20"
+    },
+    {
+     "id": "cmw6t2pj8000ws3r7acrmrbqq",
+     "admin_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "action": "OPPORTUNITY_APPROVED",
+     "target_type": "OPPORTUNITY",
+     "target_id": "cmw6t2p3z000vs3r764pq4dn8",
+     "target_label": "Frontend Engineering Associate",
+     "reason": null,
+     "details": "{\"posterId\":\"cmw6t2o0u000ps3r7ae48piwp\",\"newStatus\":\"APPROV…",
+     "ip_address": null,
+     "created_at": "2026-11-07 13:37:57"
+    }
+   ]
+  },
+  "application_status_history": {
+   "count": 213,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "application_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "ApplicationStatus",
+     "nullable": false
+    },
+    {
+     "name": "note",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "changed_by_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw349ptu000epar7btf6pni4",
+     "application_id": "cmw349pdi000dpar78cp1pql5",
+     "status": "SUBMITTED",
+     "note": "Application submitted by candidate via UniCareer platform.",
+     "changed_by_id": "cmw349no50000par7vgh9hbbn",
+     "created_at": "2026-11-04 23:40:15"
+    },
+    {
+     "id": "cmw349qrv000hpar7tlosyuxk",
+     "application_id": "cmw349qnj000gpar7swgb6twb",
+     "status": "SUBMITTED",
+     "note": "External application recorded by member.",
+     "changed_by_id": "cmw349no50000par7vgh9hbbn",
+     "created_at": "2026-11-04 23:40:16"
+    },
+    {
+     "id": "cmw349rh7000ipar70s5y888x",
+     "application_id": "cmw349pdi000dpar78cp1pql5",
+     "status": "WITHDRAWN",
+     "note": "Accepted alternative fellowship.",
+     "changed_by_id": "cmw349no50000par7vgh9hbbn",
+     "created_at": "2026-11-04 23:40:17"
+    },
+    {
+     "id": "cmw34a4oo000eqor7aa3d7yno",
+     "application_id": "cmw34a4it000dqor75i1i4gxi",
+     "status": "SUBMITTED",
+     "note": "Application submitted by candidate via UniCareer platform.",
+     "changed_by_id": "cmw34a2vn0000qor7w2wyw5s4",
+     "created_at": "2026-11-04 23:40:34"
+    },
+    {
+     "id": "cmw34a5ns000hqor7jzah07yr",
+     "application_id": "cmw34a5i4000gqor7a6sjnv3y",
+     "status": "SUBMITTED",
+     "note": "External application recorded by member.",
+     "changed_by_id": "cmw34a2vn0000qor7w2wyw5s4",
+     "created_at": "2026-11-04 23:40:35"
+    }
+   ]
+  },
+  "applications": {
+   "count": 105,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunity_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "applicant_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "resume_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "cover_letter",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "method",
+     "type": "ApplicationMethod",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "ApplicationStatus",
+     "nullable": false
+    },
+    {
+     "name": "external_applied_at",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "external_notes",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "employer_notes",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewed_by_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewed_at",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "submitted_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw349qnj000gpar7swgb6twb",
+     "opportunity_id": "cmw349oc3000apar7a47jqbxa",
+     "applicant_id": "cmw349no50000par7vgh9hbbn",
+     "resume_id": null,
+     "cover_letter": null,
+     "method": "EXTERNAL",
+     "status": "SUBMITTED",
+     "external_applied_at": "2026-11-04 23:40:16",
+     "external_notes": "Submitted requisition on company Workday portal.",
+     "employer_notes": null,
+     "reviewed_by_id": null,
+     "reviewed_at": null,
+     "submitted_at": "2026-11-04 23:40:16",
+     "updated_at": "2026-11-04 23:40:16"
+    },
+    {
+     "id": "cmw38logd000hh8r7nexqmg38",
+     "opportunity_id": "cmw38lmdl000ah8r7992zcoo6",
+     "applicant_id": "cmw38llqk0000h8r7rhpdxbwf",
+     "resume_id": null,
+     "cover_letter": null,
+     "method": "EXTERNAL",
+     "status": "SUBMITTED",
+     "external_applied_at": "2026-11-05 01:41:31",
+     "external_notes": "Submitted requisition on company Workday portal.",
+     "employer_notes": null,
+     "reviewed_by_id": null,
+     "reviewed_at": null,
+     "submitted_at": "2026-11-05 01:41:31",
+     "updated_at": "2026-11-05 01:41:31"
+    },
+    {
+     "id": "cmw349pdi000dpar78cp1pql5",
+     "opportunity_id": "cmw349o7a0007par72c6zuc35",
+     "applicant_id": "cmw349no50000par7vgh9hbbn",
+     "resume_id": "cmw349oh4000cpar7dqgnut9g",
+     "cover_letter": "Excited to apply for this backend role with deep Next.js an…",
+     "method": "INTERNAL",
+     "status": "SHORTLISTED",
+     "external_applied_at": null,
+     "external_notes": null,
+     "employer_notes": "Strong background in Next.js App Router.",
+     "reviewed_by_id": null,
+     "reviewed_at": "2026-11-04 23:40:19",
+     "submitted_at": "2026-11-04 23:40:14",
+     "updated_at": "2026-11-04 23:40:19"
+    },
+    {
+     "id": "cmw91be2r000h2zr7auztz3c5",
+     "opportunity_id": "cmw91bbxp000a2zr7kwtnzhnu",
+     "applicant_id": "cmw91bb9g00002zr765at6u92",
+     "resume_id": null,
+     "cover_letter": null,
+     "method": "EXTERNAL",
+     "status": "SUBMITTED",
+     "external_applied_at": "2026-11-09 03:04:11",
+     "external_notes": "Submitted requisition on company Workday portal.",
+     "employer_notes": null,
+     "reviewed_by_id": null,
+     "reviewed_at": null,
+     "submitted_at": "2026-11-09 03:04:11",
+     "updated_at": "2026-11-09 03:04:11"
+    },
+    {
+     "id": "cmw7i069i000hpwr78m9f3gmm",
+     "opportunity_id": "cmw7i046a000apwr7ye6jhs5s",
+     "applicant_id": "cmw7i03j10000pwr7gb0q460u",
+     "resume_id": null,
+     "cover_letter": null,
+     "method": "EXTERNAL",
+     "status": "SUBMITTED",
+     "external_applied_at": "2026-11-08 01:15:49",
+     "external_notes": "Submitted requisition on company Workday portal.",
+     "employer_notes": null,
+     "reviewed_by_id": null,
+     "reviewed_at": null,
+     "submitted_at": "2026-11-08 01:15:49",
+     "updated_at": "2026-11-08 01:15:49"
+    }
+   ]
+  },
+  "career_calendar_events": {
+   "count": 5,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "title",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "description",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "event_type",
+     "type": "CalendarEventType",
+     "nullable": false
+    },
+    {
+     "name": "start_date",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "end_date",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "location",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "is_all_day",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "related_opportunity_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "related_application_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3ksmug000007i9d4gjade5",
+     "user_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "Presentation",
+     "description": null,
+     "event_type": "REMINDER",
+     "start_date": "2026-11-15 21:00:00",
+     "end_date": null,
+     "location": null,
+     "is_all_day": "true",
+     "related_opportunity_id": null,
+     "related_application_id": null,
+     "created_at": "2026-11-05 07:22:51",
+     "updated_at": "2026-11-05 07:22:51"
+    },
+    {
+     "id": "cmw3bs9q20021d6r70wpenls9",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "title": "Vercel Round 1 Technical Interview",
+     "description": "Live coding and architectural discussion on Next.js Server …",
+     "event_type": "INTERVIEW",
+     "start_date": "2026-11-09 03:10:38",
+     "end_date": null,
+     "location": null,
+     "is_all_day": "false",
+     "related_opportunity_id": null,
+     "related_application_id": null,
+     "created_at": "2026-11-05 03:10:38",
+     "updated_at": "2026-11-05 03:10:38"
+    },
+    {
+     "id": "cmw3bs9s30022d6r7l3z9dnrf",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "title": "bKash Technical Panel Deadline",
+     "description": "Submit written take-home concurrency design assessment for …",
+     "event_type": "APPLICATION_DEADLINE",
+     "start_date": "2026-11-07 03:10:38",
+     "end_date": null,
+     "location": null,
+     "is_all_day": "true",
+     "related_opportunity_id": null,
+     "related_application_id": null,
+     "created_at": "2026-11-05 03:10:38",
+     "updated_at": "2026-11-05 03:10:38"
+    },
+    {
+     "id": "cmw3bs9tm0023d6r738f8m7s8",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "title": "Annual University Tech Career Fair 2026",
+     "description": "University auditorium: meet recruiters from Google, Vercel,…",
+     "event_type": "CAREER_FAIR",
+     "start_date": "2026-11-19 03:10:38",
+     "end_date": null,
+     "location": null,
+     "is_all_day": "true",
+     "related_opportunity_id": null,
+     "related_application_id": null,
+     "created_at": "2026-11-05 03:10:38",
+     "updated_at": "2026-11-05 03:10:38"
+    },
+    {
+     "id": "cmw3bs9v80024d6r77cnrgunf",
+     "user_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "Brain Station 23 AI Screening Assessment",
+     "description": "Online coding test covering Python data structures and mach…",
+     "event_type": "INTERVIEW",
+     "start_date": "2026-11-11 03:10:38",
+     "end_date": null,
+     "location": null,
+     "is_all_day": "false",
+     "related_opportunity_id": null,
+     "related_application_id": null,
+     "created_at": "2026-11-05 03:10:38",
+     "updated_at": "2026-11-05 03:10:38"
+    }
+   ]
+  },
+  "comments": {
+   "count": 31,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "post_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "author_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "parent_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "content",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "ModerationStatus",
+     "nullable": false
+    },
+    {
+     "name": "likes_count",
+     "type": "int4",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw81t6ja000908jp65ofkrk2",
+     "post_id": "cmw3br6c8001b9gr7536v9ejv",
+     "author_id": "cmw54b766005cuar7sdkyfuq8",
+     "parent_id": null,
+     "content": "eewdqw",
+     "status": "ACTIVE",
+     "likes_count": "0",
+     "created_at": "2026-11-08 10:30:15",
+     "updated_at": "2026-11-08 10:30:15"
+    },
+    {
+     "id": "cmw9lamq4000008l2njllz8sa",
+     "post_id": "cmw3br66l00189gr7qwcvkmt1",
+     "author_id": "cmw54b6zy0059uar7d57zug0h",
+     "parent_id": null,
+     "content": "hio",
+     "status": "ACTIVE",
+     "likes_count": "0",
+     "created_at": "2026-11-09 12:23:28",
+     "updated_at": "2026-11-09 12:23:28"
+    },
+    {
+     "id": "cmw9ld13l000308l2k2wla8ag",
+     "post_id": "cmw8ziqav002tidr7ujm1ch65",
+     "author_id": "cmw54b6zy0059uar7d57zug0h",
+     "parent_id": "cmw8ziqjg002uidr7e65c0o1t",
+     "content": "kmo",
+     "status": "ACTIVE",
+     "likes_count": "0",
+     "created_at": "2026-11-09 12:25:20",
+     "updated_at": "2026-11-09 12:25:20"
+    },
+    {
+     "id": "cmwd98ie6000007lbm1fuf9i7",
+     "post_id": "cmw3bs8qz0017d6r7bh5r274y",
+     "author_id": "cmw54b766005cuar7sdkyfuq8",
+     "parent_id": null,
+     "content": "I am excited",
+     "status": "ACTIVE",
+     "likes_count": "0",
+     "created_at": "2026-11-12 01:56:58",
+     "updated_at": "2026-11-12 01:56:58"
+    },
+    {
+     "id": "cmwd98rql000008jviz8gzobk",
+     "post_id": "cmw3br66l00189gr7qwcvkmt1",
+     "author_id": "cmw54b766005cuar7sdkyfuq8",
+     "parent_id": null,
+     "content": "jhghjgf",
+     "status": "ACTIVE",
+     "likes_count": "0",
+     "created_at": "2026-11-12 01:57:10",
+     "updated_at": "2026-11-12 01:57:10"
+    }
+   ]
+  },
+  "companies": {
+   "count": 103,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "slug",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "logo",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "description",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "website",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "industry",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "location",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "createdById",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "isSuspended",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "isVerified",
+     "type": "bool",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg0zrdi00029nr7ejm2or93",
+     "name": "TechCorp Solutions 1794637771518",
+     "slug": "techcorp-1794637771518",
+     "logo": null,
+     "description": null,
+     "website": null,
+     "industry": "Information Technology",
+     "location": "Dhaka",
+     "createdById": "cmwg0zrat00019nr7o5cok95t",
+     "createdAt": "2026-11-14 00:29:32",
+     "updatedAt": "2026-11-14 00:29:32",
+     "isSuspended": "false",
+     "isVerified": "false"
+    },
+    {
+     "id": "cmwg0zlkv00059ar7rc1ija63",
+     "name": "Tech Innovators Ltd 1794637763665",
+     "slug": "tech-innovators-1794637763665",
+     "logo": null,
+     "description": null,
+     "website": null,
+     "industry": "Enterprise Software",
+     "location": "Dhaka, Bangladesh",
+     "createdById": "cmwg0zlg000039ar7owy4biz3",
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24",
+     "isSuspended": "false",
+     "isVerified": "false"
+    },
+    {
+     "id": "cmwfzskku000244r7dxywhers",
+     "name": "TechCorp Solutions 1794635756302",
+     "slug": "techcorp-1794635756302",
+     "logo": null,
+     "description": null,
+     "website": null,
+     "industry": "Information Technology",
+     "location": "Dhaka",
+     "createdById": "cmwfzskib000144r7zwya3wqx",
+     "createdAt": "2026-11-13 23:55:57",
+     "updatedAt": "2026-11-13 23:55:57",
+     "isSuspended": "false",
+     "isVerified": "false"
+    },
+    {
+     "id": "cmwfzrksc0005qjr7hesjwnv8",
+     "name": "Tech Innovators Ltd 1794635709793",
+     "slug": "tech-innovators-1794635709793",
+     "logo": null,
+     "description": null,
+     "website": null,
+     "industry": "Enterprise Software",
+     "location": "Dhaka, Bangladesh",
+     "createdById": "cmwfzrknr0003qjr7vejokvqb",
+     "createdAt": "2026-11-13 23:55:10",
+     "updatedAt": "2026-11-13 23:55:10",
+     "isSuspended": "false",
+     "isVerified": "false"
+    },
+    {
+     "id": "cmwfdlunj0002wmr7nwoe84on",
+     "name": "TechCorp Solutions 1794598491485",
+     "slug": "techcorp-1794598491485",
+     "logo": null,
+     "description": null,
+     "website": null,
+     "industry": "Information Technology",
+     "location": "Dhaka",
+     "createdById": "cmwfdlult0001wmr7h0xgz0vq",
+     "createdAt": "2026-11-13 13:34:52",
+     "updatedAt": "2026-11-13 13:34:52",
+     "isSuspended": "false",
+     "isVerified": "false"
+    }
+   ]
+  },
+  "company_members": {
+   "count": 62,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "companyId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "role",
+     "type": "CompanyMemberRole",
+     "nullable": false
+    },
+    {
+     "name": "canPostOpportunities",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "canManageCompany",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "title",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg0zrf500039nr7njqmhe0j",
+     "companyId": "cmwg0zrdi00029nr7ejm2or93",
+     "userId": "cmwg0zrat00019nr7o5cok95t",
+     "role": "OWNER",
+     "canPostOpportunities": "true",
+     "canManageCompany": "true",
+     "title": null,
+     "createdAt": "2026-11-14 00:29:32",
+     "updatedAt": "2026-11-14 00:29:32"
+    },
+    {
+     "id": "cmwg0zlmc00069ar7z6al1mxh",
+     "companyId": "cmwg0zlkv00059ar7rc1ija63",
+     "userId": "cmwg0zlg000039ar7owy4biz3",
+     "role": "OWNER",
+     "canPostOpportunities": "true",
+     "canManageCompany": "true",
+     "title": null,
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24"
+    },
+    {
+     "id": "cmwfzsknd000344r7085re999",
+     "companyId": "cmwfzskku000244r7dxywhers",
+     "userId": "cmwfzskib000144r7zwya3wqx",
+     "role": "OWNER",
+     "canPostOpportunities": "true",
+     "canManageCompany": "true",
+     "title": null,
+     "createdAt": "2026-11-13 23:55:57",
+     "updatedAt": "2026-11-13 23:55:57"
+    },
+    {
+     "id": "cmwfzrktt0006qjr7ndezfx2j",
+     "companyId": "cmwfzrksc0005qjr7hesjwnv8",
+     "userId": "cmwfzrknr0003qjr7vejokvqb",
+     "role": "OWNER",
+     "canPostOpportunities": "true",
+     "canManageCompany": "true",
+     "title": null,
+     "createdAt": "2026-11-13 23:55:10",
+     "updatedAt": "2026-11-13 23:55:10"
+    },
+    {
+     "id": "cmwfdlup80003wmr7kgz551ww",
+     "companyId": "cmwfdlunj0002wmr7nwoe84on",
+     "userId": "cmwfdlult0001wmr7h0xgz0vq",
+     "role": "OWNER",
+     "canPostOpportunities": "true",
+     "canManageCompany": "true",
+     "title": null,
+     "createdAt": "2026-11-13 13:34:52",
+     "updatedAt": "2026-11-13 13:34:52"
+    }
+   ]
+  },
+  "connections": {
+   "count": 9,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "sender_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "receiver_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "ConnectionStatus",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3e17ov000108jpqovcsfzg",
+     "sender_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "receiver_id": "cmw374x330004ror7kaar69fy",
+     "status": "PENDING",
+     "created_at": "2026-11-05 04:13:34",
+     "updated_at": "2026-11-05 04:13:34"
+    },
+    {
+     "id": "cmw3efiju000008l9etivp5v6",
+     "sender_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "receiver_id": "cmw3e1guo0000e8r7egz8pglm",
+     "status": "PENDING",
+     "created_at": "2026-11-05 04:24:41",
+     "updated_at": "2026-11-05 04:24:41"
+    },
+    {
+     "id": "cmw3i3b33000107kxuplgm9on",
+     "sender_id": "cmw3bo4p1000m3jr79ogndqat",
+     "receiver_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "status": "PENDING",
+     "created_at": "2026-11-05 06:07:10",
+     "updated_at": "2026-11-05 06:07:10"
+    },
+    {
+     "id": "cmw3l3b78000507i9r1301ui2",
+     "sender_id": "cmw3bo4p1000m3jr79ogndqat",
+     "receiver_id": "cmw349ny60004par7l2gdve37",
+     "status": "PENDING",
+     "created_at": "2026-11-05 07:31:09",
+     "updated_at": "2026-11-05 07:31:09"
+    },
+    {
+     "id": "cmw55wtgp000207jn40sn11tu",
+     "sender_id": "cmw54b6zy0059uar7d57zug0h",
+     "receiver_id": "cmw349ny60004par7l2gdve37",
+     "status": "PENDING",
+     "created_at": "2026-11-06 10:01:45",
+     "updated_at": "2026-11-06 10:01:45"
+    }
+   ]
+  },
+  "content_reports": {
+   "count": 3,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "reporter_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "target_type",
+     "type": "ReportTargetType",
+     "nullable": false
+    },
+    {
+     "name": "post_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "comment_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reason",
+     "type": "ReportReason",
+     "nullable": false
+    },
+    {
+     "name": "description",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "status",
+     "type": "ReportStatus",
+     "nullable": false
+    },
+    {
+     "name": "reviewed_by_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "review_notes",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewed_at",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3br6hm001e9gr7k5el34qt",
+     "reporter_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "target_type": "POST",
+     "post_id": "cmw3br6g0001d9gr7rqgmegiu",
+     "comment_id": null,
+     "reason": "SPAM",
+     "description": "Blatant academic dishonesty and commercial spam violating u…",
+     "status": "DISMISSED",
+     "reviewed_by_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "review_notes": "jj",
+     "reviewed_at": "2026-11-08 12:17:47",
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-08 12:17:47"
+    },
+    {
+     "id": "cmw3bs906001dd6r7spons5wg",
+     "reporter_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "target_type": "POST",
+     "post_id": "cmw3bs8yn001cd6r74fj3bccq",
+     "comment_id": null,
+     "reason": "SPAM",
+     "description": "Blatant academic dishonesty and commercial spam violating u…",
+     "status": "RESOLVED",
+     "reviewed_by_id": "cmw32x6lo000gx6r7cxbbtlrb",
+     "review_notes": "hh",
+     "reviewed_at": "2026-11-06 10:17:15",
+     "created_at": "2026-11-05 03:10:37",
+     "updated_at": "2026-11-06 10:17:15"
+    },
+    {
+     "id": "cmw89wsqc000108jggq1at0n7",
+     "reporter_id": "cmw54b6zy0059uar7d57zug0h",
+     "target_type": "POST",
+     "post_id": "cmw3bs8qz0017d6r7bh5r274y",
+     "comment_id": null,
+     "reason": "INAPPROPRIATE",
+     "description": "ok",
+     "status": "PENDING",
+     "reviewed_by_id": null,
+     "review_notes": null,
+     "reviewed_at": null,
+     "created_at": "2026-11-08 14:17:01",
+     "updated_at": "2026-11-08 14:17:01"
+    }
+   ]
+  },
+  "deadline_reminder_logs": {
+   "count": 1,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunity_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "application_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reminder_type",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "channel",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "sent_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3c74og000zcur7lcg46tsb",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "opportunity_id": "cmw32xqoq000nz4r7qkmyx2rz",
+     "application_id": null,
+     "reminder_type": "DEADLINE_72_HOURS",
+     "channel": "IN_APP",
+     "sent_at": "2026-11-05 03:22:11"
+    }
+   ]
+  },
+  "departments": {
+   "count": 16,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "code",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "faculty",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw31yo1k000fsnr7drytrhlz",
+     "code": "MIC",
+     "name": "Microbiology",
+     "faculty": "Faculty of Life & Earth Sciences",
+     "createdAt": "2026-11-04 22:35:40",
+     "updatedAt": "2026-11-05 03:10:32"
+    },
+    {
+     "id": "cmw31ynyc000esnr7yzzmm30q",
+     "code": "PHR",
+     "name": "Pharmacy",
+     "faculty": "Faculty of Life & Earth Sciences",
+     "createdAt": "2026-11-04 22:35:40",
+     "updatedAt": "2026-11-05 03:10:32"
+    },
+    {
+     "id": "cmw31ynvx000dsnr7f5107e7b",
+     "code": "ECON",
+     "name": "Economics",
+     "faculty": "Faculty of Social Sciences",
+     "createdAt": "2026-11-04 22:35:40",
+     "updatedAt": "2026-11-05 03:10:32"
+    },
+    {
+     "id": "cmw31ynsb000csnr7af2nfwl2",
+     "code": "LAW",
+     "name": "Law & Justice",
+     "faculty": "Faculty of Law",
+     "createdAt": "2026-11-04 22:35:40",
+     "updatedAt": "2026-11-05 03:10:32"
+    },
+    {
+     "id": "cmw31ynqs000bsnr74j7ddirv",
+     "code": "ENG",
+     "name": "English Language & Literature",
+     "faculty": "Faculty of Arts",
+     "createdAt": "2026-11-04 22:35:40",
+     "updatedAt": "2026-11-05 03:10:32"
+    }
+   ]
+  },
+  "manual_applications": {
+   "count": 0,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "company_name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "role_title",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "location",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "job_url",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "notes",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "status",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "applied_date",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": []
+  },
+  "membership_requests": {
+   "count": 29,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "membershipType",
+     "type": "MembershipType",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "VerificationRequestStatus",
+     "nullable": false
+    },
+    {
+     "name": "institutionalId",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "department",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "academicYear",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "graduationYear",
+     "type": "int4",
+     "nullable": true
+    },
+    {
+     "name": "organization",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "designation",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "workEmail",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "connectionNote",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "proofDetails",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "proofDocumentUrl",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewerId",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "rejectionReason",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewedAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg023w8000008l2vrbu8zxr",
+     "userId": "BsrbCebNKXMnUYFkfRtsGXV5OSRTgvJ1",
+     "membershipType": "STUDENT",
+     "status": "PENDING",
+     "institutionalId": "B22••••••",
+     "department": "Computer Science & Engineering",
+     "academicYear": null,
+     "graduationYear": null,
+     "organization": null,
+     "designation": null,
+     "workEmail": null,
+     "connectionNote": "Account email verified. Submitted to Admin Approval Panel f…",
+     "proofDetails": null,
+     "proofDocumentUrl": null,
+     "reviewerId": null,
+     "rejectionReason": null,
+     "reviewedAt": null,
+     "createdAt": "2026-11-14 00:03:22",
+     "updatedAt": "2026-11-14 00:32:55"
+    },
+    {
+     "id": "cmw98bsdg000108k1rfgcw2cj",
+     "userId": "9eX2XFGRfXneGZFXb37Qdpo0RhAPWzSx",
+     "membershipType": "STUDENT",
+     "status": "APPROVED",
+     "institutionalId": "B22••••••",
+     "department": "Computer Science & Engineering",
+     "academicYear": null,
+     "graduationYear": null,
+     "organization": null,
+     "designation": null,
+     "workEmail": null,
+     "connectionNote": "Self-registered as STUDENT from Department of Computer Scie…",
+     "proofDetails": null,
+     "proofDocumentUrl": null,
+     "reviewerId": "cmw32x6lo000gx6r7cxbbtlrb",
+     "rejectionReason": null,
+     "reviewedAt": "2026-11-09 07:15:15",
+     "createdAt": "2026-11-09 06:20:27",
+     "updatedAt": "2026-11-09 07:15:15"
+    },
+    {
+     "id": "cmw95358n000307jwoa9hz9uu",
+     "userId": "l1gQBbGkGyFhqUKNkJFyKAfX7uplfyrM",
+     "membershipType": "STUDENT",
+     "status": "APPROVED",
+     "institutionalId": "B22••••••",
+     "department": "Computer Science & Engineering",
+     "academicYear": null,
+     "graduationYear": null,
+     "organization": null,
+     "designation": null,
+     "workEmail": null,
+     "connectionNote": "Self-registered as STUDENT from Department of Computer Scie…",
+     "proofDetails": null,
+     "proofDocumentUrl": null,
+     "reviewerId": "cmw32x6lo000gx6r7cxbbtlrb",
+     "rejectionReason": null,
+     "reviewedAt": "2026-11-09 07:15:20",
+     "createdAt": "2026-11-09 04:49:45",
+     "updatedAt": "2026-11-09 07:15:20"
+    },
+    {
+     "id": "cmw94jatx000107jwmuva2boc",
+     "userId": "lnCXe6mNhDbNA5kcNrPRCHyIrxn2BLTH",
+     "membershipType": "STUDENT",
+     "status": "APPROVED",
+     "institutionalId": "B22••••••",
+     "department": "Computer Science & Engineering",
+     "academicYear": null,
+     "graduationYear": null,
+     "organization": null,
+     "designation": null,
+     "workEmail": null,
+     "connectionNote": "Self-registered as STUDENT from Department of Computer Scie…",
+     "proofDetails": null,
+     "proofDocumentUrl": null,
+     "reviewerId": "cmw32x6lo000gx6r7cxbbtlrb",
+     "rejectionReason": null,
+     "reviewedAt": "2026-11-09 07:15:23",
+     "createdAt": "2026-11-09 04:34:19",
+     "updatedAt": "2026-11-09 07:15:23"
+    },
+    {
+     "id": "cmw908e0q000108jz4swr6hpu",
+     "userId": "zw0XJr3KbwTWoM9S18hfFR3WCgilIzLf",
+     "membershipType": "STUDENT",
+     "status": "APPROVED",
+     "institutionalId": "B22••••••",
+     "department": "Computer Science & Engineering",
+     "academicYear": null,
+     "graduationYear": null,
+     "organization": null,
+     "designation": null,
+     "workEmail": null,
+     "connectionNote": "Self-registered as STUDENT from Department of Computer Scie…",
+     "proofDetails": null,
+     "proofDocumentUrl": null,
+     "reviewerId": "cmw32x6lo000gx6r7cxbbtlrb",
+     "rejectionReason": null,
+     "reviewedAt": "2026-11-09 07:14:22",
+     "createdAt": "2026-11-09 02:33:51",
+     "updatedAt": "2026-11-09 07:14:22"
+    }
+   ]
+  },
+  "notification_preferences": {
+   "count": 0,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunities_in_app",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "applications_in_app",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "community_in_app",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "membership_in_app",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "reminders_in_app",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "opportunities_email",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "applications_email",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "community_email",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "membership_email",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "reminders_email",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": []
+  },
+  "notifications": {
+   "count": 433,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "recipient_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "type",
+     "type": "NotificationType",
+     "nullable": false
+    },
+    {
+     "name": "title",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "message",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "related_entity_type",
+     "type": "RelatedEntityType",
+     "nullable": true
+    },
+    {
+     "name": "related_entity_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "action_url",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "is_read",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "read_at",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw38ifxb000j8kr712tahyt9",
+     "recipient_id": "cmw38icye00008kr70ftsysmh",
+     "type": "APPLICATION_SUBMITTED",
+     "title": "Application Submitted Successfully",
+     "message": "Your application for External Research Fellow 1793864336464…",
+     "related_entity_type": "APPLICATION",
+     "related_entity_id": "cmw38ifmv000h8kr72zbo198x",
+     "action_url": "/applications",
+     "is_read": "false",
+     "read_at": null,
+     "created_at": "2026-11-05 01:39:00",
+     "updated_at": "2026-11-05 01:39:00"
+    },
+    {
+     "id": "cmw38ihp9000m8kr7ch9q8xei",
+     "recipient_id": "cmw38icye00008kr70ftsysmh",
+     "type": "APPLICATION_STATUS_CHANGED",
+     "title": "Application Update: Full Stack Engineer 1793864336464",
+     "message": "Your application status at Tech Innovators Ltd 179386433646…",
+     "related_entity_type": "APPLICATION",
+     "related_entity_id": "cmw38iemm000d8kr7kx25yvs3",
+     "action_url": "/applications",
+     "is_read": "false",
+     "read_at": null,
+     "created_at": "2026-11-05 01:39:03",
+     "updated_at": "2026-11-05 01:39:03"
+    },
+    {
+     "id": "cmw38ii2n000o8kr786tjwvoz",
+     "recipient_id": "cmw38icye00008kr70ftsysmh",
+     "type": "APPLICATION_SHORTLISTED",
+     "title": "Application Update: Full Stack Engineer 1793864336464",
+     "message": "Your application status at Tech Innovators Ltd 179386433646…",
+     "related_entity_type": "APPLICATION",
+     "related_entity_id": "cmw38iemm000d8kr7kx25yvs3",
+     "action_url": "/applications",
+     "is_read": "false",
+     "read_at": null,
+     "created_at": "2026-11-05 01:39:03",
+     "updated_at": "2026-11-05 01:39:03"
+    },
+    {
+     "id": "cmw3av09m000q9vr7ftbra84d",
+     "recipient_id": "cmw38q92r0000syr7v3ysfij3",
+     "type": "REFERRAL_RESPONSE",
+     "title": "Referral Request Accepted",
+     "message": "Marcus Alumnus accepted your referral request for Cloud Eng…",
+     "related_entity_type": "REFERRAL",
+     "related_entity_id": "cmw3auzgo000n9vr7jkdnpcwm",
+     "action_url": "/referrals",
+     "is_read": "false",
+     "read_at": null,
+     "created_at": "2026-11-05 02:44:46",
+     "updated_at": "2026-11-05 02:44:46"
+    },
+    {
+     "id": "cmw3aegnk000g4ar7f3igq5i2",
+     "recipient_id": "cmw38q92r0000syr7v3ysfij3",
+     "type": "OPPORTUNITY_APPROVED",
+     "title": "Opportunity Approved: Temporary Review Opportunity",
+     "message": "Your opportunity has been approved and is now visible to ve…",
+     "related_entity_type": "OPPORTUNITY",
+     "related_entity_id": "cmw3aegci000e4ar7cbq6pb4s",
+     "action_url": "/opportunities/cmw3aegci000e4ar7cbq6pb4s",
+     "is_read": "false",
+     "read_at": null,
+     "created_at": "2026-11-05 02:31:54",
+     "updated_at": "2026-11-05 02:31:54"
+    }
+   ]
+  },
+  "opportunities": {
+   "count": 353,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "title",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "description",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "companyId",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "companyName",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "companyLogo",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "type",
+     "type": "OpportunityType",
+     "nullable": false
+    },
+    {
+     "name": "posterId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "sourceType",
+     "type": "OpportunitySourceType",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "OpportunityStatus",
+     "nullable": false
+    },
+    {
+     "name": "minCgpa",
+     "type": "float8",
+     "nullable": true
+    },
+    {
+     "name": "minAcademicYear",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "requiredSkills",
+     "type": "_text",
+     "nullable": true
+    },
+    {
+     "name": "targetDepartments",
+     "type": "_text",
+     "nullable": true
+    },
+    {
+     "name": "openToAllDepartments",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "salaryOrStipend",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "location",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "workplaceType",
+     "type": "WorkplaceType",
+     "nullable": false
+    },
+    {
+     "name": "applicationMethod",
+     "type": "ApplicationMethod",
+     "nullable": false
+    },
+    {
+     "name": "externalUrl",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "contactEmail",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "deadline",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "reviewerId",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "reviewedAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "rejectionReason",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg1yms1000008l5q2v9h1pr",
+     "title": "Junior Backend Engineer",
+     "description": "TypeScript, Node.js, PostgreSQL, REST APIs, Git, Docker",
+     "companyId": null,
+     "companyName": "bKash Limited",
+     "companyLogo": null,
+     "type": "FULL_TIME",
+     "posterId": "cmw54b766005cuar7sdkyfuq8",
+     "sourceType": "COMMUNITY_SHARED",
+     "status": "APPROVED",
+     "minCgpa": null,
+     "minAcademicYear": null,
+     "requiredSkills": "[]",
+     "targetDepartments": "[]",
+     "openToAllDepartments": "true",
+     "salaryOrStipend": "BDT 55,000 – 75,000",
+     "location": "Dhaka, Bangladesh",
+     "workplaceType": "HYBRID",
+     "applicationMethod": "EXTERNAL",
+     "externalUrl": "https://corporate.bkash.com/careers/junior-backend-engineer",
+     "contactEmail": "saj…@gmail.com",
+     "deadline": "2026-12-24 00:53:00",
+     "reviewerId": null,
+     "reviewedAt": null,
+     "rejectionReason": null,
+     "createdAt": "2026-11-14 00:56:39",
+     "updatedAt": "2026-11-14 00:56:39"
+    },
+    {
+     "id": "cmwg0zrj100059nr7jjbxrtgg",
+     "title": "Junior Product Design Associate 1794637771518",
+     "description": "Work on design systems, user journeys, wireframes, and cust…",
+     "companyId": null,
+     "companyName": "Global FinTech Hub",
+     "companyLogo": null,
+     "type": "FULL_TIME",
+     "posterId": "cmwg0zrat00019nr7o5cok95t",
+     "sourceType": "COMMUNITY_SHARED",
+     "status": "APPROVED",
+     "minCgpa": null,
+     "minAcademicYear": null,
+     "requiredSkills": "[\"Figma\",\"Design Systems\",\"Prototyping\"]",
+     "targetDepartments": "[]",
+     "openToAllDepartments": "true",
+     "salaryOrStipend": "BDT 45,000 / month",
+     "location": "Remote",
+     "workplaceType": "REMOTE",
+     "applicationMethod": "EXTERNAL",
+     "externalUrl": "https://fintechhub.com/apply",
+     "contactEmail": null,
+     "deadline": "2027-01-13 00:29:32",
+     "reviewerId": null,
+     "reviewedAt": null,
+     "rejectionReason": null,
+     "createdAt": "2026-11-14 00:29:32",
+     "updatedAt": "2026-11-14 00:29:32"
+    },
+    {
+     "id": "cmwg0zrgv00049nr7ew5ylk96",
+     "title": "Cloud Infrastructure Systems Intern 1794637771518",
+     "description": "Develop cloud monitoring microservices and automated deploy…",
+     "companyId": "cmwg0zrdi00029nr7ejm2or93",
+     "companyName": "TechCorp Solutions 1794637771518",
+     "companyLogo": null,
+     "type": "INTERNSHIP",
+     "posterId": "cmwg0zrat00019nr7o5cok95t",
+     "sourceType": "OFFICIAL_EMPLOYER",
+     "status": "APPROVED",
+     "minCgpa": "3.2",
+     "minAcademicYear": null,
+     "requiredSkills": "[\"Terraform\",\"Go\",\"Docker\",\"AWS\"]",
+     "targetDepartments": "[\"Computer Science & Engineering\",\"Software Engineering\"]",
+     "openToAllDepartments": "false",
+     "salaryOrStipend": "BDT 30,000 / month",
+     "location": "Dhaka",
+     "workplaceType": "HYBRID",
+     "applicationMethod": "INTERNAL",
+     "externalUrl": null,
+     "contactEmail": null,
+     "deadline": "2027-01-13 00:29:32",
+     "reviewerId": null,
+     "reviewedAt": null,
+     "rejectionReason": null,
+     "createdAt": "2026-11-14 00:29:32",
+     "updatedAt": "2026-11-14 00:29:32"
+    },
+    {
+     "id": "cmwg0zlxk000b9ar7ifu6g5sx",
+     "title": "Community Shared Lead 1794637763665",
+     "description": "Shared by alumni peer for general community referral.",
+     "companyId": null,
+     "companyName": "Third Party Labs",
+     "companyLogo": null,
+     "type": "FULL_TIME",
+     "posterId": "cmwg0zlhp00049ar70x8khk60",
+     "sourceType": "COMMUNITY_SHARED",
+     "status": "APPROVED",
+     "minCgpa": null,
+     "minAcademicYear": null,
+     "requiredSkills": "[]",
+     "targetDepartments": "[]",
+     "openToAllDepartments": "true",
+     "salaryOrStipend": null,
+     "location": "Dhaka",
+     "workplaceType": "ON_SITE",
+     "applicationMethod": "INTERNAL",
+     "externalUrl": null,
+     "contactEmail": null,
+     "deadline": "2026-11-28 00:29:24",
+     "reviewerId": null,
+     "reviewedAt": null,
+     "rejectionReason": null,
+     "createdAt": "2026-11-14 00:29:25",
+     "updatedAt": "2026-11-14 00:29:25"
+    },
+    {
+     "id": "cmwg0zlvx000a9ar7yivap2xy",
+     "title": "External Research Fellow 1794637763665",
+     "description": "Apply on corporate site for external fellowship.",
+     "companyId": "cmwg0zlkv00059ar7rc1ija63",
+     "companyName": "Tech Innovators Ltd 1794637763665",
+     "companyLogo": null,
+     "type": "CONTRACT",
+     "posterId": "cmwg0zlg000039ar7owy4biz3",
+     "sourceType": "OFFICIAL_EMPLOYER",
+     "status": "APPROVED",
+     "minCgpa": null,
+     "minAcademicYear": null,
+     "requiredSkills": "[]",
+     "targetDepartments": "[]",
+     "openToAllDepartments": "true",
+     "salaryOrStipend": null,
+     "location": "Remote",
+     "workplaceType": "ON_SITE",
+     "applicationMethod": "EXTERNAL",
+     "externalUrl": "https://careers.google.com/jobs/results/123",
+     "contactEmail": null,
+     "deadline": "2026-11-28 00:29:24",
+     "reviewerId": null,
+     "reviewedAt": null,
+     "rejectionReason": null,
+     "createdAt": "2026-11-14 00:29:25",
+     "updatedAt": "2026-11-14 00:29:25"
+    }
+   ]
+  },
+  "opportunity_bookmarks": {
+   "count": 50,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunityId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg0zss500079nr7cbp1gb8q",
+     "userId": "cmwg0zqy500009nr7w5q1t36a",
+     "opportunityId": "cmwg0zrj100059nr7jjbxrtgg",
+     "createdAt": "2026-11-14 00:29:33"
+    },
+    {
+     "id": "cmwfzso7o000744r77gnx9fms",
+     "userId": "cmwfzsk01000044r7oy7br5vi",
+     "opportunityId": "cmwfzsl3z000544r7dg79wsse",
+     "createdAt": "2026-11-13 23:56:01"
+    },
+    {
+     "id": "cmwfdlw0n0007wmr7s1qs7u6w",
+     "userId": "cmwfdlua40000wmr7az5a5y01",
+     "opportunityId": "cmwfdlusm0005wmr7jvrawyoi",
+     "createdAt": "2026-11-13 13:34:53"
+    },
+    {
+     "id": "cmwfd1onz0007b5r7e0mhvd3f",
+     "userId": "cmwfd1mtc0000b5r74rl11479",
+     "opportunityId": "cmwfd1nen0005b5r7omm0vc0b",
+     "createdAt": "2026-11-13 13:19:11"
+    },
+    {
+     "id": "cmwfbj10g0007zir7qa49dt2x",
+     "userId": "cmwfbizaw0000zir77k4l2zfz",
+     "opportunityId": "cmwfbizsu0005zir7zwy6l8x1",
+     "createdAt": "2026-11-13 12:36:41"
+    }
+   ]
+  },
+  "opportunity_comments": {
+   "count": 1,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunity_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "author_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "content",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw98tf3a000207l5oc8qpo8u",
+     "opportunity_id": "cmw93f97s000573r7iuyghlv3",
+     "author_id": "cmw54b6zy0059uar7d57zug0h",
+     "content": "jj",
+     "created_at": "2026-11-09 06:34:09",
+     "updated_at": "2026-11-09 06:34:09"
+    }
+   ]
+  },
+  "post_bookmarks": {
+   "count": 1,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "post_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwd9b2zn000007l9fq9394wh",
+     "post_id": "cmw3bs8qz0017d6r7bh5r274y",
+     "user_id": "cmw54b766005cuar7sdkyfuq8",
+     "created_at": "2026-11-12 01:58:58"
+    }
+   ]
+  },
+  "post_reactions": {
+   "count": 25,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "post_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "type",
+     "type": "ReactionType",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3excg4000508jsulm18w57",
+     "post_id": "cmw3br66l00189gr7qwcvkmt1",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "type": "CELEBRATE",
+     "created_at": "2026-11-05 04:38:33"
+    },
+    {
+     "id": "cmw3exf95000608jsg3yiut72",
+     "post_id": "cmw3bs8si0018d6r74u97jksb",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "type": "CELEBRATE",
+     "created_at": "2026-11-05 04:38:37"
+    },
+    {
+     "id": "cmw3exgi8000708js89ev0i7c",
+     "post_id": "cmw3br6ea001c9gr78j69mrkq",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "type": "CELEBRATE",
+     "created_at": "2026-11-05 04:38:39"
+    },
+    {
+     "id": "cmw3i12d7000007kx2k3sgkrj",
+     "post_id": "cmw3bs8qz0017d6r7bh5r274y",
+     "user_id": "cmw3bo4p1000m3jr79ogndqat",
+     "type": "LIKE",
+     "created_at": "2026-11-05 06:05:26"
+    },
+    {
+     "id": "cmw3lmun4000208l0lf9uw6u0",
+     "post_id": "cmw3bs8qz0017d6r7bh5r274y",
+     "user_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "type": "LIKE",
+     "created_at": "2026-11-05 07:46:21"
+    }
+   ]
+  },
+  "posts": {
+   "count": 27,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "author_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "title",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "content",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "post_type",
+     "type": "PostType",
+     "nullable": false
+    },
+    {
+     "name": "visibility",
+     "type": "PostVisibility",
+     "nullable": false
+    },
+    {
+     "name": "status",
+     "type": "ModerationStatus",
+     "nullable": false
+    },
+    {
+     "name": "is_pinned",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "attached_opportunity_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "views_count",
+     "type": "int4",
+     "nullable": false
+    },
+    {
+     "name": "likes_count",
+     "type": "int4",
+     "nullable": false
+    },
+    {
+     "name": "comments_count",
+     "type": "int4",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3br68r00199gr751u9lxut",
+     "author_id": "cmw3bo4y7000p3jr756dqp21t",
+     "title": "How to Prepare for High-Scale Systems & Cloud Interviews",
+     "content": "Having interviewed over 50 campus candidates at Databricks …",
+     "post_type": "GENERAL_DISCUSSION",
+     "visibility": "PUBLIC",
+     "status": "ACTIVE",
+     "is_pinned": "false",
+     "attached_opportunity_id": null,
+     "views_count": "0",
+     "likes_count": "2",
+     "comments_count": "4",
+     "created_at": "2026-11-05 03:09:46",
+     "updated_at": "2026-11-05 08:15:04"
+    },
+    {
+     "id": "cmw3br6ea001c9gr78j69mrkq",
+     "author_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "Seeking Alumni Referral / Advice for bKash FinTech Junior R…",
+     "content": "Hello alumni! I am a 3rd year Software Engineering student …",
+     "post_type": "REFERRAL_REQUEST",
+     "visibility": "PUBLIC",
+     "status": "ACTIVE",
+     "is_pinned": "false",
+     "attached_opportunity_id": null,
+     "views_count": "0",
+     "likes_count": "1",
+     "comments_count": "2",
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-05 04:38:39"
+    },
+    {
+     "id": "cmw3bs8x5001bd6r7bgtjyr8m",
+     "author_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "Seeking Alumni Referral / Advice for bKash FinTech Junior R…",
+     "content": "Hello alumni! I am a 3rd year Software Engineering student …",
+     "post_type": "REFERRAL_REQUEST",
+     "visibility": "PUBLIC",
+     "status": "ACTIVE",
+     "is_pinned": "false",
+     "attached_opportunity_id": null,
+     "views_count": "0",
+     "likes_count": "14",
+     "comments_count": "2",
+     "created_at": "2026-11-05 03:10:37",
+     "updated_at": "2026-11-05 03:10:37"
+    },
+    {
+     "id": "cmw3br6g0001d9gr7rqgmegiu",
+     "author_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "BUY CHEAP CRYPTO & ESSAY WRITING SERVICES 100% PASS GUARANT…",
+     "content": "Contact me on telegram @cheat_exams for instant homework so…",
+     "post_type": "GENERAL_DISCUSSION",
+     "visibility": "PUBLIC",
+     "status": "ACTIVE",
+     "is_pinned": "false",
+     "attached_opportunity_id": null,
+     "views_count": "0",
+     "likes_count": "1",
+     "comments_count": "0",
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-05 04:00:27"
+    },
+    {
+     "id": "cmw3bs8yn001cd6r74fj3bccq",
+     "author_id": "cmw3bo4p1000m3jr79ogndqat",
+     "title": "BUY CHEAP CRYPTO & ESSAY WRITING SERVICES 100% PASS GUARANT…",
+     "content": "Contact me on telegram @cheat_exams for instant homework so…",
+     "post_type": "GENERAL_DISCUSSION",
+     "visibility": "PUBLIC",
+     "status": "REMOVED",
+     "is_pinned": "false",
+     "attached_opportunity_id": null,
+     "views_count": "0",
+     "likes_count": "0",
+     "comments_count": "1",
+     "created_at": "2026-11-05 03:10:37",
+     "updated_at": "2026-11-06 10:17:15"
+    }
+   ]
+  },
+  "profiles": {
+   "count": 188,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "headline",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "bio",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "department",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "studentId",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "academicYear",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "graduationYear",
+     "type": "int4",
+     "nullable": true
+    },
+    {
+     "name": "degree",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "company",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "designation",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "skills",
+     "type": "_text",
+     "nullable": true
+    },
+    {
+     "name": "interests",
+     "type": "_text",
+     "nullable": true
+    },
+    {
+     "name": "projects",
+     "type": "jsonb",
+     "nullable": true
+    },
+    {
+     "name": "experience",
+     "type": "jsonb",
+     "nullable": true
+    },
+    {
+     "name": "linkedinUrl",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "githubUrl",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "websiteUrl",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "phone",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "showEmail",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "isOnboarded",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "currentCgpa",
+     "type": "float8",
+     "nullable": true
+    },
+    {
+     "name": "is_cgpa_verified",
+     "type": "bool",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg0zl9h00019ar7oyd57gbf",
+     "userId": "cmwg0zl7q00009ar7jbmkpjxl",
+     "headline": "Software Engineering Undergraduate",
+     "bio": null,
+     "department": "Computer Science & Engineering",
+     "studentId": "STU••••••",
+     "academicYear": "4th Year",
+     "graduationYear": "2026",
+     "degree": null,
+     "company": null,
+     "designation": null,
+     "skills": "[\"TypeScript\",\"Next.js\",\"PostgreSQL\",\"Algorithms\"]",
+     "interests": "[]",
+     "projects": null,
+     "experience": null,
+     "linkedinUrl": null,
+     "githubUrl": null,
+     "websiteUrl": null,
+     "phone": null,
+     "showEmail": "false",
+     "isOnboarded": "false",
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24",
+     "currentCgpa": null,
+     "is_cgpa_verified": "false"
+    },
+    {
+     "id": "cmwg011et000008l6t3dbcv0j",
+     "userId": "BsrbCebNKXMnUYFkfRtsGXV5OSRTgvJ1",
+     "headline": null,
+     "bio": null,
+     "department": "Computer Science & Engineering",
+     "studentId": "B22••••••",
+     "academicYear": null,
+     "graduationYear": null,
+     "degree": "Degree in Computer Science & Engineering",
+     "company": null,
+     "designation": null,
+     "skills": "[]",
+     "interests": "[]",
+     "projects": null,
+     "experience": null,
+     "linkedinUrl": null,
+     "githubUrl": null,
+     "websiteUrl": null,
+     "phone": null,
+     "showEmail": "false",
+     "isOnboarded": "false",
+     "createdAt": "2026-11-14 00:02:32",
+     "updatedAt": "2026-11-14 00:32:54",
+     "currentCgpa": null,
+     "is_cgpa_verified": "false"
+    },
+    {
+     "id": "cmwfzrkhn0001qjr7npskp0ur",
+     "userId": "cmwfzrkg20000qjr7r8dwl1t8",
+     "headline": "Software Engineering Undergraduate",
+     "bio": null,
+     "department": "Computer Science & Engineering",
+     "studentId": "STU••••••",
+     "academicYear": "4th Year",
+     "graduationYear": "2026",
+     "degree": null,
+     "company": null,
+     "designation": null,
+     "skills": "[\"TypeScript\",\"Next.js\",\"PostgreSQL\",\"Algorithms\"]",
+     "interests": "[]",
+     "projects": null,
+     "experience": null,
+     "linkedinUrl": null,
+     "githubUrl": null,
+     "websiteUrl": null,
+     "phone": null,
+     "showEmail": "false",
+     "isOnboarded": "false",
+     "createdAt": "2026-11-13 23:55:10",
+     "updatedAt": "2026-11-13 23:55:10",
+     "currentCgpa": null,
+     "is_cgpa_verified": "false"
+    },
+    {
+     "id": "cmwfdl6cv0001urr7htsafiww",
+     "userId": "cmwfdl6b90000urr71qsazgiw",
+     "headline": "Software Engineering Undergraduate",
+     "bio": null,
+     "department": "Computer Science & Engineering",
+     "studentId": "STU••••••",
+     "academicYear": "4th Year",
+     "graduationYear": "2026",
+     "degree": null,
+     "company": null,
+     "designation": null,
+     "skills": "[\"TypeScript\",\"Next.js\",\"PostgreSQL\",\"Algorithms\"]",
+     "interests": "[]",
+     "projects": null,
+     "experience": null,
+     "linkedinUrl": null,
+     "githubUrl": null,
+     "websiteUrl": null,
+     "phone": null,
+     "showEmail": "false",
+     "isOnboarded": "false",
+     "createdAt": "2026-11-13 13:34:20",
+     "updatedAt": "2026-11-13 13:34:20",
+     "currentCgpa": null,
+     "is_cgpa_verified": "false"
+    },
+    {
+     "id": "cmwfd1tt80001ckr7qkizv53u",
+     "userId": "cmwfd1tqo0000ckr78ksvo8jp",
+     "headline": "Software Engineering Undergraduate",
+     "bio": null,
+     "department": "Computer Science & Engineering",
+     "studentId": "STU••••••",
+     "academicYear": "4th Year",
+     "graduationYear": "2026",
+     "degree": null,
+     "company": null,
+     "designation": null,
+     "skills": "[\"TypeScript\",\"Next.js\",\"PostgreSQL\",\"Algorithms\"]",
+     "interests": "[]",
+     "projects": null,
+     "experience": null,
+     "linkedinUrl": null,
+     "githubUrl": null,
+     "websiteUrl": null,
+     "phone": null,
+     "showEmail": "false",
+     "isOnboarded": "false",
+     "createdAt": "2026-11-13 13:19:17",
+     "updatedAt": "2026-11-13 13:19:17",
+     "currentCgpa": null,
+     "is_cgpa_verified": "false"
+    }
+   ]
+  },
+  "referral_requests": {
+   "count": 5,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "requester_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "recipient_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "company_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "company_name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "role_title",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "opportunity_id",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "message",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "resume_url",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "status",
+     "type": "ReferralStatus",
+     "nullable": false
+    },
+    {
+     "name": "response_note",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "responded_at",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw3br6wp001t9gr71z3z5yhx",
+     "requester_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "recipient_id": "cmw3bo4y7000p3jr756dqp21t",
+     "company_id": "cmw3bo5q600133jr78f73fim1",
+     "company_name": "Databricks",
+     "role_title": "Cloud Infrastructure Engineer",
+     "opportunity_id": null,
+     "message": "Hi Tariqul vai, I saw your post regarding distributed syste…",
+     "resume_url": "https://farhan-ahmed.dev/resume.pdf",
+     "status": "ACCEPTED",
+     "response_note": "Reviewed Farhan's portfolio and GitHub repository. Exceptio…",
+     "responded_at": "2026-11-05 03:09:47",
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-05 03:09:47"
+    },
+    {
+     "id": "cmw3br6yf001u9gr7st3c85jc",
+     "requester_id": "cmw3bo4p1000m3jr79ogndqat",
+     "recipient_id": "cmw3bo551000s3jr7amz6hxy9",
+     "company_id": "cmw32xq88000kz4r7tpgtvkba",
+     "company_name": "bKash Limited",
+     "role_title": "Junior FinTech Backend Engineer",
+     "opportunity_id": null,
+     "message": "Dear Sabrina apu, as discussed on your community thread, I …",
+     "resume_url": "https://nusrat-jahan.dev/resume.pdf",
+     "status": "PENDING",
+     "response_note": null,
+     "responded_at": null,
+     "created_at": "2026-11-05 03:09:47",
+     "updated_at": "2026-11-05 03:09:47"
+    },
+    {
+     "id": "cmw3bs9cd001sd6r7749kt2bv",
+     "requester_id": "cmw3bo4ip000j3jr7a4gq18s0",
+     "recipient_id": "cmw3bo4y7000p3jr756dqp21t",
+     "company_id": "cmw3bo5q600133jr78f73fim1",
+     "company_name": "Databricks",
+     "role_title": "Cloud Infrastructure Engineer",
+     "opportunity_id": null,
+     "message": "Hi Tariqul vai, I saw your post regarding distributed syste…",
+     "resume_url": "https://farhan-ahmed.dev/resume.pdf",
+     "status": "ACCEPTED",
+     "response_note": "Reviewed Farhan's portfolio and GitHub repository. Exceptio…",
+     "responded_at": "2026-11-05 03:10:37",
+     "created_at": "2026-11-05 03:10:37",
+     "updated_at": "2026-11-05 03:10:37"
+    },
+    {
+     "id": "cmw3bs9dv001td6r7h04qzqfl",
+     "requester_id": "cmw3bo4p1000m3jr79ogndqat",
+     "recipient_id": "cmw3bo551000s3jr7amz6hxy9",
+     "company_id": "cmw32xq88000kz4r7tpgtvkba",
+     "company_name": "bKash Limited",
+     "role_title": "Junior FinTech Backend Engineer",
+     "opportunity_id": null,
+     "message": "Dear Sabrina apu, as discussed on your community thread, I …",
+     "resume_url": "https://nusrat-jahan.dev/resume.pdf",
+     "status": "PENDING",
+     "response_note": null,
+     "responded_at": null,
+     "created_at": "2026-11-05 03:10:37",
+     "updated_at": "2026-11-05 03:10:37"
+    },
+    {
+     "id": "cmw3l71jv000707i9bmcs80f5",
+     "requester_id": "cmw3bo4p1000m3jr79ogndqat",
+     "recipient_id": "cmw349ny60004par7l2gdve37",
+     "company_id": null,
+     "company_name": "Pathao",
+     "role_title": "Software Engineer",
+     "opportunity_id": null,
+     "message": "Hi [Name], I saw that [Company] is hiring for a Software En…",
+     "resume_url": null,
+     "status": "CANCELLED",
+     "response_note": null,
+     "responded_at": null,
+     "created_at": "2026-11-05 07:34:03",
+     "updated_at": "2026-11-05 07:41:48"
+    }
+   ]
+  },
+  "resumes": {
+   "count": 51,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "user_id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "file_name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "file_size",
+     "type": "int4",
+     "nullable": false
+    },
+    {
+     "name": "mime_type",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "storage_key",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "is_default",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw349oh4000cpar7dqgnut9g",
+     "user_id": "cmw349no50000par7vgh9hbbn",
+     "file_name": "Candidate_CV_2026.pdf",
+     "file_size": "40",
+     "mime_type": "application/pdf",
+     "storage_key": "cmw349no50000par7vgh9hbbn-1793857213412-5a2f2d85c974621bf62…",
+     "is_default": "true",
+     "created_at": "2026-11-04 23:40:13",
+     "updated_at": "2026-11-04 23:40:13"
+    },
+    {
+     "id": "cmw34a3mh000cqor7hfl8juws",
+     "user_id": "cmw34a2vn0000qor7w2wyw5s4",
+     "file_name": "Candidate_CV_2026.pdf",
+     "file_size": "40",
+     "mime_type": "application/pdf",
+     "storage_key": "cmw34a2vn0000qor7w2wyw5s4-1793857233058-697df9c875c66d83cb2…",
+     "is_default": "true",
+     "created_at": "2026-11-04 23:40:33",
+     "updated_at": "2026-11-04 23:40:33"
+    },
+    {
+     "id": "cmw34dv9w000c0nr78zyedu3n",
+     "user_id": "cmw34duhv00000nr702nxvgo1",
+     "file_name": "Candidate_CV_2026.pdf",
+     "file_size": "40",
+     "mime_type": "application/pdf",
+     "storage_key": "cmw34duhv00000nr702nxvgo1-1793857408860-384e4fe2166126f34c5…",
+     "is_default": "true",
+     "created_at": "2026-11-04 23:43:28",
+     "updated_at": "2026-11-04 23:43:28"
+    },
+    {
+     "id": "cmw357dq9000cybr750rnuq1h",
+     "user_id": "cmw357cyl0000ybr7zxhww1gw",
+     "file_name": "Candidate_CV_2026.pdf",
+     "file_size": "40",
+     "mime_type": "application/pdf",
+     "storage_key": "cmw357cyl0000ybr7zxhww1gw-1793858785800-b748adda8f1b1b21da5…",
+     "is_default": "true",
+     "created_at": "2026-11-05 00:06:25",
+     "updated_at": "2026-11-05 00:06:25"
+    },
+    {
+     "id": "cmw35aorx000c9br7wrf8zqsz",
+     "user_id": "cmw35anzz00009br79ndv5udh",
+     "file_name": "Candidate_CV_2026.pdf",
+     "file_size": "40",
+     "mime_type": "application/pdf",
+     "storage_key": "cmw35anzz00009br79ndv5udh-1793858940083-74ac2b95df51007ae00…",
+     "is_default": "true",
+     "created_at": "2026-11-05 00:09:00",
+     "updated_at": "2026-11-05 00:09:00"
+    }
+   ]
+  },
+  "sessions": {
+   "count": 53,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "expiresAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "token",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "ipAddress",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "userAgent",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "userId",
+     "type": "text",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "Qfw7jsg1Hs8qouNWFSlSCateDLiLLISr",
+     "expiresAt": "2026-11-15 01:02:20",
+     "token": "•••• hidden",
+     "createdAt": "2026-11-14 01:02:20",
+     "updatedAt": "2026-11-14 01:02:20",
+     "ipAddress": "103••••••",
+     "userAgent": "Moz••••••",
+     "userId": "cmw32x6lo000gx6r7cxbbtlrb"
+    },
+    {
+     "id": "5CcYtk17UJI8MbZaKew6JjRp3vyVENzv",
+     "expiresAt": "2026-11-15 00:50:03",
+     "token": "•••• hidden",
+     "createdAt": "2026-11-14 00:50:03",
+     "updatedAt": "2026-11-14 00:50:03",
+     "ipAddress": "103••••••",
+     "userAgent": "Moz••••••",
+     "userId": "cmw54b766005cuar7sdkyfuq8"
+    },
+    {
+     "id": "3WoqWK6qGdoX93OzYCURwu9wpsaDKAiW",
+     "expiresAt": "2026-11-14 13:12:11",
+     "token": "•••• hidden",
+     "createdAt": "2026-11-13 13:12:11",
+     "updatedAt": "2026-11-13 13:12:11",
+     "ipAddress": "103••••••",
+     "userAgent": "Moz••••••",
+     "userId": "cmw54b766005cuar7sdkyfuq8"
+    },
+    {
+     "id": "HSTAARON4tXqSDg7P1GzI7wSxEKX851j",
+     "expiresAt": "2026-11-13 01:54:06",
+     "token": "•••• hidden",
+     "createdAt": "2026-11-12 01:54:06",
+     "updatedAt": "2026-11-12 01:54:06",
+     "ipAddress": "103••••••",
+     "userAgent": "Moz••••••",
+     "userId": "cmw54b766005cuar7sdkyfuq8"
+    },
+    {
+     "id": "KfzDj97y3hc9Z9JYMGIGHKpukxAw4lXz",
+     "expiresAt": "2026-11-11 08:04:46",
+     "token": "•••• hidden",
+     "createdAt": "2026-11-10 08:04:46",
+     "updatedAt": "2026-11-10 08:04:46",
+     "ipAddress": "000••••••",
+     "userAgent": "Moz••••••",
+     "userId": "cmw54b6zy0059uar7d57zug0h"
+    }
+   ]
+  },
+  "skills": {
+   "count": 92,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "category",
+     "type": "SkillCategory",
+     "nullable": false
+    },
+    {
+     "name": "description",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "created_at",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updated_at",
+     "type": "timestamp",
+     "nullable": false
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmw370aci0003ctr7pkhu51wb",
+     "name": "React_1793861812960",
+     "category": "FRAMEWORK",
+     "description": null,
+     "created_at": "2026-11-05 00:56:54",
+     "updated_at": "2026-11-05 00:56:54"
+    },
+    {
+     "id": "cmw370bhf0007ctr7bx28k77c",
+     "name": "PostgreSQL_1793861812960",
+     "category": "DATABASE",
+     "description": null,
+     "created_at": "2026-11-05 00:56:55",
+     "updated_at": "2026-11-05 00:56:55"
+    },
+    {
+     "id": "cmw371dzg0003f3r7q5z15wu2",
+     "name": "React_1793861864341",
+     "category": "FRAMEWORK",
+     "description": null,
+     "created_at": "2026-11-05 00:57:45",
+     "updated_at": "2026-11-05 00:57:45"
+    },
+    {
+     "id": "cmw371f390007f3r7tw5fzgu1",
+     "name": "PostgreSQL_1793861864341",
+     "category": "DATABASE",
+     "description": null,
+     "created_at": "2026-11-05 00:57:46",
+     "updated_at": "2026-11-05 00:57:46"
+    },
+    {
+     "id": "cmw3720700003hhr7ro0pi4p7",
+     "name": "React_1793861893168",
+     "category": "FRAMEWORK",
+     "description": null,
+     "created_at": "2026-11-05 00:58:14",
+     "updated_at": "2026-11-05 00:58:14"
+    }
+   ]
+  },
+  "users": {
+   "count": 292,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "name",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "email",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "emailVerified",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "image",
+     "type": "text",
+     "nullable": true
+    },
+    {
+     "name": "membershipType",
+     "type": "MembershipType",
+     "nullable": false
+    },
+    {
+     "name": "systemRole",
+     "type": "SystemRole",
+     "nullable": false
+    },
+    {
+     "name": "accountStatus",
+     "type": "AccountStatus",
+     "nullable": false
+    },
+    {
+     "name": "verificationStatus",
+     "type": "VerificationStatus",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "canPostOpportunities",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "canReviewApplicants",
+     "type": "bool",
+     "nullable": false
+    },
+    {
+     "name": "verifiedAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "verifiedBy",
+     "type": "text",
+     "nullable": true
+    }
+   ],
+   "rows": [
+    {
+     "id": "cmwg0zrat00019nr7o5cok95t",
+     "name": "Stage 7 Recruiter 1794637771518",
+     "email": "rec…@company.com",
+     "emailVerified": "true",
+     "image": null,
+     "membershipType": "ALUMNI",
+     "systemRole": "MEMBER",
+     "accountStatus": "ACTIVE",
+     "verificationStatus": "VERIFIED",
+     "createdAt": "2026-11-14 00:29:32",
+     "updatedAt": "2026-11-14 00:29:32",
+     "canPostOpportunities": "true",
+     "canReviewApplicants": "false",
+     "verifiedAt": null,
+     "verifiedBy": null
+    },
+    {
+     "id": "cmwg0zqy500009nr7w5q1t36a",
+     "name": "Stage 7 Student 1794637771518",
+     "email": "stu…@university.edu",
+     "emailVerified": "true",
+     "image": null,
+     "membershipType": "STUDENT",
+     "systemRole": "MEMBER",
+     "accountStatus": "ACTIVE",
+     "verificationStatus": "VERIFIED",
+     "createdAt": "2026-11-14 00:29:31",
+     "updatedAt": "2026-11-14 00:29:31",
+     "canPostOpportunities": "false",
+     "canReviewApplicants": "false",
+     "verifiedAt": null,
+     "verifiedBy": null
+    },
+    {
+     "id": "cmwg0zlhp00049ar70x8khk60",
+     "name": "Alumni Lead 1794637763665",
+     "email": "alu…@university.edu",
+     "emailVerified": "true",
+     "image": null,
+     "membershipType": "ALUMNI",
+     "systemRole": "MEMBER",
+     "accountStatus": "ACTIVE",
+     "verificationStatus": "VERIFIED",
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24",
+     "canPostOpportunities": "true",
+     "canReviewApplicants": "false",
+     "verifiedAt": null,
+     "verifiedBy": null
+    },
+    {
+     "id": "cmwg0zlg000039ar7owy4biz3",
+     "name": "Talent Lead 1794637763665",
+     "email": "tal…@techpartner.com",
+     "emailVerified": "true",
+     "image": null,
+     "membershipType": "ADMIN",
+     "systemRole": "ADMIN",
+     "accountStatus": "ACTIVE",
+     "verificationStatus": "VERIFIED",
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24",
+     "canPostOpportunities": "true",
+     "canReviewApplicants": "true",
+     "verifiedAt": null,
+     "verifiedBy": null
+    },
+    {
+     "id": "cmwg0zlec00029ar7raejtehx",
+     "name": "Other Student 1794637763665",
+     "email": "oth…@university.edu",
+     "emailVerified": "true",
+     "image": null,
+     "membershipType": "STUDENT",
+     "systemRole": "MEMBER",
+     "accountStatus": "ACTIVE",
+     "verificationStatus": "VERIFIED",
+     "createdAt": "2026-11-14 00:29:24",
+     "updatedAt": "2026-11-14 00:29:24",
+     "canPostOpportunities": "false",
+     "canReviewApplicants": "false",
+     "verifiedAt": null,
+     "verifiedBy": null
+    }
+   ]
+  },
+  "verifications": {
+   "count": 7,
+   "columns": [
+    {
+     "name": "id",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "identifier",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "value",
+     "type": "text",
+     "nullable": false
+    },
+    {
+     "name": "expiresAt",
+     "type": "timestamp",
+     "nullable": false
+    },
+    {
+     "name": "createdAt",
+     "type": "timestamp",
+     "nullable": true
+    },
+    {
+     "name": "updatedAt",
+     "type": "timestamp",
+     "nullable": true
+    }
+   ],
+   "rows": [
+    {
+     "id": "ver…@university.edu",
+     "identifier": "uni…@university.edu",
+     "value": "•••• hidden",
+     "expiresAt": "2026-11-15 00:29:50",
+     "createdAt": "2026-11-14 00:29:49",
+     "updatedAt": "2026-11-14 00:29:50"
+    },
+    {
+     "id": "ver…@university.edu",
+     "identifier": "uni…@university.edu",
+     "value": "•••• hidden",
+     "expiresAt": "2026-11-15 00:28:06",
+     "createdAt": "2026-11-14 00:28:05",
+     "updatedAt": "2026-11-14 00:28:06"
+    },
+    {
+     "id": "ver…@cse.jnu.ac.bd",
+     "identifier": "b22…@cse.jnu.ac.bd",
+     "value": "•••• hidden",
+     "expiresAt": "2026-11-15 00:02:30",
+     "createdAt": "2026-11-14 00:02:30",
+     "updatedAt": "2026-11-14 00:02:30"
+    },
+    {
+     "id": "ver…@university.edu",
+     "identifier": "uni…@university.edu",
+     "value": "•••• hidden",
+     "expiresAt": "2026-11-14 23:55:50",
+     "createdAt": "2026-11-13 23:55:49",
+     "updatedAt": "2026-11-13 23:55:50"
+    },
+    {
+     "id": "ver…@gmail.com",
+     "identifier": "soo…@gmail.com",
+     "value": "•••• hidden",
+     "expiresAt": "2026-11-14 23:51:38",
+     "createdAt": "2026-11-13 23:51:38",
+     "updatedAt": "2026-11-13 23:51:38"
+    }
+   ]
+  }
+ }
+}
