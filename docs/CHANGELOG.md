@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Strict Verification Lifecycle: Email Confirm -> Admin Approval -> Approval Email & Login Gate] - 2026-11-14
+
+### Added
+- **Official Membership Approval Email Dispatch (`lib/email.ts`)**:
+  - Implemented `sendMembershipApprovedEmail` with a high-trust, responsive HTML template notifying the user that their university membership has been approved by the platform administration and providing their direct sign-in link.
+  - Implemented `sendMembershipRejectedEmail` notifying applicants if their request was rejected, including specific administrator feedback.
+  - Linked email dispatches to `reviewVerificationRequest` in `lib/services/verification.ts`.
+- **Pre-Approval Login Security Gate (`app/(auth)/login/page.tsx`, `app/(dashboard)/layout.tsx`)**:
+  - Enforced that non-admin accounts with `verificationStatus !== "VERIFIED"` are strictly blocked from logging in.
+  - Added dedicated "Awaiting Administrator Approval" alert in the login interface explaining that the application is under administrator review and that sign-in will unlock upon receiving the approval email.
+  - Server-side redirect in `app/(dashboard)/layout.tsx` guarantees that unapproved sessions cannot access protected pages (`/feed`, `/profile`, `/opportunities`).
+- **Updated Email Verification Screen (`app/(auth)/verify-email/page.tsx`)**:
+  - Removed direct "Proceed to Community Feed" button from unapproved state.
+  - Communicates clearly that the verification request has been queued for administrator review and that the user will receive an approval email before they can sign in.
+- **Better Auth Auto-Sign-In Decoupling (`lib/auth.ts`)**:
+  - Set `autoSignInAfterVerification: false` so clicking the verification link confirms the email and enqueues the request without automatically opening an unauthorized session.
+
+### Changed
+- **Unit & Security Tests (`tests/unit/membership-and-profiles.test.ts`)**:
+  - Added test assertions verifying `sendMembershipApprovedEmail` and `sendMembershipRejectedEmail` are dispatched and stored in `devEmailStore`.
+  - Verified 100% test pass rate across all suites.
+
 ## [Database 3NF Optimization & Redundant Table Removal] - 2026-11-09
 
 ### Removed

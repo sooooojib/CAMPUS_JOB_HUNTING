@@ -102,7 +102,7 @@ export const auth = betterAuth({
         token,
       });
     },
-    autoSignInAfterVerification: true,
+    autoSignInAfterVerification: false, // Strict: Do not auto sign-in upon email click; applicant must await admin approval email
     afterEmailVerification: async (user: any) => {
       try {
         if (!user?.id) return;

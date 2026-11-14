@@ -35,7 +35,9 @@ The platform operates on a single unified account model supporting three active 
 ### 3.1 Authentication & Session Integrity
 - **Public Routes**: Only `/`, `/login`, `/register`, `/forgot-password`, `/reset-password`, and `/verify-email` are publicly accessible.
 - **Registration**: Captures Full Name, Institutional Email, University ID / Student ID, and Department dropdown selection. Both University ID and Department are locked to prevent tampering.
-- **Email Verification**: Mandatory verification-first security gate. Users cannot sign in until clicking the cryptographic link sent to their university inbox via Gmail SMTP.
+- **Email Verification**: Mandatory verification-first security gate. Users receive a cryptographic link in their inbox. Clicking the link verifies their email and submits their profile to the Administrator Approval Queue.
+- **Strict Pre-Approval Login Gate**: Unapproved accounts cannot sign in. Users must be approved by the administrator before being granted platform access.
+- **Admin Approval Notification**: Upon admin approval, the user receives an official approval email granting access to sign in.
 - **Return Path Retention**: `callbackUrl` query parameter preserves the user's intended route across login and verification.
 - **Password Strength**: Minimum 8 characters with at least one uppercase letter, one number, and one special character.
 - **Session Security**: HttpOnly, SameSite cookies with rolling updates and CSRF defense.
@@ -45,8 +47,9 @@ The platform operates on a single unified account model supporting three active 
   - **Student Dossier**: Pre-populated and locked Student ID & Department, academic standing (e.g. 3rd Year / Junior), degree, graduation year, and registrar enrollment proof.
   - **Alumni Dossier**: Pre-populated and locked Department, graduation year, degree, current company, designation, and alumni proof (thesis topic, batch number, or advisor).
 - **Admin Verification Queue (`/admin`)**:
-  - Submissions are queued in `membership_requests` with status `PENDING`.
+  - Verification requests enter `membership_requests` with status `PENDING` only after email verification is confirmed.
   - Administrators inspect claims, review submitted evidence, and approve or reject with specific feedback.
+  - Upon approval, the system immediately dispatches an official approval email to the member's university inbox and unlocks login access.
   - Verified members receive verified badges and full platform privileges.
 
 ### 3.3 Opportunities & Job Engine

@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
         name: true,
         emailVerified: true,
         verificationStatus: true,
+        systemRole: true,
       },
     });
 
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
         name: user.name,
         emailVerified: user.emailVerified,
         verificationStatus: user.verificationStatus,
+        systemRole: user.systemRole,
       },
     });
   } catch (error: any) {

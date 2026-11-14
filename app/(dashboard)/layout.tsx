@@ -47,6 +47,12 @@ export default async function DashboardLayout({
     redirect("/login?error=account_suspended");
   }
 
+  // Institutional verification security gate:
+  // Non-admin members must be officially approved (VERIFIED) by the campus administrator before logging in.
+  if (dbUser.systemRole !== "ADMIN" && dbUser.verificationStatus !== "VERIFIED") {
+    redirect("/login?error=pending_admin_approval&signout=true");
+  }
+
   return (
     <AuthenticatedShell
       user={{

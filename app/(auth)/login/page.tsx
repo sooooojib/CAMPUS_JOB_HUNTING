@@ -4,7 +4,7 @@ import * as React from "react";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Mail, Loader2, AlertCircle, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Lock, Mail, Loader2, AlertCircle, Eye, EyeOff, ArrowRight, Clock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 function LoginForm() {
@@ -19,6 +19,7 @@ function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUnverified, setIsUnverified] = useState(false);
+  const [isPendingApproval, setIsPendingApproval] = useState(urlError === "pending_admin_approval");
   const [errorMessage, setErrorMessage] = useState<string | null>(
     urlError === "account_suspended"
       ? "Your account has been suspended by campus administration. Please contact registrar support."
@@ -29,6 +30,7 @@ function LoginForm() {
     e.preventDefault();
     setErrorMessage(null);
     setIsUnverified(false);
+    setIsPendingApproval(false);
 
     if (!email.trim() || !password) {
       setErrorMessage("Please enter both your university email and password.");
@@ -65,6 +67,30 @@ function LoginForm() {
         return;
       }
 
+      // Check user institutional verification status
+      try {
+        const statusRes = await fetch(`/api/auth/verification-status?email=${encodeURIComponent(email.trim().toLowerCase())}`);
+        if (statusRes.ok) {
+          const statusData = await statusRes.json();
+          const user = statusData.user;
+
+          // Non-admin accounts must be officially approved (VERIFIED) by campus administration before accessing the platform
+          if (user && user.systemRole !== "ADMIN" && user.verificationStatus !== "VERIFIED") {
+            // Terminate session immediately
+            await fetch("/api/auth/logout", { method: "POST" });
+            if (user.verificationStatus === "REJECTED") {
+              setErrorMessage("Your institutional verification request was not approved by campus administration. Please contact registrar support.");
+            } else {
+              setIsPendingApproval(true);
+            }
+            setIsLoading(false);
+            return;
+          }
+        }
+      } catch (checkErr) {
+        console.warn("[Login Status Check Warning]:", checkErr);
+      }
+
       // Successful sign in -> hard redirect to callbackUrl to load fresh session state
       window.location.href = callbackUrl;
     } catch (err: any) {
@@ -88,8 +114,25 @@ function LoginForm() {
         </p>
       </div>
 
-      {/* Verification required alert */}
-      {isUnverified ? (
+      {/* Awaiting Administrator Approval Alert */}
+      {isPendingApproval ? (
+        <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-blue-500/30 bg-blue-500/10 p-3.5 text-xs text-blue-900 dark:text-blue-100 animate-in fade-in-50">
+          <div className="flex items-start gap-2.5">
+            <Clock className="size-4 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
+            <div className="space-y-1">
+              <div className="font-bold text-sm text-blue-950 dark:text-blue-50">
+                Awaiting Administrator Approval
+              </div>
+              <p className="leading-relaxed text-blue-800 dark:text-blue-200">
+                Your email is confirmed and your application has been submitted to the University Administrator.
+              </p>
+              <p className="leading-relaxed text-blue-800 dark:text-blue-200">
+                You will receive an official approval email once an administrator approves your account. Sign-in is restricted until approval.
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : isUnverified ? (
         <div className="mb-4 flex flex-col gap-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-800 dark:text-amber-200 animate-in fade-in-50">
           <div className="flex items-start gap-2">
             <AlertCircle className="size-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />

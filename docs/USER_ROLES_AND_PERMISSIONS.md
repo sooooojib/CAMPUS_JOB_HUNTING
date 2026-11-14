@@ -53,10 +53,10 @@ UniCareer Community operates on a **Single Unified Account Architecture**. Rathe
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Browse Landing Page (`/`)** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Register & Request Password Reset** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Sign In with Credentials** | ❌ | ❌ (Email Link Required) | ✅ | ✅ | ✅ | ✅ |
-| **Access Member Shell & Feed** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
-| **Submit Academic Verification (/onboarding)** | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ (Not applicable) |
-| **View Other Member Profiles (/profile/[id])** | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| **Sign In with Credentials** | ❌ | ❌ (Email Link Required) | ❌ (Admin Approval Required) | ✅ | ✅ | ✅ |
+| **Access Member Shell & Feed** | ❌ | ❌ | ❌ (Awaiting Approval) | ✅ | ✅ | ✅ |
+| **Submit Academic Verification (/onboarding)** | ❌ | ❌ | ❌ (Auto-submitted via mail click) | ✅ | ✅ | ❌ (Not applicable) |
+| **View Other Member Profiles (/profile/[id])** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | **View Private Student IDs & Phone Numbers** | ❌ | ❌ | ❌ | ❌ (Own only) | ❌ (Own only) | ✅ (Audit view) |
 | **Browse & Search Opportunities Catalog** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | **Submit Job / Internship Applications** | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ (Testing) |

@@ -5,6 +5,7 @@ import {
   SubmitVerificationRequestInput,
 } from "@/lib/validations/verification";
 import { createNotification } from "./notification";
+import { sendMembershipApprovedEmail, sendMembershipRejectedEmail } from "@/lib/email";
 
 /**
  * Submits an institutional verification request for an authenticated member.
@@ -220,6 +221,15 @@ export async function reviewVerificationRequest(
       actionUrl: "/profile/me",
     }).catch(() => {});
 
+    // Dispatch official email notification to user's university inbox
+    sendMembershipApprovedEmail({
+      to: request.user.email,
+      name: request.user.name,
+      membershipType: request.membershipType,
+    }).catch((emailErr) => {
+      console.error("[Email Error] Failed delivering membership approval email:", emailErr);
+    });
+
     return {
       request: updatedRequest,
       user: updatedUser,
@@ -259,6 +269,15 @@ export async function reviewVerificationRequest(
       relatedEntityId: request.id,
       actionUrl: "/onboarding",
     }).catch(() => {});
+
+    // Dispatch rejection update email to user with administrator feedback
+    sendMembershipRejectedEmail({
+      to: request.user.email,
+      name: request.user.name,
+      reason: input.rejectionReason.trim(),
+    }).catch((emailErr) => {
+      console.error("[Email Error] Failed delivering membership rejection email:", emailErr);
+    });
 
     return {
       request: updatedRequest,

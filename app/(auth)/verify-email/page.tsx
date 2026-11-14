@@ -139,24 +139,23 @@ function VerifyEmailContent() {
           Email Verified Successfully
         </h2>
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-          Your email address has been confirmed and your profile has been submitted to the University Administrator for verification approval. You can sign in to view your account status.
+          Your university email address has been confirmed and your verification request has been submitted to the University Administrator for review.
         </p>
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 p-3.5 text-xs text-foreground text-left space-y-1">
+          <div className="font-semibold text-primary">What happens next:</div>
+          <p className="text-muted-foreground leading-relaxed">
+            The administrator will review your institutional credentials. You will receive an official approval email as soon as your account is approved, at which point you will be able to log in.
+          </p>
+        </div>
 
         <div className="pt-2 space-y-2.5">
           <Link
             href="/login"
             className="w-full h-11 sm:h-12 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Sign In to Your Account</span>
+            <span>Return to Sign In</span>
             <ArrowRight className="size-4" />
           </Link>
-          
-          <button
-            onClick={() => router.push("/feed")}
-            className="w-full h-10 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-foreground transition-all flex items-center justify-center cursor-pointer"
-          >
-            <span>Proceed to Community Feed</span>
-          </button>
         </div>
       </div>
     );

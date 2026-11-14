@@ -390,6 +390,195 @@ export async function sendPasswordResetEmail({
   return { success: true };
 }
 
+export interface SendMembershipApprovedEmailParams {
+  to: string;
+  name: string;
+  membershipType: string;
+  loginUrl?: string;
+}
+
+/**
+ * Dispatches an official email notification when an administrator approves a membership request.
+ */
+export async function sendMembershipApprovedEmail({
+  to,
+  name,
+  membershipType,
+  loginUrl,
+}: SendMembershipApprovedEmailParams): Promise<{ success: boolean; devUrl?: string; error?: string }> {
+  const isTest = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const finalLoginUrl = loginUrl || `${baseUrl}/login`;
+
+  devEmailStore.record({
+    id: `approved_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    to,
+    subject: "Your UniCareer Community Account has been Approved!",
+    type: "NOTIFICATION",
+    content: `Your ${membershipType} membership verification has been approved by the platform administrator. You can now log in.`,
+    url: finalLoginUrl,
+    sentAt: new Date(),
+  });
+
+  if (isTest) {
+    return { success: true, devUrl: finalLoginUrl };
+  }
+
+  const transporter = getSmtpTransporter();
+  const htmlContent = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
+      <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+        <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
+      </div>
+      <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <h2 style="color: #065f46; font-size: 18px; font-weight: 700; margin: 0 0 6px;">Membership Verified &amp; Approved</h2>
+        <p style="color: #047857; font-size: 14px; margin: 0;">
+          Congratulations! Your university credentials have been approved by the platform administrator.
+        </p>
+      </div>
+      <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+        Hello <strong>${name}</strong>,<br/><br/>
+        An administrator has reviewed and officially approved your <strong>${membershipType}</strong> membership request. You can now sign in to access community discussions, browse career opportunities, and network with students and alumni.
+      </p>
+      <div style="margin: 28px 0; text-align: center;">
+        <a href="${finalLoginUrl}" style="background-color: #2563eb; color: #ffffff; padding: 13px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-block; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">
+          Sign In to Your Account
+        </a>
+      </div>
+      <p style="color: #64748b; font-size: 12px; line-height: 1.6; margin: 24px 0 0;">
+        Direct link: <a href="${finalLoginUrl}" style="color: #2563eb; word-break: break-all;">${finalLoginUrl}</a>
+      </p>
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
+      <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+        UniCareer Community — Trusted Career Network.
+      </p>
+    </div>
+  `;
+
+  if (transporter) {
+    try {
+      const user = process.env.SMTP_USER;
+      const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+      await transporter.sendMail({
+        from,
+        to,
+        subject: "Your UniCareer Community Account has been Approved!",
+        html: htmlContent,
+      });
+      return { success: true, devUrl: finalLoginUrl };
+    } catch (err: any) {
+      console.error("[SMTP Error] Failed delivering approval email:", err.message);
+    }
+  }
+
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM || "UniCareer <notifications@resend.dev>",
+          to,
+          subject: "Your UniCareer Community Account has been Approved!",
+          html: htmlContent,
+        }),
+      });
+      return { success: true, devUrl: finalLoginUrl };
+    } catch (resendErr: any) {
+      console.error("[Resend Error] Failed delivering approval email:", resendErr.message);
+    }
+  }
+
+  return { success: true, devUrl: finalLoginUrl };
+}
+
+export interface SendMembershipRejectedEmailParams {
+  to: string;
+  name: string;
+  reason?: string;
+  resubmitUrl?: string;
+}
+
+/**
+ * Dispatches an email notification when an administrator rejects a membership request with feedback.
+ */
+export async function sendMembershipRejectedEmail({
+  to,
+  name,
+  reason,
+  resubmitUrl,
+}: SendMembershipRejectedEmailParams): Promise<{ success: boolean; devUrl?: string; error?: string }> {
+  const isTest = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const finalResubmitUrl = resubmitUrl || `${baseUrl}/register`;
+
+  devEmailStore.record({
+    id: `rejected_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    to,
+    subject: "Update Regarding Your UniCareer Verification Request",
+    type: "NOTIFICATION",
+    content: `Your membership verification request was rejected: ${reason || "Information could not be verified"}.`,
+    url: finalResubmitUrl,
+    sentAt: new Date(),
+  });
+
+  if (isTest) {
+    return { success: true, devUrl: finalResubmitUrl };
+  }
+
+  const transporter = getSmtpTransporter();
+  const htmlContent = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; color: #0f172a;">
+      <div style="margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+        <h1 style="color: #1e3a8a; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">UniCareer<span style="color: #2563eb;">.</span></h1>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0; font-weight: 500;">Campus Career Community &amp; Opportunity Network</p>
+      </div>
+      <div style="background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <h2 style="color: #991b1b; font-size: 18px; font-weight: 700; margin: 0 0 6px;">Verification Request Update</h2>
+        <p style="color: #b91c1c; font-size: 14px; margin: 0;">
+          Your institutional verification request could not be approved at this time.
+        </p>
+      </div>
+      <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
+        Hello <strong>${name}</strong>,<br/><br/>
+        The university administrator reviewed your verification request and noted the following feedback:
+      </p>
+      <div style="background-color: #f8fafc; border-left: 4px solid #ef4444; padding: 12px 16px; margin-bottom: 24px; font-style: italic; color: #334155; font-size: 13px;">
+        "${reason || "Institutional ID or department credentials could not be validated against campus records."}"
+      </div>
+      <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+        If you believe this was an error, please verify your details or resubmit your institutional affiliation.
+      </p>
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 28px 0 16px;" />
+      <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+        UniCareer Community — Trusted Career Network.
+      </p>
+    </div>
+  `;
+
+  if (transporter) {
+    try {
+      const user = process.env.SMTP_USER;
+      const from = process.env.EMAIL_FROM || `"UniCareer Community" <${user}>`;
+      await transporter.sendMail({
+        from,
+        to,
+        subject: "Update Regarding Your UniCareer Verification Request",
+        html: htmlContent,
+      });
+      return { success: true, devUrl: finalResubmitUrl };
+    } catch (err: any) {
+      console.error("[SMTP Error] Failed delivering rejection email:", err.message);
+    }
+  }
+
+  return { success: true, devUrl: finalResubmitUrl };
+}
+
 export interface SendNotificationEmailParams {
   to: string;
   name?: string;

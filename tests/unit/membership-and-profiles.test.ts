@@ -19,6 +19,7 @@ import {
   getUserVerificationHistory,
   reviewVerificationRequest,
 } from "@/lib/services/verification";
+import { devEmailStore } from "@/lib/email";
 
 describe("Stage 5: Membership Verification & User Profiles Engine", () => {
   const timestamp = Date.now();
@@ -224,6 +225,11 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       expect(decision.user.verificationStatus).toBe("VERIFIED");
       expect(decision.user.verifiedBy).toBe(adminUser.id);
       expect(decision.user.canPostOpportunities).toBe(true);
+
+      // Verify approval email was dispatched to user
+      const approvalEmail = devEmailStore.getLatestFor(applicantUser.email);
+      expect(approvalEmail).toBeDefined();
+      expect(approvalEmail?.subject).toContain("Approved");
     });
 
     it("excludes users with unverified emails from admin pending verification queue", async () => {
@@ -279,6 +285,12 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       const studentAfterReject = await prisma.user.findUnique({ where: { id: student.id } });
       expect(studentAfterReject?.verificationStatus).toBe("REJECTED");
       expect(studentAfterReject?.canPostOpportunities).toBe(false);
+
+      // Verify rejection email was dispatched to user with administrator feedback
+      const rejectEmail = devEmailStore.getLatestFor(student.email);
+      expect(rejectEmail).toBeDefined();
+      expect(rejectEmail?.subject).toContain("Verification Request");
+      expect(rejectEmail?.content).toContain("Student ID could not be located");
 
       // Student resubmits corrected ID
       const req2 = await submitVerificationRequest(student.id, {
