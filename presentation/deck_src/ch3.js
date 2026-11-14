@@ -51,7 +51,7 @@ module.exports = function ch3(pres) {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
     header(s, "Use case diagram: ", "overview");
     U.boundary(pres, s, 2.4, 1.4, 8.05, 5.35, "UniCareer Community");
-    const A = ["Register Account", "Log In", "Submit Membership Proof", "Search & Filter Jobs", "Save Job", "Apply to Job", "Post Job", "Post in Feed", "Respond to Referral", "Request Referral"];
+    const A = ["Register Account", "Log In", "Update Credentials", "Search & Filter Jobs", "Save Job", "Apply to Job", "Post Job", "Post in Feed", "Respond to Referral", "Request Referral"];
     const ax = 2.65, aw = 2.3, ah = 0.4, ay = (i) => 1.85 + i * 0.48;
     const g = A.map((t, i) => U.uc(pres, s, ax, ay(i), aw, ah, t, { fontSize: 11 }));
     const member = U.actor(pres, s, 1.35, 2.15, "Member");
@@ -69,6 +69,9 @@ module.exports = function ch3(pres) {
     const ra = U.uc(pres, s, bx, ay(5) + 0.06, bw, ah, "Record Application", { fontSize: 11 });
     const rp = U.uc(pres, s, bx, ay(7), bw, ah, "Report Post", { fontSize: 11 });
     U.stereo(pres, s, g[0].r, g[0].cy, ve.l, ve.cy, "«include»", { dy: -0.02 });
+    const jq = U.uc(pres, s, bx, ay(1) + 0.25, bw, ah, "Join Approval Queue", { fontSize: 10 });
+    U.stereo(pres, s, ve.cx, ve.b, jq.cx, jq.t, "", {});
+    U.tx(s, "«include»", ve.cx + 0.06, ve.b + 0.02, 0.9, 0.2, { fontSize: 9, italic: true, color: U.GREY, align: "left" });
     U.stereo(pres, s, gr.l, gr.cy, g[4].r, g[4].cy, "«extend»", { dy: -0.02 });
     U.stereo(pres, s, g[5].r, g[5].cy, ra.l, ra.cy, "«include»", { dy: 0.0 });
     U.stereo(pres, s, rp.l, rp.cy, g[7].r, g[7].cy, "«extend»", { dy: -0.02 });
@@ -78,7 +81,7 @@ module.exports = function ch3(pres) {
     const c = C.map((t, i) => U.uc(pres, s, cx, 1.95 + i * 0.6, cw, 0.42, t, { fontSize: 11 }));
     const admin = U.actor(pres, s, 11.45, 2.9, "Admin");
     c.forEach((e) => U.ln(pres, s, admin.left - 0.02, admin.mid + 0.05, e.r, e.cy, { width: 1 }));
-    s.addNotes("Primary actors: Member (generalised into Student and Alumnus, placed below their parent) on the left, Admin on the right. Every member use case is inherited by both Student and Alumnus; Request Referral is Student-only and Respond to Referral is Alumnus-only. «include» = always happens as part of the base use case (registering always sends a verification email; applying always records the application). «extend» = optional extra behaviour (a reminder only if the job is saved and the deadline is near; a report only if a member flags a post). Secondary actors are shown on the detail slides.");
+    s.addNotes("Primary actors: Member (generalised into Student and Alumnus, placed below their parent) on the left, Admin on the right. Every member use case is inherited by both Student and Alumnus; Request Referral is Student-only and Respond to Referral is Alumnus-only. «include» = always happens as part of the base use case (registering always sends a verification email; verifying the email always joins the admin approval queue; applying always records the application). «extend» = optional extra behaviour (a reminder only if the job is saved and the deadline is near; a report only if a member flags a post). Secondary actors are shown on the detail slides.");
   }
 
   // ---------- 17: Use case detail - members ----------
@@ -104,6 +107,9 @@ module.exports = function ch3(pres) {
     const ra = U.uc(pres, s, bx, ay(3), bw, ah, "Record Application", { fontSize: 13 });
     const rp = U.uc(pres, s, bx, ay(4), bw, ah, "Report Post", { fontSize: 13 });
     U.stereo(pres, s, g[0].r, g[0].cy, ve.l, ve.cy, "«include»", { fontSize: 11 });
+    const jq = U.uc(pres, s, bx + 0.2, 2.64, bw - 0.4, 0.38, "Join Approval Queue", { fontSize: 12 });
+    U.stereo(pres, s, ve.cx, ve.b, jq.cx, jq.t, "", {});
+    U.tx(s, "«include»", ve.cx + 0.08, ve.b + 0.03, 1.0, 0.2, { fontSize: 10, italic: true, color: U.GREY, align: "left" });
     U.stereo(pres, s, gr.l, gr.cy, g[2].r, g[2].cy, "«extend»", { fontSize: 11 });
     U.stereo(pres, s, g[3].r, g[3].cy, ra.l, ra.cy, "«include»", { fontSize: 11 });
     U.stereo(pres, s, rp.l, rp.cy, g[4].r, g[4].cy, "«extend»", { fontSize: 11 });
@@ -113,7 +119,7 @@ module.exports = function ch3(pres) {
     U.ln(pres, s, mail.left, mail.mid + 0.05, ve.r, ve.cy, { width: 1 });
     U.ln(pres, s, sch.left, sch.mid + 0.05, gr.r, gr.cy, { width: 1 });
     strip(pres, s, ["Students and alumni are members", "«include» = always", "«extend» = only sometimes"]);
-    s.addNotes("Secondary actors (right): Email Service = Gmail SMTP via Nodemailer, sends the verification link; Scheduler = /api/cron/reminders, scans saved/applied jobs closing within 72 hours. Log In, Submit Membership Proof and Post Job are on the overview slide and work the same way (Member association).");
+    s.addNotes("Secondary actors (right): Email Service = Gmail SMTP via Nodemailer, sends the verification link; Scheduler = /api/cron/reminders, scans saved/applied jobs closing within 72 hours. Clicking the email link (Verify Email) always puts the member into the admin's approval queue (include: Join Approval Queue, via Better Auth's afterEmailVerification hook). Log In only works after the admin approves. Log In, Update Credentials (/onboarding, for verified members) and Post Job are on the overview slide and work the same way (Member association).");
   }
 
   // ---------- 18: Use case detail - admin ----------

@@ -4,6 +4,22 @@
 
 ---
 
+## Verification & Pre-Approval Gate Lifecycle Tests (2026-11-14)
+
+- **Date**: 2026-11-14
+- **Environment**: macOS / Node.js v22.21.1 / Next.js 16.4.3 / Neon PostgreSQL 16
+- **Test Engine**: Vitest v5.0.5 + TypeScript 5
+- **Status**: **ALL TESTS PASSED (194/194 Passing across 16 Test Files, 0 Failures)**
+
+| Test Suite / File | Scope | Status | Details |
+| :--- | :--- | :---: | :--- |
+| `tests/unit/membership-and-profiles.test.ts` | Verification Queue Gating, Approval Email Dispatch, Rejection Feedback Email & Pre-Approval Access Control | **PASSED** (16/16) | 1. Verified that unverified email accounts are excluded from the admin pending verification queue (`getPendingVerificationRequests`).<br>2. Verified that attempting to approve an account whose email has not been confirmed strictly throws `EMAIL_NOT_VERIFIED`.<br>3. Verified that administrative approval immediately dispatches `sendMembershipApprovedEmail` and records the notification in `devEmailStore`.<br>4. Verified that administrative rejection with reason immediately dispatches `sendMembershipRejectedEmail` with feedback.<br>5. Verified role decoupling, privacy redaction, and server-side posting clearance. |
+| `tests/unit/auth.test.ts` | Email Verification Token Redemption, Scrypt Hashes & Pre-Auth Gate | **PASSED** (8/8) | All 8 tests passing. |
+| `tests/unit/complete-user-workflows.test.ts` | Multi-Persona End-to-End Journeys (Student, Alumni, Admin) | **PASSED** (23/23) | All 23 tests passing. |
+| **All Other Test Suites (13 files)** | Jobs, Companies, Community, Directory, Applications, Notifications, Database, Config, Layout | **PASSED** (147/147) | All tests passing. |
+| **Type Check** (`npm run type-check`) | TypeScript Compilation | **PASSED** | 0 TypeScript errors (`tsc --noEmit`). |
+| **Total** | **Full Regression Suite** | **PASSED** | **194/194 Passing (100%)** |
+
 ## Stage 14 Verification: Final Testing, Security, Responsiveness, and Optimization (2026-11-05)
 
 - **Date**: 2026-11-05

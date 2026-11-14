@@ -1,6 +1,6 @@
 const T = require("./theme_config");
 const { HEX, TINTS, W, M, CW, GUT, header, intro, card, num, badge, pill } = T;
-const SEC = "Chapter 6 — Test Data & Design Justification";
+const SEC = "Chapter 6 — Testing and Evidence";
 
 function strip(pres, s, items, y = 6.3) {
   const w = (CW - 2 * GUT) / 3;
@@ -100,7 +100,7 @@ module.exports = function ch6(pres) {
   // ---------- 4: What the data means ----------
   {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
-    header(s, "What the data ", "means for UniCareer");
+    header(s, "From evidence ", "to design");
     const rows = [
       ["906,000 graduates out of work (2023)", "Students need trusted, focused job leads", "A JnU-only, checked community"],
       ["Referrals: 1 in 16 hired vs 1 in 152", "Who you know matters more than mass applying", "Built-in alumni referrals"],
@@ -131,7 +131,7 @@ module.exports = function ch6(pres) {
     const items = [
       ["Click-through browser tests", "Tests run on the code, not in a real browser yet", "PLANNED"],
       ["Many users at once", "No load test yet; the spam limit counts per server", "PLANNED"],
-      ["Latest changes", "Re-run all tests after the switch to company-site applying", "PLANNED"],
+      ["Latest changes", "Re-run all tests after the new admin-approval login", "PLANNED"],
       ["Phones and screen readers", "Checked by hand, not with automatic tools", "PLANNED"],
     ];
     const w = (CW - GUT) / 2, h = 2.1;
@@ -143,6 +143,6 @@ module.exports = function ch6(pres) {
       s.addText(it[0], { x: x + 0.35, y: y + 0.8, w: w - 0.7, h: 0.5, fontSize: 22, bold: true, color: HEX.dk1, margin: 0, valign: "top", isTextBox: true });
       s.addText(it[1], { x: x + 0.35, y: y + 1.35, w: w - 0.7, h: 0.6, fontSize: 16, color: HEX.dk2, margin: 0, valign: "top", isTextBox: true });
     });
-    s.addNotes("Honest gaps: (1) AGENTS.md asks for Playwright end-to-end browser tests, but Playwright is not installed; the 'journeys' run in Vitest against the real services and database. (2) No load/performance test; the rate limiter is in memory per server instance (KNOWN_ISSUES suggests Redis/Upstash). (3) The last recorded full test run is 5 Nov 2026; commits on 14 Nov changed applications and removed career tools. (4) WCAG/responsive checks were manual per the test plan (Playwright + axe-core planned).");
+    s.addNotes("Honest gaps: (1) AGENTS.md asks for Playwright end-to-end browser tests, but Playwright is not installed; the 'journeys' run in Vitest against the real services and database. (2) No load/performance test; the rate limiter is in memory per server instance (KNOWN_ISSUES suggests Redis/Upstash). (3) The last recorded full test run is 5 Nov 2026. On 14 Nov login was changed to need admin approval, with approval and rejection emails; the changelog says these were tested, but no test in tests/ checks the approval emails or the pending_admin_approval redirect yet. (4) WCAG/responsive checks were manual per the test plan (Playwright + axe-core planned).");
   }
 };

@@ -26,7 +26,7 @@
 ## Account & Authentication
 - **Mandatory Authentication**: Unauthenticated visitors cannot browse job listings, view full job descriptions, search opportunities, access the community, or use member features.
 - **Public Routes Only**: Landing/marketing page, login, registration, password recovery, and email verification.
-- **Email Verification**: Required before gaining access to member functionality.
+- **Two-Stage Verification Gate**: Registration triggers a cryptographic email link. Clicking the link verifies the email and dispatches the dossier to the Administrator Verification Queue. Non-admin accounts cannot log in until an administrator officially approves their dossier and dispatches an approval email.
 - **Post-Login Redirection**: Return users to their originally requested URL after successful authentication.
 
 ## Active Personas & Verification

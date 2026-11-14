@@ -243,15 +243,15 @@ flowchart TD
   - **Comprehensive Production Documentation**: Created `docs/FINAL_PROJECT_REVIEW.md`, `docs/DEPLOYMENT_GUIDE.md`, `docs/ENVIRONMENT_SETUP.md`, `docs/KNOWN_ISSUES.md`, `docs/FINAL_TEST_REPORT.md`, and `docs/stages/STAGE-14.md`.
   - **Production Readiness Verdict**: Full production readiness confirmed. All requirements from `AGENTS.md` and `docs/PRODUCT_REQUIREMENTS.md` verified without fake data or mocked endpoints.
 
-### Post-Stage 14: Live Transactional Delivery, Verification-First Gate & UI De-AI-ification
-- **Status**: **COMPLETE** (2026-11-09)
+### Post-Stage 14: Complete Verification Lifecycle, Approval Email Dispatch & Pre-Approval Login Gate
+- **Status**: **COMPLETE** (2026-11-14)
 - **Prerequisites**: Stage 14.
 - **Core Deliverables Delivered**:
-  - **Live Gmail SMTP Integration (`lib/email.ts`)**: Installed `nodemailer` and configured outbound transactional email via Gmail SMTP (`sooooooooojib@gmail.com`) using a Google App Password. Dispatches live verification links, password resets, and notifications to any arbitrary inbox globally.
-  - **Mandatory Pre-Authentication Verification Gate (`lib/auth.ts`, `app/(auth)/login/page.tsx`)**: Enabled `requireEmailVerification: true` and `autoSignIn: false` in Better Auth. Enforces that newly registered users cannot log in until they click the cryptographic link sent to their email inbox. Attempts to sign in unverified are strictly blocked on the server with HTTP 403 `EMAIL_NOT_VERIFIED`.
-  - **Academic CGPA Verification & Directory Filtering (`prisma/schema.prisma`, `lib/services/admin.ts`, `lib/validations/admin.ts`)**: Added `isCgpaVerified` field to the `Profile` model with dedicated admin verification endpoint (`POST /api/admin/members/[id]/verify-cg`). Added `CG_VERIFIED` ("CG Verified") and `CG_PENDING` ("CG Pending") filters to the Member Directory and Admin Governance consoles.
-  - **Permanent Redirect Loop Resolution (`proxy.ts`, `app/(dashboard)/layout.tsx`)**: Solved Chrome `ERR_TOO_MANY_REDIRECTS` on expired or revoked sessions by emitting explicit `?signout=true` cookie-clearing directives from protected layouts.
-  - **De-AI-ified Institutional Identity (`components/navigation/header.tsx`, `components/community/member-directory-view.tsx`)**: Replaced generic AI-looking floating capsule pills and flashing green radar animations (`animate-ping`) with an authentic, grounded institutional header breadcrumb (`Jagannath University / Campus Career Community`) and clean, modern micro-tags (`rounded-md` / `rounded-lg`).
+  - **Mail-Click Triggered Admin Review Queue (`lib/auth.ts`, `app/api/auth/register-details/route.ts`)**: Registration saves student ID and department without pushing unverified signups into the admin review queue. Clicking the emailed verification link validates the token (`emailVerified = true`) and triggers Better Auth's `afterEmailVerification` hook to automatically enroll the user's formal verification request into the Admin Dashboard queue.
+  - **Official Approval Email Dispatch (`lib/email.ts`, `lib/services/verification.ts`)**: Implemented `sendMembershipApprovedEmail` and `sendMembershipRejectedEmail`. When an administrator reviews and approves an applicant's dossier, the system immediately emails an official approval notice to their university inbox containing their direct sign-in link.
+  - **Strict Pre-Approval Login Gate (`app/(auth)/login/page.tsx`, `app/(dashboard)/layout.tsx`)**: Unapproved accounts (`verificationStatus: "PENDING"`) cannot log in. The login page provides an "Awaiting Administrator Approval" alert, and the server-side dashboard layout terminates any non-admin unverified session.
+  - **Better Auth Auto-Sign-In Decoupled**: Set `autoSignInAfterVerification: false` to ensure applicants must wait for the administrator approval email before accessing platform features.
+  - **100% Test Pass Rate**: 194 automated unit tests across 16 test files passing with 0 failures (`npm test`).
 
 ---
 
@@ -264,7 +264,7 @@ flowchart TD
 | **Stage 2** | UI/UX Design System | **COMPLETE** | 2/2 Passing |
 | **Stage 3** | Navigation & Shell Layout | **COMPLETE** | 4/4 Passing |
 | **Stage 4** | Authentication & Security Engine | **COMPLETE** | 8/8 Passing |
-| **Stage 5** | Membership Verification & Profiles | **COMPLETE** | 14/14 Passing |
+| **Stage 5** | Membership Verification & Profiles | **COMPLETE** | 16/16 Passing |
 | **Stage 6** | Companies & Opportunity Core | **COMPLETE** | 18/18 Passing |
 | **Stage 7** | Job Browsing & Search Discovery | **COMPLETE** | 14/14 Passing |
 | **Stage 8** | Applications & External Tracking | **COMPLETE** | 17/17 Passing |
@@ -274,5 +274,5 @@ flowchart TD
 | **Stage 12** | Notifications & Career Calendar | **COMPLETE** | 12/12 Passing |
 | **Stage 13** | Admin Dashboard & Moderation | **COMPLETE** | 13/13 Passing |
 | **Stage 14** | Final Testing, Security & Optimization | **COMPLETE** | 23/23 Passing |
-| **Post-14** | Live Email, CGPA Gate & UI De-AI-ification | **COMPLETE** | 29/29 Passing |
-| **TOTAL** | **Entire UniCareer Community Platform** | **100% COMPLETE** | **193/193 Passing** |
+| **Post-14** | Complete Verification Lifecycle & Pre-Approval Gate | **COMPLETE** | 31/31 Passing |
+| **TOTAL** | **Entire UniCareer Community Platform** | **100% COMPLETE** | **194/194 Passing** |

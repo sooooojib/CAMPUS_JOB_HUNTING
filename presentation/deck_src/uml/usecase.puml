@@ -11,8 +11,9 @@ Alumnus --|> Member
 rectangle "UniCareer Community" {
   usecase "Register Account" as UC1
   usecase "Verify Email" as UC1a
+  usecase "Join Approval Queue" as UC1b
   usecase "Log In" as UC2
-  usecase "Submit Membership Proof" as UC3
+  usecase "Update Credentials" as UC3
   usecase "Search & Filter Jobs" as UC4
   usecase "Save Job" as UC5
   usecase "Get Deadline Reminder" as UC5a
@@ -43,6 +44,7 @@ Member -- UC8
 Student -- UC9
 Alumnus -- UC10
 UC1 ..> UC1a : <<include>>
+UC1a ..> UC1b : <<include>>
 UC6 ..> UC6a : <<include>>
 UC5a ..> UC5 : <<extend>>
 UC8a ..> UC8 : <<extend>>

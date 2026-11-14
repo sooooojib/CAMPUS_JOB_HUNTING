@@ -96,11 +96,11 @@ se_project/
                   │   (Business Logic & Rules)    │
                   └───────┬───────────────┬───────┘
                           │               │
-       Prisma Driver Pool │               │ Authenticated Stream
+       Prisma Driver Pool │               │ SMTP / Nodemailer Stream
                           ▼               ▼
         ┌───────────────────────┐   ┌───────────────────────┐
-        │      PostgreSQL       │   │    Private Storage    │
-        │   (Relational DB)     │   │   (Encrypted Resumes) │
+        │      PostgreSQL       │   │  Transactional Email  │
+        │   (Neon Lakebase DB)  │   │  (Verification/Alert) │
         └───────────────────────┘   └───────────────────────┘
 ```
 
@@ -112,3 +112,27 @@ se_project/
 6. **External Applications**: Opportunities link directly to official external company career portals ("Apply on Official Website"), keeping candidate applications direct and authentic without file uploads.
 7. **Rate Limiting**: Integrated sliding-window rate limiter in `lib/security/rate-limit.ts` protects mutation routes against spam, scraping, and brute force with HTTP 429 response headers.
 8. **Testing**: Vitest executes fast unit, schema, and end-to-end multi-persona workflow tests; Playwright runs browser workflows.
+
+---
+
+## 4. Verification & Pre-Approval Access Control Lifecycle
+
+UniCareer Community strictly enforces a four-stage verified trust model:
+
+```
+[1. User Registration] ──▶ [Cryptographic Email Link Dispatched]
+                                       │
+                                       ▼ (User clicks link in inbox)
+[2. Email Confirmed]    ──▶ [Auto-Submitted to Admin Review Queue]
+                                       │
+                                       ▼ (Login attempts blocked with "Awaiting Approval")
+[3. Admin Review]       ──▶ [Admin inspects Student ID & Department claims]
+                                       │
+                                       ▼ (Admin clicks Approve)
+[4. Approval Dispatched]──▶ [User receives Approval Email with Login Link] ──▶ [User Logs In]
+```
+
+1. **Registration**: Student ID, Department, and credentials saved; unverified accounts cannot sign in.
+2. **Mail-Click Trigger**: Clicking the emailed verification link marks `emailVerified = true` and immediately dispatches the dossier to the Administrator Verification Queue.
+3. **Pre-Approval Gate**: Login is strictly blocked while `verificationStatus === "PENDING"`. Non-admin sessions are automatically terminated on client and server layout.
+4. **Approval Email & Unlock**: When the administrator reviews and approves the dossier, an official email notification is dispatched to the user's inbox, unlocking login access.

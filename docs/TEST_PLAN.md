@@ -18,7 +18,8 @@ Quality assurance spans four rigorous layers to guarantee a production-grade exp
 - **Role Isolation**: Verifies that `membershipType` is separate from `systemRole` and cannot be escalated to `ADMIN` on registration.
 - **Login Credentials**: Authenticates valid credentials, rejects invalid passwords, rejects non-existent emails.
 - **Session Lifecycle**: Database session creation, cookie emission (`better-auth.session_token`), session invalidation on logout.
-- **Email Verification**: Generates cryptographic verification token, dispatches through dev email logger, successfully validates token and sets `emailVerified: true`.
+- **Email Verification**: Generates cryptographic verification token, dispatches through dev email logger, successfully validates token and sets `emailVerified: true`, and enqueues dossier to admin review queue.
+- **Pre-Approval Gate & Approval Notification**: Unapproved users cannot log in while in pending state; admin review queues only display email-verified users; administrative approval dispatches an official approval email and unlocks login access.
 - **Password Reset**: Cryptographic token issuance valid for 30 minutes, token redemption updating password hash, invalidating previous credentials.
 - **Route Protection & Proxy**: Unauthenticated user attempting to view `/dashboard`, `/opportunities`, `/applications`, `/community`, `/referrals`, `/admin` is redirected with 307 to `/login?callbackUrl=...`. Authenticated user on `/login` or `/register` is redirected to `/dashboard`.
 - **Account Status Guard**: Suspended or deactivated accounts are rejected by server layout.

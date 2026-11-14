@@ -21,6 +21,11 @@
    - Better Auth is configured with `emailAndPassword.requireEmailVerification: true` and `autoSignIn: false`.
    - Unverified accounts (`emailVerified: false`) are strictly prohibited from creating sessions or signing in.
    - Any login attempt with unverified credentials triggers an immediate server-side HTTP 403 `EMAIL_NOT_VERIFIED` rejection, guaranteeing that no member can access platform features without clicking the cryptographic verification link dispatched to their university inbox.
+6. **Strict Administrator Pre-Approval Gate & Notification Lifecycle**:
+   - Clicking the verification link confirms `emailVerified = true` and dispatches the dossier directly to the Administrator Approval Queue (`MembershipRequest` with status `PENDING`).
+   - Unapproved accounts (`verificationStatus: "PENDING"`) cannot log in. Login attempts trigger immediate session termination and an "Awaiting Administrator Approval" alert.
+   - Server-side guard in `app/(dashboard)/layout.tsx` blocks any non-admin access to protected views.
+   - When an administrator reviews and approves the application, `sendMembershipApprovedEmail` dispatches an official approval email to the applicant's inbox, enabling sign-in.
 
 ---
 

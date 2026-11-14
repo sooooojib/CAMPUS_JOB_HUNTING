@@ -30,8 +30,8 @@ Unlike public, impersonal job boards or single-purpose campus portals, UniCareer
 
 ## 4. Key Differentiators
 
-- **Gated Trust Model**: Mandatory email verification and locked institutional credentials (Student ID and Department) eliminate spam, fake recruiters, and anonymous trolling.
+- **Gated Institutional Trust Model**: Two-stage verification gate — mandatory email confirmation followed by administrator dossier approval. Unapproved users cannot log in until an administrator approves their credentials and dispatches an official approval email.
 - **Dual-Role Unified Account**: A user can apply for jobs while simultaneously posting opportunities or referrals when authorized — no separate employer login required.
 - **Explainable Matching (Zero Blackbox AI)**: Skill match scores use a transparent formula: $\frac{\text{Matched Required Skills}}{\text{Total Required Skills}} \times 100$, paired with strict eligibility criteria (Department, CGPA, Deadline).
-- **Private Document Vault**: Resumes are stored outside the web root and streamed strictly through Anti-IDOR authorized routes.
+- **Authentic External Applications**: Direct links to official company hiring portals ("Apply on Official Website"), keeping candidate applications authentic, direct, and spam-free without file uploads.
 - **Admin Review Gate**: All new opportunities are reviewed before becoming visible, guaranteeing high-signal, compliant postings.

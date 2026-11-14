@@ -24,14 +24,15 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 - `POST /api/auth/register-details`
   - Persists initial Student ID, Department, and Membership Type immediately after signup.
   - **Body**: `{ email, studentId, department, membershipType }`
-  - **Behavior**: Stores credentials on the user's profile and enqueues initial `MembershipRequest`.
+  - **Behavior**: Stores credentials on the user's profile. Does not enqueue to admin review until email verification is confirmed.
   - **Output**: `{ success: true }`
 
 - `POST /api/auth/sign-in/email`
   - Authenticates an existing user.
   - **Body**: `{ email, password, rememberMe, callbackURL }`
   - **Verification-First Enforcement**: If `user.emailVerified === false`, authentication is strictly rejected with HTTP 403 `EMAIL_NOT_VERIFIED` and zero session is issued.
-  - **Behavior**: Validates scrypt hash, verifies email verification status, verifies account status is not `SUSPENDED`, creates session cookie `better-auth.session_token`.
+  - **Administrator Approval Gate**: Non-admin accounts with `verificationStatus !== "VERIFIED"` are blocked at login with an "Awaiting Administrator Approval" alert; sessions are terminated immediately until the user receives their approval email.
+  - **Behavior**: Validates scrypt hash, verifies email verification status, verifies account status is not `SUSPENDED` and verification status is `VERIFIED`, creates session cookie `better-auth.session_token`.
   - **Output**: `{ user: User, session: Session }`
 
 - `POST /api/auth/sign-out`
@@ -46,7 +47,7 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
 
 - `GET /api/auth/verify-email?token=<token>`
   - Verifies institutional email address.
-  - **Behavior**: Validates cryptographic verification token, sets `users.emailVerified = true`, and returns status.
+  - **Behavior**: Validates cryptographic verification token, sets `users.emailVerified = true`, automatically dispatches the applicant's verification request to the Admin Dashboard review queue (`MembershipRequest` with status `PENDING`), and returns status.
   - **Output**: `{ status: true }`
 
 - `POST /api/auth/send-verification-email`
@@ -122,8 +123,8 @@ Powered by `toNextJsHandler(auth.handler)` via `better-auth/next-js`.
   - **Access**: Platform `ADMIN` only.
   - **Body**: `{ requestId: string, decision: 'APPROVE' | 'REJECT', rejectionReason?: string }`
   - **Behavior**:
-    - If `APPROVE`: Updates request to `APPROVED`, sets `user.verificationStatus = VERIFIED`, sets `verifiedAt` and `verifiedBy`. For employers, faculty, and staff, automatically activates opportunity posting clearance (`canPostOpportunities = true`).
-    - If `REJECT`: Requires a non-empty `rejectionReason`. Updates request to `REJECTED`, stores explanation, sets `user.verificationStatus = REJECTED`, revokes posting clearance.
+    - If `APPROVE`: Updates request to `APPROVED`, sets `user.verificationStatus = VERIFIED`, sets `verifiedAt` and `verifiedBy`, activates posting clearance (`canPostOpportunities = true`), and **dispatches an official approval email** to the applicant's inbox unlocking login.
+    - If `REJECT`: Requires a non-empty `rejectionReason`. Updates request to `REJECTED`, stores explanation, sets `user.verificationStatus = REJECTED`, revokes posting clearance, and **dispatches a rejection update email** with the administrator's feedback.
   - **Output**: `{ success: true, data: { request, user, decision } }`
 
 ---

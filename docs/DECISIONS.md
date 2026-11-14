@@ -88,3 +88,16 @@
 - **Context**: Generic AI templates often rely on floating capsule pills with pulsing radar dots (`animate-ping`). This looks synthetic and detracts from an authoritative university portal aesthetic.
 - **Decision**: Remove floating bubble pills and pulsing animations. Replace with grounded institutional typography, university crest anchors (`Jagannath University / Campus Career Community`), and crisp micro-tags (`rounded-md` / `rounded-lg`).
 - **Consequence**: The application presents an authentic, professional, human-crafted institutional appearance.
+
+---
+
+## ADR-011: Two-Stage Verification & Pre-Approval Login Gate with Approval Email Notification
+
+- **Status**: Accepted
+- **Context**: In an institutional campus platform, confirming email ownership verifies inbox control, but university governance requires registrar/administrator validation of the applicant's Student ID and Department credentials before allowing access to internal member feeds, student directories, and referral opportunities.
+- **Decision**: Implement a strict two-stage verification architecture:
+  1. Signup registers the profile and dispatches a cryptographic email link without enqueuing to admin.
+  2. Clicking the email link sets `emailVerified = true` and triggers Better Auth's `afterEmailVerification` hook to automatically enroll the user into the Admin Verification Queue.
+  3. Non-admin accounts with `verificationStatus !== "VERIFIED"` are strictly blocked from logging in on both client (`/login` with an "Awaiting Administrator Approval" alert) and server (`app/(dashboard)/layout.tsx` redirection).
+  4. When an administrator reviews and approves the dossier, `sendMembershipApprovedEmail` automatically dispatches an official approval email to the user's inbox, enabling sign-in.
+- **Consequence**: Guarantees zero unapproved accounts can access community discussions or student records, while providing a seamless, transparent experience where approved users are directly notified via email.

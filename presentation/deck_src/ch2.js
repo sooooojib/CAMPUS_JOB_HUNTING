@@ -47,12 +47,12 @@ module.exports = function ch2(pres) {
 
   frSlide("What the system ", "must do (1/2)", [
     ["Sign up", "University email, student ID, department. Strong password: 8+ characters"],
-    ["Email check", "No login until the email link is clicked"],
-    ["Member approval", "Admin approves or rejects, with a reason"],
+    ["Email check", "Confirm the email link, then wait for admin approval"],
+    ["Member approval", "Admin approves or rejects. An email tells you which"],
     ["Post a job", "Approved students and alumni only. Goes live right away"],
     ["Find jobs", "Search and filter by type, office or remote, department"],
     ["Apply and track", "Apply on the company site. One record per job"],
-  ], 1, "Exact rules: password min 8 chars with uppercase, number and symbol (Zod, client and server). Unverified login returns 403 EMAIL_NOT_VERIFIED. MembershipRequest PENDING → VERIFIED/REJECTED with rejectionReason. canPostOpportunity: verified STUDENT/ALUMNI; status set to APPROVED on submit. Opportunity list: 12 per page. Applications: unique (opportunityId, applicantId); 30 per hour rate limit; verification requests 10 per 10 minutes.");
+  ], 1, "Exact rules: password min 8 chars with uppercase, number and symbol (Zod, client and server). Unverified login returns 403 EMAIL_NOT_VERIFIED. Since 14 Nov, clicking the email link puts the member in the admin queue (afterEmailVerification hook) and login stays blocked until approval ('Awaiting Administrator Approval'; the dashboard layout redirects to /login?error=pending_admin_approval). Approval sends 'Your UniCareer Community Account has been Approved!'; rejection sends an email with the reason. MembershipRequest PENDING → VERIFIED/REJECTED with rejectionReason. canPostOpportunity: verified STUDENT/ALUMNI; status set to APPROVED on submit. Opportunity list: 12 per page. Applications: unique (opportunityId, applicantId); 30 per hour rate limit; verification requests 10 per 10 minutes.");
 
   frSlide("What the system ", "must do (2/2)", [
     ["Community feed", "Post, like, comment and save. Posts are 10 to 5,000 characters"],
@@ -174,7 +174,7 @@ module.exports = function ch2(pres) {
     header(s, "Requirements you can ", "see in the app");
     const w = (CW - 2 * GUT) / 3, y = 1.6, mh = 2.75;
     const labels = [
-      ["FR-2", "No login until the email is confirmed"],
+      ["FR-2", "No login until an admin approves you"],
       ["FR-4", "Every job shows who shared it"],
       ["FR-10", "A reminder before the deadline"],
     ];
@@ -194,7 +194,7 @@ module.exports = function ch2(pres) {
         s.addText(t, { x: x + 0.37, y: y + 0.85 + k * 0.45, w: iw - 0.7, h: 0.36, fontSize: 12, color: HEX.dk2, margin: 0, valign: "middle", isTextBox: true });
       });
       s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.25, y: y + 1.8, w: iw - 0.5, h: 0.5, rectRadius: 0.06, fill: { color: HEX.accent4 }, line: { color: HEX.accent4, width: 0 }, objectName: "Mock warning" });
-      s.addText("Confirm your email first", { x: x + 0.35, y: y + 1.8, w: iw - 0.7, h: 0.5, fontSize: 13, bold: true, color: HEX.accent1, margin: 0, valign: "middle", isTextBox: true });
+      s.addText("Awaiting admin approval", { x: x + 0.35, y: y + 1.8, w: iw - 0.7, h: 0.5, fontSize: 13, bold: true, color: HEX.accent1, margin: 0, valign: "middle", isTextBox: true });
     }
     // Mock 2: job card
     {

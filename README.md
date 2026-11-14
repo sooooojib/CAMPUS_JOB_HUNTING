@@ -17,7 +17,7 @@ UniCareer Community connects current university students, alumni, and university
 - **Authentication**: Better Auth 1.7.17 (Scrypt password hashing, session cookies, verification-first gate)
 - **Email Dispatcher**: Nodemailer with Gmail SMTP & Google App Passwords
 - **Validation**: React Hook Form with mirrored Zod schemas (client & server)
-- **Testing**: Vitest 5.0.5 (193 automated unit, integration, and workflow tests — 100% pass rate)
+- **Testing**: Vitest 5.0.5 (194 automated unit, integration, and workflow tests — 100% pass rate)
 
 ---
 
@@ -39,13 +39,13 @@ UniCareer Community connects current university students, alumni, and university
 | **Stage 12** | Notifications & Calendar | 22 notification event triggers, upcoming deadline cron worker, personal career calendar. |
 | **Stage 13** | Admin Dashboard & Moderation | Platform KPIs, member governance, opportunity moderation, content review, immutable audit trail. |
 | **Stage 14** | Testing, Hardening & Workflows | 23 end-to-end multi-persona workflows, sliding-window rate limiting, 100% test pass rate. |
-| **Post-14** | Live Email & Verification Polish | Gmail SMTP delivery, strict verification-first sign-in gate, admin CGPA verification, de-AI-ified UI. |
+| **Post-14** | Complete Verification & Gating | Mail-click admin queue enrollment, official approval email dispatch, strict pre-approval login gate. |
 
 ---
 
 ## Core Security & Business Rules
 
-1. **Mandatory Verification-First Login**: Users must click the cryptographic verification link sent to their university inbox before gaining login access. Unverified login attempts are strictly blocked with HTTP 403 `EMAIL_NOT_VERIFIED`.
+1. **Two-Stage Verification & Pre-Approval Gate**: Users register and receive a verification email. Clicking the link confirms `emailVerified = true` and dispatches the dossier to the Administrator Verification Queue. Non-admin accounts remain in `PENDING` state and are strictly blocked from logging in until an administrator approves their credentials and dispatches an official approval email.
 2. **Single Account Architecture**: Supports the core membership personas (`STUDENT`, `ALUMNI`) unified with platform governance (`systemRole: ADMIN`). Platform administration is strictly decoupled from membership.
 3. **External Application Tracking & Privacy**: Candidate applications redirect to official employer portals ("Apply on Official Website") with direct application tracking. Candidate records remain strictly private between the candidate and administrators.
 4. **Zero Fake Data**: All feeds, dashboards, statistics, and directories query live PostgreSQL rows. No synthetic arrays exist in production code paths.
