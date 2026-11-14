@@ -55,6 +55,7 @@ export interface PendingVerificationRequestItem {
     id: string;
     name: string;
     email: string;
+    emailVerified?: boolean;
     image?: string | null;
     membershipType: string;
     verificationStatus: string;
@@ -185,6 +186,12 @@ export function VerificationTable({ initialRequests = [] }: VerificationTablePro
                   <TableCell>
                     <div className="font-bold text-foreground text-sm">{req.user.name}</div>
                     <div className="text-xs text-muted-foreground font-mono">{req.user.email}</div>
+                    {req.user.emailVerified && (
+                      <div className="inline-flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
+                        <CheckCircle2 className="size-3" />
+                        <span>Email Verified</span>
+                      </div>
+                    )}
                     {req.workEmail && req.workEmail !== req.user.email && (
                       <div className="text-[11px] text-primary font-mono mt-0.5">
                         Work: {req.workEmail}

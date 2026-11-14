@@ -1,0 +1,35 @@
+sequenceDiagram
+    title sd Apply to Job
+    actor Student
+    participant Page as :JobPage
+    participant API as :ApplicationsAPI
+    participant RL as :RateLimiter
+    participant Svc as :ApplicationService
+    participant DB as :Database
+    participant N as :Notifications
+    Student->>Page: clickApply()
+    Page->>Page: openCompanySite(url)
+    Page->>API: POST /api/applications
+    API->>API: getSession()
+    API->>RL: checkRateLimit(user)
+    alt more than 30 in the last hour
+        RL-->>API: blocked
+        API-->>Page: 429 Too Many Requests
+    else allowed
+        RL-->>API: allowed
+        API->>Svc: recordExternalApplication()
+        Svc->>DB: findOpportunity(id)
+        DB-->>Svc: opportunity
+        alt job closed or expired
+            Svc-->>API: error: job not open
+        else already recorded
+            Svc-->>API: error: already recorded
+        else new
+            Svc->>DB: createApplication()
+            DB-->>Svc: saved
+            Svc->>N: notify(APPLICATION_SUBMITTED)
+            Svc-->>API: application
+            API-->>Page: 201 Created
+        end
+    end
+    Page-->>Student: show confirmation

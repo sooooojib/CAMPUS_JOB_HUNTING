@@ -86,13 +86,19 @@ export async function getPendingVerificationRequests(adminUserId: string) {
   }
 
   const pendingRequests = await prisma.membershipRequest.findMany({
-    where: { status: "PENDING" },
+    where: {
+      status: "PENDING",
+      user: {
+        emailVerified: true,
+      },
+    },
     include: {
       user: {
         select: {
           id: true,
           name: true,
           email: true,
+          emailVerified: true,
           image: true,
           membershipType: true,
           verificationStatus: true,
@@ -158,6 +164,11 @@ export async function reviewVerificationRequest(
   const now = new Date();
 
   if (input.decision === "APPROVE") {
+    // Security gate: Ensure applicant has verified their institutional email address before admin approval
+    if (!request.user.emailVerified) {
+      throw new Error("EMAIL_NOT_VERIFIED: Cannot approve membership for an account whose email has not been verified.");
+    }
+
     // 1. Mark request as APPROVED
     const updatedRequest = await prisma.membershipRequest.update({
       where: { id: input.requestId },

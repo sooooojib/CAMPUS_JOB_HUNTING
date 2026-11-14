@@ -1,0 +1,49 @@
+@startuml Activity
+|Alumnus|
+start
+:Fill in job form;
+:Submit post;
+|UniCareer System|
+if (Verified member?) then (no)
+  |Alumnus|
+  :See "not allowed";
+  stop
+else (yes)
+  |UniCareer System|
+  :Publish job (live);
+endif
+fork
+  |Student|
+  :Browse and filter jobs;
+  :Apply on company site;
+  |UniCareer System|
+  :Check hourly limit;
+  if (More than 30?) then (yes)
+    |Student|
+    :Try again later;
+    stop
+  endif
+  |UniCareer System|
+  if (Already tracked?) then (yes)
+    |Student|
+    :See "already tracked";
+    stop
+  endif
+  |UniCareer System|
+  :Save application;
+  fork
+    :Add to my list;
+  fork again
+    :Send alert;
+  end fork
+fork again
+  |Admin|
+  :Review live post;
+  if (Misleading?) then (yes)
+    :Close with reason;
+    |UniCareer System|
+    :Notify poster;
+  endif
+end fork
+stop
+@enduml

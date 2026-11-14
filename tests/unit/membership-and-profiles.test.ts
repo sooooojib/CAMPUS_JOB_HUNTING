@@ -31,6 +31,7 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
     membershipType: any;
     systemRole?: any;
     verificationStatus?: any;
+    emailVerified?: boolean;
   }) {
     const user = await prisma.user.create({
       data: {
@@ -40,6 +41,7 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
         systemRole: params.systemRole || "MEMBER",
         verificationStatus: params.verificationStatus || "PENDING",
         accountStatus: "ACTIVE",
+        emailVerified: params.emailVerified !== undefined ? params.emailVerified : true,
       },
     });
     createdUserIds.push(user.id);
@@ -222,6 +224,35 @@ describe("Stage 5: Membership Verification & User Profiles Engine", () => {
       expect(decision.user.verificationStatus).toBe("VERIFIED");
       expect(decision.user.verifiedBy).toBe(adminUser.id);
       expect(decision.user.canPostOpportunities).toBe(true);
+    });
+
+    it("excludes users with unverified emails from admin pending verification queue", async () => {
+      // Create user with unverified email
+      const unverifiedUser = await createTestUser({
+        email: `unverified_applicant_${timestamp}@university.edu`,
+        name: "Unverified Applicant",
+        membershipType: "STUDENT",
+        emailVerified: false,
+      });
+
+      const unverifiedReq = await submitVerificationRequest(unverifiedUser.id, {
+        membershipType: "STUDENT",
+        institutionalId: "UNVERIFIED-101",
+        department: "Physics",
+      });
+
+      // Pending queue should NOT include this request
+      const queue = await getPendingVerificationRequests(adminUser.id);
+      const found = queue.find((r) => r.id === unverifiedReq.id);
+      expect(found).toBeUndefined();
+
+      // Admin attempting to APPROVE an unverified email account MUST fail
+      await expect(
+        reviewVerificationRequest(adminUser.id, {
+          requestId: unverifiedReq.id,
+          decision: "APPROVE",
+        })
+      ).rejects.toThrow("EMAIL_NOT_VERIFIED");
     });
 
     it("supports resubmission when a request is rejected", async () => {

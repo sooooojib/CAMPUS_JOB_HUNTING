@@ -53,32 +53,36 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // 2. Upsert or update initial MembershipRequest for the Admin Approval Panel
-    const existingReq = await prisma.membershipRequest.findFirst({
-      where: { userId: user.id },
-    });
+    // 2. Only queue into the Admin Approval Panel if the user's email has already been verified.
+    // Unverified accounts MUST complete Step 2 (Mandatory Email Verification) before being enrolled in the admin queue.
+    // When they verify their email, Better Auth's afterEmailVerification hook will automatically enroll them.
+    if (user.emailVerified) {
+      const existingReq = await prisma.membershipRequest.findFirst({
+        where: { userId: user.id },
+      });
 
-    if (!existingReq) {
-      await prisma.membershipRequest.create({
-        data: {
-          userId: user.id,
-          membershipType: (membershipType as any) || "STUDENT",
-          status: "PENDING",
-          institutionalId: studentId.trim(),
-          department: department.trim(),
-          connectionNote: `Self-registered as ${membershipType} from Department of ${department.trim()} (ID: ${studentId.trim()}). Awaiting verification approval.`,
-        },
-      });
-    } else {
-      await prisma.membershipRequest.update({
-        where: { id: existingReq.id },
-        data: {
-          institutionalId: studentId.trim(),
-          department: department.trim(),
-          membershipType: (membershipType as any) || "STUDENT",
-          status: "PENDING",
-        },
-      });
+      if (!existingReq) {
+        await prisma.membershipRequest.create({
+          data: {
+            userId: user.id,
+            membershipType: (membershipType as any) || "STUDENT",
+            status: "PENDING",
+            institutionalId: studentId.trim(),
+            department: department.trim(),
+            connectionNote: `Self-registered as ${membershipType} from Department of ${department.trim()} (ID: ${studentId.trim()}). Awaiting verification approval.`,
+          },
+        });
+      } else {
+        await prisma.membershipRequest.update({
+          where: { id: existingReq.id },
+          data: {
+            institutionalId: studentId.trim(),
+            department: department.trim(),
+            membershipType: (membershipType as any) || "STUDENT",
+            status: "PENDING",
+          },
+        });
+      }
     }
 
     // 3. Ensure User verificationStatus remains PENDING

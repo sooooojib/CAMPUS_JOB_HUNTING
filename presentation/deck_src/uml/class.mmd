@@ -1,0 +1,108 @@
+classDiagram
+    class User {
+      -String id
+      -String email
+      -MembershipType membershipType
+      -SystemRole systemRole
+      -VerificationStatus verificationStatus
+      +isVerified() Boolean
+      +canPostJob() Boolean
+    }
+    class Profile {
+      -String department
+      -String studentId
+      -String phone
+      -Boolean isCgpaVerified
+      +update()
+    }
+    class MembershipRequest {
+      -RequestStatus status
+      -String proofDetails
+      -String rejectionReason
+      +approve()
+      +reject(reason)
+    }
+    class Notification {
+      -NotificationType type
+      -String title
+      -Boolean isRead
+      +markRead()
+    }
+    class AdminAuditLog {
+      -AuditAction action
+      -TargetType targetType
+      -String reason
+      -String ipAddress
+      +record()
+    }
+    class Company {
+      -String name
+      -String website
+      -Boolean isVerified
+      +verify()
+    }
+    class Opportunity {
+      -String title
+      -JobType type
+      -Workplace workplaceType
+      -String externalUrl
+      -Date deadline
+      -JobStatus status
+      +close()
+      +expire()
+    }
+    class OpportunityBookmark {
+      -Date createdAt
+      +remove()
+    }
+    class Application {
+      -ApplicationMethod method
+      -AppStatus status
+      -Date externalAppliedAt
+      +remove()
+    }
+    class Post {
+      -String content
+      -PostType postType
+      -ModerationStatus status
+      +like()
+      +report(reason)
+    }
+    class Comment {
+      -String content
+      -String parentId
+      +reply()
+    }
+    class PostReaction {
+      -ReactionType type
+      +toggle()
+    }
+    class ContentReport {
+      -ReportReason reason
+      -ReportStatus status
+      +resolve()
+    }
+    class ReferralRequest {
+      -String companyName
+      -String message
+      -ReferralStatus status
+      +accept(note)
+      +decline()
+    }
+    User "1" *-- "0..1" Profile
+    User "1" -- "0..*" MembershipRequest : submits
+    User "1" -- "0..*" Notification : receives
+    User "1" -- "0..*" AdminAuditLog : admin writes
+    User "1" -- "0..*" Opportunity : posts
+    Company "0..1" -- "0..*" Opportunity
+    Opportunity "1" -- "0..*" OpportunityBookmark : saved as
+    User "1" -- "0..*" OpportunityBookmark
+    Opportunity "1" -- "0..*" Application
+    User "1" -- "0..*" Application : applies
+    User "1" -- "0..*" Post : writes
+    Post "1" *-- "0..*" Comment
+    Comment "0..1" -- "0..*" Comment : replies
+    Post "1" *-- "0..*" PostReaction
+    Post "0..1" -- "0..*" ContentReport
+    User "1" -- "0..*" ReferralRequest : sends
+    User "1" -- "0..*" ReferralRequest : receives

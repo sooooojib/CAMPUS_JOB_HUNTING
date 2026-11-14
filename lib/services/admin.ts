@@ -38,7 +38,12 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
   ] = await Promise.all([
     prisma.user.count(),
     prisma.user.count({ where: { verificationStatus: "VERIFIED" } }),
-    prisma.membershipRequest.count({ where: { status: "PENDING" } }),
+    prisma.membershipRequest.count({
+      where: {
+        status: "PENDING",
+        user: { emailVerified: true },
+      },
+    }),
     prisma.opportunity.count(),
     prisma.opportunity.count({ where: { status: "PENDING" } }),
     prisma.opportunity.count({ where: { status: "APPROVED" } }),

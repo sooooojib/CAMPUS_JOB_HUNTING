@@ -1,0 +1,64 @@
+@startuml UseCase
+left to right direction
+actor Member
+actor Student
+actor Alumnus
+actor Admin
+actor "Email Service" as Mail
+actor Scheduler
+Student --|> Member
+Alumnus --|> Member
+rectangle "UniCareer Community" {
+  usecase "Register Account" as UC1
+  usecase "Verify Email" as UC1a
+  usecase "Log In" as UC2
+  usecase "Submit Membership Proof" as UC3
+  usecase "Search & Filter Jobs" as UC4
+  usecase "Save Job" as UC5
+  usecase "Get Deadline Reminder" as UC5a
+  usecase "Apply to Job" as UC6
+  usecase "Record Application" as UC6a
+  usecase "Post Job" as UC7
+  usecase "Post in Feed" as UC8
+  usecase "Report Post" as UC8a
+  usecase "Request Referral" as UC9
+  usecase "Respond to Referral" as UC10
+  usecase "Review Membership" as A1
+  usecase "Verify CGPA" as A2
+  usecase "Moderate Job Post" as A3
+  usecase "Resolve Reports" as A4
+  usecase "Suspend Account" as A5
+  usecase "View Audit Log" as A6
+  usecase "Write Audit Log" as AL
+  usecase "Notify Member" as NM
+}
+Member -- UC1
+Member -- UC2
+Member -- UC3
+Member -- UC4
+Member -- UC5
+Member -- UC6
+Member -- UC7
+Member -- UC8
+Student -- UC9
+Alumnus -- UC10
+UC1 ..> UC1a : <<include>>
+UC6 ..> UC6a : <<include>>
+UC5a ..> UC5 : <<extend>>
+UC8a ..> UC8 : <<extend>>
+UC1a -- Mail
+UC5a -- Scheduler
+Admin -- A1
+Admin -- A2
+Admin -- A3
+Admin -- A4
+Admin -- A5
+Admin -- A6
+A1 ..> AL : <<include>>
+A3 ..> AL : <<include>>
+A4 ..> AL : <<include>>
+A5 ..> AL : <<include>>
+A1 ..> NM : <<include>>
+A3 ..> NM : <<include>>
+NM -- Mail
+@enduml

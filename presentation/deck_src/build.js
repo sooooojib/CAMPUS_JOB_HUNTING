@@ -8,7 +8,7 @@ const { applyTheme } = require(process.env.PPTX_SKILL + "/scripts/apply_theme.js
   pres.title = "UniCareer Community — SWE Project Defense";
   pres.theme = { headFontFace: T.THEME.headFontFace, bodyFontFace: T.THEME.bodyFontFace };
   T.defineLayouts(pres);
-  const chapters = (process.env.CHAPTERS || "1").split(",");
+  const chapters = (process.env.CHAPTERS || "1,2").split(",");
   for (const c of chapters) require(`./ch${c}.js`)(pres);
   const out = process.env.OUT;
   await pres.writeFile({ fileName: out });
