@@ -1,7 +1,7 @@
 const T = require("./theme_config");
 const { HEX, W, M, CW, GUT, header, card, num, pill } = T;
 const U = require("./uml");
-const SEC = "Chapter 7 — How We Built It and Closing";
+const SEC = "Chapter 7 — Design Choices and Closing";
 
 module.exports = function ch7(pres) {
   pres.addSection({ title: SEC });
@@ -43,7 +43,7 @@ module.exports = function ch7(pres) {
       ["FR-9", "Referrals", "In the app"],
       ["FR-10", "Reminders", "Ch 5: Calendar"],
       ["FR-11", "Admin tools", "Ch 5: Admin"],
-      ["FR-12", "Activity log", "Ch 6: Safety rules"],
+      ["FR-12", "Activity log", "Ch 4: Data safety"],
     ];
     const cw = (CW - GUT) / 2, rh = 0.62, gap = 0.12;
     rows.forEach((r, i) => {
@@ -54,9 +54,9 @@ module.exports = function ch7(pres) {
       s.addText(r[2], { x: x + 2.95, y, w: cw - 4.1, h: rh, fontSize: 13, color: HEX.dk2, margin: 0, valign: "middle", isTextBox: true });
       pill(pres, s, "Done", x + cw - 1.1, y + (rh - 0.32) / 2, 0.9, HEX.accent5, HEX.accent2, 12);
     });
-    s.addText([{ text: "12 of 12 built.  ", options: { bold: true, color: HEX.accent1 } }, { text: "Still to do: real-browser tests and a load test (Chapter 6).", options: { color: HEX.dk1 } }],
+    s.addText([{ text: "12 of 12 built.  ", options: { bold: true, color: HEX.accent1 } }, { text: "Still to do: real-browser tests and a load test.", options: { color: HEX.dk1 } }],
       { x: M, y: 6.1, w: CW, h: 0.45, fontSize: 18, margin: 0, valign: "middle", isTextBox: true });
-    s.addNotes("Requirements are FR-1 to FR-12 from Chapter 2. Each one is live on jnujobhunting.vercel.app; the right column says where we showed it. Referrals (FR-9) were built in Stage 10 (/referrals, request from a member profile, accept/decline, mark completed) but we did not give them a screen slide. Reminders: /api/cron/reminders alerts for saved or applied jobs closing within 72 hours, and deadlines show on /calendar. Activity log: AdminAuditLog records admin, action, target, reason and IP. Honest gaps from Chapter 6: no Playwright browser tests yet, no load test, and tests need a re-run after the 14 Nov approval change.");
+    s.addNotes("Requirements are FR-1 to FR-12 from Chapter 2. Each one is live on jnujobhunting.vercel.app; the right column says where we showed it. Referrals (FR-9) were built in Stage 10 (/referrals, request from a member profile, accept/decline, mark completed) but we did not give them a screen slide. Reminders: /api/cron/reminders alerts for saved or applied jobs closing within 72 hours, and deadlines show on /calendar. Activity log: AdminAuditLog records admin, action, target, reason and IP. Honest gaps: no Playwright browser tests yet, no load test, and tests need a re-run after the 14 Nov approval change.");
   }
 
   // ---------- Thank you ----------

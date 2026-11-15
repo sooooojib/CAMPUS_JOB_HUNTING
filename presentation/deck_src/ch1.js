@@ -1,5 +1,6 @@
 const T = require("./theme_config");
 const { HEX, TINTS, W, M, CW, GUT, TOP, FS, header, intro, card, num, pill } = T;
+T.setChapter(0, "01 · PROBLEM");
 const SEC = "Chapter 1 — Opening, Problem & Workflow";
 
 // A drawn copy of a real UniCareer job card (data from prisma/seed.ts)
@@ -11,17 +12,17 @@ function jobCard(pres, s, x, y, w, opts = {}) {
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + pad, y: y + pad, w: lg, h: lg, rectRadius: 0.1, fill: { color: HEX.accent1 }, line: { color: HEX.accent1, width: 0 }, objectName: "Company logo" });
   s.addText("bK", { x: x + pad, y: y + pad, w: lg, h: lg, fontSize: compact ? 15 : 18, bold: true, color: HEX.lt1, align: "center", valign: "middle", margin: 0, isTextBox: true });
   s.addText([
-    { text: "Junior FinTech Backend Engineer", options: { bold: true, fontSize: compact ? 16 : 19, color: HEX.dk1, breakLine: true } },
+    { text: "Junior Backend Engineer", options: { bold: true, fontSize: compact ? 16 : 19, color: HEX.dk1, breakLine: true } },
     { text: "bKash Limited  ·  Dhaka  ·  Full-time", options: { fontSize: compact ? 13 : 14, color: HEX.dk2 } },
   ], { x: x + pad + lg + 0.2, y: y + pad - 0.05, w: w - lg - pad * 2 - 0.2, h: lg + 0.1, margin: 0, valign: "middle", isTextBox: true });
   if (compact) {
-    pill(pres, s, "Shared by Sabrina Rahman, verified alumna", x + pad, y + h - 0.45, 3.9, HEX.accent5, HEX.accent2);
+    pill(pres, s, "Shared by a verified JnU member", x + pad, y + h - 0.45, 3.9, HEX.accent5, HEX.accent2);
     s.addText("2 days left", { x: x + pad + 4.0, y: y + h - 0.45, w: w - pad * 2 - 4.0, h: 0.32, fontSize: 13, bold: true, color: HEX.accent1, align: "right", valign: "middle", margin: 0, isTextBox: true });
     return;
   }
-  pill(pres, s, "Shared by Sabrina Rahman, verified alumna", x + 0.3, y + 1.25, Math.min(4.1, w - 0.6), HEX.accent5, HEX.accent2);
+  pill(pres, s, "Shared by a verified JnU member", x + 0.3, y + 1.25, Math.min(4.1, w - 0.6), HEX.accent5, HEX.accent2);
   s.addText([
-    { text: "BDT 75,000 – 95,000 a month", options: { fontSize: 14, color: HEX.dk1, breakLine: true } },
+    { text: "BDT 55,000 – 75,000 a month", options: { fontSize: 14, color: HEX.dk1, breakLine: true } },
     { text: "Closes in 2 days", options: { fontSize: 14, bold: true, color: HEX.accent1 } },
   ], { x: x + 0.3, y: y + 1.7, w: w - 0.6, h: 0.6, margin: 0, valign: "top", isTextBox: true });
   pill(pres, s, "Apply on company website", x + 0.3, y + h - 0.6, 2.9, HEX.accent1, HEX.lt1, 13);
@@ -35,42 +36,43 @@ function marker(pres, s, x, y, color, i) {
 module.exports = function ch1(pres) {
   pres.addSection({ title: SEC });
 
-  // ---------- Slide 1: Cover ----------
+  // ---------- Slide 1: Cover (v5, typographic, no UI mock) ----------
   {
     const s = pres.addSlide({ masterName: "COVER", sectionTitle: SEC });
-    s.addText("Jagannath University", { x: M, y: 0.8, w: 6, h: 0.4, fontSize: 16, bold: true, color: HEX.accent2, margin: 0, valign: "top", isTextBox: true });
-    s.addText([{ text: "UniCareer\n", options: {} }, { text: "Community", options: { color: HEX.accent1 } }], { x: M, y: 1.45, w: 6.6, h: 2.0, fontSize: 56, bold: true, color: HEX.dk1, margin: 0, valign: "top", isTextBox: true, charSpacing: -0.5 });
-    s.addText("Trusted jobs and referrals for JnU students and alumni.", { x: M, y: 3.6, w: 6.2, h: 1.0, fontSize: 20, color: HEX.dk2, margin: 0, valign: "top", isTextBox: true });
-
-    const info = [["Course", "[Course name and code]"], ["Teacher", "[Teacher's name]"], ["Presented by", "[Team members and IDs]"]];
-    const iw = (CW - 2 * GUT) / 3;
+    s.addShape(pres.shapes.RECTANGLE, { x: 8.1, y: 0, w: W - 8.1, h: 7.5, fill: { color: "E3EBF4" }, line: { type: "none" }, objectName: "Right panel" });
+    s.addShape(pres.shapes.RECTANGLE, { x: M, y: 0.95, w: 0.32, h: 0.05, fill: { color: HEX.accent1 }, line: { type: "none" }, objectName: "Kicker bar" });
+    s.addText("SOFTWARE ENGINEERING PROJECT  ·  JAGANNATH UNIVERSITY", { x: M + 0.42, y: 0.83, w: 7, h: 0.3, fontSize: 12, bold: true, color: HEX.accent1, charSpacing: 2, margin: 0, valign: "middle", isTextBox: true });
+    s.addText([{ text: "UniCareer\n", options: {} }, { text: "Community", options: { color: HEX.accent1 } }], { x: M, y: 1.45, w: 7.2, h: 2.4, fontSize: 66, bold: true, color: HEX.dk1, margin: 0, valign: "top", isTextBox: true, lineSpacingMultiple: 0.9 });
+    s.addText("Trusted jobs and referrals for JnU students and alumni", { x: M, y: 3.95, w: 7, h: 0.6, fontSize: 22, color: HEX.dk2, margin: 0, valign: "top", isTextBox: true });
+    const info = ["Course", "Teacher", "Presented by"];
+    const iw = (7.2 - 2 * 0.3) / 3;
     info.forEach((r, i) => {
-      const x = M + i * (iw + GUT);
-      s.addShape(pres.shapes.LINE, { x, y: 5.85, w: iw, h: 0, line: { color: HEX.accent6, width: 1 }, objectName: `Info rule ${i + 1}` });
-      s.addText([
-        { text: r[0], options: { fontSize: 13, bold: true, color: HEX.accent2, breakLine: true } },
-        { text: r[1], options: { fontSize: 16, color: HEX.dk1 } },
-      ], { x, y: 6.0, w: iw, h: 0.7, margin: 0, valign: "top", isTextBox: true });
+      const x = M + i * (iw + 0.3);
+      s.addText(r, { x, y: 5.45, w: iw, h: 0.3, fontSize: 13, bold: true, color: HEX.accent2, margin: 0, isTextBox: true });
+      s.addShape(pres.shapes.LINE, { x, y: 6.25, w: iw, h: 0, line: { color: "B8C4D4", width: 1 }, objectName: `Blank line ${i + 1}` });
     });
-
-    // Right: what the app actually looks like
-    jobCard(pres, s, 7.55, 1.2, 5.1);
-    card(pres, s, 8.35, 4.45, 4.3, 0.95, "App mock: reminder");
-    s.addText([
-      { text: "Reminder", options: { fontSize: 13, bold: true, color: HEX.accent1, breakLine: true } },
-      { text: "Your saved bKash job closes soon", options: { fontSize: 14, color: HEX.dk1 } },
-    ], { x: 8.6, y: 4.53, w: 3.9, h: 0.8, margin: 0, valign: "middle", isTextBox: true });
-    s.addNotes("Cover. The card on the right is drawn from a real job in the demo data (bKash, shared by alumna Sabrina Rahman). Fill in course, teacher and team before presenting. Live site: jnujobhunting.vercel.app");
+    // right: three promise cards
+    const items = [["01", "Trusted jobs", "Shared by verified JnU members"], ["02", "Alumni referrals", "Ask in the app or by email"], ["03", "No missed deadlines", "Saved jobs on your calendar"]];
+    items.forEach((it, i) => {
+      const x = 8.75 + (i % 2) * 0.35, y = 1.25 + i * 1.7;
+      card(pres, s, x, y, 3.9, 1.35, `Promise ${i + 1}`);
+      s.addShape(pres.shapes.RECTANGLE, { x, y, w: 0.09, h: 1.35, fill: { color: i === 0 ? HEX.accent1 : HEX.accent2 }, line: { type: "none" }, objectName: `Promise bar ${i + 1}` });
+      s.addText(it[0], { x: x + 0.35, y: y + 0.18, w: 1, h: 0.35, fontSize: 14, bold: true, color: HEX.accent1, margin: 0, isTextBox: true });
+      s.addText(it[1], { x: x + 0.35, y: y + 0.48, w: 3.3, h: 0.45, fontSize: 21, bold: true, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
+      s.addText(it[2], { x: x + 0.35, y: y + 0.9, w: 3.3, h: 0.35, fontSize: 14, color: HEX.dk2, margin: 0, valign: "middle", isTextBox: true });
+    });
+    T.progress(s, 0);
+    s.addNotes("Cover. Fill in the course, teacher and team names on the blank lines before presenting. The three cards are UniCareer's three promises: trusted job leads from verified JnU members, alumni referrals (in the app or by email), and deadline reminders on the calendar. Live site: jnujobhunting.vercel.app");
   }
 
   // ---------- Slide 2: The problem ----------
   {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
     header(s, "Why job hunting at JnU is ", "hard today");
-    intro(s, "906,000 unemployed graduates in Bangladesh (2023)");
+    intro(s, "13.5% of graduates are unemployed; 1 in 3 wait up to 2 years (2024)");
     const people = [
       ["Farhan", "Student", "Can't tell which jobs are real"],
-      ["Tariqul", "Alumnus at Databricks", "No trusted place to help juniors"],
+      ["Tariqul", "Alumnus at bKash", "No trusted place to help juniors"],
       ["Arthur", "Admin", "Must keep fake accounts out"],
     ];
     const pw = (CW - 2 * GUT) / 3;
@@ -101,12 +103,12 @@ module.exports = function ch1(pres) {
     const rx = M + bw + GUT;
     s.addText([{ text: "Finding a job on ", options: { color: HEX.dk1 } }, { text: "UniCareer", options: { color: HEX.accent1 } }], { x: rx, y: by, w: bw, h: 0.4, fontSize: FS.body, bold: true, margin: 0, isTextBox: true });
     jobCard(pres, s, rx, by + 0.5, bw, { compact: true, h: 1.25 });
-    const good = ["Shared by a checked alumna", "Apply on the company site", "Deadline reminder"];
+    const good = ["Shared by a verified member", "Apply on the company site", "Deadline reminder"];
     good.forEach((t, i) => {
       marker(pres, s, rx + 0.1, by + 2.08 + i * 0.42, HEX.accent2, `good ${i + 1}`);
       s.addText(t, { x: rx + 0.4, y: by + 1.95 + i * 0.42, w: bw - 0.5, h: 0.4, fontSize: 16, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
     });
-    s.addNotes("Source for 906,000: Dhaka Tribune, citing BBS Labour Force Survey 2023 (799,000 in 2022). https://www.dhakatribune.com/bangladesh/415371/graduate-unemployment-reaches-906-000-amid-skills  Extra facts for Q&A: Lever data via SHRM (2016) shows referred applicants are hired 1 in 16 vs 1 in 152 from job boards. The Business Standard (Sep 2023) reports CID warnings about fake work-from-home job offers to students. The left card is an illustrative example of a typical scam post; the right card uses real demo data from prisma/seed.ts.");
+    s.addNotes("Numbers: graduate unemployment 13.5% in 2024 (BBS-based figure reported via The Daily Star/IANS, Jun 2026) and, from Labour Force Survey 2024, about 1 in 3 graduates stayed jobless for up to two years (Asia News Network, Sep 2025). LFS 2024 also shows 35.8% of job seekers look for work through relatives and friends (bdnews24, Sep 2025). Farhan, Tariqul and Arthur are example personas, not real people. The left card is an illustrative example of a typical scam post; the right card uses a real job from our database (bKash, Junior Backend Engineer).");
   }
 
   // ---------- Slide 3: Problem -> fix ----------
@@ -124,12 +126,12 @@ module.exports = function ch1(pres) {
     s.addText("What goes wrong", { x: M, y: 1.45, w: lw, h: 0.35, fontSize: 14, bold: true, color: HEX.accent2, margin: 0, isTextBox: true });
     s.addText("How UniCareer fixes it", { x: M + lw + gap, y: 1.45, w: rw, h: 0.35, fontSize: 14, bold: true, color: HEX.accent2, margin: 0, isTextBox: true });
     rows.forEach((r, i) => {
-      const y = 1.9 + i * 0.97;
-      card(pres, s, M, y, CW, 0.82, `Row ${i + 1}`);
+      const y = 1.95 + i * 1.0;
+      card(pres, s, M, y, CW, 0.86, `Row ${i + 1}`);
       num(s, i + 1, M + 0.25, y + 0.22);
-      s.addText(r[0], { x: M + 0.85, y, w: lw - 0.9, h: 0.82, fontSize: 20, bold: true, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
+      s.addText(r[0], { x: M + 0.85, y, w: lw - 0.9, h: 0.86, fontSize: 20, bold: true, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
       s.addShape(pres.shapes.RIGHT_ARROW, { x: M + lw + 0.05, y: y + 0.3, w: 0.32, h: 0.22, fill: { color: HEX.accent1 }, line: { color: HEX.accent1, width: 0 }, objectName: `Arrow ${i + 1}` });
-      s.addText(r[1], { x: M + lw + gap, y, w: rw - 0.25, h: 0.82, fontSize: 20, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
+      s.addText(r[1], { x: M + lw + gap, y, w: rw - 0.25, h: 0.86, fontSize: 20, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
     });
     s.addNotes("Technical basis for Q&A: (1) canPostOpportunity allows verified STUDENT and ALUMNI; admins can reject or close posts (ADR-001, ADR-003). (2) Every post is COMMUNITY_SHARED and shows the poster (ADR-002). (3) Better Auth requireEmailVerification + admin review of MembershipRequest (ADR-007). (4) External application links; studentId/phone/proofDetails are redacted for other viewers (ADR-002, SECURITY). (5) Bookmarks, /applications tracker and /api/cron/reminders (deadlines in the next 72 hours). Note: jobs publish instantly; moderation happens after posting. The old resume upload API still exists in code but the app no longer uses it.");
   }
@@ -139,7 +141,7 @@ module.exports = function ch1(pres) {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
     header(s, "How it works in ", "three stages");
     const phases = [
-      ["Get in", ["Sign up", "Confirm email", "Get approved"]],
+      ["Get in", ["Sign up", "Confirm email", "Admin approves"]],
       ["Find and apply", ["Browse jobs", "Save favourites", "Apply on company site"]],
       ["Keep track", ["Track applications", "Ask for a referral", "Get reminders"]],
     ];
@@ -188,7 +190,7 @@ module.exports = function ch1(pres) {
 
   canDo("What alumni and ", "admins can do", [
     ["AS AN ALUMNUS", "share job openings", "juniors hear early"],
-    ["AS AN ALUMNUS", "answer referral requests", "I help people I trust"],
+    ["AS AN ALUMNUS", "answer referrals by app or email", "I help people I trust"],
     ["AS AN ADMIN", "approve new members", "only real JnU people join"],
     ["AS AN ADMIN", "remove fake job posts", "students stay safe"],
   ], "Posting rights: verified STUDENT and ALUMNI (canPostOpportunity). Nobody can request a referral from themselves. Every admin action is saved in admin_audit_logs (16 action types).");

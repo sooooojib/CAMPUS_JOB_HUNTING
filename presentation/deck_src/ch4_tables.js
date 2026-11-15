@@ -1,12 +1,27 @@
-// Chapter 4 table slides: database tables drawn as cards (name, columns, PK/FK/UQ),
-// links between cards on the same slide, and a hidden "zoom" slide per card that
-// shows every column. Clicking a card jumps to its zoom slide (Morph), clicking again returns.
+// Chapter 4 table slides (v5): every column of every table, one-line purpose, live row count,
+// and tidy links: children sit next to their parent and join one straight "bus" line per side.
+// Clicking a table opens a hidden slide with real rows (dataGrid).
 const T = require("./theme_config");
 const { HEX, W, H, M, CW, header } = T;
 const U = require("./uml");
 const SCHEMA = require("./data/schema.json").models;
 const TABLES = {};
 Object.values(SCHEMA).forEach((m) => { TABLES[m.table] = m; });
+const COUNTS = (() => { try { const t = require("./data/table_samples.json").tables; const o = {}; for (const k in t) o[k] = t[k].count; return o; } catch (e) { return {}; } })();
+
+const DESC = {
+  users: "Every member's account", profiles: "Department, ID, CGPA, bio and links", membership_requests: "Join requests the admin reviews",
+  academic_records: "GPA and credits for each semester", sessions: "Who is logged in, on which device", accounts: "Login method and hashed password",
+  verifications: "Email-link and password-reset codes", departments: "List of JnU departments", skills: "List of skills members can pick",
+  opportunities: "Job posts shared by members", companies: "Companies that jobs belong to", opportunity_bookmarks: "Jobs a member saved",
+  opportunity_comments: "Questions under a job post", applications: "\"I applied\" records for UniCareer jobs", application_status_history: "Every status change of an application",
+  manual_applications: "Jobs a member tracks from outside", posts: "Community feed posts", comments: "Comments and threaded replies",
+  post_reactions: "Likes on posts", post_bookmarks: "Posts a member saved", content_reports: "Reports of bad posts or comments",
+  connections: "Member-to-member connections", referral_requests: "Referral asks from students to alumni", notifications: "In-app alerts",
+  notification_preferences: "Alert on/off switches for each member", career_calendar_events: "Reminders members add to the calendar",
+  deadline_reminder_logs: "Deadline alerts already sent", admin_audit_logs: "Every admin action: who, what, why",
+  resumes: "CV uploads (removed)", company_members: "Company accounts (removed)",
+};
 
 const BUILTIN = { String: "text", Int: "int", Float: "float", Boolean: "bool", DateTime: "timestamp", Json: "json" };
 function typeLabel(t) {
@@ -20,113 +35,110 @@ function rowsFor(table, cols) {
   const pick = cols ? cols.map((c) => { const f = m.fields.find((x) => x.name === c); if (!f) throw new Error(`${table}.${c}`); return f; }) : m.fields;
   return pick.map((f) => ({ name: f.name, type: typeLabel(f.type), tag: f.pk ? "PK" : f.fk ? "FK" : f.uq ? "UQ" : "", fk: f.fk }));
 }
-function uqLine(table, full) {
+function uqLine(table) {
   const u = TABLES[table].uniques;
   if (!u.length) return null;
   const cols = u[0].split(",");
-  const txt = `UQ (${cols.join(" + ")})`;
-  return full || txt.length <= 34 ? txt : `UQ (${cols.length} columns together)`;
+  return cols.length > 3 ? `UQ (${cols.length} columns together)` : `UQ (${cols.join(" + ")})`;
 }
 
-const HDR = 0.32, RH = 0.2, PAD = 0.08;
-function cardHeight(nRows, hasUq) { return HDR + nRows * RH + (hasUq ? RH : 0) + PAD; }
+const HDR = 0.36, DSC = 0.25, RH = 0.168, PAD = 0.06;
+const SH = { type: "outer", color: "1E3A5F", opacity: 0.12, blur: 10, offset: 2, angle: 90 };
+function cardHeight(table, o = {}) {
+  const n = o.cols ? o.cols.length : TABLES[table].fields.length, per = Math.ceil(n / (o.twoCol ? 2 : 1));
+  return HDR + (o.anchor ? 0 : DSC) + per * RH + (!o.cols && uqLine(table) ? RH : 0) + PAD;
+}
 
-// Draw a card. o: {name, ghost, legacy, rh, hdr, fs, twoCol, link}
-function drawCard(pres, s, table, rows, x, y, w, o = {}) {
-  const rh = o.rh || RH, hdr = o.hdr || HDR, fs = o.fs || 10, uq = uqLine(table, o.fullUq);
-  const cols = o.twoCol ? 2 : 1, per = Math.ceil(rows.length / cols);
-  const h = hdr + per * rh + (uq ? rh : 0) + PAD * (rh / RH);
-  const id = o.name || table;
-  const hdrFill = o.ghost ? "9AA5B4" : o.legacy ? "8A94A6" : HEX.accent2;
-  s.addShape(pres.shapes.RECTANGLE, { x, y, w, h, fill: { color: HEX.lt1 }, line: { color: o.ghost ? "C5CDD8" : HEX.accent6, width: 1, dashType: o.ghost ? "dash" : "solid" }, objectName: `!!${id}_body` });
-  s.addShape(pres.shapes.RECTANGLE, { x, y, w, h: hdr, fill: { color: hdrFill }, line: { color: hdrFill, width: 0.5 }, objectName: `!!${id}_hdr` });
-  s.addText(table, { x: x + 0.08 * (rh / RH), y, w: w - 0.16 * (rh / RH), h: hdr, fontSize: fs + 1, bold: true, color: HEX.lt1, margin: 0, valign: "middle", isTextBox: true, objectName: `!!${id}_title` });
-  const colW = w / cols;
-  for (let c = 0; c < cols; c++) {
+// o: {cols (subset, for anchor cards), twoCol, anchor (slim parent shown for context), legacy, hi: [fk cols to highlight]}
+function drawCard(pres, s, table, x, y, w, o = {}) {
+  const rows = rowsFor(table, o.cols), uq = o.cols ? null : uqLine(table);
+  const ncol = o.twoCol ? 2 : 1, per = Math.ceil(rows.length / ncol);
+  const h = cardHeight(table, o), dsc = o.anchor ? 0 : DSC;
+  const hdrFill = o.anchor ? "8FA3BB" : o.legacy ? "9AA5B4" : HEX.accent2;
+  s.addShape(pres.shapes.RECTANGLE, { x, y, w, h, fill: { color: o.legacy ? "F7F8FA" : HEX.lt1 }, line: { color: o.anchor || o.legacy ? "C5CDD8" : "D3DDE8", width: 0.75, dashType: o.anchor || o.legacy ? "dash" : "solid" }, shadow: o.anchor ? undefined : SH, objectName: `Table ${table}` });
+  s.addShape(pres.shapes.RECTANGLE, { x, y, w, h: HDR, fill: { color: hdrFill }, line: { type: "none" }, objectName: `Header ${table}` });
+  const cnt = COUNTS[table];
+  s.addText([{ text: table, options: { bold: true, color: HEX.lt1 } }], { x: x + 0.1, y, w: w - 0.2, h: HDR, fontSize: 12, margin: 0, valign: "middle" });
+  if (!o.anchor && cnt != null) s.addText(`${cnt} ${cnt === 1 ? "row" : "rows"}`, { x: x + w - 1.1, y, w: 1.0, h: HDR, fontSize: 10, bold: true, color: o.legacy ? "EEF0F3" : "F2A77F", align: "right", margin: 0, valign: "middle" });
+  if (o.anchor) s.addText("on another slide", { x: x + 0.1, y, w: w - 0.2, h: HDR, fontSize: 9, italic: true, color: "EEF3F8", align: "right", margin: 0, valign: "middle" });
+  if (dsc) s.addText(DESC[table] || "", { x: x + 0.1, y: y + HDR, w: w - 0.2, h: dsc, fontSize: 10, italic: true, color: "5B6577", margin: 0, valign: "middle" });
+  const colW = w / ncol, ty = y + HDR + dsc;
+  (o.hi || []).forEach((c) => {
+    const i = rows.findIndex((r) => r.name === c); if (i < 0) return;
+    const col = Math.floor(i / per), k = i % per;
+    s.addShape(pres.shapes.RECTANGLE, { x: x + col * colW + 0.03, y: ty + k * RH, w: colW - 0.06, h: RH, fill: { color: HEX.accent4 }, line: { type: "none" }, objectName: `Link row ${table}.${c}` });
+  });
+  for (let c = 0; c < ncol; c++) {
     const part = rows.slice(c * per, (c + 1) * per);
     if (!part.length) continue;
     const names = [], info = [];
     part.forEach((r, i) => {
       const br = i < part.length - 1;
-      names.push({ text: r.name, options: { bold: r.tag === "PK", color: o.ghost ? "6B7280" : HEX.dk1, breakLine: br } });
+      names.push({ text: r.name, options: { bold: r.tag === "PK", color: o.legacy ? "6B7280" : HEX.dk1, breakLine: br } });
       const tagColor = r.tag === "PK" ? HEX.accent1 : r.tag === "FK" ? HEX.accent2 : "6B7280";
-      info.push({ text: r.type + (r.tag ? "  " : ""), options: { color: "6B7280", breakLine: !r.tag && br } });
-      if (r.tag === "FK" && r.fk) {
-        info.push({ text: "FK ", options: { bold: true, color: tagColor } });
-        info.push({ text: r.fk, options: { color: "5B7BA6", breakLine: br } });
-      } else if (r.tag) info.push({ text: r.tag, options: { bold: true, color: tagColor, breakLine: br } });
+      info.push({ text: r.type + (r.tag ? "  " : ""), options: { color: "8A94A6", breakLine: !r.tag && br } });
+      if (r.tag === "FK" && r.fk) { info.push({ text: "FK ", options: { bold: true, color: tagColor } }); info.push({ text: r.fk, options: { color: "5B7BA6", breakLine: br } }); }
+      else if (r.tag) info.push({ text: r.tag, options: { bold: true, color: tagColor, breakLine: br } });
     });
-    const tx0 = x + c * colW, ty = y + hdr + 0.03 * (rh / RH);
-    const lsp = rh * 72;
-    s.addText(names, { x: tx0 + 0.08 * (rh / RH), y: ty, w: colW * 0.46, h: part.length * rh, fontSize: fs, margin: 0, valign: "top", lineSpacing: lsp, isTextBox: true, objectName: `!!${id}_names${c}` });
-    s.addText(info, { x: tx0 + colW * 0.46, y: ty, w: colW * 0.54 - 0.08 * (rh / RH), h: part.length * rh, fontSize: fs - 1, margin: 0, valign: "top", align: "right", lineSpacing: lsp, isTextBox: true, objectName: `!!${id}_info${c}` });
+    const tx0 = x + c * colW;
+    s.addText(names, { x: tx0 + 0.1, y: ty, w: colW * 0.64, h: part.length * RH, fontSize: 9.5, margin: 0, valign: "top", lineSpacing: RH * 72, fit: "none" });
+    s.addText(info, { x: tx0 + colW * 0.42, y: ty, w: colW * 0.58 - 0.1, h: part.length * RH, fontSize: 8.5, margin: 0, valign: "top", align: "right", lineSpacing: RH * 72, fit: "none" });
   }
-  if (uq) s.addText(uq, { x: x + 0.08 * (rh / RH), y: y + hdr + per * rh + 0.03 * (rh / RH), w: w - 0.16 * (rh / RH), h: rh, fontSize: fs - 1, italic: true, color: HEX.accent1, margin: 0, valign: "middle", isTextBox: true, objectName: `!!${id}_uq` });
-  if (o.legacy && o.zoomed) s.addText("no longer used", { x: x + w - 1.3 * (rh / RH) - 0.05, y, w: 1.25 * (rh / RH), h: hdr, fontSize: fs - 1, italic: true, color: HEX.lt1, align: "right", valign: "middle", margin: 0, isTextBox: true, objectName: `!!${id}_legacy` });
-  const rowY = (name) => { const i = rows.findIndex((r) => r.name === name); return y + hdr + 0.03 + (i + 0.5) * rh; };
-  return { x, y, w, h, l: x, r: x + w, t: y, b: y + h, rowY };
+  if (uq) s.addText(uq, { x: x + 0.1, y: ty + per * RH, w: w - 0.2, h: RH, fontSize: 9, italic: true, color: HEX.accent1, margin: 0, valign: "middle" });
+  const rowY = (name) => { const i = rows.findIndex((r) => r.name === name); if (i < 0) throw new Error(`${table}.${name} not on card`); return ty + (i % per + 0.5) * RH; };
+  return { x, y, w, h, l: x, r: x + w, t: y, b: y + h, cx: x + w / 2, rowY };
 }
 
-// Link child.fk row -> parent.id row. side: "h" (horizontal elbow) | "rightLoop"
-function link(pres, s, child, childCol, parent, o = {}) {
-  const cy = child.rowY(childCol), py = parent.rowY("id");
-  const color = HEX.accent2;
-  if (o.side === "rightLoop") {
-    const xo = Math.max(child.r, parent.r) + 0.18;
-    U.poly(pres, s, [[child.r, cy], [xo, cy], [xo, py], [parent.r, py]], { width: 1.25, color });
-    U.lbl(s, "*", child.r + 0.04, cy - 0.2, 10, { bg: "none", color: HEX.dk1 });
-    U.lbl(s, "1", parent.r + 0.04, py - 0.2, 10, { bg: "none", color: HEX.dk1 });
-    return;
-  }
-  const childLeft = child.l > parent.r - 0.01;
-  const cx = childLeft ? child.l : child.r, px = childLeft ? parent.r : parent.l;
-  const mx = o.mx != null ? o.mx : (cx + px) / 2;
-  U.poly(pres, s, [[cx, cy], [mx, cy], [mx, py], [px, py]], { width: 1.25, color });
-  const many = o.one ? "1" : "*";
-  U.lbl(s, many, childLeft ? cx - 0.13 : cx + 0.04, cy - 0.21, 10, { bg: "none", color: HEX.dk1 });
-  U.lbl(s, "1", childLeft ? px + 0.04 : px - 0.13, py - 0.21, 10, { bg: "none", color: HEX.dk1 });
+const LINE = { width: 1.5, color: HEX.accent2 };
+function many(s, x, y, right) { U.lbl(s, "many", right ? x + 0.05 : x - 0.42, y - 0.2, 8.5, { bg: "none", color: HEX.accent1, italic: true }); }
+function one(s, x, y, right) { U.lbl(s, "1", right ? x + 0.05 : x - 0.15, y - 0.2, 9, { bg: "none", color: HEX.accent1, bold: true }); }
+function dot(pres, s, x, y) { s.addShape(pres.shapes.OVAL, { x: x - 0.045, y: y - 0.045, w: 0.09, h: 0.09, fill: { color: HEX.accent2 }, line: { type: "none" }, objectName: "Junction" }); }
+
+// One bus per side: every child FK row runs straight across to a vertical bus, the bus enters the parent at its id row.
+// side: "left" (children on the left of the parent) | "right"
+function bus(pres, s, parent, kids, side, o = {}) {
+  const left = side === "left";
+  const bx = o.x != null ? o.x : left ? parent.l - (o.gap || 0.32) : parent.r + (o.gap || 0.32);
+  const py = parent.rowY("id"), pe = left ? parent.l : parent.r;
+  const ys = [py];
+  kids.forEach(([g, col, isOne]) => {
+    const y = g.rowY(col), ce = left ? g.r : g.l;
+    U.ln(pres, s, ce, y, bx, y, LINE);
+    if (isOne) one(s, ce, y, left); else many(s, ce, y, left);
+    if (Math.abs(y - py) > 0.01) dot(pres, s, bx, y);
+    ys.push(y);
+  });
+  U.ln(pres, s, bx, Math.min(...ys), bx, Math.max(...ys), LINE);
+  U.ln(pres, s, bx, py, pe, py, LINE);
+  one(s, pe, py, !left);
+}
+// Direct link child.col -> parent.id when they sit side by side
+function direct(pres, s, child, col, parent, isOne) {
+  const y1 = child.rowY(col), y2 = parent.rowY("id");
+  const childLeft = child.r <= parent.l;
+  const x1 = childLeft ? child.r : child.l, x2 = childLeft ? parent.l : parent.r, mx = (x1 + x2) / 2;
+  U.poly(pres, s, [[x1, y1], [mx, y1], [mx, y2], [x2, y2]], LINE);
+  if (isOne) one(s, x1, y1, childLeft); else many(s, x1, y1, childLeft);
+  one(s, x2, y2, !childLeft);
 }
 
-/*
- * spec = { title, accent, sec, cards: [{t, cols, x, y, w, ghost, legacy}], links: [[childT, col, parentT, opts]],
- *          extras: fn(pres, s, geo), note }
- * Builds base slide + one hidden zoom slide per (non-ghost) card.
- */
+/* spec = { title:[plain,accent], group, cards:[{t,x,y,w,twoCol,anchor,cols,legacy,hi}], draw(pres,s,geo), note } */
 function tableSlide(pres, spec) {
   const MORPH = pres._morph || (pres._morph = []);
-  const draw = (s, zoomT) => {
-    header(s, spec.title, spec.accent);
-    if (spec.phase) s.addText(spec.phase, { x: W - M - 4.2, y: 0.62, w: 4.2, h: 0.35, fontSize: 13, bold: true, color: HEX.accent2, align: "right", margin: 0, valign: "middle", isTextBox: true });
-    const geo = {};
-    spec.cards.forEach((c) => {
-      if (c.t === zoomT) return;
-      geo[c.t] = drawCard(pres, s, c.t, rowsFor(c.t, c.cols), c.x, c.y, c.w, { ghost: c.ghost, legacy: c.legacy, name: c.ghost ? `ghost_${c.t}` : c.t, showTarget: true });
-    });
-    // geometry for zoomed card (for links) using small size
-    if (zoomT) { const c = spec.cards.find((k) => k.t === zoomT); geo[zoomT] = { ...drawGeo(c) }; }
-    (spec.links || []).forEach(([ch, col, par, lo]) => link(pres, s, geo[ch], col, geo[par], lo || {}));
-    if (spec.extras) spec.extras(pres, s, geo);
-    s.addText("Click any table to see its real data", { x: W - M - 5, y: 6.95, w: 5, h: 0.3, fontSize: 11, italic: true, color: "6B7280", align: "right", margin: 0, valign: "middle", isTextBox: true });
-    return geo;
-  };
-  const drawGeo = (c) => {
-    const rows = rowsFor(c.t, c.cols), h = cardHeight(rows.length, !!uqLine(c.t));
-    const rowY = (name) => { const i = rows.findIndex((r) => r.name === name); return c.y + HDR + 0.03 + (i + 0.5) * RH; };
-    return { x: c.x, y: c.y, w: c.w, h, l: c.x, r: c.x + c.w, t: c.y, b: c.y + h, rowY };
-  };
-
+  T.setChapter(3, `04 · DATABASE  ·  ${spec.group.toUpperCase()}`);
   const base = pres.addSlide({ masterName: "CONTENT", sectionTitle: spec.sec });
   const baseNum = base._slideNum;
-  draw(base, null);
+  header(base, spec.title[0], spec.title[1]);
+  const geo = {};
+  spec.cards.forEach((c) => { geo[c.t] = drawCard(pres, base, c.t, c.x, c.y, c.w, c); });
+  if (spec.draw) spec.draw(pres, base, geo);
+  base.addText("Click a table to see its real rows", { x: W - M - 4, y: 0.62, w: 4, h: 0.3, fontSize: 11, italic: true, color: "8A94A6", align: "right", margin: 0, valign: "middle" });
   base.addNotes(spec.note);
-  MORPH.push(baseNum);
-  const zoomables = spec.cards.filter((c) => !c.ghost);
-  // click areas on base slide
+  const zoomables = spec.cards.filter((c) => !c.anchor);
   zoomables.forEach((c, i) => {
-    const g = drawGeo(c);
-    base.addShape(pres.shapes.RECTANGLE, { x: g.x, y: g.y, w: g.w, h: g.h, fill: { color: "FFFFFF", transparency: 100 }, line: { type: "none" }, hyperlink: { slide: baseNum + 1 + i, tooltip: `Show data in ${c.t}` }, objectName: `Click ${c.t}` });
+    const g = geo[c.t];
+    base.addShape(pres.shapes.RECTANGLE, { x: g.x, y: g.y, w: g.w, h: g.h, fill: { color: "FFFFFF", transparency: 100 }, line: { type: "none" }, hyperlink: { slide: baseNum + 1 + i, tooltip: `Show rows in ${c.t}` }, objectName: `Click ${c.t}` });
   });
-  // data slides: clicking a card opens a database-console style view with real sample rows
   zoomables.forEach((c) => {
     const z = pres.addSlide({ masterName: "CONTENT", sectionTitle: spec.sec });
     z.hidden = !process.env.SHOW_HIDDEN;
@@ -134,6 +146,7 @@ function tableSlide(pres, spec) {
     z.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: W, h: H, fill: { color: "FFFFFF", transparency: 100 }, line: { type: "none" }, hyperlink: { slide: baseNum, tooltip: "Back" }, objectName: "Click back" });
     MORPH.push(z._slideNum);
   });
+  return base;
 }
 
 // ---------- data grid ----------
@@ -181,11 +194,11 @@ function dataGrid(pres, s, table, legacy) {
   if (!rows.length) { const e = picked.map(() => ({ text: "", options: {} })); e[0] = { text: "No rows yet", options: { italic: true, color: "8A94A6" } }; if (hidden > 0) e.push({ text: "" }); body.push(e); }
   const colW = picked.map((c) => c.w); if (hidden > 0) colW.push(1.0);
   const tw = colW.reduce((a, b) => a + b, 0), tx = (W - tw) / 2;
-  s.addTable([hdr, ...body], { x: tx, y: 1.55, w: tw, colW, rowH: 0.42, fontSize: FS, fontFace: "Inter", color: HEX.dk1, fill: { color: "FFFFFF" }, border: { type: "solid", pt: 0.75, color: "E1E6EE" }, margin: [0.02, 0.08, 0.02, 0.08], valign: "middle", autoPage: false });
+  s.addTable([hdr, ...body], { x: tx, y: 1.55, w: tw, colW, rowH: 0.42, fontSize: FS, fontFace: "Calibri", color: HEX.dk1, fill: { color: "FFFFFF" }, border: { type: "solid", pt: 0.75, color: "E1E6EE" }, margin: [0.02, 0.08, 0.02, 0.08], valign: "middle", autoPage: false });
   const sub = `${smp.count} ${smp.count === 1 ? "row" : "rows"} in the database  ·  showing ${rows.length}  ·  ${cols.length} columns${hidden > 0 ? ` (${picked.length} shown)` : ""}${legacy ? "  ·  no longer used by the app" : ""}`;
   s.addText(sub, { x: tx, y: 1.12, w: tw, h: 0.35, fontSize: 13, color: HEX.dk2, margin: 0, valign: "middle", isTextBox: true });
   s.addText("Private values are hidden (•••)  ·  click anywhere to go back", { x: W - M - 7, y: 6.95, w: 7, h: 0.3, fontSize: 11, italic: true, color: "6B7280", align: "right", margin: 0, isTextBox: true });
   s.addNotes(`Real rows from the live Neon database (read-only export on ${(require("./data/table_samples.json").exportedAt || "").slice(0, 10)}, scripts/export-table-samples.mjs). Passwords, tokens and verification values are hidden; emails, student IDs, phone numbers and IP addresses are partly masked. PK = primary key, FK = link to another table. The full column list of every table is in UniCareer_Database_Tables.pdf.`);
 }
 
-module.exports = { tableSlide, cardHeight, rowsFor, uqLine, TABLES, HDR, RH };
+module.exports = { tableSlide, drawCard, cardHeight, bus, direct, rowsFor, TABLES, COUNTS, HDR, DSC, RH };

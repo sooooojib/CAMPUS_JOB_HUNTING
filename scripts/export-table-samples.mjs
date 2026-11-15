@@ -1,11 +1,11 @@
-// Exports up to 5 sample rows from every table (read-only), with private values hidden,
+// Exports up to 12 sample rows from every table (read-only), with private values hidden,
 // to presentation/table_samples.json for the defense slides.
 // Run:  node scripts/export-table-samples.mjs
 import "dotenv/config";
 import pg from "pg";
 import fs from "node:fs";
 
-const ROWS = 5, MAXLEN = 60, SCAN = 300;
+const ROWS = 12, MAXLEN = 60, SCAN = 300;
 // Rows left behind by automated tests carry a 13-digit timestamp (e.g. "TechCorp Solutions 1794637771518"); skip them when possible.
 const TESTROW = /\b1\d{12}\b|\bStage \d+ (Student|Recruiter|Admin)|@(test|example)\.|vitest/i;
 const HIDE = /^(password|token|accesstoken|refreshtoken|idtoken|value|storagekey|proofdocumenturl|resumeurl|proofdetails)$/i;
@@ -44,6 +44,25 @@ for (const t of tables) {
   };
   console.log(`${t.padEnd(28)} ${String(count).padStart(5)} rows`);
 }
+
+// ---------- Summary numbers for the Reports chapter (counts only, no personal data) ----------
+const Q = async (sql) => (await client.query(sql)).rows.map((r) => ({ ...r, n: Number(r.n) }));
+out.summary = {
+  usersByRole: await Q(`select "membershipType" k, count(*) n from users where "systemRole" <> 'ADMIN' group by 1 order by 2 desc`),
+  usersByStatus: await Q(`select "verificationStatus" k, count(*) n from users where "systemRole" <> 'ADMIN' group by 1 order by 2 desc`),
+  membersByDepartment: await Q(`select coalesce(department,'Not set') k, count(*) n from profiles group by 1 order by 2 desc limit 10`),
+  jobsByType: await Q(`select type k, count(*) n from opportunities group by 1 order by 2 desc`),
+  jobsByWorkplace: await Q(`select "workplaceType" k, count(*) n from opportunities group by 1 order by 2 desc`),
+  jobsByStatus: await Q(`select status k, count(*) n from opportunities group by 1 order by 2 desc`),
+  jobsByCompany: await Q(`select "companyName" k, count(*) n from opportunities group by 1 order by 2 desc limit 8`),
+  applicationsByStatus: await Q(`select status k, count(*) n from applications group by 1 order by 2 desc`),
+  postsByType: await Q(`select post_type k, count(*) n from posts group by 1 order by 2 desc`),
+  referralsByStatus: await Q(`select status k, count(*) n from referral_requests group by 1 order by 2 desc`),
+  reportsByReason: await Q(`select reason k, count(*) n from content_reports group by 1 order by 2 desc`),
+  membershipRequestsByStatus: await Q(`select status k, count(*) n from membership_requests group by 1 order by 2 desc`),
+  adminActionsByType: await Q(`select action k, count(*) n from admin_audit_logs group by 1 order by 2 desc limit 8`),
+  signupsByWeek: await Q(`select to_char(date_trunc('week', "createdAt"), 'YYYY-MM-DD') k, count(*) n from users group by 1 order by 1`),
+};
 await client.end();
 fs.mkdirSync("presentation", { recursive: true });
 fs.writeFileSync("presentation/table_samples.json", JSON.stringify(out, null, 1));

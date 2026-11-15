@@ -1,6 +1,7 @@
 const T = require("./theme_config");
 const { HEX, W, H, M, CW, header, badge, pill } = T;
 const SEC = "Chapter 5 — The App in Action";
+const kick = (phase) => T.setChapter(4, phase ? `05 · APP UI  ·  ${phase.toUpperCase()}` : "05 · APP UI");
 
 // Empty screenshot frame (kept blank on purpose; paste a real screenshot over it)
 function shot(pres, s, x, y, w, h, label, route, fs = 15) {
@@ -15,20 +16,19 @@ function bottomBar(pres, s, by, enter, get) {
   const gap = 0.3, w = (CW - gap) / 2, bh = 0.6;
   [["You do", enter, HEX.accent3, HEX.accent2], ["You get", get, HEX.accent4, HEX.accent1]].forEach(([k, t, fill, col], i) => {
     const x = M + i * (w + gap);
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: by, w, h: bh, rectRadius: 0.1, fill: { color: fill }, line: { color: fill, width: 0 }, objectName: `${k} bar` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: by, w, h: bh, rectRadius: 0.1, fill: { color: fill }, line: { color: fill, width: 0 }, shadow: { type: "outer", color: "1E3A5F", opacity: 0.12, blur: 12, offset: 2, angle: 90 }, objectName: `${k} bar` });
     s.addText([{ text: `${k}:  `, options: { bold: true, color: col } }, { text: t, options: { color: HEX.dk1 } }], { x: x + 0.25, y: by, w: w - 0.5, h: bh, fontSize: 17, margin: 0, valign: "middle", isTextBox: true });
   });
 }
 
 const MORPH = [];
 function drawImgSlide(pres, s, title, accent, shots, bar, note, phase, zoom) {
-  if (zoom !== -1 || s._isNew) { header(s, title, accent);
-    if (phase) s.addText(phase, { x: W - M - 3.2, y: 0.62, w: 3.2, h: 0.35, fontSize: 13, bold: true, color: HEX.accent2, align: "right", margin: 0, valign: "middle", isTextBox: true }); }
+  if (zoom !== -1 || s._isNew) { kick(phase); header(s, title, accent); }
   const n = shots.length, gap = 0.55, y = 1.95;
   const pos = []; let band;
   if (shots[0][4]) {
     // Column-fit layout: each image fits its own column (width share = it[4]); for very different shapes
-    const maxH = 3.15, tot = shots.reduce((t, it) => t + it[4], 0), avail = CW - gap * (n - 1);
+    const maxH = 3.6, tot = shots.reduce((t, it) => t + it[4], 0), avail = CW - gap * (n - 1);
     let x = M;
     shots.forEach((it) => {
       const cw = avail * it[4] / tot;
@@ -39,7 +39,7 @@ function drawImgSlide(pres, s, title, accent, shots, bar, note, phase, zoom) {
     band = maxH;
   } else {
     const sum = shots.reduce((t, it) => t + it[3], 0);
-    const h = Math.min(n === 2 ? 3.3 : 2.85, (CW - gap * (n - 1)) / sum);
+    const h = Math.min(n === 2 ? 3.75 : 3.1, (CW - gap * (n - 1)) / sum);
     let x = M + (CW - (h * sum + gap * (n - 1))) / 2;
     shots.forEach((it) => { const w = h * it[3]; pos.push([x, y, w, h, x + w]); x += w + gap; });
     band = h;
@@ -71,12 +71,11 @@ function drawImgSlide(pres, s, title, accent, shots, bar, note, phase, zoom) {
 // shots: [[label, route], ...] (2 or 3). Tags: first = What you enter, last = What you get, middle = "Then"
 function screenSlide(pres, title, accent, shots, bar, note, phase, opts = {}) {
   const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
-  header(s, title, accent);
-  if (phase) s.addText(phase, { x: W - M - 3.2, y: 0.62, w: 3.2, h: 0.35, fontSize: 13, bold: true, color: HEX.accent2, align: "right", margin: 0, valign: "middle", isTextBox: true });
+  kick(phase); header(s, title, accent);
   const hasImg = shots.some((it) => it[2]);
   if (hasImg && opts.zoom === false) {
     // Plain screenshots, no zoom: each image fits its own column (widths = it[4] share), centred vertically
-    const n = shots.length, gap = 0.6, y = 1.95, maxH = 3.15;
+    const n = shots.length, gap = 0.6, y = 1.95, maxH = 3.6;
     const tot = shots.reduce((t, it) => t + it[4], 0), avail = CW - gap * (n - 1);
     let x = M;
     shots.forEach((it, i) => {
@@ -102,7 +101,7 @@ function screenSlide(pres, title, accent, shots, bar, note, phase, opts = {}) {
     shots.forEach((it, z) => {
       const zs = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
       drawImgSlide(pres, zs, title, accent, shots, bar, note, phase, z);
-      MORPH.push(zs._slideNum);
+      (pres._morph || (pres._morph = [])).push(zs._slideNum); zs._noNum = true;
     });
     return;
   }
@@ -120,7 +119,7 @@ function screenSlide(pres, title, accent, shots, bar, note, phase, opts = {}) {
 }
 
 module.exports = function ch5(pres) {
-  pres._morph = MORPH;
+  pres._morph = pres._morph || [];
   pres.addSection({ title: SEC });
   const J = "Joining", C = "Community", B = "Jobs", R = "Referrals", A = "Admin";
 
@@ -158,6 +157,10 @@ module.exports = function ch5(pres) {
 
 
   // ---------- Referrals ----------
+  screenSlide(pres, "Ask an alumnus for a ", "referral",
+    [["Referral post with an alumnus reply", "/feed", "img/referral_post.jpg", 1.12], ["Request Referral: Mail Me or in-app", "/profile/[id]", "img/referral_mail.jpg", 1.114]],
+    ["ask in the feed, or email an alumnus directly", "a ready-made email, logged for tracking"],
+    "Screens: (1) A post of type 'Referral' on /feed: the student (STUDENT, Verified, CSE) asks for an alumni referral or a resume review for backend roles at Chaldal / ShopUp. An alumnus (ALUMNI badge) who works at Chaldal answers in the comments and the student replies. (2) From the alumnus's profile the student opens 'Request Referral from Al-Amin Hossain' (shown as 'Email Available' because the alumnus shared a contact email). Two ways to ask: 'Direct Email (Mail Me)' or 'In-App Tracked Dossier'. In Mail Me mode the student fills Company Name, Target Role Title, Key Qualifications / Elevator Pitch and an optional resume or portfolio link; the app builds the email (To and Subject '[UniCareer Referral Request] ...' in the Email Preview). 'Open in Email App' launches the mail client, 'Copy Email' copies the text for webmail. With 'Also log this request in my UniCareer Sent Referrals' ticked, the request is also saved so the student can track its status. In-App mode sends the request inside UniCareer, where the alumnus accepts or declines it.", R);
 
 
   // ---------- Admin ----------

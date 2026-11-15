@@ -1,0 +1,737 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2860" height="1452" viewBox="0 0 2860 1452" font-family="Carlito, Calibri, sans-serif" xmlns:c2pa="http://c2pa.org/manifest">
+<rect width="2860" height="1452" fill="#EEF3F8"/>
+<rect x="22" y="88" width="473" height="1342" rx="12" fill="#FBE6D6" fill-opacity="0.75" stroke="#C2410C" stroke-opacity="0.45" stroke-width="1.5"/>
+<text x="157" y="112" font-size="17" font-weight="700" fill="#C2410C">Jobs and applications <tspan fill="#C2410C" fill-opacity="0.7" font-weight="400">· 7 tables</tspan></text>
+<rect x="2354" y="88" width="484" height="1342" rx="12" fill="#DDEFE4" fill-opacity="0.75" stroke="#1F7A4D" stroke-opacity="0.45" stroke-width="1.5"/>
+<text x="2368" y="112" font-size="17" font-weight="700" fill="#1F7A4D">Community and referrals <tspan fill="#1F7A4D" fill-opacity="0.7" font-weight="400">· 7 tables</tspan></text>
+<rect x="528" y="396" width="1760" height="770" rx="12" fill="#DCE6F2" fill-opacity="0.75" stroke="#1E3A5F" stroke-opacity="0.45" stroke-width="1.5"/>
+<text x="542" y="420" font-size="17" font-weight="700" fill="#1E3A5F">People and login <tspan fill="#1E3A5F" fill-opacity="0.7" font-weight="400">· 9 tables</tspan></text>
+<rect x="528" y="88" width="770" height="264" rx="12" fill="#E9ECF0" fill-opacity="0.75" stroke="#8A94A6" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="8 6"/>
+<text x="542" y="112" font-size="17" font-weight="700" fill="#8A94A6">Left over (no longer used) <tspan fill="#8A94A6" fill-opacity="0.7" font-weight="400">· 2 tables</tspan></text>
+<rect x="1760" y="88" width="528" height="264" rx="12" fill="#F5EBD3" fill-opacity="0.75" stroke="#A16207" stroke-opacity="0.45" stroke-width="1.5"/>
+<text x="1774" y="112" font-size="17" font-weight="700" fill="#A16207">Admin <tspan fill="#A16207" fill-opacity="0.7" font-weight="400">· 1 table</tspan></text>
+<rect x="528" y="1210" width="1760" height="220" rx="12" fill="#DFE9F7" fill-opacity="0.75" stroke="#2F6FB0" stroke-opacity="0.45" stroke-width="1.5"/>
+<text x="542" y="1234" font-size="17" font-weight="700" fill="#2F6FB0">Alerts and calendar <tspan fill="#2F6FB0" fill-opacity="0.7" font-weight="400">· 4 tables</tspan></text>
+<path d="M1650,1320 L1606,1320 L1606,1089 L1474,1089 L1474,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="1320" x2="1650" y2="1313" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="1320" x2="1650" y2="1327" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1632" cy="1320" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1467" y1="998" x2="1481" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1467" y1="1003" x2="1481" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M1650,1078 L1496,1078 L1496,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="1078" x2="1650" y2="1071" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="1078" x2="1650" y2="1085" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1632" cy="1078" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1489" y1="998" x2="1503" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1489" y1="1003" x2="1503" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,1188 L2321,1188 L2321,891 L1595,891" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1188" x2="2431" y2="1181" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1188" x2="2431" y2="1195" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="1188" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="898" x2="1603" y2="884" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="898" x2="1608" y2="884" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,209 L2299,209 L2299,649 L1595,649" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="209" x2="2431" y2="202" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="209" x2="2431" y2="216" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="209" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="656" x2="1603" y2="642" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="656" x2="1608" y2="642" stroke="#475569" stroke-width="1.6"/>
+<path d="M1650,517 L1507,517 L1507,616" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="517" x2="1650" y2="510" stroke="#475569" stroke-width="1.6"/>
+<line x1="1637" y1="517" x2="1650" y2="524" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1632" cy="517" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1514" y1="608" x2="1500" y2="608" stroke="#475569" stroke-width="1.6"/>
+<line x1="1514" y1="603" x2="1500" y2="603" stroke="#475569" stroke-width="1.6"/>
+<path d="M1914,231 L1892,231 L1892,429 L2046,429 L2046,605 L1617,605 L1617,583 L1562,583 L1562,616" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1901" y1="231" x2="1914" y2="224" stroke="#475569" stroke-width="1.6"/>
+<line x1="1901" y1="231" x2="1914" y2="238" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1896" cy="231" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1569" y1="608" x2="1555" y2="608" stroke="#475569" stroke-width="1.6"/>
+<line x1="1569" y1="603" x2="1555" y2="603" stroke="#475569" stroke-width="1.6"/>
+<path d="M1188,539 L1243,539 L1243,616" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1201" y1="539" x2="1188" y2="546" stroke="#475569" stroke-width="1.6"/>
+<line x1="1201" y1="539" x2="1188" y2="532" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1206" cy="539" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1250" y1="608" x2="1236" y2="608" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1243" cy="599" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M990,231 L836,231 L836,143 L523,143 a6,6 0 0 0 -12,0 L352,143 L352,154 L319,154" fill="none" stroke="#9AA5B4" stroke-width="1.6" stroke-dasharray="6 4"/>
+<line x1="977" y1="231" x2="990" y2="224" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="977" y1="231" x2="990" y2="238" stroke="#9AA5B4" stroke-width="1.6"/>
+<circle cx="972" cy="231" r="4.5" fill="#EEF3F8" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="327" y1="161" x2="327" y2="147" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="332" y1="161" x2="332" y2="147" stroke="#9AA5B4" stroke-width="1.6"/>
+<path d="M143,605 L110,605 L110,495 L143,495" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="605" x2="143" y2="598" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="605" x2="143" y2="612" stroke="#475569" stroke-width="1.6"/>
+<circle cx="125" cy="605" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="488" x2="135" y2="502" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="488" x2="130" y2="502" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,1331 L2299,1331 L2299,957 L1595,957" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1331" x2="2431" y2="1324" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1331" x2="2431" y2="1338" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="1331" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="964" x2="1603" y2="950" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="964" x2="1608" y2="950" stroke="#475569" stroke-width="1.6"/>
+<path d="M1342,1320 L1320,1320 L1320,1089 L1441,1089 L1441,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1329" y1="1320" x2="1342" y2="1313" stroke="#475569" stroke-width="1.6"/>
+<line x1="1329" y1="1320" x2="1342" y2="1327" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1324" cy="1320" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1434" y1="998" x2="1448" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1434" y1="1003" x2="1448" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M2684,440 L2717,440 L2717,33 L55,33 L55,341 L60,341 a6,6 0 0 1 12,0 L71,341 a6,6 0 0 1 12,0 L143,341" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2697" y1="440" x2="2684" y2="447" stroke="#475569" stroke-width="1.6"/>
+<line x1="2697" y1="440" x2="2684" y2="433" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2702" cy="440" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="334" x2="135" y2="348" stroke="#475569" stroke-width="1.6"/>
+<circle cx="126" cy="341" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,1309 L2310,1309 L2310,924 L1595,924" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1309" x2="2431" y2="1302" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1309" x2="2431" y2="1316" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="1309" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="931" x2="1603" y2="917" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="931" x2="1608" y2="917" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,858 L1628,858 L1628,825 L1595,825" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="858" x2="2431" y2="851" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="858" x2="2431" y2="865" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="858" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="832" x2="1603" y2="818" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1612" cy="825" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M352,1287 L517,1287 L517,957 L1232,957" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="365" y1="1287" x2="352" y2="1294" stroke="#475569" stroke-width="1.6"/>
+<line x1="365" y1="1287" x2="352" y2="1280" stroke="#475569" stroke-width="1.6"/>
+<circle cx="370" cy="1287" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="950" x2="1224" y2="964" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="950" x2="1219" y2="964" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,231 L2310,231 L2310,682 L1595,682" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="231" x2="2431" y2="224" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="231" x2="2431" y2="238" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="231" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="689" x2="1603" y2="675" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="689" x2="1608" y2="675" stroke="#475569" stroke-width="1.6"/>
+<path d="M1155,1331 L1309,1331 L1309,1034 L1331,1034 L1331,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1164" y1="1338" x2="1164" y2="1324" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1172" cy="1331" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1324" y1="998" x2="1338" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1324" y1="1003" x2="1338" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,627 L2343,627 L2343,748 L1595,748" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="627" x2="2431" y2="620" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="627" x2="2431" y2="634" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="627" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="755" x2="1603" y2="741" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="755" x2="1608" y2="741" stroke="#475569" stroke-width="1.6"/>
+<path d="M1188,517 L1287,517 L1287,616" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1201" y1="517" x2="1188" y2="524" stroke="#475569" stroke-width="1.6"/>
+<line x1="1201" y1="517" x2="1188" y2="510" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1206" cy="517" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1294" y1="608" x2="1280" y2="608" stroke="#475569" stroke-width="1.6"/>
+<line x1="1294" y1="603" x2="1280" y2="603" stroke="#475569" stroke-width="1.6"/>
+<path d="M143,814 L110,814 L110,704 L143,704" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="814" x2="143" y2="807" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="814" x2="143" y2="821" stroke="#475569" stroke-width="1.6"/>
+<circle cx="125" cy="814" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="697" x2="135" y2="711" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="697" x2="130" y2="711" stroke="#475569" stroke-width="1.6"/>
+<path d="M803,231 L825,231 L825,385 L1386,385 L1386,616" fill="none" stroke="#9AA5B4" stroke-width="1.6" stroke-dasharray="6 4"/>
+<line x1="816" y1="231" x2="803" y2="238" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="816" y1="231" x2="803" y2="224" stroke="#9AA5B4" stroke-width="1.6"/>
+<circle cx="821" cy="231" r="4.5" fill="#EEF3F8" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="1393" y1="608" x2="1379" y2="608" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="1393" y1="603" x2="1379" y2="603" stroke="#9AA5B4" stroke-width="1.6"/>
+<path d="M2618,836 L2651,836 L2651,682 L2585,682" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2631" y1="836" x2="2618" y2="843" stroke="#475569" stroke-width="1.6"/>
+<line x1="2631" y1="836" x2="2618" y2="829" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2636" cy="836" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2593" y1="689" x2="2593" y2="675" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2602" cy="682" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M2585,649 L2618,649 L2618,583 L2585,583" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2598" y1="649" x2="2585" y2="656" stroke="#475569" stroke-width="1.6"/>
+<line x1="2598" y1="649" x2="2585" y2="642" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2603" cy="649" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2593" y1="590" x2="2593" y2="576" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2602" cy="583" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M913,517 L935,517 L935,407 L1320,407 L1320,616" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="922" y1="524" x2="922" y2="510" stroke="#475569" stroke-width="1.6"/>
+<circle cx="930" cy="517" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1327" y1="608" x2="1313" y2="608" stroke="#475569" stroke-width="1.6"/>
+<line x1="1327" y1="603" x2="1313" y2="603" stroke="#475569" stroke-width="1.6"/>
+<path d="M319,418 L495,418 L495,660 L1199,660 L1199,726 L1232,726" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="418" x2="319" y2="425" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="418" x2="319" y2="411" stroke="#475569" stroke-width="1.6"/>
+<circle cx="337" cy="418" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="719" x2="1224" y2="733" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1215" cy="726" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M363,1144 L506,1144 L506,924 L1232,924" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="376" y1="1144" x2="363" y2="1151" stroke="#475569" stroke-width="1.6"/>
+<line x1="376" y1="1144" x2="363" y2="1137" stroke="#475569" stroke-width="1.6"/>
+<circle cx="381" cy="1144" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="917" x2="1224" y2="931" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="917" x2="1219" y2="931" stroke="#475569" stroke-width="1.6"/>
+<path d="M407,836 L1199,836 L1199,847 L1232,847" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="420" y1="836" x2="407" y2="843" stroke="#475569" stroke-width="1.6"/>
+<line x1="420" y1="836" x2="407" y2="829" stroke="#475569" stroke-width="1.6"/>
+<circle cx="425" cy="836" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="840" x2="1224" y2="854" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1215" cy="847" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,792 L1628,792 L1628,781 L1595,781" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="792" x2="2431" y2="785" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="792" x2="2431" y2="799" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="792" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="788" x2="1603" y2="774" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="788" x2="1608" y2="774" stroke="#475569" stroke-width="1.6"/>
+<path d="M143,649 L105,649 a6,6 0 0 0 -12,0 L94,649 a6,6 0 0 0 -12,0 L66,649 L66,77 L93,77 a6,6 0 0 1 12,0 L104,77 a6,6 0 0 1 12,0 L517,77 L517,176 L660,176" fill="none" stroke="#9AA5B4" stroke-width="1.6" stroke-dasharray="6 4"/>
+<line x1="130" y1="649" x2="143" y2="642" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="130" y1="649" x2="143" y2="656" stroke="#9AA5B4" stroke-width="1.6"/>
+<circle cx="125" cy="649" r="4.5" fill="#EEF3F8" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="652" y1="169" x2="652" y2="183" stroke="#9AA5B4" stroke-width="1.6"/>
+<circle cx="643" cy="176" r="4.5" fill="#EEF3F8" stroke="#9AA5B4" stroke-width="1.6"/>
+<path d="M1199,1078 L1243,1078 L1243,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="1212" y1="1078" x2="1199" y2="1085" stroke="#475569" stroke-width="1.6"/>
+<line x1="1212" y1="1078" x2="1199" y2="1071" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1217" cy="1078" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1236" y1="998" x2="1250" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1236" y1="1003" x2="1250" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M143,374 L77,374 L77,264 L93,264 a6,6 0 0 1 12,0 L143,264" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="374" x2="143" y2="367" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="374" x2="143" y2="381" stroke="#475569" stroke-width="1.6"/>
+<circle cx="125" cy="374" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="257" x2="135" y2="271" stroke="#475569" stroke-width="1.6"/>
+<circle cx="126" cy="264" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M374,979 L495,979 L495,880 L1232,880" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="387" y1="979" x2="374" y2="986" stroke="#475569" stroke-width="1.6"/>
+<line x1="387" y1="979" x2="374" y2="972" stroke="#475569" stroke-width="1.6"/>
+<circle cx="392" cy="979" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="873" x2="1224" y2="887" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="873" x2="1219" y2="887" stroke="#475569" stroke-width="1.6"/>
+<path d="M1166,253 L1320,253 L1320,374 L1408,374 L1408,616" fill="none" stroke="#9AA5B4" stroke-width="1.6" stroke-dasharray="6 4"/>
+<line x1="1179" y1="253" x2="1166" y2="260" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="1179" y1="253" x2="1166" y2="246" stroke="#9AA5B4" stroke-width="1.6"/>
+<circle cx="1184" cy="253" r="4.5" fill="#EEF3F8" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="1415" y1="608" x2="1401" y2="608" stroke="#9AA5B4" stroke-width="1.6"/>
+<line x1="1415" y1="603" x2="1401" y2="603" stroke="#9AA5B4" stroke-width="1.6"/>
+<path d="M2431,418 L2332,418 L2332,715 L1595,715" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="418" x2="2431" y2="411" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="418" x2="2431" y2="425" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="418" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="722" x2="1603" y2="708" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="722" x2="1608" y2="708" stroke="#475569" stroke-width="1.6"/>
+<path d="M836,1320 L880,1320 L880,1166 L1276,1166 L1276,990" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="849" y1="1320" x2="836" y2="1327" stroke="#475569" stroke-width="1.6"/>
+<line x1="849" y1="1320" x2="836" y2="1313" stroke="#475569" stroke-width="1.6"/>
+<circle cx="854" cy="1320" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1269" y1="998" x2="1283" y2="998" stroke="#475569" stroke-width="1.6"/>
+<line x1="1269" y1="1003" x2="1283" y2="1003" stroke="#475569" stroke-width="1.6"/>
+<path d="M2629,253 L2684,253 L2684,66 L110,66 L110,154 L143,154" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2642" y1="253" x2="2629" y2="260" stroke="#475569" stroke-width="1.6"/>
+<line x1="2642" y1="253" x2="2629" y2="246" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2647" cy="253" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="147" x2="135" y2="161" stroke="#475569" stroke-width="1.6"/>
+<circle cx="126" cy="154" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M2629,275 L2695,275 L2695,55 L99,55 L99,319 L143,319" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2642" y1="275" x2="2629" y2="282" stroke="#475569" stroke-width="1.6"/>
+<line x1="2642" y1="275" x2="2629" y2="268" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2647" cy="275" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="312" x2="135" y2="326" stroke="#475569" stroke-width="1.6"/>
+<circle cx="126" cy="319" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M341,627 L484,627 L484,759 L1232,759" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="354" y1="627" x2="341" y2="634" stroke="#475569" stroke-width="1.6"/>
+<line x1="354" y1="627" x2="341" y2="620" stroke="#475569" stroke-width="1.6"/>
+<circle cx="359" cy="627" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="752" x2="1224" y2="766" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="752" x2="1219" y2="766" stroke="#475569" stroke-width="1.6"/>
+<path d="M341,671 L473,671 L473,803 L1232,803" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="354" y1="671" x2="341" y2="678" stroke="#475569" stroke-width="1.6"/>
+<line x1="354" y1="671" x2="341" y2="664" stroke="#475569" stroke-width="1.6"/>
+<circle cx="359" cy="671" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="796" x2="1224" y2="810" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1215" cy="803" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M319,209 L517,209 L517,627 L1232,627" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="209" x2="319" y2="216" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="209" x2="319" y2="202" stroke="#475569" stroke-width="1.6"/>
+<circle cx="337" cy="209" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="620" x2="1224" y2="634" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="620" x2="1219" y2="634" stroke="#475569" stroke-width="1.6"/>
+<path d="M319,396 L506,396 L506,649 L1232,649" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="396" x2="319" y2="403" stroke="#475569" stroke-width="1.6"/>
+<line x1="332" y1="396" x2="319" y2="389" stroke="#475569" stroke-width="1.6"/>
+<circle cx="337" cy="396" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1224" y1="642" x2="1224" y2="656" stroke="#475569" stroke-width="1.6"/>
+<line x1="1219" y1="642" x2="1219" y2="656" stroke="#475569" stroke-width="1.6"/>
+<path d="M2596,1166 L2750,1166 L2750,374 L2723,374 a6,6 0 0 0 -12,0 L2684,374" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2609" y1="1166" x2="2596" y2="1173" stroke="#475569" stroke-width="1.6"/>
+<line x1="2609" y1="1166" x2="2596" y2="1159" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2614" cy="1166" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2692" y1="381" x2="2692" y2="367" stroke="#475569" stroke-width="1.6"/>
+<line x1="2697" y1="381" x2="2697" y2="367" stroke="#475569" stroke-width="1.6"/>
+<path d="M143,1001 L99,1001 L99,473 L143,473" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="1001" x2="143" y2="994" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="1001" x2="143" y2="1008" stroke="#475569" stroke-width="1.6"/>
+<circle cx="125" cy="1001" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="466" x2="135" y2="480" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="466" x2="130" y2="480" stroke="#475569" stroke-width="1.6"/>
+<path d="M143,1122 L88,1122 L88,451 L143,451" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="1122" x2="143" y2="1115" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="1122" x2="143" y2="1129" stroke="#475569" stroke-width="1.6"/>
+<circle cx="125" cy="1122" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="135" y1="444" x2="135" y2="458" stroke="#475569" stroke-width="1.6"/>
+<line x1="130" y1="444" x2="130" y2="458" stroke="#475569" stroke-width="1.6"/>
+<path d="M2596,1001 L2739,1001 L2739,396 L2723,396 a6,6 0 0 0 -12,0 L2684,396" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2609" y1="1001" x2="2596" y2="1008" stroke="#475569" stroke-width="1.6"/>
+<line x1="2609" y1="1001" x2="2596" y2="994" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2614" cy="1001" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2692" y1="403" x2="2692" y2="389" stroke="#475569" stroke-width="1.6"/>
+<line x1="2697" y1="403" x2="2697" y2="389" stroke="#475569" stroke-width="1.6"/>
+<path d="M2585,605 L2612,605 a6,6 0 0 1 12,0 L2717,605 L2717,495 L2684,495" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2598" y1="605" x2="2585" y2="612" stroke="#475569" stroke-width="1.6"/>
+<line x1="2598" y1="605" x2="2585" y2="598" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2603" cy="605" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2692" y1="502" x2="2692" y2="488" stroke="#475569" stroke-width="1.6"/>
+<line x1="2697" y1="502" x2="2697" y2="488" stroke="#475569" stroke-width="1.6"/>
+<path d="M2618,814 L2645,814 a6,6 0 0 1 12,0 L2728,814 L2728,473 L2684,473" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2631" y1="814" x2="2618" y2="821" stroke="#475569" stroke-width="1.6"/>
+<line x1="2631" y1="814" x2="2618" y2="807" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2636" cy="814" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="2692" y1="480" x2="2692" y2="466" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2701" cy="473" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<path d="M2431,1023 L2332,1023 L2332,869 L1595,869" fill="none" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1023" x2="2431" y2="1016" stroke="#475569" stroke-width="1.6"/>
+<line x1="2418" y1="1023" x2="2431" y2="1030" stroke="#475569" stroke-width="1.6"/>
+<circle cx="2413" cy="1023" r="4.5" fill="#EEF3F8" stroke="#475569" stroke-width="1.6"/>
+<line x1="1603" y1="876" x2="1603" y2="862" stroke="#475569" stroke-width="1.6"/>
+<line x1="1608" y1="876" x2="1608" y2="862" stroke="#475569" stroke-width="1.6"/>
+<rect x="143" y="143" width="176" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="143" width="176" height="33" fill="#1E3A5F"/>
+<text x="153" y="165" font-size="16" font-weight="700" fill="#FFFFFF">companies</text>
+<text x="153" y="192" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="309" y="192" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="198" width="174" height="22" fill="#F6F8FB"/>
+<text x="153" y="214" font-size="14" fill="#111827" font-weight="400">createdById</text>
+<text x="309" y="214" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="236" font-size="14" fill="#111827" font-weight="400">name</text>
+<text x="309" y="236" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="144" y="242" width="174" height="22" fill="#F6F8FB"/>
+<text x="153" y="258" font-size="14" fill="#111827" font-weight="400">slug</text>
+<text x="309" y="258" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<rect x="143" y="308" width="176" height="198" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="308" width="176" height="33" fill="#1E3A5F"/>
+<text x="153" y="330" font-size="16" font-weight="700" fill="#FFFFFF">opportunities</text>
+<text x="153" y="357" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="309" y="357" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="363" width="174" height="22" fill="#F6F8FB"/>
+<text x="153" y="379" font-size="14" fill="#111827" font-weight="400">companyId</text>
+<text x="309" y="379" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="401" font-size="14" fill="#111827" font-weight="400">posterId</text>
+<text x="309" y="401" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="144" y="407" width="174" height="22" fill="#F6F8FB"/>
+<text x="153" y="423" font-size="14" fill="#111827" font-weight="400">reviewerId</text>
+<text x="309" y="423" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="445" font-size="14" fill="#111827" font-weight="400">title</text>
+<text x="309" y="445" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="144" y="451" width="174" height="22" fill="#F6F8FB"/>
+<text x="153" y="467" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="309" y="467" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<text x="153" y="489" font-size="14" fill="#111827" font-weight="400">deadline</text>
+<text x="309" y="489" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<rect x="143" y="539" width="198" height="176" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="539" width="198" height="33" fill="#1E3A5F"/>
+<text x="153" y="561" font-size="16" font-weight="700" fill="#FFFFFF">applications</text>
+<text x="153" y="588" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="331" y="588" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="594" width="196" height="22" fill="#F6F8FB"/>
+<text x="153" y="610" font-size="14" fill="#111827" font-weight="400">opportunityId</text>
+<text x="331" y="610" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="632" font-size="14" fill="#111827" font-weight="400">applicantId</text>
+<text x="331" y="632" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="144" y="638" width="196" height="22" fill="#F6F8FB"/>
+<text x="153" y="654" font-size="14" fill="#111827" font-weight="400">resumeId</text>
+<text x="331" y="654" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="676" font-size="14" fill="#111827" font-weight="400">reviewedById</text>
+<text x="331" y="676" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="144" y="682" width="196" height="22" fill="#F6F8FB"/>
+<text x="153" y="698" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="331" y="698" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="143" y="748" width="264" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="748" width="264" height="33" fill="#1E3A5F"/>
+<text x="153" y="770" font-size="16" font-weight="700" fill="#FFFFFF">application_status_history</text>
+<text x="153" y="797" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="397" y="797" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="803" width="262" height="22" fill="#F6F8FB"/>
+<text x="153" y="819" font-size="14" fill="#111827" font-weight="400">applicationId</text>
+<text x="397" y="819" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="841" font-size="14" fill="#111827" font-weight="400">changedById</text>
+<text x="397" y="841" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="144" y="847" width="262" height="22" fill="#F6F8FB"/>
+<text x="153" y="863" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="397" y="863" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="143" y="913" width="231" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="913" width="231" height="33" fill="#1E3A5F"/>
+<text x="153" y="935" font-size="16" font-weight="700" fill="#FFFFFF">opportunity_bookmarks</text>
+<text x="153" y="962" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="364" y="962" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="968" width="229" height="22" fill="#F6F8FB"/>
+<text x="153" y="984" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="364" y="984" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="1006" font-size="14" fill="#111827" font-weight="400">opportunityId</text>
+<text x="364" y="1006" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="143" y="1056" width="220" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="1056" width="220" height="33" fill="#1E3A5F"/>
+<text x="153" y="1078" font-size="16" font-weight="700" fill="#FFFFFF">opportunity_comments</text>
+<text x="153" y="1105" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="353" y="1105" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="1111" width="218" height="22" fill="#F6F8FB"/>
+<text x="153" y="1127" font-size="14" fill="#111827" font-weight="400">opportunityId</text>
+<text x="353" y="1127" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="1149" font-size="14" fill="#111827" font-weight="400">authorId</text>
+<text x="353" y="1149" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="144" y="1155" width="218" height="22" fill="#F6F8FB"/>
+<text x="153" y="1171" font-size="14" fill="#111827" font-weight="400">content</text>
+<text x="353" y="1171" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="143" y="1221" width="209" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="143" y="1221" width="209" height="33" fill="#1E3A5F"/>
+<text x="153" y="1243" font-size="16" font-weight="700" fill="#FFFFFF">manual_applications</text>
+<text x="153" y="1270" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="342" y="1270" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="144" y="1276" width="207" height="22" fill="#F6F8FB"/>
+<text x="153" y="1292" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="342" y="1292" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="153" y="1314" font-size="14" fill="#111827" font-weight="400">companyName</text>
+<text x="342" y="1314" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="144" y="1320" width="207" height="22" fill="#F6F8FB"/>
+<text x="153" y="1336" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="342" y="1336" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="2431" y="143" width="198" height="176" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="143" width="198" height="33" fill="#1E3A5F"/>
+<text x="2441" y="165" font-size="16" font-weight="700" fill="#FFFFFF">referral_requests</text>
+<text x="2441" y="192" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2619" y="192" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="198" width="196" height="22" fill="#F6F8FB"/>
+<text x="2441" y="214" font-size="14" fill="#111827" font-weight="400">requesterId</text>
+<text x="2619" y="214" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="236" font-size="14" fill="#111827" font-weight="400">recipientId</text>
+<text x="2619" y="236" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="242" width="196" height="22" fill="#F6F8FB"/>
+<text x="2441" y="258" font-size="14" fill="#111827" font-weight="400">companyId</text>
+<text x="2619" y="258" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="280" font-size="14" fill="#111827" font-weight="400">opportunityId</text>
+<text x="2619" y="280" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="286" width="196" height="22" fill="#F6F8FB"/>
+<text x="2441" y="302" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="2619" y="302" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="2431" y="352" width="253" height="154" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="352" width="253" height="33" fill="#1E3A5F"/>
+<text x="2441" y="374" font-size="16" font-weight="700" fill="#FFFFFF">posts</text>
+<text x="2441" y="401" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2674" y="401" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="407" width="251" height="22" fill="#F6F8FB"/>
+<text x="2441" y="423" font-size="14" fill="#111827" font-weight="400">authorId</text>
+<text x="2674" y="423" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="445" font-size="14" fill="#111827" font-weight="400">attachedOpportunityId</text>
+<text x="2674" y="445" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="451" width="251" height="22" fill="#F6F8FB"/>
+<text x="2441" y="467" font-size="14" fill="#111827" font-weight="400">title</text>
+<text x="2674" y="467" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<text x="2441" y="489" font-size="14" fill="#111827" font-weight="400">postType</text>
+<text x="2674" y="489" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="2431" y="539" width="154" height="154" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="539" width="154" height="33" fill="#1E3A5F"/>
+<text x="2441" y="561" font-size="16" font-weight="700" fill="#FFFFFF">comments</text>
+<text x="2441" y="588" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2575" y="588" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="594" width="152" height="22" fill="#F6F8FB"/>
+<text x="2441" y="610" font-size="14" fill="#111827" font-weight="400">postId</text>
+<text x="2575" y="610" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="632" font-size="14" fill="#111827" font-weight="400">authorId</text>
+<text x="2575" y="632" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="638" width="152" height="22" fill="#F6F8FB"/>
+<text x="2441" y="654" font-size="14" fill="#111827" font-weight="400">parentId</text>
+<text x="2575" y="654" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="676" font-size="14" fill="#111827" font-weight="400">content</text>
+<text x="2575" y="676" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="2431" y="726" width="187" height="176" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="726" width="187" height="33" fill="#1E3A5F"/>
+<text x="2441" y="748" font-size="16" font-weight="700" fill="#FFFFFF">content_reports</text>
+<text x="2441" y="775" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2608" y="775" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="781" width="185" height="22" fill="#F6F8FB"/>
+<text x="2441" y="797" font-size="14" fill="#111827" font-weight="400">reporterId</text>
+<text x="2608" y="797" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="819" font-size="14" fill="#111827" font-weight="400">postId</text>
+<text x="2608" y="819" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="825" width="185" height="22" fill="#F6F8FB"/>
+<text x="2441" y="841" font-size="14" fill="#111827" font-weight="400">commentId</text>
+<text x="2608" y="841" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="863" font-size="14" fill="#111827" font-weight="400">reviewedById</text>
+<text x="2608" y="863" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="869" width="185" height="22" fill="#F6F8FB"/>
+<text x="2441" y="885" font-size="14" fill="#111827" font-weight="400">reason</text>
+<text x="2608" y="885" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="2431" y="935" width="165" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="935" width="165" height="33" fill="#1E3A5F"/>
+<text x="2441" y="957" font-size="16" font-weight="700" fill="#FFFFFF">post_reactions</text>
+<text x="2441" y="984" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2586" y="984" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="990" width="163" height="22" fill="#F6F8FB"/>
+<text x="2441" y="1006" font-size="14" fill="#111827" font-weight="400">postId</text>
+<text x="2586" y="1006" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="1028" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="2586" y="1028" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="1034" width="163" height="22" fill="#F6F8FB"/>
+<text x="2441" y="1050" font-size="14" fill="#111827" font-weight="400">type</text>
+<text x="2586" y="1050" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="2431" y="1100" width="165" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="1100" width="165" height="33" fill="#1E3A5F"/>
+<text x="2441" y="1122" font-size="16" font-weight="700" fill="#FFFFFF">post_bookmarks</text>
+<text x="2441" y="1149" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2586" y="1149" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="1155" width="163" height="22" fill="#F6F8FB"/>
+<text x="2441" y="1171" font-size="14" fill="#111827" font-weight="400">postId</text>
+<text x="2586" y="1171" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="1193" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="2586" y="1193" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2431" y="1243" width="176" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2431" y="1243" width="176" height="33" fill="#1E3A5F"/>
+<text x="2441" y="1265" font-size="16" font-weight="700" fill="#FFFFFF">connections</text>
+<text x="2441" y="1292" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2597" y="1292" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2432" y="1298" width="174" height="22" fill="#F6F8FB"/>
+<text x="2441" y="1314" font-size="14" fill="#111827" font-weight="400">senderId</text>
+<text x="2597" y="1314" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="2441" y="1336" font-size="14" fill="#111827" font-weight="400">receiverId</text>
+<text x="2597" y="1336" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="2432" y="1342" width="174" height="22" fill="#F6F8FB"/>
+<text x="2441" y="1358" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="2597" y="1358" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="561" y="451" width="176" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="561" y="451" width="176" height="33" fill="#1E3A5F"/>
+<text x="571" y="473" font-size="16" font-weight="700" fill="#FFFFFF">verifications</text>
+<text x="571" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="727" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="562" y="506" width="174" height="22" fill="#F6F8FB"/>
+<text x="571" y="522" font-size="14" fill="#111827" font-weight="400">identifier</text>
+<text x="727" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<text x="571" y="544" font-size="14" fill="#111827" font-weight="400">expiresAt</text>
+<text x="727" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<rect x="770" y="451" width="143" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="770" y="451" width="143" height="33" fill="#1E3A5F"/>
+<text x="780" y="473" font-size="16" font-weight="700" fill="#FFFFFF">profiles</text>
+<text x="780" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="903" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="771" y="506" width="141" height="22" fill="#F6F8FB"/>
+<text x="780" y="522" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="903" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="780" y="544" font-size="14" fill="#111827" font-weight="400">department</text>
+<text x="903" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="771" y="550" width="141" height="22" fill="#F6F8FB"/>
+<text x="780" y="566" font-size="14" fill="#111827" font-weight="400">studentId</text>
+<text x="903" y="566" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="979" y="451" width="209" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="979" y="451" width="209" height="33" fill="#1E3A5F"/>
+<text x="989" y="473" font-size="16" font-weight="700" fill="#FFFFFF">membership_requests</text>
+<text x="989" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1178" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="980" y="506" width="207" height="22" fill="#F6F8FB"/>
+<text x="989" y="522" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1178" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="989" y="544" font-size="14" fill="#111827" font-weight="400">reviewerId</text>
+<text x="1178" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="980" y="550" width="207" height="22" fill="#F6F8FB"/>
+<text x="989" y="566" font-size="14" fill="#111827" font-weight="400">status</text>
+<text x="1178" y="566" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1650" y="451" width="187" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1650" y="451" width="187" height="33" fill="#1E3A5F"/>
+<text x="1660" y="473" font-size="16" font-weight="700" fill="#FFFFFF">academic_records</text>
+<text x="1660" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1827" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1651" y="506" width="185" height="22" fill="#F6F8FB"/>
+<text x="1660" y="522" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1827" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1660" y="544" font-size="14" fill="#111827" font-weight="400">semester</text>
+<text x="1827" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1651" y="550" width="185" height="22" fill="#F6F8FB"/>
+<text x="1660" y="566" font-size="14" fill="#111827" font-weight="400">gpa</text>
+<text x="1827" y="566" font-size="12.5" text-anchor="end" fill="#8A94A6">float</text>
+<rect x="1881" y="451" width="143" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1881" y="451" width="143" height="33" fill="#1E3A5F"/>
+<text x="1891" y="473" font-size="16" font-weight="700" fill="#FFFFFF">departments</text>
+<text x="1891" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2014" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1882" y="506" width="141" height="22" fill="#F6F8FB"/>
+<text x="1891" y="522" font-size="14" fill="#111827" font-weight="400">code</text>
+<text x="2014" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<text x="1891" y="544" font-size="14" fill="#111827" font-weight="400">name</text>
+<text x="2014" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<rect x="2079" y="451" width="132" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="2079" y="451" width="132" height="33" fill="#1E3A5F"/>
+<text x="2089" y="473" font-size="16" font-weight="700" fill="#FFFFFF">skills</text>
+<text x="2089" y="500" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2201" y="500" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="2080" y="506" width="130" height="22" fill="#F6F8FB"/>
+<text x="2089" y="522" font-size="14" fill="#111827" font-weight="400">name</text>
+<text x="2201" y="522" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<text x="2089" y="544" font-size="14" fill="#111827" font-weight="400">category</text>
+<text x="2201" y="544" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1232" y="616" width="363" height="374" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1232" y="616" width="363" height="33" fill="#1E3A5F"/>
+<text x="1242" y="638" font-size="16" font-weight="700" fill="#FFFFFF">users</text>
+<text x="1242" y="665" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1585" y="665" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1233" y="671" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="687" font-size="14" fill="#111827" font-weight="400">name</text>
+<text x="1585" y="687" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<text x="1242" y="709" font-size="14" fill="#111827" font-weight="400">email</text>
+<text x="1585" y="709" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<rect x="1233" y="715" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="731" font-size="14" fill="#111827" font-weight="400">emailVerified</text>
+<text x="1585" y="731" font-size="12.5" text-anchor="end" fill="#8A94A6">bool</text>
+<text x="1242" y="753" font-size="14" fill="#111827" font-weight="400">image</text>
+<text x="1585" y="753" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1233" y="759" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="775" font-size="14" fill="#111827" font-weight="400">membershipType</text>
+<text x="1585" y="775" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<text x="1242" y="797" font-size="14" fill="#111827" font-weight="400">systemRole</text>
+<text x="1585" y="797" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1233" y="803" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="819" font-size="14" fill="#111827" font-weight="400">accountStatus</text>
+<text x="1585" y="819" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<text x="1242" y="841" font-size="14" fill="#111827" font-weight="400">verificationStatus</text>
+<text x="1585" y="841" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1233" y="847" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="863" font-size="14" fill="#111827" font-weight="400">canPostOpportunities</text>
+<text x="1585" y="863" font-size="12.5" text-anchor="end" fill="#8A94A6">bool</text>
+<text x="1242" y="885" font-size="14" fill="#111827" font-weight="400">canReviewApplicants</text>
+<text x="1585" y="885" font-size="12.5" text-anchor="end" fill="#8A94A6">bool</text>
+<rect x="1233" y="891" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="907" font-size="14" fill="#111827" font-weight="400">verifiedAt</text>
+<text x="1585" y="907" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<text x="1242" y="929" font-size="14" fill="#111827" font-weight="400">verifiedBy</text>
+<text x="1585" y="929" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1233" y="935" width="361" height="22" fill="#F6F8FB"/>
+<text x="1242" y="951" font-size="14" fill="#111827" font-weight="400">createdAt</text>
+<text x="1585" y="951" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<text x="1242" y="973" font-size="14" fill="#111827" font-weight="400">updatedAt</text>
+<text x="1585" y="973" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<rect x="1023" y="1012" width="176" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1023" y="1012" width="176" height="33" fill="#1E3A5F"/>
+<text x="1033" y="1034" font-size="16" font-weight="700" fill="#FFFFFF">sessions</text>
+<text x="1033" y="1061" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1189" y="1061" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1024" y="1067" width="174" height="22" fill="#F6F8FB"/>
+<text x="1033" y="1083" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1189" y="1083" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1033" y="1105" font-size="14" fill="#111827" font-weight="400">token</text>
+<text x="1189" y="1105" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#6B7280">UQ</tspan></text>
+<rect x="1024" y="1111" width="174" height="22" fill="#F6F8FB"/>
+<text x="1033" y="1127" font-size="14" fill="#111827" font-weight="400">expiresAt</text>
+<text x="1189" y="1127" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<rect x="1650" y="1012" width="143" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1650" y="1012" width="143" height="33" fill="#1E3A5F"/>
+<text x="1660" y="1034" font-size="16" font-weight="700" fill="#FFFFFF">accounts</text>
+<text x="1660" y="1061" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1783" y="1061" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1651" y="1067" width="141" height="22" fill="#F6F8FB"/>
+<text x="1660" y="1083" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1783" y="1083" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1660" y="1105" font-size="14" fill="#111827" font-weight="400">providerId</text>
+<text x="1783" y="1105" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="660" y="165" width="143" height="110" fill="#FFFFFF" stroke="#AAB5C3" stroke-width="1" stroke-dasharray="5 3"/>
+<rect x="660" y="165" width="143" height="33" fill="#8A94A6"/>
+<text x="670" y="187" font-size="16" font-weight="700" fill="#FFFFFF">resumes</text>
+<text x="670" y="214" font-size="14" fill="#6B7280" font-weight="700">id</text>
+<text x="793" y="214" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="661" y="220" width="141" height="22" fill="#F6F8FB"/>
+<text x="670" y="236" font-size="14" fill="#6B7280" font-weight="400">userId</text>
+<text x="793" y="236" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="670" y="258" font-size="14" fill="#6B7280" font-weight="400">fileName</text>
+<text x="793" y="258" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="990" y="165" width="176" height="132" fill="#FFFFFF" stroke="#AAB5C3" stroke-width="1" stroke-dasharray="5 3"/>
+<rect x="990" y="165" width="176" height="33" fill="#8A94A6"/>
+<text x="1000" y="187" font-size="16" font-weight="700" fill="#FFFFFF">company_members</text>
+<text x="1000" y="214" font-size="14" fill="#6B7280" font-weight="700">id</text>
+<text x="1156" y="214" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="991" y="220" width="174" height="22" fill="#F6F8FB"/>
+<text x="1000" y="236" font-size="14" fill="#6B7280" font-weight="400">companyId</text>
+<text x="1156" y="236" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1000" y="258" font-size="14" fill="#6B7280" font-weight="400">userId</text>
+<text x="1156" y="258" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<rect x="991" y="264" width="174" height="22" fill="#F6F8FB"/>
+<text x="1000" y="280" font-size="14" fill="#6B7280" font-weight="400">role</text>
+<text x="1156" y="280" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1914" y="165" width="187" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1914" y="165" width="187" height="33" fill="#1E3A5F"/>
+<text x="1924" y="187" font-size="16" font-weight="700" fill="#FFFFFF">admin_audit_logs</text>
+<text x="1924" y="214" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="2091" y="214" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1915" y="220" width="185" height="22" fill="#F6F8FB"/>
+<text x="1924" y="236" font-size="14" fill="#111827" font-weight="400">adminId</text>
+<text x="2091" y="236" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1924" y="258" font-size="14" fill="#111827" font-weight="400">action</text>
+<text x="2091" y="258" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="1915" y="264" width="185" height="22" fill="#F6F8FB"/>
+<text x="1924" y="280" font-size="14" fill="#111827" font-weight="400">targetType</text>
+<text x="2091" y="280" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="660" y="1254" width="176" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="660" y="1254" width="176" height="33" fill="#1E3A5F"/>
+<text x="670" y="1276" font-size="16" font-weight="700" fill="#FFFFFF">notifications</text>
+<text x="670" y="1303" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="826" y="1303" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="661" y="1309" width="174" height="22" fill="#F6F8FB"/>
+<text x="670" y="1325" font-size="14" fill="#111827" font-weight="400">recipientId</text>
+<text x="826" y="1325" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="670" y="1347" font-size="14" fill="#111827" font-weight="400">type</text>
+<text x="826" y="1347" font-size="12.5" text-anchor="end" fill="#8A94A6">enum</text>
+<rect x="661" y="1353" width="174" height="22" fill="#F6F8FB"/>
+<text x="670" y="1369" font-size="14" fill="#111827" font-weight="400">title</text>
+<text x="826" y="1369" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="902" y="1265" width="253" height="110" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="902" y="1265" width="253" height="33" fill="#1E3A5F"/>
+<text x="912" y="1287" font-size="16" font-weight="700" fill="#FFFFFF">notification_preferences</text>
+<text x="912" y="1314" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1145" y="1314" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="903" y="1320" width="251" height="22" fill="#F6F8FB"/>
+<text x="912" y="1336" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1145" y="1336" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="912" y="1358" font-size="14" fill="#111827" font-weight="400">remindersEmail</text>
+<text x="1145" y="1358" font-size="12.5" text-anchor="end" fill="#8A94A6">bool</text>
+<rect x="1342" y="1254" width="231" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1342" y="1254" width="231" height="33" fill="#1E3A5F"/>
+<text x="1352" y="1276" font-size="16" font-weight="700" fill="#FFFFFF">deadline_reminder_logs</text>
+<text x="1352" y="1303" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1563" y="1303" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1343" y="1309" width="229" height="22" fill="#F6F8FB"/>
+<text x="1352" y="1325" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1563" y="1325" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1352" y="1347" font-size="14" fill="#111827" font-weight="400">opportunityId</text>
+<text x="1563" y="1347" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1343" y="1353" width="229" height="22" fill="#F6F8FB"/>
+<text x="1352" y="1369" font-size="14" fill="#111827" font-weight="400">reminderType</text>
+<text x="1563" y="1369" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1650" y="1254" width="231" height="132" fill="#FFFFFF" stroke="#8FA3BB" stroke-width="1"/>
+<rect x="1650" y="1254" width="231" height="33" fill="#1E3A5F"/>
+<text x="1660" y="1276" font-size="16" font-weight="700" fill="#FFFFFF">career_calendar_events</text>
+<text x="1660" y="1303" font-size="14" fill="#111827" font-weight="700">id</text>
+<text x="1871" y="1303" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#C2410C">PK</tspan></text>
+<rect x="1651" y="1309" width="229" height="22" fill="#F6F8FB"/>
+<text x="1660" y="1325" font-size="14" fill="#111827" font-weight="400">userId</text>
+<text x="1871" y="1325" font-size="12.5" text-anchor="end" fill="#8A94A6">text<tspan dx="6" font-weight="700" fill="#1E3A5F">FK</tspan></text>
+<text x="1660" y="1347" font-size="14" fill="#111827" font-weight="400">title</text>
+<text x="1871" y="1347" font-size="12.5" text-anchor="end" fill="#8A94A6">text</text>
+<rect x="1651" y="1353" width="229" height="22" fill="#F6F8FB"/>
+<text x="1660" y="1369" font-size="14" fill="#111827" font-weight="400">startDate</text>
+<text x="1871" y="1369" font-size="12.5" text-anchor="end" fill="#8A94A6">timestamp</text>
+<rect x="1342" y="88" width="374" height="264" rx="10" fill="#FFFFFF" stroke="#C5D0DD"/>
+<text x="1356" y="114" font-size="16" font-weight="700" fill="#1E3A5F">UniCareer database</text>
+<text x="1356" y="134" font-size="13" fill="#8A94A6">PostgreSQL · 30 tables · 48 relationships</text>
+<line x1="1358" y1="160" x2="1438" y2="160" stroke="#475569" stroke-width="1.6"/>
+<line x1="1430" y1="153" x2="1430" y2="167" stroke="#475569" stroke-width="1.6"/><line x1="1425" y1="153" x2="1425" y2="167" stroke="#475569" stroke-width="1.6"/>
+<text x="1452" y="165" font-size="13.5" fill="#111827">exactly one</text>
+<line x1="1358" y1="184" x2="1438" y2="184" stroke="#475569" stroke-width="1.6"/>
+<line x1="1430" y1="177" x2="1430" y2="191" stroke="#475569" stroke-width="1.6"/><circle cx="1421" cy="184" r="4.5" fill="#FFFFFF" stroke="#475569" stroke-width="1.6"/>
+<text x="1452" y="189" font-size="13.5" fill="#111827">zero or one</text>
+<line x1="1358" y1="208" x2="1438" y2="208" stroke="#475569" stroke-width="1.6"/>
+<line x1="1425" y1="208" x2="1438" y2="201" stroke="#475569" stroke-width="1.6"/><line x1="1425" y1="208" x2="1438" y2="215" stroke="#475569" stroke-width="1.6"/>
+<circle cx="1420" cy="208" r="4.5" fill="#FFFFFF" stroke="#475569" stroke-width="1.6"/>
+<text x="1452" y="213" font-size="13.5" fill="#111827">zero or many</text>
+<text x="1356" y="238" font-size="12.5" fill="#8A94A6"><tspan font-weight="700" fill="#C2410C">PK</tspan> primary key  <tspan font-weight="700" fill="#1E3A5F">FK</tspan> foreign key  <tspan font-weight="700" fill="#6B7280">UQ</tspan> unique</text>
+<text x="1356" y="260" font-size="12.5" fill="#8A94A6">Every link points to the parent table&#8217;s id</text>
+<text x="1356" y="278" font-size="12.5" fill="#8A94A6">Keys and main columns shown (users: all)</text>
+<text x="1356" y="300" font-size="12.5" fill="#8A94A6">Dashed grey = no longer used</text>
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTowOWE0MjZiYy1hZDgwLTRjNDMtYmRlZi00NjBiMjczZGI5MTIAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaGuc3wdCnUD+kB9wxtk7xPwAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDphNjc4OTkxMC01NjRmLTQyYmQtOTk5MS0yMzA4NGE3NDdjNWFscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNotJoRQ+wLBwavIV9f5f7VsQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg9CRWA8QESBvRLqH8gOyHIWwnxOtBJuuPok1Vm85Hf76kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaCHmLVsSR3biPISZn2oZphUAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRKAAAAAAAAAAAAAGRoYXNoWCDukyP+gFWFb+BQwem4x/qn/qBbZXLsGMJ3XrTuiBtio2RuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBoAAQwMZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjA5YTQyNmJjLWFkODAtNGM0My1iZGVmLTQ2MGIyNzNkYjkxMi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjhmZDg1MmQ3LTQyMmMtNDc4Yy05MjE0LTQ5MzEwYWMzYThmMHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCD0JFYDxARIG9EuofyA7IchbCfE60Em64+iTVWbzkd/vqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggW1qV8pWS6DdRJiWe0liYcUSTbzTe1iqw74hXFvRhlSWiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggR11cMUN6xDLP9jJ2oAwVEE3yXXF7Oe9LFNn0Eg3Pvwl0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQL20+6EvTD+PR7c3YEEqi4ilYXZ3/WNaBqzteYDRQbCxOv4yYZkgZNi95djgxvQXuIXY30KtNBQ6O0JIdYfOsPU=</c2pa:manifest></metadata></svg>

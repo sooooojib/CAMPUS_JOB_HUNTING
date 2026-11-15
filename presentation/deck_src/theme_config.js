@@ -7,8 +7,8 @@
 
 const THEME = {
   name: "UniCareer Light",
-  headFontFace: "Inter",
-  bodyFontFace: "Inter",
+  headFontFace: "Calibri",
+  bodyFontFace: "Calibri",
   colors: {
     dk1: "111111", // main text
     lt1: "FFFFFF", // cards
@@ -44,7 +44,7 @@ const GUT = 0.3;
 const TOP = 1.75;
 
 // Font sizes (minimums agreed with the user)
-const FS = { title: 34, body: 18, small: 15, note: 14, big: 44 };
+const FS = { title: 32, body: 18, small: 15, note: 14, big: 44 };
 
 function defineLayouts(pres) {
   const C = pres.SchemeColor;
@@ -54,26 +54,43 @@ function defineLayouts(pres) {
     background: { color: HEX.lt2 },
     margin: [0.5, M, 0.6, M],
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: M, y: 0.5, w: CW, h: 0.7, fontSize: FS.title, bold: true, color: C.text1, margin: 0, valign: "top", align: "left", charSpacing: -0.5 }, text: "" } },
-      { text: { text: "UniCareer Community", options: { x: M, y: 6.98, w: 5, h: 0.25, fontSize: 10, color: HEX.dk2, margin: 0, valign: "middle" } } },
+      { placeholder: { options: { name: "title", type: "title", x: M, y: 0.62, w: CW, h: 0.7, fontFace: "Calibri", fontSize: FS.title, bold: true, color: C.text1, margin: 0, valign: "middle", align: "left" }, text: "" } },
     ],
   });
 }
 
 // Two-tone title: plain words + red highlight
+// v5: chapter context for the kicker label and the progress bar
+const CHAPTERS = ["Problem", "Requirements", "UML", "Database", "App UI", "Reports & Closing"];
+const CUR = { idx: null, kicker: null };
+function setChapter(idx, kicker) { CUR.idx = idx; CUR.kicker = kicker; }
+function progress(slide, active) {
+  const y = 7.08, n = CHAPTERS.length, w = (W - 2 * M - (n - 1) * 0.08) / n;
+  CHAPTERS.forEach((c, i) => {
+    const x = M + i * (w + 0.08);
+    slide.addShape("rect", { x, y, w, h: 0.05, fill: { color: i === active ? HEX.accent1 : i < active ? "9FB3C8" : "D3DDE8" }, line: { type: "none" }, objectName: `Progress ${c}` });
+    slide.addText(c, { x, y: 7.13, w, h: 0.25, fontSize: 9, bold: i === active, color: i === active ? HEX.accent1 : "8A94A6", margin: 0, valign: "top" });
+  });
+}
+// Two-tone title + orange kicker label + chapter progress bar
 function header(slide, plain, accent) {
   const runs = [{ text: plain, options: {} }];
   if (accent) runs.push({ text: accent, options: { color: HEX.accent1 } });
   slide.addText(runs, { placeholder: "title" });
+  if (CUR.kicker) {
+    slide.addShape("rect", { x: M, y: 0.4, w: 0.32, h: 0.05, fill: { color: HEX.accent1 }, line: { type: "none" }, objectName: "Kicker bar" });
+    slide.addText(CUR.kicker, { x: M + 0.42, y: 0.28, w: 8, h: 0.3, fontSize: 12, bold: true, color: HEX.accent1, charSpacing: 2, margin: 0, valign: "middle" });
+  }
+  if (CUR.idx != null) progress(slide, CUR.idx);
 }
 // Optional one-line intro under the title
-function intro(slide, text, y = 1.18) {
-  slide.addText(text, { x: M, y, w: CW, h: 0.4, fontSize: FS.small, color: HEX.dk2, margin: 0, valign: "top", isTextBox: true });
+function intro(slide, text, y = 1.3) {
+  slide.addText(text, { x: M, y, w: CW, h: 0.32, fontSize: FS.small, color: HEX.dk2, margin: 0, valign: "top", isTextBox: true });
 }
 
 function card(pres, slide, x, y, w, h, name, fill) {
   const f = fill || HEX.card;
-  slide.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.12, fill: { color: f }, line: { color: fill || HEX.card !== HEX.lt1 ? f : HEX.accent6, width: 0.75 }, objectName: name || "Card" });
+  slide.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.12, fill: { color: f }, line: { color: fill || HEX.card !== HEX.lt1 ? f : "D3DDE8", width: 0.75 }, shadow: { type: "outer", color: "1E3A5F", opacity: 0.12, blur: 12, offset: 2, angle: 90 }, objectName: name || "Card" });
 }
 
 // Numbered label "01"
@@ -100,4 +117,4 @@ function pill(pres, slide, text, x, y, w, fill, color, size = 12) {
   slide.addText(text, { x, y, w, h: 0.32, fontSize: size, bold: true, color, align: "center", valign: "middle", margin: 0, isTextBox: true });
 }
 
-module.exports = { THEME, HEX, TINTS, MONO, W, H, M, CW, GUT, TOP, FS, defineLayouts, header, intro, card, num, badge, pill };
+module.exports = { setChapter, progress, CHAPTERS, THEME, HEX, TINTS, MONO, W, H, M, CW, GUT, TOP, FS, defineLayouts, header, intro, card, num, badge, pill };

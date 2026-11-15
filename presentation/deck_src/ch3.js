@@ -1,6 +1,7 @@
 const T = require("./theme_config");
 const { HEX, TINTS, W, M, CW, GUT, header, card, num } = T;
 const U = require("./uml");
+T.setChapter(2, "03 · UML");
 const SEC = "Chapter 3 — System Diagrams";
 
 function strip(pres, s, items, y = 6.28) {
@@ -75,13 +76,15 @@ module.exports = function ch3(pres) {
     U.stereo(pres, s, gr.l, gr.cy, g[4].r, g[4].cy, "«extend»", { dy: -0.02 });
     U.stereo(pres, s, g[5].r, g[5].cy, ra.l, ra.cy, "«include»", { dy: 0.0 });
     U.stereo(pres, s, rp.l, rp.cy, g[7].r, g[7].cy, "«extend»", { dy: -0.02 });
+    const em = U.uc(pres, s, bx, ay(9), bw, ah, "Email for Referral", { fontSize: 11 });
+    U.stereo(pres, s, em.l, em.cy, g[9].r, g[9].cy, "«extend»", { dy: -0.02 });
     // admin column
     const C = ["Review Membership", "Verify CGPA", "Moderate Job Post", "Resolve Reports", "Suspend Account", "View Audit Log"];
     const cx = 7.95, cw = 2.25;
     const c = C.map((t, i) => U.uc(pres, s, cx, 1.95 + i * 0.6, cw, 0.42, t, { fontSize: 11 }));
     const admin = U.actor(pres, s, 11.45, 2.9, "Admin");
     c.forEach((e) => U.ln(pres, s, admin.left - 0.02, admin.mid + 0.05, e.r, e.cy, { width: 1 }));
-    s.addNotes("Primary actors: Member (generalised into Student and Alumnus, placed below their parent) on the left, Admin on the right. Every member use case is inherited by both Student and Alumnus; Request Referral is Student-only and Respond to Referral is Alumnus-only. «include» = always happens as part of the base use case (registering always sends a verification email; verifying the email always joins the admin approval queue; applying always records the application). «extend» = optional extra behaviour (a reminder only if the job is saved and the deadline is near; a report only if a member flags a post). Secondary actors are shown on the detail slides.");
+    s.addNotes("Primary actors: Member (generalised into Student and Alumnus, placed below their parent) on the left, Admin on the right. Every member use case is inherited by both Student and Alumnus; Request Referral is Student-only and Respond to Referral is Alumnus-only. «include» = always happens as part of the base use case (registering always sends a verification email; verifying the email always joins the admin approval queue; applying always records the application). «extend» = optional extra behaviour (a reminder only if the job is saved and the deadline is near; a report only if a member flags a post; Email for Referral when the student chooses to email the alumnus instead of using the in-app form). Secondary actors are shown on the detail slides.");
   }
 
   // ---------- 17: Use case detail - members ----------
@@ -113,6 +116,8 @@ module.exports = function ch3(pres) {
     U.stereo(pres, s, gr.l, gr.cy, g[2].r, g[2].cy, "«extend»", { fontSize: 11 });
     U.stereo(pres, s, g[3].r, g[3].cy, ra.l, ra.cy, "«include»", { fontSize: 11 });
     U.stereo(pres, s, rp.l, rp.cy, g[4].r, g[4].cy, "«extend»", { fontSize: 11 });
+    const em = U.uc(pres, s, bx, ay(6), bw, ah, "Email for Referral", { fontSize: 13 });
+    U.stereo(pres, s, em.l, em.cy, g[6].r, g[6].cy, "«extend»", { fontSize: 11 });
     // secondary actors (right)
     const mail = U.actor(pres, s, 11.4, 1.55, "Email Service", 0.95);
     const sch = U.actor(pres, s, 11.4, 3.25, "Scheduler", 0.95);
