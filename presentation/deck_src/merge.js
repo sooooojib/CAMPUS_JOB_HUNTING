@@ -14,7 +14,7 @@ const { applyTheme } = require(process.env.PPTX_SKILL + "/scripts/apply_theme.js
   pres.title = "UniCareer Community — SWE Project Defense";
   pres.theme = { headFontFace: T.THEME.headFontFace, bodyFontFace: T.THEME.bodyFontFace };
   T.defineLayouts(pres);
-  for (const c of ["1", "2", "3", "4", "5"]) require(`./ch${c}.js`)(pres);
+  for (const c of ["1", "2", "3", "5", "4"]) require(`./ch${c}.js`)(pres); // Problem, Requirements, UML, App UI, Database
   require("./ch_reports.js")(pres);
 
   // ---- slide numbers: main slides only, counted 1..N in the order they are shown ----

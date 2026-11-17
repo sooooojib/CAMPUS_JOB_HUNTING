@@ -52,7 +52,7 @@ GROUPS = [
     ("comm", "Community and referrals", ["posts", "comments", "post_reactions", "post_bookmarks", "content_reports", "connections", "referral_requests"]),
     ("alerts", "Alerts and calendar", ["notifications", "notification_preferences", "career_calendar_events", "deadline_reminder_logs"]),
     ("admin", "Admin", ["admin_audit_logs"]),
-    ("left", "Left over (no longer used)", ["resumes", "company_members"]),
+    ("left", "Left over", ["resumes", "company_members"]),
 ]
 for k, _, ts in GROUPS:
     for t in ts: GROUP[t] = k
@@ -399,5 +399,5 @@ def LEGEND():
     o.append(f'<text x="{a+14}" y="{b+150}" font-size="12.5" fill="{GREY}"><tspan font-weight="700" fill="{ORANGE}">PK</tspan> primary key  <tspan font-weight="700" fill="{NAVY}">FK</tspan> foreign key  <tspan font-weight="700" fill="#6B7280">UQ</tspan> unique</text>')
     o.append(f'<text x="{a+14}" y="{b+172}" font-size="12.5" fill="{GREY}">Every link points to the parent table&#8217;s id</text>')
     o.append(f'<text x="{a+14}" y="{b+190}" font-size="12.5" fill="{GREY}">Keys and main columns shown (users: all)</text>')
-    o.append(f'<text x="{a+14}" y="{b+212}" font-size="12.5" fill="{GREY}">Dashed grey = no longer used</text>')
+    o.append(f'<text x="{a+14}" y="{b+212}" font-size="12.5" fill="{GREY}">Dashed grey = left over, nothing writes to them</text>')
     return "\n".join(o)

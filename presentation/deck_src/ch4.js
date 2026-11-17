@@ -4,8 +4,8 @@ const T = require("./theme_config");
 const { HEX, W, M, CW, GUT, header, card, num, pill } = T;
 const U = require("./uml");
 const { tableSlide, bus, direct } = require("./ch4_tables");
-const SEC = "Chapter 4 — Database";
-const K = (g) => T.setChapter(3, g ? `04 · DATABASE  ·  ${g.toUpperCase()}` : "04 · DATABASE");
+const SEC = "Chapter 5 — Database";
+const K = (g) => T.setChapter(4, g ? `05 · DATABASE  ·  ${g.toUpperCase()}` : "05 · DATABASE");
 const SH = () => ({ type: "outer", color: "1E3A5F", opacity: 0.12, blur: 12, offset: 2, angle: 90 });
 const GREY = "5B6577", GREY2 = "8A94A6", LINE = "D3DDE8";
 
@@ -35,7 +35,7 @@ module.exports = function ch4(pres) {
       ["Community and referrals", ["posts", "comments", "post_reactions", "post_bookmarks", "content_reports", "connections", "referral_requests"]],
       ["Alerts and calendar", ["notifications", "notification_preferences", "career_calendar_events", "deadline_reminder_logs"]],
       ["Admin", ["admin_audit_logs"]],
-      ["Left over (no longer used)", ["resumes", "company_members"]],
+      ["Left over", ["resumes", "company_members"]],
     ];
     const gw = (CW - 2 * 0.35) / 3, gh = 2.38, hh = 0.55;
     groups.forEach(([name, tables], i) => {
@@ -171,13 +171,13 @@ module.exports = function ch4(pres) {
     ],
     draw: (pres, s, g) => {
       txt(s, "Admin", cx(0), 1.5, CWD, 0.35, { fontSize: 15, bold: true, color: HEX.accent2 });
-      txt(s, "Left over from features we removed", cx(2), 1.5, 2 * CWD + GAP, 0.35, { fontSize: 15, bold: true, color: GREY2 });
+      txt(s, "Left over: nothing writes to them any more", cx(2), 1.5, 2 * CWD + GAP, 0.35, { fontSize: 15, bold: true, color: GREY2 });
       txt(s, [{ text: "One row for every admin action", options: { bold: true, color: HEX.dk1, breakLine: true } }, { text: "who did it, what, to which record, why, and from where. Rows are only added, never changed.", options: { color: GREY } }], cx(1), 2.0, CWD, 1.6, { fontSize: 14, valign: "top" });
       [["resumes", "CV uploads"], ["company_members", "company accounts"]].forEach(([t, w]) => {
         txt(s, [{ text: "Was for: ", options: { bold: true, color: GREY } }, { text: w, options: { color: HEX.dk1 } }], g[t].x, g[t].b + 0.2, CWD, 0.35, { fontSize: 13 });
       });
     },
-    note: "admin_audit_logs is append-only: adminId, action (e.g. MEMBERSHIP_APPROVED, ACCOUNT_SUSPENDED, OPPORTUNITY_CLOSED), targetType and targetId, optional reason and details, IP address and time. The two grey tables are still in the schema and the database, but the screens that used them (CV upload, company accounts) were removed; they could be dropped in a future clean-up.",
+    note: "admin_audit_logs is append-only: adminId, action (e.g. MEMBERSHIP_APPROVED, ACCOUNT_SUSPENDED, OPPORTUNITY_CLOSED), targetType and targetId, optional reason and details, IP address and time. The two grey tables are still in the schema and the database, but the screens that filled them (CV upload, company accounts) were removed, so nothing writes to them any more. The job-post page still reads company_members (getUserCompanies), which is always empty now. They could be dropped in a future clean-up.",
   });
 
   // ================= 8: Life of a member — watch one row change =================
@@ -230,12 +230,13 @@ module.exports = function ch4(pres) {
     const lv = st(4.35, 3.05, 2.9, 1.2, "Live", "everyone sees it", { fill: HEX.accent4, line: HEX.accent1, color: HEX.accent1 });
     ARW(pres, s, [[dr.r + 0.05, dr.cy], [lv.l - 0.05, lv.cy]], HEX.accent1);
     txt(s, "Submit", dr.r, dr.t - 0.05, lv.l - dr.r, 0.35, { fontSize: 14, bold: true, italic: true, color: HEX.accent1, align: "center" });
-    const ex = 9.0, ew = W - M - ex;
-    const ends = [["Expired", "the deadline passed (automatic)"], ["Closed", "closed by the poster or an admin"], ["Rejected", "removed by an admin, with a reason"]];
-    const jx = lv.r + 0.75;
+    const ex = 9.45, ew = W - M - ex;
+    const ends = [["Expired", "the deadline passed (automatic)", "deadline passes"], ["Closed", "closed by the poster or an admin", "poster or admin closes"], ["Rejected", "removed by an admin, with a reason", "admin rejects"]];
+    const jx = lv.r + 0.4;
     ends.forEach((e, i) => {
       const b = st(ex, 1.65 + i * 1.6, ew, 1.15, e[0], e[1]);
       ARW(pres, s, [[lv.r + 0.05, lv.cy], [jx, lv.cy], [jx, b.cy], [b.l - 0.05, b.cy]]);
+      txt(s, e[2], jx + 0.08, b.cy - 0.34, ex - jx - 0.16, 0.3, { fontSize: 12, italic: true, bold: true, color: HEX.accent2, align: "center" });
     });
     box(pres, s, M, 5.75, 7.6, 0.75, { fill: HEX.accent3, flat: true, name: "Key point" });
     txt(s, [{ text: "Goes live right away.  ", options: { bold: true, color: HEX.accent1 } }, { text: "Admins check posts after they are live.", options: { color: HEX.dk1 } }], M + 0.3, 5.75, 7.2, 0.75, { fontSize: 17 });

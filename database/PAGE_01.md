@@ -2,7 +2,7 @@
 
 > **Slide Number in Deck:** Slide 01 of 42  
 > **Slide Title:** `30 tables, 6 groups`  
-> **Header Badge:** `27 in use · 3 left over`  
+> **Header Badge:** `28 in use · 2 left over`  
 > **Footer Note:** `Every group links back to users`
 
 ---
@@ -27,11 +27,11 @@ When looking at Slide 1 in PowerPoint:
      - `verifications`
 3. **Right Side (5 Connected Group Cards)**:
    - Lines stretch from the purple "People" card to 5 horizontal cards stacked on the right:
-     1. **Jobs and applications (6 tables)**: `opportunities`, `opportunity_bookmarks`, `opportunity_comments`, `companies`, `applications`, `manual_applications`.
+     1. **Jobs and applications (7 tables)**: `opportunities`, `opportunity_bookmarks`, `opportunity_comments`, `companies`, `applications`, `application_status_history`, `manual_applications`.
      2. **Community and referrals (7 tables)**: `posts`, `comments`, `post_reactions`, `post_bookmarks`, `content_reports`, `connections`, `referral_requests`.
      3. **Alerts and calendar (4 tables)**: `notifications`, `notification_preferences`, `career_calendar_events`, `deadline_reminder_logs`.
      4. **Admin (1 table)**: `admin_audit_logs`.
-     5. **Left over (no longer used) (3 tables)**: *(Grey background with dashed border)* `resumes`, `application_status_history`, `company_members`.
+     5. **Left over (no longer used) (2 tables)**: *(Grey background with dashed border)* `resumes`, `company_members`.
 4. **Bottom Label**:
    - An italic caption pointing out: *"Every group links back to users"*.
 
@@ -58,15 +58,15 @@ Every single action in our database connects back to a verified person.
 
 ---
 
-## 3. What Do the Numbers Mean? (30 vs 27 vs 3)
+## 3. What Do the Numbers Mean? (30 vs 28 vs 2)
 
 * **30 Total Tables**:  
   PostgreSQL 16 running on Neon contains exactly 30 relational tables defined by our `schema.prisma`.
-* **27 In Active Production Use**:  
-  These 27 tables are actively queried, updated, and used by our current pages, APIs, forms, and background jobs.
-* **3 Leftover Tables**:  
-  `resumes`, `application_status_history`, and `company_members`.  
-  * *Why are they there?* Early in development, we initially drafted features for raw PDF resume uploads and outside corporate recruiter accounts. Through software engineering evaluation (**ADR-002** in `docs/DECISIONS.md`), we eliminated third-party recruiter logins and PDF file uploads to protect students from spam and predatory job posts. We preserved these 3 models in the database schema to maintain backward migration stability and keep all test histories intact without regressions.
+* **28 In Active Production Use**:  
+  These 28 tables are actively queried, updated, and used by our current pages, APIs, forms, and background jobs — including `application_status_history` which acts as the chronological audit timeline for all job applications.
+* **2 Leftover Tables**:  
+  `resumes` and `company_members`.  
+  * *Why are they there?* Early in development, we initially drafted features for raw PDF resume uploads and outside corporate recruiter accounts. Through software engineering evaluation (**ADR-002** in `docs/DECISIONS.md`), we eliminated third-party recruiter logins and unstructured PDF file uploads to protect students from spam, predatory postings, and binary malware. We preserved these 2 models in the database schema to maintain backward migration stability and keep all test histories intact without regressions.
 
 ---
 
@@ -80,7 +80,7 @@ Every single action in our database connects back to a verified person.
 >
 > *Every other domain on the right — from Job Opportunities to Community Discussions and Automated Reminders — connects directly back to the `users` table for strict data ownership and security.*
 >
-> *Currently, **27 tables are in active production use**, and **3 tables are documented legacy tables** preserved from earlier architectural iterations."*
+> *Currently, **28 tables are in active production use**, and **2 tables are documented legacy tables** preserved from earlier architectural iterations."*
 
 ---
 

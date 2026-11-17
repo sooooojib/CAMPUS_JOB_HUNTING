@@ -1,8 +1,8 @@
-# Page 13: Group 2 — "Jobs and applications" (6 tables)
+# Page 13: Group 2 — "Jobs and applications" (7 tables)
 
-> **Slide Number in Deck:** Slide 13 of 42 (Slides 14–19 are its interactive Zoom slides)  
+> **Slide Number in Deck:** Slide 13 of 42 (Slides 14–20 are its interactive Zoom slides)  
 > **Slide Title:** `Jobs and applications`  
-> **Header Badge:** `6 tables`  
+> **Header Badge:** `7 tables`  
 > **Interactive Morph:** Clicking any card zooms into its full column specification!
 
 ---
@@ -12,22 +12,23 @@
 When looking at Slide 13 in PowerPoint, you see 4 columns with `opportunities` acting as the centerpiece:
 
 ```
- Column 0                Column 1                        Column 2 (Center)               Column 3
-┌─────────────────────┐┌───────────────────────────┐   ┌───────────────────────────┐   ┌───────────────────────┐
-│ manual_applications ││         companies         │◄──│       opportunities       │──►│ opportunity_bookmarks │
-│ (Off-campus tracker)││(Admin-verified directory) │   │     (Central Job Post)    │   │  (Saved Jobs List)    │
-└─────────────────────┘├───────────────────────────┤   └───────────────────────────┘   ├───────────────────────┤
-                       │       applications        │◄─────────────────┘                │ opportunity_comments  │
-                       │(External apply tracker)   │                                   │(Q&A under job posts)  │
-                       └───────────────────────────┘                                   └───────────────────────┘
+ Column 0                        Column 1                        Column 2 (Center)               Column 3
+┌─────────────────────────────┐┌───────────────────────────┐   ┌───────────────────────────┐   ┌───────────────────────┐
+│     manual_applications     ││       applications        │◄──│       opportunities       │──►│ opportunity_bookmarks │
+│ (Off-campus tracker)        ││ (External apply tracker)  │   │     (Central Job Post)    │   │  (Saved Jobs List)    │
+├─────────────────────────────┤├───────────────────────────┤   └───────────────────────────┘   ├───────────────────────┤
+│ application_status_history  ││         companies         │◄─────────────────┘                │ opportunity_comments  │
+│ (Chronological audit log)   ││(Admin-verified directory) │                                   │(Q&A under job posts)  │
+└─────────────────────────────┘└───────────────────────────┘                                   └───────────────────────┘
 ```
 
 ### The 4 Visual Zones:
-1. **Column 0 (Personal External Tracker):**
+1. **Column 0 (Application Trackers & Timeline):**
    * **`manual_applications`**: Lets students track jobs found outside UniCareer (e.g. from BDJobs or LinkedIn).
-2. **Column 1 (Companies & Applications):**
-   * **`companies`**: Institutional directory of verified employers (`name`, `slug`, `isVerified`, `isSuspended`).
+   * **`application_status_history`**: Chronological audit trail recording every state change (`SUBMITTED`, `INTERVIEW`, `WITHDRAWN`).
+2. **Column 1 (Applications & Companies):**
    * **`applications`**: Outbound external application tracking records.
+   * **`companies`**: Institutional directory of verified employers (`name`, `slug`, `isVerified`, `isSuspended`).
 3. **Column 2 (The Central Job Hub):**
    * **`opportunities`**: The primary job post (`title`, `companyName`, `type`, `salaryOrStipend`, `deadline`, `externalUrl`, `status`).
 4. **Column 3 (Engagement & Bookmarks):**
@@ -74,22 +75,28 @@ Think of Slide 13 as the **Campus Career Placement Center**:
 * **Columns:** `id`, `opportunityId`, `authorId`, `content`, `createdAt`.
 
 ### 6. `manual_applications` (Personal Career Journal)
-* **What it stores:** Applications that students submitted outside of UniCareer.
+* **What it stores:** Applications that students submitted outside of UniCareer (e.g. from BDJobs or LinkedIn).
 * **Columns:** `userId`, `companyName`, `roleTitle`, `status`, `appliedDate`.
+
+### 7. `application_status_history` (Chronological Status Audit Trail)
+* **What it stores:** Every status transition of an application (`SUBMITTED`, `UNDER_REVIEW`, `INTERVIEW`, `SELECTED`, `REJECTED`, `WITHDRAWN`).
+* **Foreign Key:** `applicationId` references `applications(id)` with `onDelete: Cascade`.
+* **Columns:** `id`, `applicationId`, `status`, `note`, `changedById`, `createdAt`.
+* **Why it's essential:** Every time an application is recorded or updated, a row is inserted in an atomic transaction (`tx.applicationStatusHistory.create`) to build a transparent timeline for the student.
 
 ---
 
 ## 4. Word-for-Word Presentation Script (30–45 Seconds)
 
-> *"Moving to Slide 13, this is **'Jobs and applications'**, consisting of 6 tables centered around **`opportunities`**.*
+> *"Moving to Slide 13, this is **'Jobs and applications'**, consisting of **7 tables** centered around **`opportunities`**.*
 >
 > *Under our Architectural Decision Record (ADR-002), all opportunities are standardized as **community-shared leads** directing students to official corporate application portals via **`externalUrl`**.*
 >
 > *The **`companies`** table provides an administrator-verified directory of recognized partner employers. Crucially, the connection between `opportunities` and `companies` uses a **nullable foreign key**, ensuring alumni can post leads from any global organization without administrative friction.*
 >
-> *Student applications are tracked in **`applications`**, protected against duplicates by a database composite unique constraint, while **`opportunity_bookmarks`** and **`opportunity_comments`** facilitate student engagement.*
+> *Student applications are tracked in **`applications`**, protected against duplicates by a database composite unique constraint, and every status change is automatically logged in **`application_status_history`** to create an immutable chronological timeline.*
 >
-> *Finally, **`manual_applications`** acts as a personal career ledger for students to track off-campus applications in one unified dashboard."*
+> *Finally, **`opportunity_bookmarks`** and **`opportunity_comments`** handle student engagement, while **`manual_applications`** acts as a personal career ledger for students to track off-campus applications in one unified dashboard."*
 
 ---
 

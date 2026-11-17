@@ -47,7 +47,7 @@ module.exports = function ch2(pres) {
   };
 
   frSlide("What the system ", "must do (1/2)", [
-    ["Sign up", "University email, student ID, department. Strong password: 8+ characters"],
+    ["Sign up", "University email, student ID, department. Password: 8+ characters"],
     ["Email check", "Confirm the email link, then wait for admin approval"],
     ["Member approval", "Admin approves or rejects. An email tells you which"],
     ["Post a job", "Approved students and alumni only. Goes live right away"],
@@ -60,8 +60,8 @@ module.exports = function ch2(pres) {
     ["Report posts", "A post reported 3 times is flagged for admins"],
     ["Referrals", "Ask an alumnus in the app or by email"],
     ["Reminders", "Alerts before a saved job's deadline"],
-    ["Admin tools", "Approve members, suspend accounts, handle reports"],
-    ["Activity log", "Every admin action is saved: who, what and when"],
+    ["Admin tools", "Approve members, verify CGPA, suspend accounts, handle reports"],
+    ["Activity log", "Every admin action is saved: who, what, why and when"],
   ], 7, "Exact rules: post length 10–5,000 chars; ContentReport ≥ 3 → ModerationStatus FLAGGED; self-referral blocked; referrals can be requested through the in-app form or by email (the Mail Me for Referral button on job pages and Mail Candidate / Mail Alumnus in the Referrals hub, added 14 Nov 2026); /api/cron/reminders covers deadlines in the next 72 hours, de-duplicated via DeadlineReminderLog; admins cannot suspend themselves; AdminAuditLog stores admin, action (16 types), target, reason and IP address.");
 
   // ---------- Slide 10: Non-functional requirements ----------
@@ -70,7 +70,7 @@ module.exports = function ch2(pres) {
     header(s, "How well it ", "must work");
     intro(s, "Non-functional requirements");
     const cols = [
-      ["Product", [["Safe", "Private data hidden from other members"], ["Reliable", "194 automated tests, all passing"], ["Easy to use", "Works on phone and laptop"]]],
+      ["Product", [["Safe", "Private data hidden from other members"], ["Reliable", "194 automated tests"], ["Easy to use", "Works on phone and laptop"]]],
       ["Organisation", [["Standard tools", "Next.js and PostgreSQL"], ["Documented", "A written report for every build stage"], ["Online", "Live at jnujobhunting.vercel.app"]]],
       ["Outside rules", [["Privacy", "Student ID and phone never shown publicly"], ["University only", "Only JnU members can join"], ["Real email", "Messages sent through Gmail"]]],
     ];
@@ -97,7 +97,7 @@ module.exports = function ch2(pres) {
     header(s, "UniCareer vs. ", "other job sources");
     const tools = ["UniCareer", "LinkedIn", "Bdjobs", "Facebook job groups"];
     const rows = [
-      ["Only checked JnU members", ["Yes", "No", "No", "No"]],
+      ["Only approved JnU members", ["Yes", "No", "No", "No"]],
       ["See who shared each job", ["Yes", "Yes", "Yes", "Often not"]],
       ["Ask alumni for a referral", ["Yes", "Partly", "No", "Partly"]],
       ["Fake posts removed by admins", ["Yes", "Partly", "Partly", "Rarely"]],
@@ -119,6 +119,7 @@ module.exports = function ch2(pres) {
         pill(pres, s, v, x + (cw - 1.3) / 2, y + (rh - 0.38) / 2, 1.3, style[0], style[1], 14);
       });
     });
+    s.addText("Team's assessment of how each platform generally works (Nov 2026), not a formal audit.", { x: M, y: 6.74, w: CW, h: 0.26, fontSize: 10, italic: true, color: "8A94A6", margin: 0, valign: "middle", isTextBox: true });
     s.addNotes("Comparison is based on how each service generally works, not a formal audit. LinkedIn: open to anyone; referrals happen through personal messages; free with paid Premium. Bdjobs: Bangladesh's largest open job portal (free, with paid Pro plans at 99–199 BDT/month, per Future Startup, May 2024); employers post jobs, no alumni referral feature. Facebook groups: anyone can post; moderation depends on group admins. Handshake (US/Europe university job network, free for students) is not used in Bangladesh, so it is left out. Sources: https://futurestartup.com/2024/05/28/bdjobs-pro-radically-improving-job-search-experience-and-career-prospects-for-job-seekers-in-bangladesh/ ; https://joinhandshake.co.uk/blog/careers-services/about-handshake-discover-our-business-model-and-why-we-are-trusted-by-over-1500-universities-worldwide");
   }
 

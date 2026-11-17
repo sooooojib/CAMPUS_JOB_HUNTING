@@ -17,15 +17,15 @@ When looking at Slide 2 in PowerPoint:
    A full-canvas architectural map showing all 30 database tables grouped into color-coded zones:
    - **Top Zone (Light Blue)**: **People and login** (9 tables: `users`, `profiles`, `membership_requests`, `departments`, `academic_records`, `skills`, `sessions`, `accounts`, `verifications`).
    - **Left Zone (Soft Teal)**: **Community and referrals** (7 tables: `posts`, `comments`, `post_reactions`, `post_bookmarks`, `content_reports`, `connections`, `referral_requests`).
-   - **Right Zone (Warm Orange)**: **Jobs and applications** (6 tables: `opportunities`, `companies`, `applications`, `opportunity_bookmarks`, `opportunity_comments`, `manual_applications`).
+   - **Right Zone (Warm Orange)**: **Jobs and applications** (7 tables: `opportunities`, `companies`, `applications`, `application_status_history`, `opportunity_bookmarks`, `opportunity_comments`, `manual_applications`).
    - **Center Zone (Soft Purple)**: **Alerts and calendar** (4 tables: `notifications`, `notification_preferences`, `career_calendar_events`, `deadline_reminder_logs`).
    - **Center Bottom (Light Grey)**: **Admin** (1 table: `admin_audit_logs`).
-   - **Bottom Right (Dashed Grey Box)**: **Left over (no longer used)** (3 tables: `resumes`, `application_status_history`, `company_members`).
+   - **Bottom Right (Dashed Grey Box)**: **Left over (no longer used)** (2 tables: `resumes`, `company_members`).
 
 3. **The Connection Lines**:
    - **Thick Orange Lines**: Route from all domain tables directly into the `users` table at the top.
    - **Blue Lines with `1` and `*`**: Show specific relationships between entities (e.g. from `companies` to `opportunities`, or `posts` to `comments`).
-   - **Dashed Grey Lines**: Connect into the 3 retired legacy tables.
+   - **Dashed Grey Lines**: Connect into the 2 retired legacy tables (`resumes`, `company_members`).
 
 ---
 
@@ -69,7 +69,7 @@ In a relational database (RDBMS), a **link** is not just a visual arrow — it i
 >
 > *The **blue lines** depict entity-to-entity business logic, labeled with **1** and **asterisk (*)** for One-to-Many relationships — for instance, one company linking to multiple opportunities, or one post containing multiple threaded comments.*
 >
-> *Finally, the **grey dashed cluster** at the bottom right highlights our 3 legacy tables, clearly separated from active production data.*
+> *Finally, the **grey dashed cluster** at the bottom right highlights our 2 legacy tables (`resumes`, `company_members`), clearly separated from active production data.*
 >
 > *A high-resolution, vector copy of this exact diagram is available in our documentation as `UniCareer_ER_Diagram.pdf`."*
 

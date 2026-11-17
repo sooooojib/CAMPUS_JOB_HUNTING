@@ -61,7 +61,7 @@ function defineLayouts(pres) {
 
 // Two-tone title: plain words + red highlight
 // v5: chapter context for the kicker label and the progress bar
-const CHAPTERS = ["Problem", "Requirements", "UML", "Database", "App UI", "Reports & Closing"];
+const CHAPTERS = ["Problem", "Requirements", "UML", "App UI", "Database", "Reports & Closing"];
 const CUR = { idx: null, kicker: null };
 function setChapter(idx, kicker) { CUR.idx = idx; CUR.kicker = kicker; }
 function progress(slide, active) {

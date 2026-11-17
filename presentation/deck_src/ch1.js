@@ -50,6 +50,7 @@ module.exports = function ch1(pres) {
       const x = M + i * (iw + 0.3);
       s.addText(r, { x, y: 5.45, w: iw, h: 0.3, fontSize: 13, bold: true, color: HEX.accent2, margin: 0, isTextBox: true });
       s.addShape(pres.shapes.LINE, { x, y: 6.25, w: iw, h: 0, line: { color: "B8C4D4", width: 1 }, objectName: `Blank line ${i + 1}` });
+      if (r === "Presented by") s.addText("Group-1", { x, y: 5.8, w: iw, h: 0.4, fontSize: 18, bold: true, color: HEX.dk1, margin: 0, valign: "bottom", isTextBox: true });
     });
     // right: three promise cards
     const items = [["01", "Trusted jobs", "Shared by verified JnU members"], ["02", "Alumni referrals", "Ask in the app or by email"], ["03", "No missed deadlines", "Saved jobs on your calendar"]];
@@ -62,18 +63,48 @@ module.exports = function ch1(pres) {
       s.addText(it[2], { x: x + 0.35, y: y + 0.9, w: 3.3, h: 0.35, fontSize: 14, color: HEX.dk2, margin: 0, valign: "middle", isTextBox: true });
     });
     T.progress(s, 0);
-    s.addNotes("Cover. Fill in the course, teacher and team names on the blank lines before presenting. The three cards are UniCareer's three promises: trusted job leads from verified JnU members, alumni referrals (in the app or by email), and deadline reminders on the calendar. Live site: jnujobhunting.vercel.app");
+    s.addNotes("Cover. Fill in the course and teacher on the blank lines before presenting; the team (Group-1) is introduced on the next slide. The three cards are UniCareer's three promises: trusted job leads from verified JnU members, alumni referrals (in the app or by email), and deadline reminders on the calendar. Live site: jnujobhunting.vercel.app");
+  }
+
+  // ---------- Slide 2: Team (Presented by Group-1) ----------
+  {
+    const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
+    T.setChapter(0, "PRESENTED BY");
+    header(s, "Meet ", "Group-1");
+    T.setChapter(0, "01 · PROBLEM");
+    const team = [
+      ["Ifrat Jahan Juthy", "B220305004"], ["Jannatun Nahar Jui", "B220305005"], ["Fariha Yasmeen", "B220305007"],
+      ["Nazmul Hasan Riyan", "B220305008"], ["S.M Sajib Al Hasan", "B220305009"], ["Naima Marjan", "B220305010"],
+      ["Maufiya Khatun", "B220305011"],
+    ];
+    const cw = 2.85, ch = 2.15, g = 0.3;
+    const rows = [team.slice(0, 4), team.slice(4)];
+    rows.forEach((row, r) => {
+      const x0 = (W - (row.length * cw + (row.length - 1) * g)) / 2, y = 1.8 + r * (ch + 0.45);
+      row.forEach(([name, id], i) => {
+        const k = r * 4 + i, x = x0 + i * (cw + g);
+        card(pres, s, x, y, cw, ch, `Member ${k + 1}`);
+        const ini = name.replace("S.M ", "").split(" ").filter(Boolean);
+        const initials = (ini[0][0] + ini[ini.length - 1][0]).toUpperCase();
+        const d = 0.8, accent = k % 2 === 0;
+        s.addShape(pres.shapes.OVAL, { x: x + (cw - d) / 2, y: y + 0.28, w: d, h: d, fill: { color: accent ? HEX.accent4 : HEX.accent3 }, line: { type: "none" }, objectName: `Avatar ${k + 1}` });
+        s.addText(initials, { x: x + (cw - d) / 2, y: y + 0.28, w: d, h: d, fontSize: 22, bold: true, color: accent ? HEX.accent1 : HEX.accent2, align: "center", valign: "middle", margin: 0, isTextBox: true });
+        s.addText(name, { x: x + 0.1, y: y + 1.2, w: cw - 0.2, h: 0.42, fontSize: 17, bold: true, color: HEX.dk1, align: "center", valign: "middle", margin: 0, isTextBox: true });
+        s.addText(id, { x: x + 0.1, y: y + 1.62, w: cw - 0.2, h: 0.32, fontSize: 14, color: HEX.dk2, align: "center", valign: "middle", margin: 0, isTextBox: true });
+      });
+    });
+    s.addNotes("Group-1 team members with their student IDs: Ifrat Jahan Juthy (B220305004), Jannatun Nahar Jui (B220305005), Fariha Yasmeen (B220305007), Nazmul Hasan Riyan (B220305008), S.M Sajib Al Hasan (B220305009), Naima Marjan (B220305010), Maufiya Khatun (B220305011).");
   }
 
   // ---------- Slide 2: The problem ----------
   {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
     header(s, "Why job hunting at JnU is ", "hard today");
-    intro(s, "13.5% of graduates are unemployed; 1 in 3 wait up to 2 years (2024)");
+    intro(s, "13.5% of graduates are unemployed; 1 in 3 wait up to 2 years (BBS Labour Force Survey 2024)");
     const people = [
-      ["Farhan", "Student", "Can't tell which jobs are real"],
-      ["Tariqul", "Alumnus at bKash", "No trusted place to help juniors"],
-      ["Arthur", "Admin", "Must keep fake accounts out"],
+      ["Tanvir", "Student", "Can't tell which jobs are real"],
+      ["Al-Amin", "Alumnus at Chaldal", "No trusted place to help juniors"],
+      ["Arif", "Admin", "Must keep fake accounts out"],
     ];
     const pw = (CW - 2 * GUT) / 3;
     people.forEach((p, i) => {
@@ -108,7 +139,7 @@ module.exports = function ch1(pres) {
       marker(pres, s, rx + 0.1, by + 2.08 + i * 0.42, HEX.accent2, `good ${i + 1}`);
       s.addText(t, { x: rx + 0.4, y: by + 1.95 + i * 0.42, w: bw - 0.5, h: 0.4, fontSize: 16, color: HEX.dk1, margin: 0, valign: "middle", isTextBox: true });
     });
-    s.addNotes("Numbers: graduate unemployment 13.5% in 2024 (BBS-based figure reported via The Daily Star/IANS, Jun 2026) and, from Labour Force Survey 2024, about 1 in 3 graduates stayed jobless for up to two years (Asia News Network, Sep 2025). LFS 2024 also shows 35.8% of job seekers look for work through relatives and friends (bdnews24, Sep 2025). Farhan, Tariqul and Arthur are example personas, not real people. The left card is an illustrative example of a typical scam post; the right card uses a real job from our database (bKash, Junior Backend Engineer).");
+    s.addNotes("Numbers: graduate unemployment 13.5% in 2024 (BBS-based figure reported via The Daily Star/IANS, Jun 2026) and, from Labour Force Survey 2024, about 1 in 3 graduates stayed jobless for up to two years (Asia News Network, Sep 2025). LFS 2024 also shows 35.8% of job seekers look for work through relatives and friends (bdnews24, Sep 2025). Tanvir, Al-Amin and Arif are example personas, not real people. The left card is an illustrative example of a typical scam post; the right card uses a real job from our database (bKash, Junior Backend Engineer).");
   }
 
   // ---------- Slide 3: Problem -> fix ----------
@@ -116,8 +147,8 @@ module.exports = function ch1(pres) {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: SEC });
     header(s, "What goes wrong, and ", "how we fix it");
     const rows = [
-      ["Fake job posts", "Only checked members can post"],
-      ["Unknown posters", "Every job shows who shared it"],
+      ["Fake job posts", "Only approved members can post"],
+      ["Unknown posters", "Every job page shows who shared it"],
       ["Fake accounts", "Email and student ID check"],
       ["CVs sent to strangers", "Apply on the company's own site"],
       ["Missed deadlines", "Saved jobs and reminders"],
@@ -142,7 +173,7 @@ module.exports = function ch1(pres) {
     header(s, "How it works in ", "three stages");
     const phases = [
       ["Get in", ["Sign up", "Confirm email", "Admin approves"]],
-      ["Find and apply", ["Browse jobs", "Save favourites", "Apply on company site"]],
+      ["Find and apply", ["Browse jobs", "Save jobs", "Apply on company site"]],
       ["Keep track", ["Track applications", "Ask for a referral", "Get reminders"]],
     ];
     const w = (CW - 2 * GUT) / 3;

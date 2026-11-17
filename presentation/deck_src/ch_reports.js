@@ -53,8 +53,8 @@ module.exports = function reports(pres) {
         { x, y: 1.75, w: pw0, h: 0.62, fontFace: FONT, align: "center", valign: "middle", margin: 0 });
     });
     const nice = (k) => ({ FULL_TIME: "Full-time", INTERNSHIP: "Internship", PART_TIME: "Part-time", CONTRACT: "Contract", HYBRID: "Hybrid", REMOTE: "Remote", ON_SITE: "On-site" }[k] || k);
-    const dept = S.membersByDepartment.filter((r) => r.k !== "Not set").slice(0, 6).map((r) => ({ k: r.k.replace("Computer Science & Engineering", "CSE").replace("Electrical & Electronic Engineering", "EEE"), n: r.n })).reverse();
-    const panels = [["Members by department", dept, "bar", C.navy, 4.6], ["Job posts by type", S.jobsByType, "col", C.orange, 3.55], ["Where the jobs are", S.jobsByWorkplace, "col", C.navy, 3.18]];
+    const dept = S.membersByDepartment.map((r) => ({ k: r.k.replace("Computer Science & Engineering", "CSE").replace("Electrical & Electronic Engineering", "EEE"), n: r.n })).reverse();
+    const panels = [[`Members by department (${S.membersByDepartment.reduce((t, r) => t + r.n, 0)} profiles)`, dept, "bar", C.navy, 4.6], ["Job posts by type", S.jobsByType, "col", C.orange, 3.55], ["Where the jobs are", S.jobsByWorkplace, "col", C.navy, 3.18]];
     let x = M;
     panels.forEach((pn) => {
       const w = pn[4];
@@ -73,7 +73,7 @@ module.exports = function reports(pres) {
     const p1 = T.chartPanel(pres, s, M, 1.75, 3.9, 4.85, "Graduate unemployment rate");
     s.addChart(pres.charts.BAR, [{ name: "%", labels: ["2016-17", "2022", "2024"], values: [11.2, 12.0, 13.5] }],
       T.chartOpts({ x: p1.x, y: p1.y, w: p1.w, h: p1.h, barDir: "col", dataLabelFormatCode: "0.0\"%\"", valAxisMinVal: 0, valAxisMaxVal: 15.5, chartColors: [C.navy, C.navy, C.orange] }));
-    const p2 = T.chartPanel(pres, s, M + 4.15, 1.75, 3.9, 4.85, "Graduates without a job (lakh)");
+    const p2 = T.chartPanel(pres, s, M + 4.15, 1.75, 3.9, 4.85, "Graduates without a job (lakh, latest 2023)");
     s.addChart(pres.charts.BAR, [{ name: "Lakh", labels: ["2016-17", "2022", "2023"], values: [4.0, 8.0, 9.06] }],
       T.chartOpts({ x: p2.x, y: p2.y, w: p2.w, h: p2.h, barDir: "col", dataLabelFormatCode: "0.0", valAxisMaxVal: 10.5 }));
     T.meansPanel(pres, s, M + 8.3, 1.75, CW - 8.3, 4.85, "What this means for UniCareer", ["1 in 3 graduates waited up to 2 years for a job (2024)", "Graduates without jobs more than doubled", "JnU students need a direct path to real jobs, shared by their own alumni"]);
@@ -90,7 +90,7 @@ module.exports = function reports(pres) {
     const cx = M + 5.85, cw = 2.3;
     T.card(pres, s, cx, 1.75, cw, 4.85);
     s.addText("1 in 3", { x: cx, y: 2.3, w: cw, h: 1.2, fontFace: HFONT, fontSize: 54, bold: true, color: C.orange, align: "center", margin: 0, valign: "middle" });
-    s.addText("job seekers depend on someone they know to find work", { x: cx + 0.25, y: 3.6, w: cw - 0.5, h: 1.5, fontFace: FONT, fontSize: 16, color: C.ink, align: "center", margin: 0, valign: "top" });
+    s.addText("more than 1 in 3 unemployed people look for work through someone they know", { x: cx + 0.25, y: 3.6, w: cw - 0.5, h: 1.5, fontFace: FONT, fontSize: 16, color: C.ink, align: "center", margin: 0, valign: "top" });
     s.addText("the most common way", { x: cx, y: 5.35, w: cw, h: 0.4, fontFace: FONT, fontSize: 14, bold: true, color: C.grey, align: "center", margin: 0 });
     T.meansPanel(pres, s, M + 8.4, 1.75, CW - 8.4, 4.85, "What this means for UniCareer", ["Knowing the right person still matters most", "Students without contacts are left out", "UniCareer makes JnU alumni that contact, through referrals in the app or by email"]);
     T.source(s, "Source: Bangladesh Bureau of Statistics, Labour Force Survey 2024 (via bdnews24.com, 28 Sep 2025). \"Other ways\" = the remaining 28.7%.");
@@ -118,7 +118,7 @@ module.exports = function reports(pres) {
       s.addText(c[3], { x: lx + 3.55, y: y + 0.5, w: lw - 3.85, h: 0.3, fontFace: FONT, fontSize: 11.5, color: C.grey2, margin: 0, valign: "top" });
     });
     T.meansPanel(pres, s, M + 8.4, 1.75, CW - 8.4, 4.85, "What this means for UniCareer", ["Only approved JnU members can post a job", "Every post shows who shared it", "You apply on the company's own website, never by paying anyone"]);
-    T.source(s, "No national job-scam statistics exist; these are police cases reported in the news. Same pattern each time: fake company, small tasks, pay to earn more, money gone.");
+    T.source(s, "No national job-scam statistics exist; these are police cases reported in the news. The pattern is the same each time: a fake company, small paid tasks, then pay to earn more, and the money is gone.");
     s.addNotes("Documented Bangladesh cases (amounts as reported): (1) Jan 2022, CID Dhaka Metro arrested three men who used forged ministerial letters to take at least Tk 2 crore from about 90 job seekers (The Daily Star, 18 Jan 2022). (2) Aug 2023, DMP Detective Branch arrested four people (two Chinese nationals) in a fake 'Amazon jobs' and investment scheme; police said about Tk 100 crore was taken (TBS News, 3 Aug 2023). (3) Nov 2023, a woman lost about Tk 3.36 lakh to a fake online job impersonating Amazon/Google, paid via bKash and City Bank (Daily Messenger, 29 Nov 2023). (4) Sep 2026, CID arrested two men in a Telegram job scam where a victim lost Tk 9.42 million (Tk 94 lakh) after a job offer from a fake jewellery company (bdnews24.com, 18 Sep 2026). Bangladesh does not publish national job-scam totals, so we show reported cases instead of a national trend.");
   }
 
@@ -131,7 +131,7 @@ module.exports = function reports(pres) {
     const rows = [
       ["Graduates can't find work", "13.5% graduate unemployment; 1 in 3 wait up to 2 years", "Job leads shared by JnU alumni, for JnU students"],
       ["Jobs come through people", "35.8% find work through relatives and friends", "Referrals: ask an alumnus in the app or by email"],
-      ["Fake job offers", "Tk 2 crore to Tk 100 crore lost in reported cases", "Approved members only; apply on the company's own site"],
+      ["Fake job offers", "From Tk 3.4 lakh to about Tk 100 crore lost in reported cases", "Approved members only; apply on the company's own site"],
     ];
     rows.forEach((r, i) => {
       const y = 2.25 + i * 1.45;
@@ -172,7 +172,7 @@ module.exports = function reports(pres) {
     const ax = x0 + 4 * step + tw / 2 + 0.25, aw = W - M - ax;
     T.card(pres, s, ax, 2.35, aw, 3.4, { fill: C.orangeL, noLine: true, name: "After card" });
     s.addText("AFTER", { x: ax + 0.2, y: 2.55, w: aw - 0.4, h: 0.3, fontFace: FONT, fontSize: 12, bold: true, color: C.orange, charSpacing: 2, margin: 0 });
-    s.addText("Ready to apply, on time", { x: ax + 0.2, y: 3.0, w: aw - 0.35, h: 2.4, fontFace: HFONT, fontSize: 21, bold: true, color: C.orange, margin: 0, valign: "middle" });
+    s.addText("Applied on time, and tracked", { x: ax + 0.2, y: 3.0, w: aw - 0.35, h: 2.4, fontFace: HFONT, fontSize: 21, bold: true, color: C.orange, margin: 0, valign: "middle" });
     // path line through the stops
     s.addShape(pres.shapes.LINE, { x: M + 1.95, y: lineY, w: ax - M - 1.95, h: 0, line: { color: C.orangeM, width: 2, dashType: "dash" }, objectName: "Journey line" });
     STOPS.forEach((st, i) => {
@@ -187,7 +187,7 @@ module.exports = function reports(pres) {
     // what's left
     s.addText([{ text: "Next:  ", options: { bold: true, color: C.orange } }, { text: "real-browser tests and a load test", options: { color: C.grey } }],
       { x: M, y: 6.6, w: 6, h: 0.32, fontFace: FONT, fontSize: 14, margin: 0, valign: "middle" });
-    s.addNotes("Closing story: one student, Tanvir, from start to finish. Before UniCareer he faced fake posts, no referrals and missed deadlines. (1) He signs up with his university email, confirms it, and an admin approves him. (2) He finds a job shared by a verified member, e.g. bKash's Junior Backend Engineer. (3) He asks an alumnus at Chaldal for a referral, in the app or with the ready-made Mail Me email. (4) He applies on the company's own careers site and saves it to My Applications. (5) The deadline shows on his calendar and the reminder job alerts him 72 hours before it closes. After: he is ready to apply, on time. What's still to do: real-browser (end-to-end) tests and a load test.");
+    s.addNotes("Closing story: one student, Tanvir, from start to finish. Before UniCareer he faced fake posts, no referrals and missed deadlines. (1) He signs up with his university email, confirms it, and an admin approves him. (2) He finds a job shared by a verified member, e.g. bKash's Junior Backend Engineer. (3) He asks an alumnus at Chaldal for a referral, in the app or with the ready-made Mail Me email. (4) He applies on the company's own careers site and saves it to My Applications. (5) The deadline shows on his calendar and the reminder job alerts him 72 hours before it closes. After: he has applied on time and can track it. What's still to do: real-browser (end-to-end) tests and a load test.");
   }
 
   // ---------- 8: Thank you (split layout + screenshot collage; Morph from the journey) ----------
@@ -204,6 +204,7 @@ module.exports = function reports(pres) {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: M, y: 4.72, w: 4.9, h: 0.72, rectRadius: 0.36, fill: { color: C.orange }, line: { type: "none" }, shadow: { ...T.SH }, objectName: "Live link pill" });
     s.addText("jnujobhunting.vercel.app", { x: M, y: 4.72, w: 4.9, h: 0.72, fontFace: FONT, fontSize: 22, bold: true, color: C.white, align: "center", valign: "middle", margin: 0, hyperlink: { url: "https://jnujobhunting.vercel.app" } });
     s.addText("Presented by", { x: M, y: 5.95, w: 2, h: 0.3, fontFace: FONT, fontSize: 13, bold: true, color: C.grey2, margin: 0 });
+    s.addText("Group-1", { x: M, y: 6.2, w: 5.6, h: 0.38, fontFace: FONT, fontSize: 20, bold: true, color: C.ink || "111111", margin: 0, valign: "bottom" });
     s.addShape(pres.shapes.LINE, { x: M, y: 6.6, w: 5.6, h: 0, line: { color: C.line, width: 1.25 }, objectName: "Team names line" });
     // collage (same objects as the journey thumbnails, so Morph flies them in)
     const tiles = [ // x, y, w, rotate (4:3 tiles)

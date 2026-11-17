@@ -8,7 +8,7 @@ const C = {
 const FONT = "Calibri", HFONT = "Calibri";
 const W = 13.333, H = 7.5, M = 0.7, CW = W - 2 * M;
 const SH = { type: "outer", color: "1E3A5F", opacity: 0.14, blur: 14, offset: 3, angle: 90 };
-const CHAPTERS = ["Problem", "Requirements", "UML", "Database", "App UI", "Reports & Closing"];
+const CHAPTERS = ["Problem", "Requirements", "UML", "App UI", "Database", "Reports & Closing"];
 
 function setup(pres) {
   pres.layout = "LAYOUT_WIDE";
@@ -35,7 +35,7 @@ function slide(pres, o) {
   return s;
 }
 function card(pres, s, x, y, w, h, o = {}) {
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: o.r || 0.12, fill: { color: o.fill || C.white }, line: o.noLine ? { type: "none" } : { color: o.line || C.line, width: 0.75 }, shadow: o.flat ? undefined : SH, objectName: o.name || "Card" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: o.r || 0.12, fill: { color: o.fill || C.white }, line: o.noLine ? { type: "none" } : { color: o.line || C.line, width: 0.75 }, shadow: o.flat ? undefined : { ...SH }, objectName: o.name || "Card" });
 }
 function divider(pres, o) {
   const s = pres.addSlide({ sectionTitle: o.sec });

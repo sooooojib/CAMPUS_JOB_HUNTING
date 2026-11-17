@@ -1,7 +1,7 @@
 const T = require("./theme_config");
 const { HEX, W, H, M, CW, header, badge, pill } = T;
-const SEC = "Chapter 5 — The App in Action";
-const kick = (phase) => T.setChapter(4, phase ? `05 · APP UI  ·  ${phase.toUpperCase()}` : "05 · APP UI");
+const SEC = "Chapter 4 — App UI";
+const kick = (phase) => T.setChapter(3, phase ? `04 · APP UI  ·  ${phase.toUpperCase()}` : "04 · APP UI");
 
 // Empty screenshot frame (kept blank on purpose; paste a real screenshot over it)
 function shot(pres, s, x, y, w, h, label, route, fs = 15) {
